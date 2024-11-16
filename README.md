@@ -38,6 +38,8 @@
 ## 🚀 What's New?  
 - **SPARQL endpoint as input** – It is now possible to analyze the quality of any desired Knowledge Graph by indicating its SPARQL endpoint in the input configuration of KGHeartBeat and without it is necessarily registered in LOD Cloud or Datahub. See the section [Input configuration](#input-configuration) for more info.
 
+- [Roadmap](#roadmap-)
+
 ## Repository structure
 ```
 KG-HeartBeat
@@ -204,3 +206,8 @@ Link to the paper: [https://link.springer.com/chapter/10.1007/978-3-031-77847-6_
 - [ ] Increase the number of KGs monitored by the tool, including through the use of scraping in GitHub/Git Lab repositories (as suggested in the [#1 issue](https://github.com/isislab-unisa/KGHeartbeat/issues/1) by @vemonet).
 - [ ] Grouping KGs with the same SPARQL endpoint, but referring to a different sub-graph.
 
+
+## Roadmap 🚀
+- [ ] Better filtering of inactive KGs from the Web-App, not just based on SPARQL endpoint (possible cue from YummyData).
+- [ ] Increase the number of KGs monitored by the tool, including through the use of scraping in GitHub/Git Lab repositories (as suggested in the [#1 issue](https://github.com/isislab-unisa/KGHeartbeat/issues/1) by @vemonet).
+- [ ] Grouping KGs with the same SPARQL endpoint, but referring to a different sub-graph.
