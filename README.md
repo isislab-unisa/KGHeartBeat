@@ -40,7 +40,6 @@
 
 - [Roadmap](#roadmap-)
 
-- [Roadmap](#roadmap-)
 
 ## Repository structure
 ```
@@ -202,8 +201,6 @@ Link to the paper: [https://link.springer.com/chapter/10.1007/978-3-031-77847-6_
   organization={Springer}
 }
 ```
-
-
 
 ## Roadmap 🚀
 - [ ] Better filtering of inactive KGs from the Web-App, not just based on SPARQL endpoint (possible cue from YummyData).
