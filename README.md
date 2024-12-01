@@ -35,10 +35,10 @@ KGHeartBeat is a tool that can help you to analyze the quality of all Knowledge 
     - [Look directly the quality](#look-directly-the-quality)
 - [How include a new quality metric?](#how-include-a-new-quality-metric)
 - [How to cite our work](#how-to-cite-our-work)
-- [How to cite our work](#how-to-cite-our-work)
 - [Generate RDF graph from csv (ESWC Workshop)](./Generate%20KG%20from%20csv%20(ESWC%20Workshop)/)
 
 - [Roadmap](#roadmap-)
+
 
 ## Repository structure
 ```
@@ -200,6 +200,8 @@ Link to the paper: [https://link.springer.com/chapter/10.1007/978-3-031-77847-6_
   organization={Springer}
 }
 ```
+
+
 
 ## Roadmap 🚀
 - [ ] Better filtering of inactive KGs from the Web-App, not just based on SPARQL endpoint (possible cue from YummyData).
