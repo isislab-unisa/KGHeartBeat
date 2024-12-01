@@ -38,10 +38,9 @@
 ## 🚀 What's New?  
 - **SPARQL endpoint as input** – It is now possible to analyze the quality of any desired Knowledge Graph by indicating its SPARQL endpoint in the input configuration of KGHeartBeat and without it is necessarily registered in LOD Cloud or Datahub. See the section [Input configuration](#input-configuration) for more info.
 
-- [Roadmap](#roadmap-)
-
 
 - [Roadmap](#roadmap-)
+
 
 ## Repository structure
 ```
