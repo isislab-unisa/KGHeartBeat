@@ -1,3 +1,23 @@
+<p align="center">
+  <img src="./img/logo.png" alt="KGHeartBeat Logo" width="200"/>
+</p>
+
+<h1 align="center">KGHeartBeat</h1>
+
+<p align="center">
+  <i>An Open Source Tool for Periodically Evaluating the Quality of Knowledge Graphs</i>
+</p>
+
+---
+
+# Table of contents
+- [KGHeartbeat](#kgheartbeat)
+    - [Repository structure](#repository-structure)
+    - [Quality metrics covered](#quality-metrics-covered)
+    - [Examples](#examples)
+    - [Test](#test)
+    - [Performance](#performance)
+    - [License](#license)
 # KGHeartBeat
 KGHeartBeat is a tool that can help you to analyze the quality of all Knowledge Graphs automatically recoverable from [Linked Open data Cloud (LODC)](https://lod-cloud.net) and [DataHub](https://old.datahub.io/) (the tool can easily be extended to include other KGs aggregators).
 - [KGHeartbeat](#kgheartbeat)
@@ -14,6 +34,8 @@ KGHeartBeat is a tool that can help you to analyze the quality of all Knowledge 
     - [Results](#results)
     - [Look directly the quality](#look-directly-the-quality)
 - [How include a new quality metric?](#how-include-a-new-quality-metric)
+- [How to cite our work](#how-to-cite-our-work)
+- [How to cite our work](#how-to-cite-our-work)
 - [Generate RDF graph from csv (ESWC Workshop)](./Generate%20KG%20from%20csv%20(ESWC%20Workshop)/)
 
 - [Roadmap](#roadmap-)
@@ -178,15 +200,6 @@ Link to the paper: [https://link.springer.com/chapter/10.1007/978-3-031-77847-6_
   organization={Springer}
 }
 ```
-
-
-## Roadmap 🚀
-- [ ] Better filtering of inactive KGs from the Web-App, not just based on SPARQL endpoint (possible cue from YummyData).
-- [ ] Increase the number of KGs monitored by the tool, including through the use of scraping in GitHub/Git Lab repositories (as suggested in the [#1 issue](https://github.com/isislab-unisa/KGHeartbeat/issues/1) by @vemonet).
-- [ ] Grouping KGs with the same SPARQL endpoint, but referring to a different sub-graph.
-
-
-
 
 ## Roadmap 🚀
 - [ ] Better filtering of inactive KGs from the Web-App, not just based on SPARQL endpoint (possible cue from YummyData).
