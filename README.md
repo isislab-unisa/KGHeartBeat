@@ -16,8 +16,6 @@ KGHeartBeat is a tool that can help you to analyze the quality of all Knowledge 
 - [How include a new quality metric?](#how-include-a-new-quality-metric)
 - [Generate RDF graph from csv (ESWC Workshop)](./Generate%20KG%20from%20csv%20(ESWC%20Workshop)/)
 
-- [Roadmap](#roadmap-)
-
 ## Repository structure
 ```
 KG-HeartBeat
