@@ -273,7 +273,7 @@ def checkAvailabilityResource(url):
     ssl.match_hostname = lambda cert, hostname: True
     try:
         #url = checkRedirect(url) #BEFORE CHECK IF THE URL IS REDIRECTED
-        response = requests.head(url,timeout=180,allow_redirects=True) #3 MINUTES
+        response = requests.head(url,timeout=180,allow_redirects=True, verify=False) #3 MINUTES
         if response.status_code < 400:   #IF FAILS WITH A HEAD REQUEST, WE TEST WITH A GET (HEAD MAY NOT BE SUPPORTED)
             return True
         else:
