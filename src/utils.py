@@ -277,7 +277,7 @@ def checkAvailabilityResource(url):
         if response.status_code < 400:   #IF FAILS WITH A HEAD REQUEST, WE TEST WITH A GET (HEAD MAY NOT BE SUPPORTED)
             return True
         else:
-            response = requests.get(url,timeout=180,allow_redirects=True)
+            response = requests.head(url,timeout=180,allow_redirects=True, verify=False)
             if response.status_code < 400:
                 return True
             else:
