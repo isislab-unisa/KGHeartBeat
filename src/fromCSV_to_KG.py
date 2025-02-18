@@ -173,11 +173,13 @@ def convert_to_kg_code_from_llm(filename):
                 g.add((observation_uri, PROV.wasAttributedTo, kgheartbeat_uri))
 
                 value = row[column]
-                if isinstance(value, str):
-                    try:
-                        value = float(value.replace(',', '.'))
-                    except ValueError:
-                        pass
+                value = value.replace("\n", " ").strip() 
+                value = value.replace('"',' ')
+                value = value.replace("'",' ')
+                try:
+                    value = float(value.replace(',', '.'))
+                except ValueError:
+                    pass
 
                 if isinstance(value, float):
                     g.add((observation_uri, DQV.value, Literal(value, datatype=XSD.double)))
