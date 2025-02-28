@@ -138,6 +138,34 @@ if len(input.get('sparql_url')) > 0:
         del kg
         gc.collect()
 
+if len(input.get('sparql_url')) > 0:
+    sparql_urls = input.get('sparql_url')
+    for sparql_url in sparql_urls:
+        start_analysis = time.time()
+        kg = analyses.analyses(filename,sparql_endpoint=sparql_url)
+        score = Score(kg,20)
+        totalScore,normalizedScore = score.getWeightedDimensionScore(1)
+        totalScore = "%.3f"%totalScore
+        normalizedScore = "%.3f"%normalizedScore
+        totalScore = float(totalScore)
+        normalizedScore = float(normalizedScore)
+        kg.extra.score = totalScore
+        kg.extra.normalizedScore = normalizedScore
+        kg.extra.scoreObj = score
+        end_analysis = time.time()
+        utils.write_time(sparql_url,end_analysis-start_analysis,'--- Analysis','INFO',filename)
+        csv = OutputCSV(kg,sparql_urls)
+        csv_with_dim = OutputCSV(kg,sparql_urls)
+        csv.writeRow(filename)
+        csv_with_dim.writeRow(filename,include_dimensions=True)
+        print(f"KG score: {kg.extra.score}")
+        if(useDB == True):
+            mongo_interface = DBinterface()
+            mongo_interface.insert_quality_data(kg,score)
+        del csv
+        del kg
+        gc.collect()
+
 end = time.time()
 save_path = os.path.join(here,'../Analysis results')
 with open(f'{save_path}/performance-{filename}.txt','a') as file:
