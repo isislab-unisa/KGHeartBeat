@@ -75,6 +75,22 @@ def analyses(analysis_date,idKG = None,nameKG = None, sparql_endpoint = None):
         accessUrl = Aggregator.getSPARQLEndpoint(idKG)
     elif sparql_endpoint:
         accessUrl = sparql_endpoint
+        try:
+            nameKG = query.get_kg_name(accessUrl)
+        except:
+            nameKG = ''
+        try:
+            idKG = query.get_kg_id(accessUrl)
+        except:
+            idKG = ''
+        metadata = None
+        if idKG == '':
+            try:
+                idKG = query.get_kg_url(accessUrl)
+            except:
+                idKG = ''
+
+    if idKG == '' or idKG == False:
         idKG = sparql_endpoint
         try:
             nameKG = query.get_kg_name(accessUrl)
