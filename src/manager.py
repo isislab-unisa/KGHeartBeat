@@ -44,6 +44,9 @@ except  FileNotFoundError:
         print('Error')
         quit()
 
+if len(input.get('id')) == 0 and len(input.get('name')) == 0 and len(input.get('sparql_url')) == 0:
+    print('You have not entered any KGs for analysis')
+ 
 start = time.time()
 
 toAnalyze = []
@@ -61,7 +64,7 @@ if 'all' not in name:
         print(f"Number of KG found with keyword {name[i]}:{len(kgFound)}")
         toAnalyze = toAnalyze + kgFound
 
-if (len(id) == 1 and 'all' in id) or (len(name) == 1 and 'all' in name): #SPECIAL INPUT, WE ANALYZE ALL KG DISCOVERABLE
+if (len(id) == 1 and 'all' in id) or (len(name) == 1 and 'all' in name) or (len(input.get('sparql_url')) == 1 and 'all' in input.get('sparql_url')): #SPECIAL INPUT, WE ANALYZE ALL KG DISCOVERABLE
     kgFound = AGAPI.getIdByName('')
     print(f"Number of KG found: {len(kgFound)}")
     toAnalyze = toAnalyze + kgFound
@@ -110,7 +113,7 @@ for i in range(len(toAnalyze)):
     gc.collect()
     #print(kg.getQualityKG()) #PRINT THE KG QUALITY ON THE COMAND LINE
 
-if len(input.get('sparql_url')) > 0:
+if len(input.get('sparql_url')) > 0 and not 'all' in input.get('sparql_url'):
     sparql_urls = input.get('sparql_url')
     for sparql_url in sparql_urls:
         start_analysis = time.time()
