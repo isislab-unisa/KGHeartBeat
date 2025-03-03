@@ -209,9 +209,13 @@ def analyses(analysis_date,idKG = None,nameKG = None, sparql_endpoint = None):
     else:
         sourcesC = Sources(sources.get('web','Absent'),sources.get('name','Absent'),sources.get('email','Absent'))
     if sourcesC.web == 'Absent':
-        kg_uri = query.get_kg_url(accessUrl)
-        if kg_uri:
-            sourcesC.web = kg_uri
+        try:
+            kg_uri = query.get_kg_url(accessUrl)
+            if kg_uri:
+                sourcesC.web = kg_uri
+        except:
+            sourcesC.web = 'Absent'
+    
     if available == False and absent == False and sourcesC.web != 'absent': #TRY TO ACCESS AT THE SPARQL ENDPOINT ADDING \sparql AT THE END OF THE DATASET URL
         try:
             newUrl = sourcesC.web + '/sparql'
