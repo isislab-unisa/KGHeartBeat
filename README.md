@@ -148,9 +148,6 @@ KG-HeartBeat
 # Architecture
 ![architecture](./img/architecture.png)
 
-# Architecture
-![architecture](./img/architecture.png)
-
 
 
 ## Quality metrics covered
