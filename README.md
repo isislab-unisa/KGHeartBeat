@@ -203,7 +203,6 @@ pip install -r requirements.txt
 ```
 ## Input configuration
 From the [KG-quality-analysis/configuration.json](configuration.json) file, you can choose the Knowledge Graph to analyze. You can analyze it by using a list of keywords, ids (indicated in LOD cloud or DataHUB) or by explicitly indicating the SPARQL endpoint (also a combination of these methods is possible). In the example below, all the Knowledge Graphs that have the keywords *"museum"* will be analyzed.
-From the [KG-quality-analysis/configuration.json](configuration.json) file, you can choose the Knowledge Graph to analyze. You can analyze it by using a list of keywords, ids (indicated in LOD cloud or DataHUB) or by explicitly indicating the SPARQL endpoint (also a combination of these methods is possible). In the example below, all the Knowledge Graphs that have the keywords *"museum"* will be analyzed.
 ```
 {"name": ["museum"], "id": [], "sparql_url" : [], "sparql_url" : []}
 ```
@@ -214,17 +213,12 @@ Or, by a list of ids like this:
 Or, by indicating the SPARQL endpoint:
 ```
 {"name": [], "id": [], "sparql_url" : ["https://dbpedia.org/sparql"]}
-{"name": [], "id": ["dbpedia","taxref-ld"], "sparql_url" : []}
-```
-Or, by indicating the SPARQL endpoint:
-```
-{"name": [], "id": [], "sparql_url" : ["https://dbpedia.org/sparql"]}
 ```
 If instead, you want to analyze all the Knowledge Graphs automatically discoverable from [LODCloud](https://lod-cloud.net/) and [DataHub](https://old.datahub.io/), insert the "all" value in the list (you can indicate it in the ```name``` or ```id``` key):
 <a name="all-kgs-conf"></a>
 ```
 {"name": ["all"], "id": [], "sparql_url" : []}
-{"name": ["all"], "id": [], "sparql_url" : []}
+
 ```
 After the input configuration, to execute the analysis simply launch form the main directory of the project:
 ```
