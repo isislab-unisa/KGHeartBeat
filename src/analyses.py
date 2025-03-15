@@ -1775,9 +1775,12 @@ def analyses(analysis_date,idKG = None,nameKG = None, sparql_endpoint = None):
                 consistency = Consistency(deprecatedV,'insufficient data','insufficient data','insufficient data',hijacking,'insufficient data','insufficient data')
         
         if isinstance(triplesQuery,int) and isinstance(numTriplesUpdated,int):
-            percentageUp = (numTriplesUpdated/triplesQuery) * 100
-            percentageUp = str(percentageUp)
-            percentageUp = percentageUp +"%"
+            if triplesQuery > 0:
+                percentageUp = (numTriplesUpdated/triplesQuery) * 100
+                percentageUp = str(percentageUp)
+                percentageUp = percentageUp +"%"
+            else:
+                percentageUp = '-'
         elif isinstance(triplesM,int) and isinstance(numTriplesUpdated,int):
             if triplesM > 0:
                 percentageUp = (numTriplesUpdated/triplesM) * 100
