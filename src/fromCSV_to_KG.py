@@ -134,9 +134,7 @@ def convert_to_kg_code_from_llm(filename):
     for _, row in df.iterrows():
         kg_name = row['kg_name']
         kg_id = row['kg_id']
-        kg_id = str(kg_id)
         kg_id = kg_id.strip()
-        kg_name = str(kg_name)
         kg_name = kg_name.strip()
         kg_id = kg_id.replace(' ','_')
         kg_name = kg_name.replace(' ','_')
@@ -173,11 +171,13 @@ def convert_to_kg_code_from_llm(filename):
                 g.add((observation_uri, PROV.wasAttributedTo, kgheartbeat_uri))
 
                 value = row[column]
-                value = value.replace("\n", " ").strip() 
-                value = value.replace('"',' ')
-                value = value.replace("'",' ')
+                if isinstance(value,str):
+                    value = value.replace("\n", " ").strip() 
+                    value = value.replace('"',' ')
+                    value = value.replace("'",' ')
+                    value = value.replace(',', '.')
                 try:
-                    value = float(value.replace(',', '.'))
+                    value = float(value)
                 except ValueError:
                     pass
 
