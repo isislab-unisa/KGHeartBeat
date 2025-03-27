@@ -63,6 +63,9 @@ def getTriples(metadata):
         return False
 
 def getSPARQLEndpoint(idKG):
+    endpoint = utils.return_updated_sparql_endpoint(idKG)
+    if endpoint:
+        return endpoint
     metadataLODC = LODCloudAPI.getJSONMetadata(idKG)
     metadataDH = DataHubAPI.getDataPackage(idKG)
     endpointLODC = LODCloudAPI.getSPARQLEndpoint(metadataLODC)  
