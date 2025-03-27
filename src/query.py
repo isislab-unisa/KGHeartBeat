@@ -180,13 +180,30 @@ def checkRDFDataStructures(url):
 def checkSerialisationFormat(url):
     sparql = SPARQLWrapper(url)
     sparql.setQuery('''
-    PREFIX void: <http://rdfs.org/ns/void#>
+    PREFIX dcterms: <http://purl.org/dc/terms/>
+    PREFIX schema: <http://schema.org/>
     PREFIX dcat: <http://www.w3.org/ns/dcat#>
-    SELECT DISTINCT ?o 
-    WHERE{ 
-    {?s void:feature ?o}
+    PREFIX void: <http://rdfs.org/ns/void#>
+
+    SELECT ?format
+    WHERE {
+    { ?dataset a dcat:Dataset ; dcat:mediaType ?format . }
     UNION
-    {?s dcat:mediaType ?o}
+    { ?dataset a dcat:Dataset ; void:feature ?format . }
+    UNION
+    { ?dataset a dcat:Dataset ; dcterms:format ?format . }
+    UNION
+    { ?dataset a dcat:Distribution ; dcat:mediaType ?format . }
+    UNION
+    { ?dataset a dcat:Distribution ; dcterms:format ?format . }
+    UNION
+    { ?dataset a dcat:Distribution ; void:feature ?format . }
+    UNION
+    { ?dataset a void:Dataset ; dcat:mediaType ?format . }
+    UNION
+    { ?dataset a void:Dataset ; void:feature ?format . }
+    UNION
+    { ?dataset a void:Dataset ; dcterms:format ?format . }
     }
     ''')
     sparql.setTimeout(300)
@@ -480,9 +497,18 @@ def checkUriPattern(url):
 def getVocabularies(url):
     sparql = SPARQLWrapper(url)
     sparql.setQuery('''
+    PREFIX dcterms: <http://purl.org/dc/terms/>
+    PREFIX dcat: <http://www.w3.org/ns/dcat#>
     PREFIX void: <http://rdfs.org/ns/void#>
-    SELECT DISTINCT ?o
-    WHERE{?s void:vocabulary ?o }
+
+    SELECT DISTINCT ?vacab
+    WHERE {
+    { ?dataset a dcat:Dataset ; void:vocabulary ?vacab . }
+    UNION
+    { ?dataset a dcat:Distribution ; void:vocabulary ?vacab . }
+    UNION
+    { ?dataset a void:Dataset ; void:vocabulary ?vacab . }
+    }
     ''')
     sparql.setTimeout(300)
     sparql.setReturnFormat(JSON)
@@ -499,16 +525,24 @@ def getVocabularies(url):
 def getCreator(url):
     sparql = SPARQLWrapper(url)
     sparql.setQuery('''
-    PREFIX dc: <http://purl.org/dc/elements/1.1/>
     PREFIX dcterms: <http://purl.org/dc/terms/>
+    PREFIX dcat: <http://www.w3.org/ns/dcat#>
+    PREFIX void: <http://rdfs.org/ns/void#>
     PREFIX foaf: <http://xmlns.com/foaf/0.1/>
-    SELECT DISTINCT ?o 
-    WHERE{ 
-    {?s dc:creator ?o }
+
+    SELECT ?creator
+    WHERE {
+    { ?dataset a dcat:Dataset ; dcterms:creator ?creator . }
     UNION
-    {?s dcterms:creator ?o}
+    { ?dataset a dcat:Distribution ; dcterms:creator ?creator . }
     UNION
-    {?s foaf:maker ?o}
+    { ?dataset a void:Dataset ; dcterms:creator ?creator . }
+    UNION
+    { ?dataset a void:Dataset ; foaf:maker ?creator . }
+    UNION
+    { ?dataset a dcat:Dataset ; foaf:maker ?creator . }
+    UNION
+    { ?dataset a dcat:Distribution ; foaf:maker ?creator . }
     }
     ''')
     sparql.setTimeout(300)
@@ -525,14 +559,18 @@ def getCreator(url):
 @log_in_out
 def getPublisher(url):
     sparql = SPARQLWrapper(url)
-    sparql.setQuery('''
-    PREFIX dc: <http://purl.org/dc/elements/1.1/>
-    PREFIX dct: <http://purl.org/dc/terms/>
-    SELECT DISTINCT ?o
+    sparql.setQuery('''                    
+    PREFIX dcterms: <http://purl.org/dc/terms/>
+    PREFIX dcat: <http://www.w3.org/ns/dcat#>
+    PREFIX void: <http://rdfs.org/ns/void#>
+
+    SELECT DISTINCT ?format
     WHERE {
-        {?s dc:publisher ?o}
+    { ?dataset a dcat:Dataset ; dcterms:publisher ?format . }
     UNION
-        {?s dct:publisher ?o}
+    { ?dataset a dcat:Distribution ; dcterms:publisher ?format . }
+    UNION
+    { ?dataset a void:Dataset ; dcterms:publisher ?format . }
     }
     ''')
     sparql.setTimeout(300)
@@ -550,9 +588,15 @@ def getPublisher(url):
 def getNumEntities(url):
     sparql = SPARQLWrapper(url)
     sparql.setQuery('''
-    PREFIX void:<http://rdfs.org/ns/void#>
-    SELECT ?triples
-    WHERE {?s void:entities ?triples}
+    PREFIX void: <http://rdfs.org/ns/void#>
+    SELECT DISTINCT ?entities
+    WHERE {
+    { ?dataset a void:Dataset ; void:entities ?entities . }
+    UNION
+    { ?dataset a dcat:Dataset ; void:entities ?entities . }
+    UNION
+    { ?dataset a dcat:Distribution ; void:entities ?entities . }
+    }
     ''')
     sparql.setTimeout(300)
     sparql.setReturnFormat(JSON)
@@ -565,6 +609,7 @@ def getNumEntities(url):
         return entities
     else:
         return False
+    
 @log_in_out
 def getNumEntitiesRegex(url,entityRe):
     sparql = SPARQLWrapper(url)
@@ -590,9 +635,18 @@ def getNumEntitiesRegex(url,entityRe):
 def getContributors(url):
     sparql = SPARQLWrapper(url)
     sparql.setQuery('''
-    PREFIX dcterms:<http://purl.org/dc/terms/>
-    SELECT DISTINCT ?o
-    WHERE {?s dcterms:contributor ?o.}
+    PREFIX dcterms: <http://purl.org/dc/terms/>
+    PREFIX dcat: <http://www.w3.org/ns/dcat#>
+    PREFIX void: <http://rdfs.org/ns/void#>
+
+    SELECT DISTINCT ?contributor
+    WHERE {
+        { ?dataset a dcat:Dataset ; dcterms:contributor ?contributor . }
+        UNION
+        { ?dataset a dcat:Distribution ; dcterms:contributor ?contributor . }
+        UNION
+        { ?dataset a void:Dataset ; dcterms:contributor ?contributor . }
+    }
     ''')
     sparql.setTimeout(300)
     sparql.setReturnFormat(JSON)
@@ -630,12 +684,23 @@ def getSameAsChains(url):
 def getFrequency(url):
     sparql = SPARQLWrapper(url)
     sparql.setQuery('''
-    PREFIX dcterms:<http://purl.org/dc/terms/>
-    SELECT DISTINCT ?o
-    WHERE{
-    {?s dcterms:accrualPeriodicity ?o}
+    PREFIX dcterms: <http://purl.org/dc/terms/>
+    PREFIX dcat: <http://www.w3.org/ns/dcat#>
+    PREFIX void: <http://rdfs.org/ns/void#>
+
+    SELECT ?frequency
+    WHERE {
+    { ?dataset a dcat:Dataset ; dcterms:accrualPeriodicity ?frequency . }
     UNION
-    {?s dcterms:Frequency ?o}
+    { ?dataset a dcat:Distribution ; dcterms:accrualPeriodicity ?frequency . }
+    UNION
+    { ?dataset a void:Dataset ; dcterms:accrualPeriodicity ?frequency . }
+    UNION
+    { ?dataset a void:Dataset ; dcterms:Frequency ?frequency . }
+    UNION
+    { ?dataset a dcat:Dataset ; dcterms:Frequency ?frequency . }
+    UNION
+    { ?dataset a dcat:Distribution ; dcterms:Frequency ?frequency . }
     }
     ''')
     sparql.setTimeout(300)
@@ -654,10 +719,22 @@ def getCreationDate(url):
     sparql = SPARQLWrapper(url)
     sparql.setQuery('''
     PREFIX dcterms: <http://purl.org/dc/terms/>
-    SELECT DISTINCT ?o
-    WHERE{?s dcterms:created ?o}
-    ORDER BY ASC(?o)
-    LIMIT 1
+    PREFIX dcat: <http://www.w3.org/ns/dcat#>
+    PREFIX void: <http://rdfs.org/ns/void#>
+    SELECT DISTINCT ?creator
+    WHERE {
+        { ?dataset a dcat:Dataset ; dcterms:created ?creator . }
+        UNION
+        { ?dataset a dcat:Distribution ; dcterms:created ?creator . }
+        UNION
+        { ?dataset a void:Dataset ; dcterms:created ?creator . }
+        UNION
+        { ?dataset a void:Dataset ; dcterms:issued ?creator . }
+        UNION
+        { ?dataset a dcat:Distribution ; dcterms:issued ?creator . }
+        UNION
+        { ?dataset a dcat:Dataset ; dcterms:issued ?creator . }
+    }
     ''')
     sparql.setTimeout(300)
     sparql.setReturnFormat(JSON)
@@ -681,12 +758,21 @@ def getCreationDateMin(url):
     sparql = SPARQLWrapper(url)
     sparql.setQuery('''
     PREFIX dcterms: <http://purl.org/dc/terms/>
-    SELECT DISTINCT (MIN (?o) AS ?min)
-    WHERE{
-    {?s dcterms:created ?o}
-    UNION
-    {?s dcterms:issued ?o }
-    }
+    PREFIX void: <http://rdfs.org/ns/void#>
+    PREFIX dcat: <http://www.w3.org/ns/dcat#>
+    SELECT DISTINCT (MIN (?created) AS ?min)
+    WHERE {
+        { ?dataset a dcat:Dataset ; dcterms:created ?created . }
+        UNION
+        { ?dataset a dcat:Distribution ; dcterms:created ?created . }
+        UNION
+        { ?dataset a void:Dataset ; dcterms:created ?created . }
+        UNION
+        { ?dataset a void:Dataset ; dcterms:issued ?created . }
+        UNION
+        { ?dataset a dcat:Distribution ; dcterms:issued ?created . }
+        UNION
+        { ?dataset a dcat:Dataset ; dcterms:issued ?created . }
     ''')
     sparql.setTimeout(300)
     sparql.setReturnFormat(JSON)
@@ -710,11 +796,17 @@ def getModificationDate(url):
     sparql = SPARQLWrapper(url)
     sparql.setQuery('''
     PREFIX dcterms: <http://purl.org/dc/terms/>
-    SELECT DISTINCT ?o
-    WHERE{
-    {?s dcterms:modified ?o}
+    PREFIX dcat: <http://www.w3.org/ns/dcat#>
+    PREFIX void: <http://rdfs.org/ns/void#>
+    SELECT DISTINCT ?modified
+    WHERE {
+        { ?dataset a dcat:Dataset ; dcterms:modified ?modified . }
+        UNION
+        { ?dataset a dcat:Distribution ; dcterms:modified ?modified . }
+        UNION
+        { ?dataset a void:Dataset ; dcterms:modified ?modified . }
     }
-    ORDER BY ASC(?o)
+    ORDER BY ASC(?modified)
     LIMIT 1
     ''')
     sparql.setTimeout(300)
@@ -744,10 +836,16 @@ def getModificationDate(url):
 def getModificationDateMax(url):
     sparql = SPARQLWrapper(url)
     sparql.setQuery('''
-    PREFIX dcterms:<http://purl.org/dc/terms/>
-    SELECT DISTINCT (MAX (?o) AS ?max)
-    WHERE{
-    {?s dcterms:modified ?o}
+    PREFIX dcterms: <http://purl.org/dc/terms/>
+    PREFIX dcat: <http://www.w3.org/ns/dcat#>
+    PREFIX void: <http://rdfs.org/ns/void#>
+    SELECT DISTINCT (MAX (?modified) AS ?max)
+    WHERE {
+        { ?dataset a dcat:Dataset ; dcterms:modified ?modified . }
+        UNION
+        { ?dataset a dcat:Distribution ; dcterms:modified ?modified . }
+        UNION
+        { ?dataset a void:Dataset ; dcterms:modified ?modified . }
     }
     ''')
     sparql.setTimeout(300)
@@ -778,10 +876,16 @@ def getModificationDateMax(url):
 def getDateUpdates(url):
     sparql = SPARQLWrapper(url)
     sparql.setQuery('''
-    PREFIX dcterms:<http://purl.org/dc/terms/>
-    SELECT DISTINCT ?o
-    WHERE{
-    {?s dcterms:modified ?o}
+    PREFIX dcterms: <http://purl.org/dc/terms/>
+    PREFIX dcat: <http://www.w3.org/ns/dcat#>
+    PREFIX void: <http://rdfs.org/ns/void#>
+    SELECT DISTINCT ?modified
+    WHERE {
+        { ?dataset a dcat:Dataset ; dcterms:modified ?modified . }
+        UNION
+        { ?dataset a dcat:Distribution ; dcterms:modified ?modified . }
+        UNION
+        { ?dataset a void:Dataset ; dcterms:modified ?modified . }
     }
     ''')
     sparql.setTimeout(300)
