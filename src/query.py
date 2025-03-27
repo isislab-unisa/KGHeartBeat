@@ -809,7 +809,7 @@ def getModificationDate(url):
         UNION
         { ?dataset a void:Dataset ; dcterms:modified ?o . }
     }
-    ORDER BY ASC(?o)
+    ORDER BY ASC(?modified)
     LIMIT 1
     ''')
     sparql.setTimeout(300)
