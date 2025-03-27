@@ -86,11 +86,15 @@ def getOtherResources(idKG):
     metadataLODC = LODCloudAPI.getJSONMetadata(idKG)
     otResourcesDH = DataHubAPI.getOtherResources(metadataDH)
     otResourcesLODC = LODCloudAPI.getOtherResources(metadataLODC)
+    manual_refined_resources = utils.return_updated_rdf_dump(idKG)
     if otResourcesDH == False:
         otResourcesDH = []
     if otResourcesLODC == False:
         otResourcesLODC = []
     otherResources = utils.mergeResources(otResourcesDH,otResourcesLODC)
+    if manual_refined_resources != False:
+        otherResources + manual_refined_resources
+    
     return otherResources
 
 def getExternalLinks(idKG):
