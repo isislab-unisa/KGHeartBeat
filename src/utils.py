@@ -1175,3 +1175,95 @@ def is_valid_void_url(url):
         return True
     except Exception as e:
         return False
+def return_updated_sparql_endpoint(id_kg):
+    if id_kg == 'hungarian-national-library-catalog':
+        return 'http://setaria.oszk.hu/sparql'
+    if id_kg == 'deutsche-biographie':
+        return 'https://data.deutsche-biographie.de/about/#sparql'
+    if id_kg == 'culturalinkeddata':
+        return 'https://datos.bne.es/sparql'
+    if id_kg == 'dutch-ships-and-sailors':
+        return 'https://dutchshipsandsailors.nl/?page_id=50'
+    if id_kg == 'geographic-names-information-system-gnis':
+        return 'https://gnis-ld.org/queries'
+    if id_kg == 'nomisma_org':
+        return 'https://nomisma.org/sparql/'
+    if id_kg == 'rism':
+        return 'https://opac.rism.info/sparql-endpoint'
+    if id_kg == 'the-european-library-open-dataset0000018aeec2aa8f':
+        return 'https://sparql.europeana.eu/'
+    if id_kg == 'zbw-pressemappe20':
+        return 'https://zbw.eu/beta/sparql/pm20/query'
+    
+    return False
+
+def return_updated_rdf_dump(id_kg):
+    dumps = [{
+        'path' : '',
+        'type' : 'full_download',
+        'status' : '',
+        'format' : ''
+    }]
+    if id_kg == 'pali-english-lexicon':
+        dumps[0]['path'] = 'https://dictionary.sutta.org/'
+        return dumps
+    if id_kg == 'data-incubator-discogs':
+        dumps[0]['path'] = 'http://archive.org/download/kasabi/discogs.gz'
+        return dumps
+    if id_kg == 'dbtropes':
+        dumps[0]['path'] = 'http://dbtropes.org/static/dbtropes.zip'
+        return dumps
+    if id_kg == 'data-incubator-moseley':
+        dumps[0]['path'] = 'https://archive.org/download/kasabi/moseley-folk-festival-data.gz'
+        return dumps
+    if id_kg == 'enslaved.org':
+        dumps[0]['path'] = 'https://docs.enslaved.org/lod/'
+        return dumps
+    if id_kg == 'gutenberg':
+        dumps[0]['path'] = 'https://github.com/alexdma/gutenberg-ld?tab=readme-ov-file'
+        return dumps
+    if id_kg == 'dutch-ships-and-sailors':
+        dumps[0]['path'] = 'https://github.com/biktorrr/dss'
+        return dumps
+    if id_kg == 'dm2e':
+        dumps[0]['path'] = 'https://github.com/dm2e'
+        return dumps
+    if id_kg == 'jita':
+        dumps[0]['path'] = 'https://github.com/gbv/JITA?tab=readme-ov-file'
+        return dumps
+    if id_kg == 'eventkg':
+        dumps[0]['path'] = 'https://github.com/saraabdollahi/EventKG-Click'
+        dumps.append({
+            'path' : 'https://zenodo.org/records/3568387',
+            'type' : 'full_download',
+            'status' : '',
+            'format' : ''
+        })
+        return dumps
+    if id_kg == 'roceeh-road0000018fe7952923':
+        dumps[0]['path'] = 'https://github.com/gbv/JITA?tab=readme-ov-file'
+        return dumps
+    if id_kg == 'rlcsh':
+        dumps[0]['path'] = 'https://id.loc.gov/download/'
+        return dumps
+    if id_kg == 'lcsubjects':
+        dumps[0]['path'] = 'https://id.loc.gov/download/'
+        return dumps
+    if id_kg == 'talis-openlibrary':
+        dumps[0]['path'] = 'https://openlibrary.org/developers/dumps'
+        return dumps
+    if id_kg == 'bncf-ns000001932a10400a':
+        dumps[0]['path'] = 'https://www.data.gov.uk/dataset/6fa6a421-e515-4ab7-bbd6-1e60c2b60706/the-linked-open-british-national-bibliography'
+        return dumps
+    if id_kg == 'http:cultural-opposition.eu':
+        dumps[0]['path'] = 'https://zenodo.org/records/3333540'
+        return dumps
+
+    return False
+    
+    
+
+    
+
+
+    
