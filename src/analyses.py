@@ -1522,7 +1522,10 @@ def analyses(analysis_date,idKG = None,nameKG = None, sparql_endpoint = None):
 
 
     #GET THE DESCRIPTION OF THE CONTENT OF KG
-    description = Aggregator.getDescription(metadata)    
+    description = Aggregator.getDescription(metadata)
+    if isinstance(description,str):
+        description = description.strip()  
+        description = re.sub(r'\n+', '\n', description)
     if available != True:  #IF ENDPOINT ISN'T AVAILABLE, WE TRY TO OBTAIN SOME INFO FROM THE VoID FILE IF IS INDICATED IN THE METADATA AND IS ONLINE
         if void == True:
             try:
