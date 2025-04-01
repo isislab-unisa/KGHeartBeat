@@ -1,14 +1,19 @@
 from API import DataHubAPI
 from API import LODCloudAPI
+from API.monitoring_requests import MonitoringRequests
 import utils
 
 def getDataPackage(idKG):
     metadataDH = DataHubAPI.getDataPackage(idKG)
     metadataLODC = LODCloudAPI.getJSONMetadata(idKG)
+    monitoring_resources = MonitoringRequests()
+    metadata_monitoring_resources = monitoring_resources.getMetadata(idKG)
     if isinstance(metadataLODC,dict):
         return metadataLODC
     elif isinstance(metadataDH,dict):
         return metadataDH
+    elif isinstance(metadata_monitoring_resources,dict):
+        return metadata_monitoring_resources
     else:
         return False
 
@@ -68,8 +73,12 @@ def getSPARQLEndpoint(idKG):
         return endpoint
     metadataLODC = LODCloudAPI.getJSONMetadata(idKG)
     metadataDH = DataHubAPI.getDataPackage(idKG)
+    monitoring_resources = MonitoringRequests()
+    endpointMR = monitoring_resources.getSPARQLEndpoint(idKG)
     endpointLODC = LODCloudAPI.getSPARQLEndpoint(metadataLODC)  
     endpointDH = DataHubAPI.getSPARQLEndpoint(metadataDH)
+    if endpointMR != False:
+        return endpointMR
     if endpointLODC != False:
         if isinstance(endpointLODC,str):
             if endpointLODC != '':
@@ -86,6 +95,8 @@ def getOtherResources(idKG):
     metadataLODC = LODCloudAPI.getJSONMetadata(idKG)
     otResourcesDH = DataHubAPI.getOtherResources(metadataDH)
     otResourcesLODC = LODCloudAPI.getOtherResources(metadataLODC)
+    monitoring_resources = MonitoringRequests()
+    otResourcesMR = monitoring_resources.getOtherResources(idKG)
     manual_refined_resources = utils.return_updated_rdf_dump(idKG)
     if otResourcesDH == False:
         otResourcesDH = []
@@ -94,7 +105,9 @@ def getOtherResources(idKG):
     otherResources = utils.mergeResources(otResourcesDH,otResourcesLODC)
     if manual_refined_resources != False:
         otherResources + manual_refined_resources
-    
+    if otResourcesMR != False:
+        otherResources + otResourcesMR
+
     return otherResources
 
 def getExternalLinks(idKG):
@@ -140,5 +153,7 @@ def getKeywords(idKg):
     metadataLODC = LODCloudAPI.getJSONMetadata(idKg)
     keywordsDH = DataHubAPI.getKeywords(metadataDH)
     keywordsLODC = LODCloudAPI.getKeywords(metadataLODC)
-    keywords = keywordsDH + keywordsLODC
+    monitoring_resources = MonitoringRequests()
+    keywordsMR = monitoring_resources.getKeywords(idKg)
+    keywords = keywordsDH + keywordsLODC + keywordsMR
     return keywords
