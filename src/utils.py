@@ -1175,6 +1175,7 @@ def is_valid_void_url(url):
         return True
     except Exception as e:
         return False
+        
 def return_updated_sparql_endpoint(id_kg):
     if id_kg == 'hungarian-national-library-catalog':
         return 'http://setaria.oszk.hu/sparql'
@@ -1289,10 +1290,3 @@ def return_updated_rdf_dump(id_kg):
         return dumps
 
     return False
-    
-    
-
-    
-
-
-    
