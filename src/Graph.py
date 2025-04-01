@@ -42,20 +42,32 @@ def buildGraph():
     return G
 
 def getPageRank(graph,idKg):
-    pr = nx.pagerank(graph)
-    return pr.get(idKg)
+    try:
+        pr = nx.pagerank(graph)
+        return pr.get(idKg)
+    except:
+        return '-'
 
 def getDegreeOfConnection(graph,idKg):
-    degree = graph.degree(nbunch=idKg)
-    return degree
+    try:
+        degree = graph.degree(nbunch=idKg)
+        return degree
+    except:
+        return '-'
 
 def getCentrality(graph,idKg):
-    degreeCentrality = nx.degree_centrality(graph)
-    return degreeCentrality.get(idKg)
+    try:
+        degreeCentrality = nx.degree_centrality(graph)
+        return degreeCentrality.get(idKg)
+    except:
+        return '-'
 
 def getClusteringCoefficient(graph,idKG):
-    clusteringCoefficient = nx.clustering(graph,idKG)
-    return clusteringCoefficient
+    try:
+        clusteringCoefficient = nx.clustering(graph,idKG)
+        return clusteringCoefficient
+    except:
+        return '-'
 
 def getSubgraph(graph,nodeList):
     subG = graph.subgraph(nodeList)

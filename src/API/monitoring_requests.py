@@ -10,7 +10,10 @@ class MonitoringRequests:
             self.dataset_metadata = json.load(json_file)
 
     def getIDs(self):
-        return list(self.dataset_metadata.keys())
+        dataset = []
+        for key in self.dataset_metadata:
+            dataset.append((key,self.dataset_metadata[key]['title']))
+        return dataset
     
     def getMetadata(self, id_kg):
         if id_kg in self.dataset_metadata:
@@ -20,7 +23,7 @@ class MonitoringRequests:
     
     def getSPARQLEndpoint(self, id_kg):
         if id_kg in self.dataset_metadata:
-            return self.dataset_metadata[id_kg]['sparql']['access_url']
+            return self.dataset_metadata[id_kg]['sparql'][0]['access_url']
         else:
             return False
     
@@ -56,5 +59,19 @@ class MonitoringRequests:
     def getKeywords(self,id_kg):
         if id_kg in self.dataset_metadata:
             return self.dataset_metadata[id_kg]['keywords']
+        else: 
+            return False
+    
+    def getExternalLinks(self,id_kg):
+        if id_kg in self.dataset_metadata:
+            jsonFile = self.dataset_metadata[id_kg]
+            if isinstance(jsonFile,dict):
+                links = jsonFile.get('links',0)
+                if isinstance(links,list):
+                    return links
+                else:
+                    return links
+            else:
+                return False
         else: 
             return False

@@ -117,6 +117,8 @@ def getExternalLinks(idKG):
     if linksDH == False or linksDH is None:
         linksDH = {}   #BECAUSE IS USED TO CLEAN THE RESULTS FROM LODCLOUD (IN CASE DATAHUB NOT HAVE EXTERNAL LINKS)
     linksLODC = LODCloudAPI.getExternalLinks(metadataLODC)
+    monitoring_requests = MonitoringRequests()
+    linksMR = monitoring_requests.getExternalLinks(idKG)
     if isinstance(linksLODC,list):
         for i in range(len(linksLODC)):
             d = linksLODC[i]
@@ -124,8 +126,16 @@ def getExternalLinks(idKG):
             value = d.get('value')
             linksDH[key] = value
         return linksDH
+    elif isinstance(linksMR,list):
+        for i in range(len(linksMR)):
+            d = linksMR[i]
+            key = d.get('target')
+            value = d.get('value')
+            linksDH[key] = value
+        return linksDH
     else:
         return linksDH
+
 
 def getDescription(metadata):
     descriptionDH = DataHubAPI.getDescription(metadata)

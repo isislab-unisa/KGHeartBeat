@@ -12,6 +12,7 @@ import gc
 import time
 import fromCSV_to_KG 
 import Graph
+from API.monitoring_requests import MonitoringRequests
 
 useDB = False
 # try : 
@@ -66,8 +67,12 @@ if 'all' not in name:
 
 if (len(id) == 1 and 'all' in id) or (len(name) == 1 and 'all' in name) or (len(input.get('sparql_url')) == 1 and 'all' in input.get('sparql_url')): #SPECIAL INPUT, WE ANALYZE ALL KG DISCOVERABLE
     kgFound = AGAPI.getIdByName('')
-    print(f"Number of KG found: {len(kgFound)}")
-    toAnalyze = toAnalyze + kgFound
+    monitoring_requests = MonitoringRequests()
+    kg_added_by_users = monitoring_requests.getIDs() 
+    print(f"Number of KG found from AGAPI: {len(kgFound)}")
+    print(f"Number of KGs from monitoring requests: {len(kg_added_by_users)}")
+    toAnalyze = toAnalyze + kgFound + kg_added_by_users
+    toAnalyze = kg_added_by_users
 
 toAnalyze = toAnalyze + tuple_id
 toAnalyze = list(dict.fromkeys(toAnalyze)) #CLEAN THE LIST FROM DUPLICATES
