@@ -1189,7 +1189,7 @@ def return_updated_sparql_endpoint(id_kg):
         return 'https://nomisma.org/sparql/'
     if id_kg == 'rism':
         return 'https://opac.rism.info/sparql-endpoint'
-    if id_kg == 'the-european-library-open-dataset0000018aeec2aa8f':
+    if id_kg == 'the-european-library-open-dataset':
         return 'https://sparql.europeana.eu/'
     if id_kg == 'zbw-pressemappe20':
         return 'https://zbw.eu/beta/sparql/pm20/query'
@@ -1239,10 +1239,10 @@ def return_updated_rdf_dump(id_kg):
             'format' : ''
         })
         return dumps
-    if id_kg == 'roceeh-road0000018fe7952923':
+    if id_kg == 'roceeh-road':
         dumps[0]['path'] = 'https://github.com/gbv/JITA?tab=readme-ov-file'
         return dumps
-    if id_kg == 'rlcsh':
+    if id_kg == 'lcsh':
         dumps[0]['path'] = 'https://id.loc.gov/download/'
         return dumps
     if id_kg == 'lcsubjects':
@@ -1251,7 +1251,7 @@ def return_updated_rdf_dump(id_kg):
     if id_kg == 'talis-openlibrary':
         dumps[0]['path'] = 'https://openlibrary.org/developers/dumps'
         return dumps
-    if id_kg == 'bncf-ns000001932a10400a':
+    if id_kg == 'bncf-ns':
         dumps[0]['path'] = 'https://www.data.gov.uk/dataset/6fa6a421-e515-4ab7-bbd6-1e60c2b60706/the-linked-open-british-national-bibliography'
         return dumps
     if id_kg == 'http:cultural-opposition.eu':
