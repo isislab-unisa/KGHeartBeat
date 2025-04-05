@@ -664,9 +664,12 @@ def getSameAsChains(url):
     sparql = SPARQLWrapper(url)
     sparql.setQuery('''
     PREFIX owl: <http://www.w3.org/2002/07/owl#>
+    PREFIX schema: <http://schema.org/>
     SELECT (COUNT(?o) AS ?triples)
     WHERE {
-    ?s owl:sameAs ?o
+        {?s owl:sameAs ?o}
+        UNION
+        {?s schema:sameAs ?o}
     }
     ''')
     sparql.setTimeout(300)
