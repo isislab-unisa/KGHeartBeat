@@ -68,43 +68,6 @@ class MonitoringRequests:
         if id_kg in self.dataset_metadata:
             return self.dataset_metadata[id_kg]['keywords']
         else: 
-            return []
-    
-    def getExternalLinks(self,id_kg):
-        if id_kg in self.dataset_metadata:
-            jsonFile = self.dataset_metadata[id_kg]
-            if isinstance(jsonFile,dict):
-                links = jsonFile.get('links',0)
-                if isinstance(links,list):
-                    return links
-                else:
-                    return links
-            else:
-                return False
-        else: 
-            return False
-    
-    def getDOI(self,id_kg):
-        if id_kg in self.dataset_metadata:
-            if self.dataset_metadata[id_kg]['doi'] != '':
-                return self.dataset_metadata[id_kg]['doi']
-            else: 
-                return False
-        else: 
-            return False
-    
-    def getExternalLinks(self,id_kg):
-        if id_kg in self.dataset_metadata:
-            jsonFile = self.dataset_metadata[id_kg]
-            if isinstance(jsonFile,dict):
-                links = jsonFile.get('links',0)
-                if isinstance(links,list):
-                    return links
-                else:
-                    return links
-            else:
-                return False
-        else: 
             return False
     
     def getExternalLinks(self,id_kg):

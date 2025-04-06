@@ -1290,3 +1290,33 @@ def return_updated_rdf_dump(id_kg):
         return dumps
 
     return False
+    
+def check_publisher_info(kg_quality):
+    author_query = 1 if kg_quality.verifiability.authorQ != '-' and len(kg_quality.verifiability.authorQ) > 0 else 0
+
+    author_metadata = 0
+    if kg_quality.verifiability.authorM not in [False,'False']:
+        if not re.fullmatch(r"Name:\s*absent,\s*email:\s*absent", kg_quality.verifiability.authorM, re.IGNORECASE):
+            author_metadata = 1
+        
+    contributors = 1 if kg_quality.verifiability.contributor != '-' and len(kg_quality.verifiability.contributor) > 0 else 0
+
+    publishers = 1 if kg_quality.verifiability.publisher != '-' and len(kg_quality.verifiability.publisher) > 0 else 0
+
+
+    sources = 0
+    if kg_quality.verifiability.sources.name not in ['absent','Absent',''] or kg_quality.verifiability.sources.web not in ['absent','Absent',''] or kg_quality.verifiability.sources.email not in ['absent','Absent','']:
+        sources = 1
+
+    return 1 if author_query or author_metadata or contributors or publishers or sources else 0
+
+def find_search_engine_from_keywords(kg_id):
+    keywords = Aggregator.getKeywords(kg_id)
+    for keyword in keywords:
+        keyword = keyword.strip()
+        if any(k in keyword for k in ['github', 'zenodo', 'fairsharing']):
+            return 1
+        else:
+            return 0
+    return 0
+    
