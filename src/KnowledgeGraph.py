@@ -43,6 +43,7 @@ class KnowledgeGraph:
         self.conciseness = conciseness
         self.accuracy = accuracy
         self.extra = extra
+        self.fairness = False
 
     def getQualityKG(self):
         return f"Quality of KG {self.believability.title}\n {Availability.getAvailability(self.availability)} {Currency.getCurrency(self.currency)} {Versatility.getVersatility(self.versatility)} {Security.getSecurity(self.security)} {RepresentationalConciseness.getRepresentationalConciseness(self.rConciseness)} {Licensing.getLicensing(self.licensing)} {Performance.getPerformance(self.performance)} {AmountOfData.getAmountOfData(self.amountOfData)} {Volatility.getVolatility(self.volatility)} {Interlinking.getInterlinking(self.interlinking)} {Consistency.getConsistency(self.consistency)} {Reputation.getReputation(self.reputation)} {Believability.getBelievability(self.believability)} {Verifiability.getVerifiability(self.verifiability)} {Completeness.getCompleteness(self.completeness)} {RepresentationalConsistency.getRepresentationalConsistency(self.rConsistency)} {Understendability.getUnderstendability(self.understendability)} {Interpretability.getInterpretability(self.interpretability)} {Conciseness.getConciseness(self.conciseness)} {Accuracy.getAccuracy(self.accuracy)} {Extra.getExtra(self.extra)}"

@@ -162,4 +162,12 @@ def getKeywords(jsonfile):
         keywords = jsonfile.get('keywords')
         return keywords
     else:
+        return []
+
+def getDOI(jsonfile):
+    if isinstance(jsonfile,dict):
+        doi = jsonfile.get('doi')
+        if doi != '':
+            return doi
+    else:
         return False

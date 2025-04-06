@@ -17,6 +17,16 @@ def getDataPackage(idKG):
     else:
         return False
 
+def check_if_on_lodc_dh(idKG):
+    metadataDH = DataHubAPI.getDataPackage(idKG)
+    metadataLODC = LODCloudAPI.getJSONMetadata(idKG)
+    if isinstance(metadataLODC,dict):
+        return True
+    elif isinstance(metadataDH,dict):
+        return True
+    else:
+        return False
+
 def getNameKG(metadata):
     nameDH = DataHubAPI.getNameKG(metadata)
     nameLODC = LODCloudAPI.getNameKG(metadata)
@@ -167,3 +177,15 @@ def getKeywords(idKg):
     keywordsMR = monitoring_resources.getKeywords(idKg)
     keywords = keywordsDH + keywordsLODC + keywordsMR
     return keywords
+
+def getDOI(idKG):
+    metadataLODC = LODCloudAPI.getJSONMetadata(idKG)
+    doiLODC = LODCloudAPI.getDOI(metadataLODC)
+    monitoring_resources = MonitoringRequests()
+    doiMR = monitoring_resources.getDOI(idKG)
+    if doiLODC != False:
+        return doiLODC
+    if doiMR != False:
+        return doiMR
+    
+    return False

@@ -60,7 +60,7 @@ class MonitoringRequests:
         if id_kg in self.dataset_metadata:
             return self.dataset_metadata[id_kg]['keywords']
         else: 
-            return False
+            return []
     
     def getExternalLinks(self,id_kg):
         if id_kg in self.dataset_metadata:
@@ -72,6 +72,15 @@ class MonitoringRequests:
                 else:
                     return links
             else:
+                return False
+        else: 
+            return False
+    
+    def getDOI(self,id_kg):
+        if id_kg in self.dataset_metadata:
+            if self.dataset_metadata[id_kg]['doi'] != '':
+                return self.dataset_metadata[id_kg]['doi']
+            else: 
                 return False
         else: 
             return False
