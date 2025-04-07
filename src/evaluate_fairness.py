@@ -79,9 +79,9 @@ class EvaluateFAIRness:
     
     def evaluate_reusability(self):
 
-        has_license_metadata = self.kg_quality.licensing.licenseMetadata not in [False, 'False', '', '-', '[]']
-        has_license_query = self.kg_quality.licensing.licenseQuery != '-' and len(self.kg_quality.licensing.licenseQuery) > 0
-        has_license_hr = self.kg_quality.licensing.licenseHR != '-' and len(self.kg_quality.licensing.licenseHR) > 0
+        has_license_metadata = 1 if self.kg_quality.licensing.licenseMetadata not in [False, 'False', '', '-', '[]'] else 0
+        has_license_query = 1 if self.kg_quality.licensing.licenseQuery != '-' and len(self.kg_quality.licensing.licenseQuery) > 0 else 0
+        has_license_hr = 1 if self.kg_quality.licensing.licenseHR != '-' and self.kg_quality.licensing.licenseHR == True else 0
         self.fairness.r1_1 = 1 if has_license_metadata or has_license_query or has_license_hr else 0
 
         self.fairness.r1_2 = utils.check_publisher_info(self.kg_quality)
@@ -101,7 +101,7 @@ class EvaluateFAIRness:
     def evaluate_interoperability(self):
         available_on_search_engine = Aggregator.check_if_on_lodc_dh(self.kg_quality.extra.KGid)
 
-        common_media_type = self.kg_quality.extra.commonMediaType in ['True', True]
+        common_media_type = 1 if self.kg_quality.extra.commonMediaType in ['True', True] else 0
         known_semantic_format = any(fmt in self.kg_quality.extra.metadataMediaType for fmt in ['api/sparql', 'rdf', 'RDF'])
         self.fairness.i1D = 1 if common_media_type or known_semantic_format else 0
 
