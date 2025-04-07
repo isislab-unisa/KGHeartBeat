@@ -185,25 +185,25 @@ def checkSerialisationFormat(url):
     PREFIX dcat: <http://www.w3.org/ns/dcat#>
     PREFIX void: <http://rdfs.org/ns/void#>
 
-    SELECT ?format
+    SELECT ?o
     WHERE {
-    { ?dataset a dcat:Dataset ; dcat:mediaType ?format . }
+    { ?dataset a dcat:Dataset ; dcat:mediaType ?o . }
     UNION
-    { ?dataset a dcat:Dataset ; void:feature ?format . }
+    { ?dataset a dcat:Dataset ; void:feature ?o . }
     UNION
-    { ?dataset a dcat:Dataset ; dcterms:format ?format . }
+    { ?dataset a dcat:Dataset ; dcterms:format ?o . }
     UNION
-    { ?dataset a dcat:Distribution ; dcat:mediaType ?format . }
+    { ?dataset a dcat:Distribution ; dcat:mediaType ?o . }
     UNION
-    { ?dataset a dcat:Distribution ; dcterms:format ?format . }
+    { ?dataset a dcat:Distribution ; dcterms:format ?o . }
     UNION
-    { ?dataset a dcat:Distribution ; void:feature ?format . }
+    { ?dataset a dcat:Distribution ; void:feature ?o . }
     UNION
-    { ?dataset a void:Dataset ; dcat:mediaType ?format . }
+    { ?dataset a void:Dataset ; dcat:mediaType ?o . }
     UNION
-    { ?dataset a void:Dataset ; void:feature ?format . }
+    { ?dataset a void:Dataset ; void:feature ?o . }
     UNION
-    { ?dataset a void:Dataset ; dcterms:format ?format . }
+    { ?dataset a void:Dataset ; dcterms:format ?o . }
     }
     ''')
     sparql.setTimeout(300)
@@ -501,13 +501,13 @@ def getVocabularies(url):
     PREFIX dcat: <http://www.w3.org/ns/dcat#>
     PREFIX void: <http://rdfs.org/ns/void#>
 
-    SELECT DISTINCT ?vacab
+    SELECT DISTINCT ?o
     WHERE {
-    { ?dataset a dcat:Dataset ; void:vocabulary ?vacab . }
+    { ?dataset a dcat:Dataset ; void:vocabulary ?o . }
     UNION
-    { ?dataset a dcat:Distribution ; void:vocabulary ?vacab . }
+    { ?dataset a dcat:Distribution ; void:vocabulary ?o . }
     UNION
-    { ?dataset a void:Dataset ; void:vocabulary ?vacab . }
+    { ?dataset a void:Dataset ; void:vocabulary ?o . }
     }
     ''')
     sparql.setTimeout(300)
@@ -530,19 +530,19 @@ def getCreator(url):
     PREFIX void: <http://rdfs.org/ns/void#>
     PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 
-    SELECT ?creator
+    SELECT ?o
     WHERE {
-    { ?dataset a dcat:Dataset ; dcterms:creator ?creator . }
+    { ?dataset a dcat:Dataset ; dcterms:creator ?o . }
     UNION
-    { ?dataset a dcat:Distribution ; dcterms:creator ?creator . }
+    { ?dataset a dcat:Distribution ; dcterms:creator ?o . }
     UNION
-    { ?dataset a void:Dataset ; dcterms:creator ?creator . }
+    { ?dataset a void:Dataset ; dcterms:creator ?o . }
     UNION
-    { ?dataset a void:Dataset ; foaf:maker ?creator . }
+    { ?dataset a void:Dataset ; foaf:maker ?o . }
     UNION
-    { ?dataset a dcat:Dataset ; foaf:maker ?creator . }
+    { ?dataset a dcat:Dataset ; foaf:maker ?o . }
     UNION
-    { ?dataset a dcat:Distribution ; foaf:maker ?creator . }
+    { ?dataset a dcat:Distribution ; foaf:maker ?o . }
     }
     ''')
     sparql.setTimeout(300)
@@ -564,13 +564,13 @@ def getPublisher(url):
     PREFIX dcat: <http://www.w3.org/ns/dcat#>
     PREFIX void: <http://rdfs.org/ns/void#>
 
-    SELECT DISTINCT ?format
+    SELECT DISTINCT ?o
     WHERE {
-    { ?dataset a dcat:Dataset ; dcterms:publisher ?format . }
+    { ?dataset a dcat:Dataset ; dcterms:publisher ?o . }
     UNION
-    { ?dataset a dcat:Distribution ; dcterms:publisher ?format . }
+    { ?dataset a dcat:Distribution ; dcterms:publisher ?o . }
     UNION
-    { ?dataset a void:Dataset ; dcterms:publisher ?format . }
+    { ?dataset a void:Dataset ; dcterms:publisher ?o . }
     }
     ''')
     sparql.setTimeout(300)
@@ -589,24 +589,24 @@ def getNumEntities(url):
     sparql = SPARQLWrapper(url)
     sparql.setQuery('''
     PREFIX void: <http://rdfs.org/ns/void#>
-    SELECT DISTINCT ?entities
+    SELECT DISTINCT ?o
     WHERE {
-    { ?dataset a void:Dataset ; void:entities ?entities . }
+    { ?dataset a void:Dataset ; void:entities ?o . }
     UNION
-    { ?dataset a dcat:Dataset ; void:entities ?entities . }
+    { ?dataset a dcat:Dataset ; void:entities ?o . }
     UNION
-    { ?dataset a dcat:Distribution ; void:entities ?entities . }
+    { ?dataset a dcat:Distribution ; void:entities ?o . }
     }
     ''')
     sparql.setTimeout(300)
     sparql.setReturnFormat(JSON)
     results = sparql.query().convert()
     if isinstance(results,dict):
-        entities = utils.getResultsFromJSONCountInt(results)
-        return entities
+        entities = utils.getResultsFromJSON(results)
+        return int(entities)
     elif isinstance(results,Document):
-        entities = utils.getResultsFromXMLCount(results)
-        return entities
+        entities = utils.getResultsFromXML(results)
+        return int(entities)
     else:
         return False
     
@@ -639,13 +639,13 @@ def getContributors(url):
     PREFIX dcat: <http://www.w3.org/ns/dcat#>
     PREFIX void: <http://rdfs.org/ns/void#>
 
-    SELECT DISTINCT ?contributor
+    SELECT DISTINCT ?o
     WHERE {
-        { ?dataset a dcat:Dataset ; dcterms:contributor ?contributor . }
+        { ?dataset a dcat:Dataset ; dcterms:contributor ?o . }
         UNION
-        { ?dataset a dcat:Distribution ; dcterms:contributor ?contributor . }
+        { ?dataset a dcat:Distribution ; dcterms:contributor ?o . }
         UNION
-        { ?dataset a void:Dataset ; dcterms:contributor ?contributor . }
+        { ?dataset a void:Dataset ; dcterms:contributor ?o . }
     }
     ''')
     sparql.setTimeout(300)
@@ -691,19 +691,19 @@ def getFrequency(url):
     PREFIX dcat: <http://www.w3.org/ns/dcat#>
     PREFIX void: <http://rdfs.org/ns/void#>
 
-    SELECT ?frequency
+    SELECT ?o
     WHERE {
-    { ?dataset a dcat:Dataset ; dcterms:accrualPeriodicity ?frequency . }
+    { ?dataset a dcat:Dataset ; dcterms:accrualPeriodicity ?o . }
     UNION
-    { ?dataset a dcat:Distribution ; dcterms:accrualPeriodicity ?frequency . }
+    { ?dataset a dcat:Distribution ; dcterms:accrualPeriodicity ?o . }
     UNION
-    { ?dataset a void:Dataset ; dcterms:accrualPeriodicity ?frequency . }
+    { ?dataset a void:Dataset ; dcterms:accrualPeriodicity ?o . }
     UNION
-    { ?dataset a void:Dataset ; dcterms:Frequency ?frequency . }
+    { ?dataset a void:Dataset ; dcterms:Frequency ?o . }
     UNION
-    { ?dataset a dcat:Dataset ; dcterms:Frequency ?frequency . }
+    { ?dataset a dcat:Dataset ; dcterms:Frequency ?o . }
     UNION
-    { ?dataset a dcat:Distribution ; dcterms:Frequency ?frequency . }
+    { ?dataset a dcat:Distribution ; dcterms:Frequency ?o . }
     }
     ''')
     sparql.setTimeout(300)
@@ -724,19 +724,19 @@ def getCreationDate(url):
     PREFIX dcterms: <http://purl.org/dc/terms/>
     PREFIX dcat: <http://www.w3.org/ns/dcat#>
     PREFIX void: <http://rdfs.org/ns/void#>
-    SELECT DISTINCT ?creator
+    SELECT DISTINCT ?o
     WHERE {
-        { ?dataset a dcat:Dataset ; dcterms:created ?creator . }
+        { ?dataset a dcat:Dataset ; dcterms:created ?o . }
         UNION
-        { ?dataset a dcat:Distribution ; dcterms:created ?creator . }
+        { ?dataset a dcat:Distribution ; dcterms:created ?o . }
         UNION
-        { ?dataset a void:Dataset ; dcterms:created ?creator . }
+        { ?dataset a void:Dataset ; dcterms:created ?o . }
         UNION
-        { ?dataset a void:Dataset ; dcterms:issued ?creator . }
+        { ?dataset a void:Dataset ; dcterms:issued ?o . }
         UNION
-        { ?dataset a dcat:Distribution ; dcterms:issued ?creator . }
+        { ?dataset a dcat:Distribution ; dcterms:issued ?o . }
         UNION
-        { ?dataset a dcat:Dataset ; dcterms:issued ?creator . }
+        { ?dataset a dcat:Dataset ; dcterms:issued ?o . }
     }
     ''')
     sparql.setTimeout(300)
@@ -801,15 +801,15 @@ def getModificationDate(url):
     PREFIX dcterms: <http://purl.org/dc/terms/>
     PREFIX dcat: <http://www.w3.org/ns/dcat#>
     PREFIX void: <http://rdfs.org/ns/void#>
-    SELECT DISTINCT ?modified
+    SELECT DISTINCT ?o
     WHERE {
-        { ?dataset a dcat:Dataset ; dcterms:modified ?modified . }
+        { ?dataset a dcat:Dataset ; dcterms:modified ?o . }
         UNION
-        { ?dataset a dcat:Distribution ; dcterms:modified ?modified . }
+        { ?dataset a dcat:Distribution ; dcterms:modified ?o . }
         UNION
-        { ?dataset a void:Dataset ; dcterms:modified ?modified . }
+        { ?dataset a void:Dataset ; dcterms:modified ?o . }
     }
-    ORDER BY ASC(?modified)
+    ORDER BY ASC(?o)
     LIMIT 1
     ''')
     sparql.setTimeout(300)
@@ -882,13 +882,13 @@ def getDateUpdates(url):
     PREFIX dcterms: <http://purl.org/dc/terms/>
     PREFIX dcat: <http://www.w3.org/ns/dcat#>
     PREFIX void: <http://rdfs.org/ns/void#>
-    SELECT DISTINCT ?modified
+    SELECT DISTINCT ?o
     WHERE {
-        { ?dataset a dcat:Dataset ; dcterms:modified ?modified . }
+        { ?dataset a dcat:Dataset ; dcterms:modified ?o . }
         UNION
-        { ?dataset a dcat:Distribution ; dcterms:modified ?modified . }
+        { ?dataset a dcat:Distribution ; dcterms:modified ?o . }
         UNION
-        { ?dataset a void:Dataset ; dcterms:modified ?modified . }
+        { ?dataset a void:Dataset ; dcterms:modified ?o . }
     }
     ''')
     sparql.setTimeout(300)
@@ -1590,16 +1590,16 @@ def get_kg_name(url):
     PREFIX void: <http://rdfs.org/ns/void#>
     PREFIX dct: <http://purl.org/dc/terms/>
 
-    SELECT DISTINCT ?name
+    SELECT DISTINCT ?o
     WHERE {
     {
         ?dataset a dcat:Dataset ;
-                dct:title ?name .
+                dct:title ?o .
     }
     UNION
     {
         ?dataset a void:Dataset ;
-                dct:title ?name .
+                dct:title ?o .
     }
     }
     LIMIT 1
@@ -1629,16 +1629,16 @@ def get_kg_url(endpoint_url):
     PREFIX foaf: <http://xmlns.com/foaf/0.1/>
     PREFIX dcat: <http://www.w3.org/ns/dcat#>
 
-    SELECT DISTINCT ?homepage
+    SELECT DISTINCT ?o
     WHERE {
     {
         ?dataset a void:Dataset ;
-                foaf:homepage ?homepage .
+                foaf:homepage ?o .
     }
     UNION
     {
         ?dataset a dcat:Dataset ;
-                dcat:accessURL ?homepage .
+                dcat:accessURL ?o .
     }
     }
     LIMIT 1
@@ -1667,10 +1667,10 @@ def get_kg_id(endpoint_url):
     PREFIX void: <http://rdfs.org/ns/void#>
     PREFIX dct: <http://purl.org/dc/terms/>
 
-    SELECT DISTINCT ?identifier
+    SELECT DISTINCT ?o
     WHERE {
     ?dataset a ?type ;
-            dct:identifier ?identifier .
+            dct:identifier ?o .
     FILTER (?type IN (dcat:Dataset, void:Dataset))
     }
     LIMIT 1
