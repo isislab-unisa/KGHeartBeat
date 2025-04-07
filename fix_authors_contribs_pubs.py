@@ -45,4 +45,4 @@ def process_csv_files(folder_path, source_csv, key_column, columns_to_copy):
 # Example usage
 folder_path = "./Analysis results"  
 source_csv = "path/to/source.csv"  
-process_csv_files(folder_path, source_csv, key_column='KG id', columns_to_copy=['Author (query)','Contributor','Publisher','Verifiability score'])
+process_csv_files(folder_path, source_csv, key_column='KG id', columns_to_copy=['Author (query)','Contributor','Publisher','Verifiability score','Score','Normalized score'])
