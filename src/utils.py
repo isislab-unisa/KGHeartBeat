@@ -27,7 +27,7 @@ from urllib.parse import urlparse
 import json
 import ssl
 from API import Aggregator
-
+from API import fair_vacabularies
 
 #PRINT THE METADATI OF A KG
 def printMetadatiKG(metadct):
@@ -1290,3 +1290,14 @@ def find_search_engine_from_keywords(kg_id):
             return 0
     return 0
     
+def check_if_fair_vocabs(vocabs):
+    vocabs = vocabs.replace('[','')
+    vocabs = vocabs.replace(']','')
+    vocabs = vocabs.split(',')
+    total_vocabs = len(vocabs)
+    fair_vocabularies = []
+    for vocab in vocabs:
+        vocab = vocab.strip()
+        if vocab in fair_vocabularies:
+            fair_vocabularies.append(vocab)
+    return len(fair_vocabularies) / total_vocabs if total_vocabs > 0 else 0

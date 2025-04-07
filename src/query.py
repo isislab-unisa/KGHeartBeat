@@ -1755,3 +1755,37 @@ def get_kg_void(endpoint_url):
                 g.add((s, p, o))
     
     return g
+
+def check_void_dcat(endpoint_url):
+    sparql = SPARQLWrapper(endpoint_url)
+    query = """
+    PREFIX dcat: <http://www.w3.org/ns/dcat#>
+    PREFIX void: <http://rdfs.org/ns/void#>
+    PREFIX dct: <http://purl.org/dc/terms/>
+
+    SELECT DISTINCT ?s
+    WHERE {
+    {?s ?p void:Dataset .}
+    UNION
+    {?S ?p dcat:Dataset}
+    }
+
+    LIMIT 1
+    """
+    try:
+        sparql.setQuery(query)
+        sparql.setTimeout(300)
+        sparql.setReturnFormat(JSON)
+        results = sparql.query().convert()
+        if isinstance(results,dict):
+            urls = utils.getResultsFromJSONs(results)
+            if isinstance(urls,list):
+                return str(urls[0])
+            return urls
+        elif isinstance(results,Document):
+            urls = utils.getResultsFromXML(results)
+            return urls
+        else:
+            return False
+    except:
+        return False
