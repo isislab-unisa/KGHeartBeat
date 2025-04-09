@@ -27,7 +27,7 @@ from urllib.parse import urlparse
 import json
 import ssl
 from API import Aggregator
-from API import fair_vacabularies
+from API import fair_vocabularies
 
 #PRINT THE METADATI OF A KG
 def printMetadatiKG(metadct):
@@ -1186,10 +1186,6 @@ def return_updated_sparql_endpoint(id_kg):
         return 'https://dutchshipsandsailors.nl/?page_id=50'
     if id_kg == 'geographic-names-information-system-gnis':
         return 'https://gnis-ld.org/queries'
-    if id_kg == 'nomisma_org':
-        return 'https://nomisma.org/sparql/'
-    if id_kg == 'rism':
-        return 'https://opac.rism.info/sparql-endpoint'
     if id_kg == 'the-european-library-open-dataset':
         return 'https://sparql.europeana.eu/'
     if id_kg == 'zbw-pressemappe20':
@@ -1291,13 +1287,30 @@ def find_search_engine_from_keywords(kg_id):
     return 0
     
 def check_if_fair_vocabs(vocabs):
-    vocabs = vocabs.replace('[','')
-    vocabs = vocabs.replace(']','')
-    vocabs = vocabs.split(',')
     total_vocabs = len(vocabs)
-    fair_vocabularies = []
+    fair_vocabularies_defined = []
     for vocab in vocabs:
         vocab = vocab.strip()
         if vocab in fair_vocabularies:
-            fair_vocabularies.append(vocab)
-    return len(fair_vocabularies) / total_vocabs if total_vocabs > 0 else 0
+            fair_vocabularies_defined.append(vocab)
+    return len(fair_vocabularies_defined) / total_vocabs if total_vocabs > 0 else 0
+
+def check_at_least_sparql_on(sparql_url):
+    '''
+    Check if the SPARQL endpoint return a 200 status, also if the sparql editor is not interoperable
+    '''
+    try:
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        }
+        
+        response = requests.get(sparql_url, headers=headers, timeout=10)
+        
+        if 200 <= response.status_code < 300:
+            return 1
+        else:
+            return 0
+        
+    except requests.exceptions.RequestException as e:
+        # Handle any exceptions that may occur
+        return 0
