@@ -23,7 +23,8 @@ class MonitoringRequests:
     
     def getSPARQLEndpoint(self, id_kg):
         if id_kg in self.dataset_metadata:
-            return self.dataset_metadata[id_kg]['sparql'][0]['access_url']
+            if len([id_kg]['sparql']) > 0:
+                return self.dataset_metadata[id_kg]['sparql'][0]['access_url']
         else:
             return False
     

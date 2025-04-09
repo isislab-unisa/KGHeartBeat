@@ -122,7 +122,6 @@ class EvaluateFAIRness:
         print("Interoperability evaluation completed!")
 
     def calculate_FAIR_score(self):
-        self.fairness.to_json()
         self.fairness.fair_score = round(
             float(self.fairness.f_score) + 
             float(self.fairness.a_score) + 
