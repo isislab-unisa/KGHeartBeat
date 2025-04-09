@@ -55,8 +55,10 @@ class EvaluateFAIRness:
     def evaluate_availability(self):
         sparql_availability = 1 if self.kg_quality.availability.sparqlEndpoint == 'Available' else 0
         dump_availability = 1 if self.kg_quality.availability.RDFDumpM in [1, "1"] else 0
+        sparql_or_dump = 1 if sparql_availability == 1 or dump_availability == 1 else 0
+        sparql_on_not_interop = utils.check_at_least_sparql_on(self.kg_quality.extra.endpointUrl)
 
-        self.fairness.a1D = 1 if sparql_availability == 1 or dump_availability == 1 else 0
+        self.fairness.a1D = 1 if sparql_or_dump == 1 else 0.5 if sparql_or_dump == 0 and sparql_on_not_interop == 1 else 0
 
         available_on_search_engine = Aggregator.check_if_on_lodc_dh(self.kg_quality.extra.KGid)
         
@@ -66,7 +68,7 @@ class EvaluateFAIRness:
             void_availability = 1 if self.kg_quality.extra.voidAvailability == 'VoID file available' else 0
             self.fairness.a1M = 1 if sparql_availability == 1 or void_availability == 1 else 0
 
-        uses_https = 1 if self.kg_quality.security.useHTTPS not in [False, 'False'] or 'https' in self.kg_quality.extra.endpointUrl else 0
+        uses_https = 1 if self.kg_quality.security.useHTTPS in [True, 'True'] or self.kg_quality.availability.sparqlEndpoint == 'Available' else 0
         no_auth_required = 1 if self.kg_quality.security.requiresAuth in ["False", False, 'True', True] else 0
 
         self.fairness.a1_2 = round((uses_https + no_auth_required) / 2, 2)
