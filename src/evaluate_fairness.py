@@ -92,7 +92,8 @@ class EvaluateFAIRness:
 
         has_void = self.kg_quality.extra.urlVoid != ''
         has_void_from_endpoint = query.check_void_dcat(self.kg_quality.extra.endpointUrl) != False
-        self.fairness.r1_3M = 1 if has_void or has_void_from_endpoint else 0
+        lic_in_meta = 1 if self.kg_quality.licensing.licenseQuery != '-' and len(self.kg_quality.licensing.licenseQuery) > 0 else 0
+        self.fairness.r1_3M = 1 if has_void or has_void_from_endpoint or lic_in_meta else 0
 
         self.fairness.r_score = round((self.fairness.r1_1 + self.fairness.r1_2 + self.fairness.r1_3D + self.fairness.r1_3M) / 4, 2)
 
@@ -105,7 +106,10 @@ class EvaluateFAIRness:
         known_semantic_format = any(fmt in self.kg_quality.extra.metadataMediaType for fmt in ['api/sparql', 'rdf', 'RDF'])
         self.fairness.i1D = 1 if common_media_type or known_semantic_format else 0
 
-        self.fairness.i1M = 1 if self.kg_quality.extra.urlVoid != '' else 0
+        has_void = self.kg_quality.extra.urlVoid != ''
+        has_void_from_endpoint = query.check_void_dcat(self.kg_quality.extra.endpointUrl) != False
+        lic_in_meta = 1 if self.kg_quality.licensing.licenseQuery != '-' and len(self.kg_quality.licensing.licenseQuery) > 0 else 0
+        self.fairness.i1M = 1 if has_void or has_void_from_endpoint or lic_in_meta else 0
 
         has_vocab = self.kg_quality.verifiability.vocabularies not in ['-', '', '[]'] and len(self.kg_quality.verifiability.vocabularies) > 0
         self.fairness.i2 = utils.check_if_fair_vocabs(self.kg_quality.verifiability.vocabularies) if has_vocab else 0
