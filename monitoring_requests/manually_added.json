@@ -1,4 +1,2670 @@
 {
+    "performing-arts.ch": {
+        "owner": {
+            "name": "",
+            "email": ""
+        },
+        "identifier": "performing-arts.ch",
+        "website": "https://www.performing-arts.ch/resource/sapa:Search",
+        "triples": 0,
+        "full_download": [],
+        "keywords": [
+            "cultural-heritage",
+            "ch-tangible"
+        ],
+        "description": {
+            "en": "The SAPA Foundation collects, documents, archives, preserves and disseminates works from the field of the performing arts (dance, theatre, performance art, etc.) produced in Switzerland, associated with Switzerland or important to it. All these documents form the Helvetica of the performing arts. In the performing-arts.ch database, information about SAPA's archival holdings and about the performing arts in Switzerland will be successively made available as Linked Data. Both the data and the interfaces are continually being expanded to provide new ways of searching and interacting with the archive collections."
+        },
+        "title": "performing-arts.ch",
+        "Image": "",
+        "example": [],
+        "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "other_download": [],
+        "domain": "cultural-heritage",
+        "namespace": "",
+        "links": [
+            {
+                "target": "wikidata.org",
+                "value": 25496
+            },
+            {
+                "target": "catalogue.collectiondeladanse.ch",
+                "value": 20153
+            },
+            {
+                "target": "viaf.org",
+                "value": 14725
+            },
+            {
+                "target": "d-nb.info",
+                "value": 13057
+            },
+            {
+                "target": "isni.org",
+                "value": 9196
+            },
+            {
+                "target": "catalogue.bnf.fr",
+                "value": 6990
+            },
+            {
+                "target": "geonames.org",
+                "value": 3662
+            },
+            {
+                "target": "classifications.data.admin.ch",
+                "value": 2600
+            },
+            {
+                "target": "tls.theaterwissenschaft.ch",
+                "value": 2446
+            },
+            {
+                "target": "vocab.getty.edu",
+                "value": 110
+            },
+            {
+                "target": "id.loc.gov",
+                "value": 78
+            },
+            {
+                "target": "rdaregistry.info",
+                "value": 64
+            },
+            {
+                "target": "loc.gov",
+                "value": 24
+            },
+            {
+                "target": "eclap.eu",
+                "value": 17
+            },
+            {
+                "target": "",
+                "value": 4
+            },
+            {
+                "target": "ica.org",
+                "value": 4
+            },
+            {
+                "target": "nationalarchives.gov.uk",
+                "value": 2
+            },
+            {
+                "target": "data.bnf.fr",
+                "value": 2
+            },
+            {
+                "target": "justinhopkinsopera.com",
+                "value": 1
+            }
+        ],
+        "_id": "performing-arts.ch",
+        "time": "",
+        "sparql": [
+            {
+                "title": "",
+                "description": "SPARQL endpoint",
+                "access_url": "https://www.performing-arts.ch/sparql",
+                "status": ""
+            }
+        ],
+        "doi": "",
+        "contact_point": {
+            "name": "",
+            "email": "baptiste.decoulon@sapa.swiss"
+        }
+    },
+    "The-AA-Thesaurus": {
+        "owner": {
+            "name": "",
+            "email": ""
+        },
+        "identifier": "The-AA-Thesaurus",
+        "website": "https://www.getty.edu/research/tools/vocabularies/aat/about.html",
+        "triples": 0,
+        "full_download": [],
+        "keywords": [
+            "cultural-heritage",
+            "ch-generic",
+            "fairsharing"
+        ],
+        "description": {
+            "en": "The Art & Architecture Thesaurus \u00ae (AAT), the Getty Thesaurus of Geographic Names \u00ae (TGN), the Union List of Artist Names \u00ae (ULAN), the Cultural Objects Name Authority \u00ae (CONA), and the Getty Iconography Authority \u2122(IA) are structured resources that can be used to improve access to information for art, architecture, and other material culture. The Getty Vocabularies are not simple 'value vocabularies'; they are unique knowledge bases in themselves. Through rich metadata and links, the Getty Vocabularies provide powerful conduits for knowledge creation, complex research, and discovery for digital art history and related disciplines."
+        },
+        "title": "The Art & Architecture Thesaurus",
+        "Image": "",
+        "example": [],
+        "license": "Open Data Commons Attribution License (ODC-By) 1.0",
+        "other_download": [
+            {
+                "media_type": "text/html;charset=utf-8",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "access_url": "https://www.getty.edu/research/tools/vocabularies/aat/"
+            }
+        ],
+        "domain": "cultural-heritage",
+        "namespace": "",
+        "links": [
+            {
+                "target": "vocab.getty.edu",
+                "value": 138087
+            },
+            {
+                "target": "wikidata.org",
+                "value": 94832
+            },
+            {
+                "target": "id.loc.gov",
+                "value": 63876
+            },
+            {
+                "target": "viaf.org",
+                "value": 5173
+            },
+            {
+                "target": "rdaregistry.info",
+                "value": 2
+            }
+        ],
+        "_id": "The-AA-Thesaurus",
+        "time": "",
+        "sparql": [
+            {
+                "title": "",
+                "description": "SPARQL endpoint",
+                "access_url": "https://vocab.getty.edu/sparql",
+                "status": ""
+            }
+        ],
+        "doi": "https://doi.org/10.25504/FAIRsharing.LQfdaV",
+        "contact_point": {
+            "name": "",
+            "email": "vocab@getty.edu"
+        }
+    },
+    "MiMoTextBase": {
+        "owner": {
+            "name": "",
+            "email": ""
+        },
+        "identifier": "MiMoTextBase",
+        "website": "https://mimotext.uni-trier.de/english/",
+        "triples": 0,
+        "full_download": [
+            {
+                "media_type": "text/html; charset=utf-8",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "download_url": "https://doi.org/10.5281/zenodo.13825346"
+            }
+        ],
+        "keywords": [
+            "cultural-heritage",
+            "ch-tangible",
+            "zenodo",
+            "github"
+        ],
+        "description": {
+            "en": "Database on the French novel of the 18th century (1751-1800)"
+        },
+        "title": "MiMoTextBase",
+        "Image": "",
+        "example": [],
+        "license": "",
+        "other_download": [],
+        "domain": "cultural-heritage",
+        "namespace": "",
+        "links": [],
+        "_id": "MiMoTextBase",
+        "time": "",
+        "sparql": [
+            {
+                "title": "",
+                "description": "SPARQL endpoint",
+                "access_url": "https://query.mimotext.uni-trier.de/",
+                "status": ""
+            }
+        ],
+        "doi": "https://doi.org/10.5281/zenodo.13825346",
+        "contact_point": {
+            "name": "Christof Sch\u00f6ch",
+            "email": "schoech@uni-trier.de"
+        }
+    },
+    "NLS": {
+        "owner": {
+            "name": "",
+            "email": ""
+        },
+        "identifier": "NLS",
+        "website": "https://www.kb.se/in-english/about-us/the-national-library-of-sweden.html",
+        "triples": 0,
+        "full_download": [],
+        "keywords": [
+            "cultural-heritage",
+            "ch-tangible",
+            "github"
+        ],
+        "description": {
+            "en": "Kungliga biblioteket is the National Library of Sweden. Our collections extend more than a thousand years back in time and are growing daily.\nWe collect, preserve and give access to almost everything that is published in Sweden \u2013 from manuscripts, books and newspapers to music, TV programmes and pictures. The National Library (Kungliga biblioteket, KB) is a government agency under the Ministry of Education, headed by the National Librarian, Karin Gr\u00f6nvall."
+        },
+        "title": "National Library of Sweden",
+        "Image": "",
+        "example": [],
+        "license": "",
+        "other_download": [
+            {
+                "media_type": "text/html; charset=utf-8",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "access_url": "https://github.com/Kungbib/"
+            }
+        ],
+        "domain": "cultural-heritage",
+        "namespace": "",
+        "links": [],
+        "_id": "NLS",
+        "time": "",
+        "sparql": [
+            {
+                "title": "",
+                "description": "SPARQL endpoint",
+                "access_url": "https://libris.kb.se/sparql",
+                "status": ""
+            }
+        ],
+        "doi": "",
+        "contact_point": {
+            "name": "",
+            "email": ""
+        }
+    },
+    "Japan-Search": {
+        "owner": {
+            "name": "",
+            "email": ""
+        },
+        "identifier": "Japan-Search",
+        "website": "https://jpsearch.go.jp/",
+        "triples": 0,
+        "full_download": [],
+        "keywords": [
+            "cultural-heritage",
+            "ch-tangible"
+        ],
+        "description": {
+            "en": "Japan Search is a national platform for aggregating metadata of digital resources of various fields, such as Book/Publication, Official Document, Humanities and Art, and operated by the National Diet Library, Japan, in cooperation with a variety of organizations in Japan under policies established by Study Group for Promoting Digital Archiving. \nAside from providing searchable aggregated metadata, Japan Search provides metadata in a user-friendly format and also plays a vital role as a foundation for promoting content utilization. \n"
+        },
+        "title": "Japan Search",
+        "Image": "",
+        "example": [],
+        "license": "https://creativecommons.org/licenses/by/4.0/legalcode.en",
+        "other_download": [],
+        "domain": "cultural-heritage",
+        "namespace": "",
+        "links": [
+            {
+                "target": "jpsearch.go.jp",
+                "value": 5596
+            },
+            {
+                "target": "jla.or.jp",
+                "value": 4376
+            },
+            {
+                "target": "ja.dbpedia.org",
+                "value": 11
+            },
+            {
+                "target": "wikidata.org",
+                "value": 7
+            },
+            {
+                "target": "haiku-data.jp",
+                "value": 6
+            },
+            {
+                "target": "rightsstatements.org",
+                "value": 2
+            },
+            {
+                "target": "dbpedia.org",
+                "value": 1
+            },
+            {
+                "target": "creativecommons.org",
+                "value": 1
+            }
+        ],
+        "_id": "Japan-Search",
+        "time": "",
+        "sparql": [
+            {
+                "title": "",
+                "description": "SPARQL endpoint",
+                "access_url": "https://jpsearch.go.jp/rdf/sparql/",
+                "status": ""
+            }
+        ],
+        "doi": "",
+        "contact_point": {
+            "name": "",
+            "email": "https://jpsearch.go.jp/contact"
+        }
+    },
+    "Rijksmuseum": {
+        "owner": {
+            "name": "",
+            "email": ""
+        },
+        "identifier": "Rijksmuseum",
+        "website": "https://www.rijksmuseum.nl/nl",
+        "triples": 0,
+        "full_download": [],
+        "keywords": [
+            "cultural-heritage",
+            "ch-tangible"
+        ],
+        "description": {
+            "en": "The Rijksmuseum Collection dataset is an open-access digital repository of artworks and historical artifacts housed in the Rijksmuseum, the national museum of the Netherlands. The dataset provides structured metadata and high-resolution images of thousands of artworks, including paintings, sculptures, prints, ceramics, and historical objects."
+        },
+        "title": "Rijksmuseum Collection",
+        "Image": "",
+        "example": [],
+        "license": "https://creativecommons.org/licenses/by/4.0/",
+        "other_download": [],
+        "domain": "cultural-heritage",
+        "namespace": "",
+        "links": [],
+        "_id": "Rijksmuseum",
+        "time": "",
+        "sparql": [
+            {
+                "title": "",
+                "description": "SPARQL endpoint",
+                "access_url": "https://data.netwerkdigitaalerfgoed.nl/Rijksmuseum/collection/sparql",
+                "status": ""
+            }
+        ],
+        "doi": "",
+        "contact_point": {
+            "name": "",
+            "email": "https://www.rijksmuseum.nl/nl/footer/vragen-collectieonderzoek-en-data"
+        }
+    },
+    "FI-Library": {
+        "owner": {
+            "name": "",
+            "email": ""
+        },
+        "identifier": "FI-Library",
+        "website": "https://www.kansalliskirjasto.fi/en",
+        "triples": 0,
+        "full_download": [],
+        "keywords": [
+            "cultural-heritage",
+            "ch-intangible"
+        ],
+        "description": {
+            "en": "The National Library of Finland is a cultural heritage organisation  that is open to all and provides nationwide services to citizens, scientific communities and other societal operators."
+        },
+        "title": "Finnish Public Libraries",
+        "Image": "",
+        "example": [
+            {
+                "_id": "",
+                "title": "",
+                "description": "",
+                "access_url": "https://data.nationallibrary.fi/bib/sparql"
+            }
+        ],
+        "license": "",
+        "other_download": [],
+        "domain": "cultural-heritage",
+        "namespace": "",
+        "links": [
+            {
+                "target": "issn.org",
+                "value": 33673
+            }
+        ],
+        "_id": "FI-Library",
+        "time": "",
+        "sparql": [
+            {
+                "title": "",
+                "description": "SPARQL endpoint",
+                "access_url": "https://data.nationallibrary.fi/bib/sparql",
+                "status": ""
+            }
+        ],
+        "doi": "",
+        "contact_point": {
+            "name": "",
+            "email": "natlibfi-data@helsinki.fi"
+        }
+    },
+    "Shanghai-Library-Open-Data-Platform": {
+        "owner": {
+            "name": "",
+            "email": ""
+        },
+        "identifier": "Shanghai-Library-Open-Data-Platform",
+        "website": "https://data.library.sh.cn/index",
+        "triples": 0,
+        "full_download": [],
+        "keywords": [
+            "cultural-heritage",
+            "ch-generic"
+        ],
+        "description": {
+            "en": "As an open data platform for the Digital Humanities Project of Shanghai Library, this website, in the form of Linked Data, will publish the general knowledge base (people, places, time, events, and objects), literature knowledge base (genealogy, archive and manuscripts, ancient books, etc.), ontology vocabulary used in the digital humanities project, various data cleaning and conversion Tools used in the construction of the project, as well as research papers and courseware published by the project team on the Internet."
+        },
+        "title": "Shanghai Library Open Data Platform",
+        "Image": "",
+        "example": [],
+        "license": "cc2.0",
+        "other_download": [],
+        "domain": "cultural-heritage",
+        "namespace": "",
+        "links": [
+            {
+                "target": "cbdb.library.sh.cn",
+                "value": 34048
+            },
+            {
+                "target": "data.library.sh.cn",
+                "value": 11404
+            },
+            {
+                "target": "cba.ac.cn",
+                "value": 2758
+            },
+            {
+                "target": "viaf.org",
+                "value": 1589
+            },
+            {
+                "target": "geonames.org",
+                "value": 140
+            },
+            {
+                "target": "id.loc.gov",
+                "value": 61
+            }
+        ],
+        "_id": "Shanghai-Library-Open-Data-Platform",
+        "time": "",
+        "sparql": [
+            {
+                "title": "",
+                "description": "SPARQL endpoint",
+                "access_url": "https://data.library.sh.cn/sparql/",
+                "status": ""
+            }
+        ],
+        "doi": "",
+        "contact_point": {
+            "name": "",
+            "email": ""
+        }
+    },
+    "National-Library-Netherlands": {
+        "owner": {
+            "name": "",
+            "email": ""
+        },
+        "identifier": "National-Library-Netherlands",
+        "website": "https://data.bibliotheken.nl/",
+        "triples": 0,
+        "full_download": [
+            {
+                "media_type": "text/turtle",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "download_url": "https://data.bibliotheken.nl/KB/Production/assets/67ca92c1e3db98faece0b350"
+            },
+            {
+                "media_type": "text/turtle",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "download_url": "https://data.bibliotheken.nl/KB/Production/assets/67989eff13a71b95bbce02a4"
+            },
+            {
+                "media_type": "text/turtle",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "download_url": "https://data.bibliotheken.nl/KB/Production/assets/6793bf161ce8599fa32bb8ed"
+            }
+        ],
+        "keywords": [
+            "cultural-heritage",
+            "ch-tangible",
+            "github"
+        ],
+        "description": {
+            "en": "Data.libraries.nl is the linked data publishing portal of the KB, national library of the Netherlands. This portal provides access to all Linked Open Data (LOD) as made available by the KB. All data is available under the CC0 license."
+        },
+        "title": "National Library Netherlands",
+        "Image": "",
+        "example": [],
+        "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "other_download": [
+            {
+                "media_type": "text/turtle",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "access_url": "https://data.bibliotheken.nl/KB/Production/assets/67ca92c1e3db98faece0b350"
+            },
+            {
+                "media_type": "text/turtle",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "access_url": "https://data.bibliotheken.nl/KB/Production/assets/67989eff13a71b95bbce02a4"
+            },
+            {
+                "media_type": "text/turtle",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "access_url": "https://data.bibliotheken.nl/KB/Production/assets/6793bf161ce8599fa32bb8ed"
+            },
+            {
+                "media_type": "text/html; charset=utf-8",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "access_url": "https://github.com/KBNLresearch"
+            }
+        ],
+        "domain": "cultural-heritage",
+        "namespace": "",
+        "links": [],
+        "_id": "National-Library-Netherlands",
+        "time": "",
+        "sparql": [
+            {
+                "title": "",
+                "description": "SPARQL endpoint",
+                "access_url": "https://data.bibliotheken.nl/KB/Production/sparql",
+                "status": ""
+            }
+        ],
+        "doi": "",
+        "contact_point": {
+            "name": "",
+            "email": ""
+        }
+    },
+    "Antique-Renaissance": {
+        "owner": {
+            "name": "",
+            "email": ""
+        },
+        "identifier": "Antique-Renaissance",
+        "website": "https://database.census.de/",
+        "triples": 0,
+        "full_download": [],
+        "keywords": [
+            "cultural-heritage",
+            "ch-tangible"
+        ],
+        "description": {
+            "en": ""
+        },
+        "title": "Database of the Census of Antique Works of Art and Architecture Known in the Renaissance",
+        "Image": "",
+        "example": [
+            {
+                "_id": "",
+                "title": "",
+                "description": "",
+                "access_url": "https://docs.census.de/navigating-and-searching/examples-of-typical-searches"
+            }
+        ],
+        "license": "",
+        "other_download": [],
+        "domain": "cultural-heritage",
+        "namespace": "",
+        "links": [],
+        "_id": "Antique-Renaissance",
+        "time": "",
+        "sparql": [
+            {
+                "title": "",
+                "description": "SPARQL endpoint",
+                "access_url": "https://censussparql.culture.hu-berlin.de/#/dataset/CENSUS/query",
+                "status": ""
+            }
+        ],
+        "doi": "",
+        "contact_point": {
+            "name": "",
+            "email": "census.ikb@hu-berlin.de"
+        }
+    },
+    "ARTSDATA-CA": {
+        "owner": {
+            "name": "",
+            "email": ""
+        },
+        "identifier": "ARTSDATA-CA",
+        "website": "http://www.artsdata.ca/",
+        "triples": 0,
+        "full_download": [],
+        "keywords": [
+            "cultural-heritage",
+            "ch-tangible",
+            "github"
+        ],
+        "description": {
+            "en": "A pan-Canadian knowledge graph for the arts.\n\nWelcome to the Artsdata knowledge graph. To discover the advantages of linked open data, stay up-to-date with current projects and upcoming events, and learn more about the Artsdata Community Group, please visit www.artsdata.ca"
+        },
+        "title": "ARTSDATA.CA",
+        "Image": "",
+        "example": [],
+        "license": "https://creativecommons.org/publicdomain/mark/1.0",
+        "other_download": [
+            {
+                "media_type": "text/html; charset=utf-8",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "access_url": "https://github.com/culturecreates"
+            }
+        ],
+        "domain": "cultural-heritage",
+        "namespace": "",
+        "links": [],
+        "_id": "ARTSDATA-CA",
+        "time": "",
+        "sparql": [
+            {
+                "title": "",
+                "description": "SPARQL endpoint",
+                "access_url": "https://artsdata-trifid-production.herokuapp.com/sparql/",
+                "status": ""
+            }
+        ],
+        "doi": "",
+        "contact_point": {
+            "name": "",
+            "email": "https://www.artsdata.ca/en/contact-us"
+        }
+    },
+    "ArCo": {
+        "owner": {
+            "name": "",
+            "email": ""
+        },
+        "identifier": "ArCo",
+        "website": "http://wit.istc.cnr.it/arco/?lang=en",
+        "triples": 0,
+        "full_download": [],
+        "keywords": [
+            "cultural-heritage",
+            "ch-generic",
+            "zenodo"
+        ],
+        "description": {
+            "en": "ArCo is the knowledge Graph of the Italian Cultural Heritage: it consists of 13 vocabularies describing the cultural heritage domain and data from the General Catalogue of the Italian Ministry of Cultural Heritage (MiC) published as RDF."
+        },
+        "title": "Architecture of Knowledge",
+        "Image": "",
+        "example": [
+            {
+                "_id": "",
+                "title": "",
+                "description": "",
+                "access_url": "http://wit.istc.cnr.it/arco/?lang=en#esempi"
+            }
+        ],
+        "license": "https://creativecommons.org/licenses/by/4.0/legalcode",
+        "other_download": [
+            {
+                "media_type": "text/html; charset=iso-8859-1",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "access_url": "https://stlab.istc.cnr.it/arco/docker_data/arco-dataset-v1.0.nt.tar.gz"
+            }
+        ],
+        "domain": "cultural-heritage",
+        "namespace": "",
+        "links": [],
+        "_id": "ArCo",
+        "time": "",
+        "sparql": [
+            {
+                "title": "",
+                "description": "SPARQL endpoint",
+                "access_url": "http://wit.istc.cnr.it/arco/virtuoso/sparql",
+                "status": ""
+            }
+        ],
+        "doi": "https://doi.org/10.5281/zenodo.3242580",
+        "contact_point": {
+            "name": "",
+            "email": ""
+        }
+    },
+    "ConfermentSampo": {
+        "owner": {
+            "name": "",
+            "email": ""
+        },
+        "identifier": "ConfermentSampo",
+        "website": "https://demo.seco.tkk.fi/saha/project/index.shtml?model=promootiosampo",
+        "triples": 0,
+        "full_download": [],
+        "keywords": [
+            "cultural-heritage",
+            "ontology",
+            "ch-generic"
+        ],
+        "description": {
+            "en": "ConfermentSampo Knowledge Graph includes linked data representing conferments and conferment participants in different subgraphs. The data covers 100 conferments and approx. 1100 people. In addition varying amounts of data from AcademySampo and BiographySampo are present."
+        },
+        "title": "ConfermentSampo",
+        "Image": "",
+        "example": [],
+        "license": "http://creativecommons.org/licenses/by/4.0/",
+        "other_download": [],
+        "domain": "cultural-heritage",
+        "namespace": "",
+        "links": [
+            {
+                "target": "ylioppilasmatrikkeli.fi",
+                "value": 28002
+            },
+            {
+                "target": "wikidata.org",
+                "value": 8060
+            },
+            {
+                "target": "sws.geonames.org",
+                "value": 5574
+            },
+            {
+                "target": "fi.wikipedia.org",
+                "value": 3477
+            },
+            {
+                "target": "doria.fi",
+                "value": 3433
+            },
+            {
+                "target": "ldf.fi",
+                "value": 3323
+            },
+            {
+                "target": "kansallisbiografia.fi",
+                "value": 2613
+            },
+            {
+                "target": "biografiasampo.fi",
+                "value": 2612
+            },
+            {
+                "target": "yso.fi",
+                "value": 1229
+            },
+            {
+                "target": "dbpedia.org",
+                "value": 582
+            },
+            {
+                "target": "commons.wikimedia.org",
+                "value": 408
+            },
+            {
+                "target": "en.wikipedia.org",
+                "value": 316
+            },
+            {
+                "target": "eduskunta.fi",
+                "value": 210
+            },
+            {
+                "target": "fi.wikisource.org",
+                "value": 203
+            },
+            {
+                "target": "sv.wikipedia.org",
+                "value": 110
+            },
+            {
+                "target": "valtioneuvosto.fi",
+                "value": 73
+            }
+        ],
+        "_id": "ConfermentSampo",
+        "time": "",
+        "sparql": [
+            {
+                "title": "",
+                "description": "SPARQL endpoint",
+                "access_url": "http://ldf.fi/promootiosampo/sparql",
+                "status": ""
+            }
+        ],
+        "doi": "",
+        "contact_point": {
+            "name": "",
+            "email": ""
+        }
+    },
+    "FI-Museum": {
+        "owner": {
+            "name": "",
+            "email": ""
+        },
+        "identifier": "FI-Museum",
+        "website": "https://www.ldf.fi/dataset/mufi/index.html",
+        "triples": 0,
+        "full_download": [],
+        "keywords": [
+            "cultural-heritage",
+            "ch-generic",
+            "ch-tangible"
+        ],
+        "description": {
+            "en": "The is a dataset based on the MuseumFinland that got, e.g., the Semantic Web Challenge Award in 2004. This is an example of Linked Data from the era before the term was invented. See the research page for more information about the project"
+        },
+        "title": "Museum Finland",
+        "Image": "",
+        "example": [],
+        "license": "https://creativecommons.org/licenses/by/4.0/",
+        "other_download": [],
+        "domain": "cultural-heritage",
+        "namespace": "",
+        "links": [],
+        "_id": "FI-Museum",
+        "time": "",
+        "sparql": [
+            {
+                "title": "",
+                "description": "SPARQL endpoint",
+                "access_url": "http://ldf.fi/mufi/sparql",
+                "status": ""
+            }
+        ],
+        "doi": "",
+        "contact_point": {
+            "name": "Eero Hyv\u00f6nen",
+            "email": "eero.hyvonen(at)aalto.fi"
+        }
+    },
+    "MMM": {
+        "owner": {
+            "name": "",
+            "email": ""
+        },
+        "identifier": "MMM",
+        "website": "https://mappingmanuscriptmigrations.org/en/",
+        "triples": 0,
+        "full_download": [],
+        "keywords": [
+            "cultural-heritage",
+            "ch-tangible",
+            "zenodo",
+            "github"
+        ],
+        "description": {
+            "en": "Mapping Manuscript Migrations (MMM) is a semantic portal for finding and studying pre-modern manuscripts and their movements, based on linked collections of the Schoenberg Institute for Manuscript Studies, the Bodleian Libraries, and the Institut de recherche et d'histoire des textes."
+        },
+        "title": "Mapping Manuscript Migrations",
+        "Image": "",
+        "example": [
+            {
+                "_id": "",
+                "title": "",
+                "description": "",
+                "access_url": "https://mappingmanuscriptmigrations.org/en/instructions"
+            }
+        ],
+        "license": "https://creativecommons.org/licenses/by-nc/4.0/",
+        "other_download": [
+            {
+                "media_type": "text/html; charset=utf-8",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "access_url": "https://github.com/mapping-manuscript-migrations"
+            }
+        ],
+        "domain": "cultural-heritage",
+        "namespace": "",
+        "links": [
+            {
+                "target": "viaf.org",
+                "value": 15778
+            },
+            {
+                "target": "ldf.fi",
+                "value": 8469
+            },
+            {
+                "target": "wikidata.org",
+                "value": 4604
+            },
+            {
+                "target": "data.bnf.fr",
+                "value": 4275
+            },
+            {
+                "target": "vocab.getty.edu",
+                "value": 4236
+            },
+            {
+                "target": "isni.org",
+                "value": 3455
+            },
+            {
+                "target": "d-nb.info",
+                "value": 3065
+            },
+            {
+                "target": "idref.fr",
+                "value": 3052
+            },
+            {
+                "target": "id.loc.gov",
+                "value": 2565
+            },
+            {
+                "target": "catalogue.bnf.fr",
+                "value": 1908
+            },
+            {
+                "target": "geonames.org",
+                "value": 174
+            },
+            {
+                "target": "mirabileweb.it",
+                "value": 111
+            },
+            {
+                "target": "pinakes.irht.cnrs.fr",
+                "value": 71
+            },
+            {
+                "target": "oxforddnb.com",
+                "value": 40
+            },
+            {
+                "target": "en.wikipedia.org",
+                "value": 36
+            },
+            {
+                "target": "doi.org",
+                "value": 35
+            },
+            {
+                "target": "klosterdatenbank.germania-sacra.de",
+                "value": 25
+            },
+            {
+                "target": "placenames.org.uk",
+                "value": 21
+            },
+            {
+                "target": "treccani.it",
+                "value": 20
+            },
+            {
+                "target": "historyofparliamentonline.org",
+                "value": 15
+            },
+            {
+                "target": "bbti.bodleian.ox.ac.uk",
+                "value": 6
+            },
+            {
+                "target": "db.theclergydatabase.org.uk",
+                "value": 6
+            },
+            {
+                "target": "incunables.bodleian.ox.ac.uk",
+                "value": 5
+            },
+            {
+                "target": "resource.database.rag-online.org",
+                "value": 4
+            },
+            {
+                "target": "www2.fgw.vu.nl",
+                "value": 4
+            },
+            {
+                "target": "armorial.library.utoronto.ca",
+                "value": 3
+            },
+            {
+                "target": "visionofbritain.org.uk",
+                "value": 3
+            },
+            {
+                "target": "thesaurus.cerl.org",
+                "value": 3
+            },
+            {
+                "target": "dare.ht.lu.se",
+                "value": 2
+            },
+            {
+                "target": "db.pbw.kcl.ac.uk",
+                "value": 2
+            },
+            {
+                "target": "users.bart.nl",
+                "value": 2
+            },
+            {
+                "target": "hist-einband.de",
+                "value": 2
+            },
+            {
+                "target": "de.wikipedia.org",
+                "value": 2
+            },
+            {
+                "target": "epns.nottingham.ac.uk",
+                "value": 2
+            },
+            {
+                "target": "fr.wikipedia.org",
+                "value": 2
+            },
+            {
+                "target": "sdbm.library.upenn.edu",
+                "value": 2
+            },
+            {
+                "target": "yba.llgc.org.uk",
+                "value": 1
+            },
+            {
+                "target": "bibale.irht.cnrs.fr",
+                "value": 1
+            },
+            {
+                "target": "data.cerl.org",
+                "value": 1
+            },
+            {
+                "target": "digital.bodleian.ox.ac.uk",
+                "value": 1
+            },
+            {
+                "target": "dx.doi.org",
+                "value": 1
+            },
+            {
+                "target": "hdl.handle.net",
+                "value": 1
+            },
+            {
+                "target": "jonas.irht.cnrs.fr",
+                "value": 1
+            },
+            {
+                "target": "orbita.bib.ub.edu",
+                "value": 1
+            },
+            {
+                "target": "textinc-person.bodleian.ox.ac.uk",
+                "value": 1
+            },
+            {
+                "target": "thepeerage.com",
+                "value": 1
+            },
+            {
+                "target": "venn.lib.cam.ac.uk",
+                "value": 1
+            },
+            {
+                "target": "bodley.ox.ac.uk",
+                "value": 1
+            },
+            {
+                "target": "british-history.ac.uk",
+                "value": 1
+            },
+            {
+                "target": "chch.ox.ac.uk",
+                "value": 1
+            },
+            {
+                "target": "cn-telma.fr",
+                "value": 1
+            },
+            {
+                "target": "lombardiabeniculturali.it",
+                "value": 1
+            },
+            {
+                "target": "monasticwales.org",
+                "value": 1
+            },
+            {
+                "target": "nuovabibliotecamanoscritta.it",
+                "value": 1
+            },
+            {
+                "target": "oxfordreference.com",
+                "value": 1
+            },
+            {
+                "target": "repertoriumpomponianum.it",
+                "value": 1
+            },
+            {
+                "target": "simonofgenoa.org",
+                "value": 1
+            },
+            {
+                "target": "trismegistos.org",
+                "value": 1
+            },
+            {
+                "target": "vincentiusbelvacensis.eu",
+                "value": 1
+            },
+            {
+                "target": "en.wikisource.org",
+                "value": 1
+            },
+            {
+                "target": "library.leeds.ac.uk",
+                "value": 1
+            },
+            {
+                "target": "plato.stanford.edu",
+                "value": 1
+            },
+            {
+                "target": "pleiades.stoa.org",
+                "value": 1
+            },
+            {
+                "target": "pseudo-isidore.com",
+                "value": 1
+            },
+            {
+                "target": "referenceworks.brillonline.com",
+                "value": 1
+            },
+            {
+                "target": "research.uni-leipzig.de",
+                "value": 1
+            },
+            {
+                "target": "deutsche-biographie.de",
+                "value": 1
+            }
+        ],
+        "_id": "MMM",
+        "time": "",
+        "sparql": [
+            {
+                "title": "",
+                "description": "SPARQL endpoint",
+                "access_url": "http://ldf.fi/mmm/sparql",
+                "status": ""
+            }
+        ],
+        "doi": "https://doi.org/10.5281/zenodo.4440464",
+        "contact_point": {
+            "name": "Toby Burrows",
+            "email": ""
+        }
+    },
+    "Semantic-Kalevala": {
+        "owner": {
+            "name": "",
+            "email": ""
+        },
+        "identifier": "Semantic-Kalevala",
+        "website": "https://www.ldf.fi/dataset/folklore/index.html",
+        "triples": 0,
+        "full_download": [],
+        "keywords": [
+            "cultural-heritage",
+            "ch-intangible"
+        ],
+        "description": {
+            "en": "The folklore service contains initially Semantic Kalevala, the RDF version fo the Finnish national epic with rich even-based annotations using FinnONTO ontologies. Annotations of all 50 poems of the \"New Kalevala\" are included totalling some 30,000 RDF triples. Since 1841 Kalevala has been translaten into ca. 60 human languages; Semantic Kalevala is the first translation of the epic for the machines to enjoy, too!\n\nThe dataset was created by SeCo in collaboration with the Finnish Literature Society. The research behind this work is described at the Semantic Kalevala project page. We plan to add other folklore data into the Linked Open Folklore service later.\n\nSemantic Kalevala is in use in the CultureSampo portal as a thematic view.\n\n"
+        },
+        "title": "Semantic Kalevala",
+        "Image": "",
+        "example": [],
+        "license": "https://creativecommons.org/licenses/by/4.0/",
+        "other_download": [],
+        "domain": "cultural-heritage",
+        "namespace": "",
+        "links": [
+            {
+                "target": "yso.fi",
+                "value": 47210
+            }
+        ],
+        "_id": "Semantic-Kalevala",
+        "time": "",
+        "sparql": [
+            {
+                "title": "",
+                "description": "SPARQL endpoint",
+                "access_url": "http://ldf.fi/folklore/sparql",
+                "status": ""
+            }
+        ],
+        "doi": "",
+        "contact_point": {
+            "name": "Eero Hyv\u00f6nen",
+            "email": "eero.hyvonen(at)aalto.fi"
+        }
+    },
+    "Smithsonian": {
+        "owner": {
+            "name": "",
+            "email": ""
+        },
+        "identifier": "Smithsonian",
+        "website": "https://americanart.si.edu/",
+        "triples": 0,
+        "full_download": [
+            {
+                "media_type": "application/x-tar",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "download_url": "http://sirismm.si.edu/siris/linkeddata/n3.tar"
+            }
+        ],
+        "keywords": [
+            "cultural-heritage",
+            "ch-tangible",
+            "github"
+        ],
+        "description": {
+            "en": "Since 1829, the Smithsonian American Art Museum has maintained a diverse collection of American artworks, keeping authoritative records about these objects and the artists who created them. In 2014, we began to publish this information as Linked Open Data (LOD). Our online collection now connects to a growing body of related data published by organizations worldwide, fostering new opportunities for discovery, research, and collaboration."
+        },
+        "title": "Smithsonian American Art Museum",
+        "Image": "",
+        "example": [],
+        "license": "http://creativecommons.org/about/cc0",
+        "other_download": [
+            {
+                "media_type": "text/html; charset=utf-8",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "access_url": "https://github.com/american-art/SAAM"
+            }
+        ],
+        "domain": "cultural-heritage",
+        "namespace": "",
+        "links": [],
+        "_id": "Smithsonian",
+        "time": "",
+        "sparql": [
+            {
+                "title": "",
+                "description": "SPARQL endpoint",
+                "access_url": "http://edan.si.edu/saam/sparql",
+                "status": ""
+            }
+        ],
+        "doi": "",
+        "contact_point": {
+            "name": "",
+            "email": "https://americanart.si.edu/about/contact"
+        }
+    },
+    "Zeri-Photo-Archive": {
+        "owner": {
+            "name": "",
+            "email": ""
+        },
+        "identifier": "Zeri-Photo-Archive",
+        "website": "https://data.fondazionezeri.unibo.it/",
+        "triples": 0,
+        "full_download": [
+            {
+                "media_type": "application/zip",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "download_url": "https://amsacta.unibo.it/id/eprint/5157/1/zeri-dump-2016-05-17.zip"
+            }
+        ],
+        "keywords": [
+            "cultural-heritage",
+            "ch-tangible",
+            "github"
+        ],
+        "description": {
+            "en": "The Zeri Photo Archive RDF dataset represents a considerable subset of data already available at Zeri Catalog web site and discoverable through the Europeana Portal, mostly regarding works of Modern Art (15th-16th centuries): about 19.000 works of art and more than 30.000 photographs depicting such works are accurately described by means of like 10 million of RDF triples."
+        },
+        "title": "Zeri Photo Archive",
+        "Image": "",
+        "example": [],
+        "license": "Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)",
+        "other_download": [
+            {
+                "media_type": "text/html; charset=utf-8",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "access_url": "https://github.com/aschimmenti/humansOfZeriPhotoArchive"
+            }
+        ],
+        "domain": "cultural-heritage",
+        "namespace": "",
+        "links": [],
+        "_id": "Zeri-Photo-Archive",
+        "time": "",
+        "sparql": [
+            {
+                "title": "",
+                "description": "SPARQL endpoint",
+                "access_url": "http://data.fondazionezeri.unibo.it/sparql",
+                "status": ""
+            }
+        ],
+        "doi": "",
+        "contact_point": {
+            "name": "",
+            "email": ""
+        }
+    },
+    "Archives-Hub": {
+        "owner": {
+            "name": "",
+            "email": ""
+        },
+        "identifier": "Archives-Hub",
+        "website": "https://archiveshub.jisc.ac.uk/introduction/",
+        "triples": 0,
+        "full_download": [],
+        "keywords": [
+            "cultural-heritage",
+            "ch-tangible",
+            "fairsharing"
+        ],
+        "description": {
+            "en": "The Archives Hub brings together descriptions of thousands of the UK\u2019s archive collections. Representing over 350 institutions across the country, the Archives Hub is an effective way to discover unique and often little-known sources to support your research. New descriptions are added every week, often representing collections being made available for the first time."
+        },
+        "title": "Archives Hub",
+        "Image": "",
+        "example": [],
+        "license": "",
+        "other_download": [],
+        "domain": "cultural-heritage",
+        "namespace": "",
+        "links": [],
+        "_id": "Archives-Hub",
+        "time": "",
+        "sparql": [
+            {
+                "title": "",
+                "description": "SPARQL endpoint",
+                "access_url": "http://data.archiveshub.ac.uk/sparql",
+                "status": ""
+            }
+        ],
+        "doi": "https://doi.org/10.25504/FAIRsharing.4e6af5",
+        "contact_point": {
+            "name": "",
+            "email": "archiveshub@jisc.ac.uk"
+        }
+    },
+    "Yale": {
+        "owner": {
+            "name": "",
+            "email": ""
+        },
+        "identifier": "Yale",
+        "website": "https://britishart.yale.edu/",
+        "triples": 0,
+        "full_download": [],
+        "keywords": [
+            "cultural-heritage",
+            "ch-tangible"
+        ],
+        "description": {
+            "en": "This service provides machine readable access to the Center\u2019s collections data. The data in the Linked Open Data service is expressed in RDF to allow our data set to link to other data sets without the need for database integration. We have organized our data using the CIDOC CRM (Conceptual Reference Model). The CRM is a powerful and robust ontology that represents our data set granularly to permit semantic integration with other data sets. This resource exists to support scholarly and creative activities, and to facilitate interdisciplinary projects"
+        },
+        "title": "Yale centre of British Art",
+        "Image": "",
+        "example": [],
+        "license": "https://britishart.yale.edu/open-data-and-data-services-terms-use",
+        "other_download": [],
+        "domain": "cultural-heritage",
+        "namespace": "",
+        "links": [],
+        "_id": "Yale",
+        "time": "",
+        "sparql": [
+            {
+                "title": "",
+                "description": "SPARQL endpoint",
+                "access_url": "http://collection.britishart.yale.edu/sparql/",
+                "status": ""
+            }
+        ],
+        "doi": "",
+        "contact_point": {
+            "name": "",
+            "email": "ycba.info@yale.edu"
+        }
+    },
+    "ADL": {
+        "owner": {
+            "name": "",
+            "email": ""
+        },
+        "identifier": "ADL",
+        "website": "",
+        "triples": 0,
+        "full_download": [],
+        "keywords": [
+            "cultural-heritage",
+            "ch-intangible"
+        ],
+        "description": {
+            "en": "The Alexandria Digital Library (ADL) Gazetteer containing about 8 million places and their toponyms and uses the ADL Feature Type Thesaurus for typing. Contains co-reference resolution via owl:sameAs assertions to Dbpedia and TGN."
+        },
+        "title": "Alexandria Digital Library Gazetteer",
+        "Image": "",
+        "example": [],
+        "license": "",
+        "other_download": [],
+        "domain": "cultural-heritage",
+        "namespace": "",
+        "links": [],
+        "_id": "ADL",
+        "time": "",
+        "sparql": [
+            {
+                "title": "",
+                "description": "SPARQL endpoint",
+                "access_url": "http://adl-gazetteer.geog.ucsb.edu:8080/sparql/select",
+                "status": ""
+            }
+        ],
+        "doi": "",
+        "contact_point": {
+            "name": "",
+            "email": ""
+        }
+    },
+    "MusicKG": {
+        "owner": {
+            "name": "",
+            "email": ""
+        },
+        "identifier": "MusicKG",
+        "website": "https://github.com/victoriaeyharabide/MusicKG?tab=readme-ov-file",
+        "triples": 0,
+        "full_download": [
+            {
+                "media_type": "text/plain; charset=utf-8",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "download_url": "https://raw.githubusercontent.com/victoriaeyharabide/MusicKG/master/MusicKG.ttl"
+            }
+        ],
+        "keywords": [
+            "cultural-heritage",
+            "ch-intangible",
+            "github"
+        ],
+        "description": {
+            "en": "MusicKG is a multilingual knowledge graph about medieval musicology and musical iconography. A specific ontology has been designed to integrate data from several iconographic and musicology databases. In addition, MusicKG is connected to the Linked Open Data cloud with a significant part of its classes, properties and instances being linked to Wikidata, Getty Vocabularies, MIMO, Iconclass and GeoNames."
+        },
+        "title": "MusicKG",
+        "Image": "",
+        "example": [],
+        "license": "",
+        "other_download": [],
+        "domain": "cultural-heritage",
+        "namespace": "",
+        "links": [],
+        "_id": "MusicKG",
+        "time": "",
+        "sparql": [],
+        "doi": "",
+        "contact_point": {
+            "name": "victoriaeyharabide",
+            "email": ""
+        }
+    },
+    "CIDOC-CRM": {
+        "owner": {
+            "name": "",
+            "email": ""
+        },
+        "identifier": "CIDOC-CRM",
+        "website": "https://cidoc-crm.org/",
+        "triples": 0,
+        "full_download": [],
+        "keywords": [
+            "cultural-heritage",
+            "ontology",
+            "ch-generic",
+            "fairsharing"
+        ],
+        "description": {
+            "en": "The CIDOC Conceptual Reference Model (CRM) is a theoretical and practical tool for information integration in the field of cultural heritage. It can help researchers, administrators and the public explore complex questions with regards to our past across diverse and dispersed datasets. The CIDOC CRM achieves this by providing definitions and a formal structure for describing the implicit and explicit concepts and relationships used in cultural heritage documentation and of general interest for the querying and exploration of such data. Such models are also known as formal ontologies. These formal descriptions allow the integration of data from multiple sources in a software and schema agnostic fashion."
+        },
+        "title": "CIDOC-CRM",
+        "Image": "",
+        "example": [],
+        "license": "",
+        "other_download": [
+            {
+                "media_type": "text/html; charset=UTF-8",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "access_url": "https://cidoc-crm.org/versions-of-the-cidoc-crm"
+            }
+        ],
+        "domain": "cultural-heritage",
+        "namespace": "",
+        "links": [],
+        "_id": "CIDOC-CRM",
+        "time": "",
+        "sparql": [],
+        "doi": "https://doi.org/10.25504/FAIRsharing.9xcr4z",
+        "contact_point": {
+            "name": "",
+            "email": ""
+        }
+    },
+    "Mondis": {
+        "owner": {
+            "name": "",
+            "email": ""
+        },
+        "identifier": "Mondis",
+        "website": "https://www.mondis.cz/en/web/portal/introduction",
+        "triples": 0,
+        "full_download": [],
+        "keywords": [
+            "cultural-heritage",
+            "ch-generic"
+        ],
+        "description": {
+            "en": "MONDIS is a research project developed in partnership between the Czech Technical University in Prague , Faculty of Electrical Engineering, Department of Cybernetics and the Institute of Theoretical and Applied Mechanics AS CR , vvi.\nIts main aims are to support collaboration and experience exchange and to enhance integration of existing knowledge sources in the field of cultural heritage protection.\nMore specifically MONDIS focuses on:\n\u2022    Documentation of damages and failures of cultural heritage objects.\n\u2022    Analysis of dependencies between failures and their causes.\n\u2022    Damage mitigation measures and intervention plans.\n\u2022    Risk factors of failure occurrence and their prevention."
+        },
+        "title": "Mondis",
+        "Image": "",
+        "example": [],
+        "license": "",
+        "other_download": [],
+        "domain": "cultural-heritage",
+        "namespace": "",
+        "links": [],
+        "_id": "Mondis",
+        "time": "",
+        "sparql": [],
+        "doi": "",
+        "contact_point": {
+            "name": "Ing. Jaroslav Valach, Ph.D",
+            "email": "valach [et] itam.cas.cz"
+        }
+    },
+    "DigitalNZ": {
+        "owner": {
+            "name": "",
+            "email": ""
+        },
+        "identifier": "DigitalNZ",
+        "website": "https://digitalnz.org/",
+        "triples": 0,
+        "full_download": [],
+        "keywords": [
+            "cultural-heritage",
+            "ch-tangible"
+        ],
+        "description": {
+            "en": "DigitalNZ is the search site for all things New Zealand. We connect you to reliable digital collections from our content partners, including: libraries, museums, galleries, government, departments, the media and community groups.\nOn DigitalNZ you can discover more than 30 million digital items from more than 200 organisations on any topic, all for free. You'll find: videos, newspapers, maps, photographs, audio, recordings, artworks, news, reports."
+        },
+        "title": "DigitalNZ",
+        "Image": "",
+        "example": [],
+        "license": "https://creativecommons.org/licenses/by/4.0/",
+        "other_download": [
+            {
+                "media_type": "text/html; charset=utf-8",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "access_url": "https://digitalnz.org/developers"
+            }
+        ],
+        "domain": "cultural-heritage",
+        "namespace": "",
+        "links": [],
+        "_id": "DigitalNZ",
+        "time": "",
+        "sparql": [],
+        "doi": "",
+        "contact_point": {
+            "name": "",
+            "email": "develop@digitalnz.org"
+        }
+    },
+    "Fondazione-Zeri": {
+        "owner": {
+            "name": "",
+            "email": ""
+        },
+        "identifier": "Fondazione-Zeri",
+        "website": "https://fondazionezeri.unibo.it/it",
+        "triples": 0,
+        "full_download": [],
+        "keywords": [
+            "cultural-heritage",
+            "ch-tangible"
+        ],
+        "description": {
+            "en": "\nThe Federico Zeri Foundation is a centre for research and specialist training in the History of Art. It was set up in 1999 by the University of Bologna with a view to making the life-work and profile of Federico Zeri known, as well as preserving his bequest and turning it to best account: an Art Library (46,000 volumes, 37,000 auction catalogues, 60 periodicals) and a Photo Archive (290,000 photographs of monuments and artworks)."
+        },
+        "title": "Fondazione Zeri",
+        "Image": "",
+        "example": [],
+        "license": "https://creativecommons.org/licenses/by-nc/4.0/",
+        "other_download": [
+            {
+                "media_type": "text/html;charset=UTF-8",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "access_url": "https://catalogo.fondazionezeri.unibo.it/home/en"
+            }
+        ],
+        "domain": "cultural-heritage",
+        "namespace": "",
+        "links": [],
+        "_id": "Fondazione-Zeri",
+        "time": "",
+        "sparql": [],
+        "doi": "",
+        "contact_point": {
+            "name": "Marcello Rossini",
+            "email": "marcello.rossini@unibo.it"
+        }
+    },
+    "Library-of-America": {
+        "owner": {
+            "name": "",
+            "email": ""
+        },
+        "identifier": "Library-of-America",
+        "website": "https://dp.la/",
+        "triples": 0,
+        "full_download": [],
+        "keywords": [
+            "cultural-heritage",
+            "ch-tangible",
+            "github"
+        ],
+        "description": {
+            "en": "The Digital Public Library of America amplifies the value of libraries and cultural organizations as Americans\u2019 most trusted sources of shared knowledge. We do this by collaborating with partners to accelerate innovative tools and ideas that empower and equip libraries to make information more accessible.\n"
+        },
+        "title": "Digital Public Library of America",
+        "Image": "",
+        "example": [],
+        "license": "http://creativecommons.org/licenses/by/3.0/legalcode",
+        "other_download": [
+            {
+                "media_type": "text/html; charset=UTF-8",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "access_url": "https://pro.dp.la/developers"
+            },
+            {
+                "media_type": "text/html; charset=utf-8",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "access_url": "https://github.com/dpla"
+            }
+        ],
+        "domain": "cultural-heritage",
+        "namespace": "",
+        "links": [],
+        "_id": "Library-of-America",
+        "time": "",
+        "sparql": [],
+        "doi": "",
+        "contact_point": {
+            "name": "",
+            "email": "tech@dp.la"
+        }
+    },
+    "Auckland-Museum": {
+        "owner": {
+            "name": "",
+            "email": ""
+        },
+        "identifier": "Auckland-Museum",
+        "website": "https://www.aucklandmuseum.com/",
+        "triples": 0,
+        "full_download": [],
+        "keywords": [
+            "cultural-heritage",
+            "ch-tangible",
+            "github"
+        ],
+        "description": {
+            "en": "Search T\u0101maki Paenga Hira Auckland Museum's Collections Online, featuring over 900,000 records and 300,000 openly licensed images from our Natural Sciences, Documentary Heritage and Human History Collections."
+        },
+        "title": "Auckland Museum",
+        "Image": "",
+        "example": [
+            {
+                "_id": "",
+                "title": "",
+                "description": "",
+                "access_url": "https://github.com/AucklandMuseum/AucklandMuseum_API/wiki/(4)-Additional-Tips"
+            }
+        ],
+        "license": "",
+        "other_download": [
+            {
+                "media_type": "text/html; charset=utf-8",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "access_url": "https://github.com/AucklandMuseum/AucklandMuseum_API?tab=readme-ov-file"
+            },
+            {
+                "media_type": "text/html; charset=utf-8",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "access_url": "https://github.com/AucklandMuseum"
+            }
+        ],
+        "domain": "cultural-heritage",
+        "namespace": "",
+        "links": [],
+        "_id": "Auckland-Museum",
+        "time": "",
+        "sparql": [],
+        "doi": "",
+        "contact_point": {
+            "name": "",
+            "email": ""
+        }
+    },
+    "BNE": {
+        "owner": {
+            "name": "",
+            "email": ""
+        },
+        "identifier": "BNE",
+        "website": "https://bnelab.bne.es/en/projects/",
+        "triples": 0,
+        "full_download": [],
+        "keywords": [
+            "cultural-heritage",
+            "ch-tangible"
+        ],
+        "description": {
+            "en": "BNE currently allows data from its bibliographic catalogue and authority file to be downloaded and reused free of charge in XML and MRC formats; from its linked data portals in RDF format, and via the SPARQL access point; and from the Hispanic Digital Library using the OAI protocol for exchange and recollection."
+        },
+        "title": "National Library of Spain",
+        "Image": "",
+        "example": [],
+        "license": "Creative Commons Public Domain Dedication",
+        "other_download": [],
+        "domain": "cultural-heritage",
+        "namespace": "",
+        "links": [],
+        "_id": "BNE",
+        "time": "",
+        "sparql": [],
+        "doi": "",
+        "contact_point": {
+            "name": "",
+            "email": "bnelab@bne.es"
+        }
+    },
+    "Korea-Library": {
+        "owner": {
+            "name": "",
+            "email": ""
+        },
+        "identifier": "Korea-Library",
+        "website": "https://www.nl.go.kr/EN/main/index.do",
+        "triples": 0,
+        "full_download": [],
+        "keywords": [
+            "cultural-heritage",
+            "ch-tangible"
+        ],
+        "description": {
+            "en": "Our library is not just a repository of books but a dynamic hub for knowledge, research, and lifelong learning. We are committed to providing an inclusive and stimulating environment where visitors can explore a wealth of resources, from ancient texts to the latest digital publications."
+        },
+        "title": "National Library of Korea",
+        "Image": "",
+        "example": [],
+        "license": "",
+        "other_download": [],
+        "domain": "cultural-heritage",
+        "namespace": "",
+        "links": [],
+        "_id": "Korea-Library",
+        "time": "",
+        "sparql": [],
+        "doi": "",
+        "contact_point": {
+            "name": "",
+            "email": ""
+        }
+    },
+    "Russian-Museum": {
+        "owner": {
+            "name": "",
+            "email": ""
+        },
+        "identifier": "Russian-Museum",
+        "website": "https://www.rusmuseum.ru/",
+        "triples": 0,
+        "full_download": [],
+        "keywords": [
+            "cultural-heritage",
+            "ch-tangible"
+        ],
+        "description": {
+            "en": "ivaling the Tretyakov Gallery in Moscow as the world's finest collection of Russian art, the State Russian Museum has an illustrious history that began when the fiercely nationalist Tsar Alexander III became the first Russian ruler to make a significant collection of art by Russian artists. His son, Nicholas II, decided to open a museum in his father's honour and, in 1895, bought the Mikhailovskiy Palace to house the collection. Originally called the Alexandrovskiy Museum, it was opened to the public in 1898."
+        },
+        "title": "The State Russian Museum",
+        "Image": "",
+        "example": [],
+        "license": "",
+        "other_download": [],
+        "domain": "cultural-heritage",
+        "namespace": "",
+        "links": [],
+        "_id": "Russian-Museum",
+        "time": "",
+        "sparql": [],
+        "doi": "",
+        "contact_point": {
+            "name": "\t\nSvetlana Biryukova",
+            "email": "vrm@rusmuseum.ru  "
+        }
+    },
+    "National-Library-of-Scotland": {
+        "owner": {
+            "name": "",
+            "email": ""
+        },
+        "identifier": "National-Library-of-Scotland",
+        "website": "https://data.nls.uk/tools/jupyter-notebooks/semantic-web/",
+        "triples": 0,
+        "full_download": [
+            {
+                "media_type": "application/x-zip-compressed",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "download_url": "https://nlsfoundry.s3.amazonaws.com/metadata/nls-moving-image-archive-2024.zip"
+            },
+            {
+                "media_type": "application/x-zip-compressed",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "download_url": "https://nlsfoundry.s3.amazonaws.com/metadata/nls-nbs-v5.zip"
+            },
+            {
+                "media_type": "application/zip",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "download_url": "https://nlsfoundry.s3.amazonaws.com/download/metadata-collections/BOSLIT.zip"
+            }
+        ],
+        "keywords": [
+            "cultural-heritage",
+            "ch-tangible",
+            "github"
+        ],
+        "description": {
+            "en": "This project explores the adoption of Semantic Web technologies such as Resource Description Framework (RDF), SPARQL and standard vocabularies promoted by relevant institutions to transform, enrich and assess the Data Foundry\u2019s digital collections, which will enable users to understand how the metadata can be improved to enhance discoverability, visibility and reuse.\nThis work is based on the following metadata datasets including MARCXML as metadata format:\n\u2013Moving Image Archive\n\u2013The National Bibliography of Scotland (version 2)\n\u2013Bibliography of Scottish Literature in Translation (BOSLIT)"
+        },
+        "title": "National Library of Scotland",
+        "Image": "",
+        "example": [],
+        "license": "https://creativecommons.org/licenses/by/4.0/",
+        "other_download": [
+            {
+                "media_type": "text/html; charset=utf-8",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "access_url": "https://github.com/NLS-Digital-Scholarship"
+            }
+        ],
+        "domain": "cultural-heritage",
+        "namespace": "",
+        "links": [],
+        "_id": "National-Library-of-Scotland",
+        "time": "",
+        "sparql": [],
+        "doi": "",
+        "contact_point": {
+            "name": "",
+            "email": ""
+        }
+    },
+    "Epigraphic-Database-Heidelberg": {
+        "owner": {
+            "name": "",
+            "email": ""
+        },
+        "identifier": "Epigraphic-Database-Heidelberg",
+        "website": "https://edh.ub.uni-heidelberg.de/",
+        "triples": 0,
+        "full_download": [
+            {
+                "media_type": "application/zip",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "download_url": "https://edh.ub.uni-heidelberg.de/data/download/edh_linked_data.zip"
+            }
+        ],
+        "keywords": [
+            "cultural-heritage",
+            "ch-tangible",
+            "zenodo"
+        ],
+        "description": {
+            "en": "The Epigraphic Database Heidelberg contains the texts of Latin and bilingual (i.e. Latin-Greek) inscriptions of the Roman Empire. The epigraphic monuments were collected and kept up to date on the basis of modern research. With the help of search functions specific queries can be carried out - e.g. a search for words in inscriptions and / or particular descriptive data. The search results are often displayed together with photos and drawings. Another focus lies on showing the exact find spots of inscriptions. The Epigraphic Database Heidelberg was a project of the  Heidelberg Academy of Sciences and Humanities during the years 1993 - 2021."
+        },
+        "title": "Epigraphic Database Heidelberg",
+        "Image": "",
+        "example": [],
+        "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "other_download": [],
+        "domain": "cultural-heritage",
+        "namespace": "",
+        "links": [],
+        "_id": "Epigraphic-Database-Heidelberg",
+        "time": "",
+        "sparql": [],
+        "doi": "https://doi.org/10.5281/zenodo.3575155",
+        "contact_point": {
+            "name": "",
+            "email": ""
+        }
+    },
+    "OntoComedySources": {
+        "owner": {
+            "name": "",
+            "email": ""
+        },
+        "identifier": "OntoComedySources",
+        "website": "https://github.com/AndreaDeDomenico97/OntoComedySources",
+        "triples": 0,
+        "full_download": [
+            {
+                "media_type": "text/html; charset=utf-8",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "download_url": "https://github.com/AndreaDeDomenico97/OntoComedySources/blob/master/OntoComedySources.owl"
+            }
+        ],
+        "keywords": [
+            "cultural-heritage",
+            "ontology",
+            "ch-tangible",
+            "github"
+        ],
+        "description": {
+            "en": "OntoComedySources, an ontology for the\nprimary sources of Dante Alighieri\u2019s Commedia, both literary and iconographic, with a focus on the latter."
+        },
+        "title": "OntoComedySources",
+        "Image": "",
+        "example": [],
+        "license": "",
+        "other_download": [],
+        "domain": "cultural-heritage",
+        "namespace": "",
+        "links": [],
+        "_id": "OntoComedySources",
+        "time": "",
+        "sparql": [],
+        "doi": "",
+        "contact_point": {
+            "name": "Andrea De Domenico",
+            "email": "https://github.com/AndreaDeDomenico97"
+        }
+    },
+    "OntoCeramic-2.0": {
+        "owner": {
+            "name": "",
+            "email": ""
+        },
+        "identifier": "OntoCeramic-2.0",
+        "website": "https://github.com/dfsantamaria/OntoCeramic-1.0",
+        "triples": 0,
+        "full_download": [
+            {
+                "media_type": "text/html; charset=utf-8",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "download_url": "https://github.com/dfsantamaria/OntoCeramic-1.0/blob/master/OntoLoc.owl"
+            },
+            {
+                "media_type": "text/html; charset=utf-8",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "download_url": "https://github.com/dfsantamaria/OntoCeramic-1.0/blob/master/OntoCeramic1.owl"
+            }
+        ],
+        "keywords": [
+            "cultural-heritage",
+            "ontology",
+            "ch-intangible",
+            "github"
+        ],
+        "description": {
+            "en": "OntoCeramic 2.0, model the new survey and the legacy data concerning Sicilian ancient potteries\ncollected in the archives of Heritage Superintendence of Syracuse and\nCatania, in the Regional Technical Office of Sicily, and in the State\nArchives of Palermo and Catania. OntoCeramic 2.0, developed using the\nWeb Ontology Language 2 (OWL 2) and constructed according to the\nstandard CIDOC Conceptual Reference Model (CRM"
+        },
+        "title": "OntoCeramic 2.0",
+        "Image": "",
+        "example": [],
+        "license": "",
+        "other_download": [],
+        "domain": "cultural-heritage",
+        "namespace": "",
+        "links": [],
+        "_id": "OntoCeramic-2.0",
+        "time": "",
+        "sparql": [],
+        "doi": "",
+        "contact_point": {
+            "name": "Daniele Francesco Santamaria",
+            "email": "daniele.santamaria@unict.it"
+        }
+    },
+    "SaintGall-Ontology": {
+        "owner": {
+            "name": "",
+            "email": ""
+        },
+        "identifier": "SaintGall-Ontology",
+        "website": "https://www.dmi.unict.it/~santamaria/projects/benedictines/archive/ontologies/SaintGall/stgallOntology.owl",
+        "triples": 0,
+        "full_download": [],
+        "keywords": [
+            "cultural-heritage",
+            "ontology",
+            "ch-tangible"
+        ],
+        "description": {
+            "en": "The SaintGall Ontology describes buildings and green spaces depicted in the Saint Gall\nplan considering their cardinal orientation, their position with respect to other entities\ninside the plan, and their architectonic, structural, and functional features.\nThe ontology exploits the following main classes. The class Building describes a\nch-generic building, Garden specifies a ch-generic green space, Element describes architectural, natural, ornamental, and votive elements, furnitures and tools of common use illustrated in the plan."
+        },
+        "title": "SaintGall Ontology",
+        "Image": "",
+        "example": [],
+        "license": "",
+        "other_download": [],
+        "domain": "cultural-heritage",
+        "namespace": "",
+        "links": [],
+        "_id": "SaintGall-Ontology",
+        "time": "",
+        "sparql": [],
+        "doi": "",
+        "contact_point": {
+            "name": "",
+            "email": ""
+        }
+    },
+    "Linguistic-Phenomena-Ontology": {
+        "owner": {
+            "name": "",
+            "email": ""
+        },
+        "identifier": "Linguistic-Phenomena-Ontology",
+        "website": "https://github.com/Gallosiciliani/languagefeatures?tab=readme-ov-file",
+        "triples": 0,
+        "full_download": [
+            {
+                "media_type": "text/turtle;charset=UTF-8",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "download_url": "https://gallosiciliani.unict.it/ns/gs-features"
+            }
+        ],
+        "keywords": [
+            "cultural-heritage",
+            "ontology",
+            "ch-intangible",
+            "fairsharing"
+        ],
+        "description": {
+            "en": "An ontology to represent linguistic phenomena, in particular those that have changed over time the pronunciation or morphology of lexical\nelements. This ontology is applied to the study of some Gallo-Italic varieties spoken in Sicily"
+        },
+        "title": "Linguistic Phenomena Ontology",
+        "Image": "",
+        "example": [],
+        "license": "",
+        "other_download": [],
+        "domain": "cultural-heritage",
+        "namespace": "",
+        "links": [],
+        "_id": "Linguistic-Phenomena-Ontology",
+        "time": "",
+        "sparql": [],
+        "doi": "",
+        "contact_point": {
+            "name": "Cristiano Longo",
+            "email": ""
+        }
+    },
+    "ICON": {
+        "owner": {
+            "name": "",
+            "email": ""
+        },
+        "identifier": "ICON",
+        "website": "https://br0ast.github.io/ICON/ICONOntologyDocumentationcurrent/index-en.html",
+        "triples": 0,
+        "full_download": [
+            {
+                "media_type": "application/ld+json",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "download_url": "https://br0ast.github.io/ICON/ICONOntologyDocumentationcurrent/ontology.jsonld"
+            },
+            {
+                "media_type": "application/rdf+xml",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "download_url": "https://br0ast.github.io/ICON/ICONOntologyDocumentationcurrent/ontology.rdf"
+            },
+            {
+                "media_type": "application/n-triples",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "download_url": "https://br0ast.github.io/ICON/ICONOntologyDocumentationcurrent/ontology.nt"
+            },
+            {
+                "media_type": "text/turtle; charset=utf-8",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "download_url": "https://br0ast.github.io/ICON/ICONOntologyDocumentationcurrent/ontology.ttl"
+            }
+        ],
+        "keywords": [
+            "cultural-heritage",
+            "ontology",
+            "ch-tangible",
+            "zenodo"
+        ],
+        "description": {
+            "en": "ICON, an ontology that models artistic interpretations of artworks\u2019 subject matter (i.e., iconographies) and meanings (i.e., symbols, iconological aspects). Developed by conceptualizing authoritative knowledge and notions\ntaken from Panofsky\u2019s levels of interpretation theory, ICON ontology focuses on the granularity of interpretations. It can\nbe used to describe an interpretation of an artwork from the pre-iconographical, icongraphical, and iconological levels"
+        },
+        "title": "ICON",
+        "Image": "",
+        "example": [],
+        "license": "https://creativecommons.org/licenses/by/4.0/",
+        "other_download": [],
+        "domain": "cultural-heritage",
+        "namespace": "",
+        "links": [],
+        "_id": "ICON",
+        "time": "",
+        "sparql": [],
+        "doi": "https://doi.org/10.5281/zenodo.5833118",
+        "contact_point": {
+            "name": "Bruno Sartini",
+            "email": ""
+        }
+    },
+    "Polifonia": {
+        "owner": {
+            "name": "",
+            "email": ""
+        },
+        "identifier": "Polifonia",
+        "website": "https://polifonia-project.github.io/ontology-network/",
+        "triples": 0,
+        "full_download": [
+            {
+                "media_type": "text/html; charset=utf-8",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "download_url": "https://github.com/polifonia-project/ontology-network/blob/main/ontology/ontology-network.owl"
+            }
+        ],
+        "keywords": [
+            "cultural-heritage",
+            "ontology",
+            "ch-intangible",
+            "github"
+        ],
+        "description": {
+            "en": "The Polifonia Ontology Network (PON) provides a modular backbone of music ontologies to address both cultural heritage and more general queries in the music domain"
+        },
+        "title": "Polifonia",
+        "Image": "",
+        "example": [],
+        "license": "https://creativecommons.org/licenses/by/4.0/",
+        "other_download": [
+            {
+                "media_type": "text/html; charset=utf-8",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "access_url": "https://github.com/polifonia-project"
+            }
+        ],
+        "domain": "cultural-heritage",
+        "namespace": "",
+        "links": [],
+        "_id": "Polifonia",
+        "time": "",
+        "sparql": [],
+        "doi": "",
+        "contact_point": {
+            "name": "Polifonia H2020",
+            "email": "https://github.com/polifonia-project"
+        }
+    },
+    "Atlas-of-Paths": {
+        "owner": {
+            "name": "",
+            "email": ""
+        },
+        "identifier": "Atlas-of-Paths",
+        "website": "https://schema.gov.it/lode/extract?url=https://w3id.org/italia/onto/AtlasOfPaths",
+        "triples": 0,
+        "full_download": [
+            {
+                "media_type": "text/plain;charset=UTF-8",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "download_url": "https://schema.gov.it/lode/source?url=https://w3id.org/italia/onto/AtlasOfPaths"
+            }
+        ],
+        "keywords": [
+            "cultural-heritage",
+            "ontology",
+            "ch-tangible",
+            "zenodo"
+        ],
+        "description": {
+            "en": "This is the Italian application profile of the ontology on the digital atlas of paths of Italy. The paths can be historical, naturalistic, cultural and religious, they cross the country from north to south and represent a fundamental part of the slow tourism offer. The digital atlas of paths is nothing more than a container of routes and ways designed and built on the guidelines indicated by the ministerial directive and regulated - with the development of appropriate criteria - within the related Committee, inter-institutional coordination formed by MiBAC, Regions and Autonomous Provinces"
+        },
+        "title": "Atlas of Paths Ontology - Italian Application Profile",
+        "Image": "",
+        "example": [],
+        "license": "",
+        "other_download": [],
+        "domain": "cultural-heritage",
+        "namespace": "",
+        "links": [],
+        "_id": "Atlas-of-Paths",
+        "time": "",
+        "sparql": [],
+        "doi": "https://doi.org/10.5281/zenodo.14058232",
+        "contact_point": {
+            "name": "Istituto di Scienze e Tecnologie della Cognizione del CNR - Semantic Technology Lab (STLab) ",
+            "email": ""
+        }
+    },
+    "Music-Note-Ontology": {
+        "owner": {
+            "name": "",
+            "email": ""
+        },
+        "identifier": "Music-Note-Ontology",
+        "website": "https://github.com/andreamust/music_note_pattern/",
+        "triples": 0,
+        "full_download": [
+            {
+                "media_type": "text/html; charset=utf-8",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "download_url": "https://github.com/andreamust/music_note_pattern/blob/main/data.owl"
+            },
+            {
+                "media_type": "text/html; charset=utf-8",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "download_url": "https://github.com/andreamust/music_note_pattern/blob/main/musicalobject.owl"
+            },
+            {
+                "media_type": "text/html; charset=utf-8",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "download_url": "https://github.com/andreamust/music_note_pattern/blob/main/notepattern-aligns.owl"
+            },
+            {
+                "media_type": "text/html; charset=utf-8",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "download_url": "https://github.com/andreamust/music_note_pattern/blob/main/notepattern.owl"
+            },
+            {
+                "media_type": "text/html; charset=utf-8",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "download_url": "https://github.com/andreamust/music_note_pattern/blob/main/scorepart.owl"
+            }
+        ],
+        "keywords": [
+            "cultural-heritage",
+            "ontology",
+            "ch-intangible",
+            "github",
+            "zenodo"
+        ],
+        "description": {
+            "en": "Music Note Ontology, an ontology for modelling music notes and their realisation. The ontology addresses the relation between a note represented in a symbolic representation system, and its realisation, i.e. a musical performance"
+        },
+        "title": "Music Note Ontology",
+        "Image": "",
+        "example": [
+            {
+                "_id": "",
+                "title": "",
+                "description": "",
+                "access_url": "https://github.com/andreamust/music_note_pattern/tree/main/SPARQL_queries"
+            }
+        ],
+        "license": "MIT License",
+        "other_download": [
+            {
+                "media_type": "text/html; charset=utf-8",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "access_url": "https://github.com/andreamust/music_note_pattern"
+            },
+            {
+                "media_type": "text/html; charset=utf-8",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "access_url": "https://doi.org/10.5281/zenodo.6047855"
+            }
+        ],
+        "domain": "cultural-heritage",
+        "namespace": "",
+        "links": [],
+        "_id": "Music-Note-Ontology",
+        "time": "",
+        "sparql": [],
+        "doi": "",
+        "contact_point": {
+            "name": "Andrea Poltronieri",
+            "email": "andrea.poltronieri21@gmail.com"
+        }
+    },
+    "HaMSE": {
+        "owner": {
+            "name": "",
+            "email": ""
+        },
+        "identifier": "HaMSE",
+        "website": "https://github.com/andreamust/HaMSE_Ontology",
+        "triples": 0,
+        "full_download": [
+            {
+                "media_type": "text/plain; charset=utf-8",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "download_url": "https://raw.githubusercontent.com/andreamust/HaMSE_Ontology/master/schema"
+            }
+        ],
+        "keywords": [
+            "cultural-heritage",
+            "ontology",
+            "ch-intangible",
+            "github",
+            "zenodo"
+        ],
+        "description": {
+            "en": "HaMSE, an ontology capable of describing musical features that can\nassist musicological research. More specifically, HaMSE proposes to address issues that have been\naffecting musicological research for decades: the representation of music and the relationship between\nquantitative and qualitative data. To do this, HaMSE allows the alignment between different music\nrepresentation systems and describes a set of musicological features that can allow the music analysis\nat different granularity levels."
+        },
+        "title": "HaMSE",
+        "Image": "",
+        "example": [],
+        "license": "MIT License",
+        "other_download": [
+            {
+                "media_type": "text/html; charset=utf-8",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "access_url": "https://zenodo.org/records/6047780"
+            },
+            {
+                "media_type": "text/html; charset=utf-8",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "access_url": "https://github.com/andreamust/HaMSE_Ontology"
+            }
+        ],
+        "domain": "cultural-heritage",
+        "namespace": "",
+        "links": [],
+        "_id": "HaMSE",
+        "time": "",
+        "sparql": [],
+        "doi": "",
+        "contact_point": {
+            "name": "Andrea Poltronieri",
+            "email": "andrea.poltronieri21@gmail.com"
+        }
+    },
+    "FOod": {
+        "owner": {
+            "name": "",
+            "email": ""
+        },
+        "identifier": "FOod",
+        "website": "http://etna.istc.cnr.it/food/#",
+        "triples": 0,
+        "full_download": [
+            {
+                "media_type": "application/xml",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "download_url": "https://figshare.com/ndownloader/files/5397878"
+            }
+        ],
+        "keywords": [
+            "cultural-heritage",
+            "ontology",
+            "ch-tangible"
+        ],
+        "description": {
+            "en": "The FOOD (FOod in Open Data) project defines and makes available standardisation models and reference ontologies for representing food quality certification schemes, in accordance with product specifications defined by the Italian Ministry of Agricultural, Food and Forestry Policies. FOOD focuses on the semantic representation of the information and production rules set out in the product specifications for agri-food products and their quality designations, including Protected Designation of Origin (PDO) and Protected Geographical Indication (PGI) schemes."
+        },
+        "title": "FOOD: FOod in Open Data",
+        "Image": "",
+        "example": [],
+        "license": "http://creativecommons.org/licenses/by/4.0/",
+        "other_download": [],
+        "domain": "cultural-heritage",
+        "namespace": "",
+        "links": [],
+        "_id": "FOod",
+        "time": "",
+        "sparql": [],
+        "doi": "",
+        "contact_point": {
+            "name": "stlab-istc-cnr",
+            "email": ""
+        }
+    },
+    "ATLAS-Italian-Digital-CH": {
+        "owner": {
+            "name": "",
+            "email": ""
+        },
+        "identifier": "ATLAS-Italian-Digital-CH",
+        "website": "https://www.ilc.cnr.it/progetti/atlas/",
+        "triples": 0,
+        "full_download": [
+            {
+                "media_type": "application/ld+json",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "download_url": "https://dh-atlas.github.io/deliverables/ontology/serializations/ontology.jsonld"
+            },
+            {
+                "media_type": "application/rdf+xml",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "download_url": "https://dh-atlas.github.io/deliverables/ontology/serializations/ontology.owl"
+            },
+            {
+                "media_type": "application/n-triples",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "download_url": "https://dh-atlas.github.io/deliverables/ontology/serializations/ontology.nt"
+            },
+            {
+                "media_type": "text/turtle; charset=utf-8",
+                "description": "",
+                "status": "",
+                "title": "",
+                "mirror": [],
+                "download_url": "https://dh-atlas.github.io/deliverables/ontology/serializations/ontology.ttl"
+            }
+        ],
+        "keywords": [
+            "cultural-heritage",
+            "ontology",
+            "ch-tangible",
+            "zenodo"
+        ],
+        "description": {
+            "en": "The goal of the ATLAS is to create a knowledge graph of the international scholarly research on Italian Cultural Heritage leveraged in a Web portal that fosters users\u2019 interpretation and engagement. The Atlas aims to collect, enrich, and provide information extracted from online resources produced in the international academic context, such as digital textual corpora and editions (mostly based on the TEI/XML standard) as well as datasets following Linked Open Data principles and databases, but also ontologies and tools adopted in the community. The ATLAS leverages existing digital heritage resources to develop an innovative system wherein scholarly projects are reused in new non-native environments."
+        },
+        "title": "The ATLAS of Italian Digital Cultural Heritage",
+        "Image": "",
+        "example": [],
+        "license": "https://creativecommons.org/licenses/by/4.0/",
+        "other_download": [],
+        "domain": "cultural-heritage",
+        "namespace": "",
+        "links": [],
+        "_id": "ATLAS-Italian-Digital-CH",
+        "time": "",
+        "sparql": [],
+        "doi": "https://zenodo.org/records/14058144",
+        "contact_point": {
+            "name": "",
+            "email": ""
+        }
+    },
     "ARIADNE": {
         "owner": {
             "name": "",
