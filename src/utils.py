@@ -27,7 +27,7 @@ from urllib.parse import urlparse
 import json
 import ssl
 from API import Aggregator
-from API import fair_vocabularies
+from API.fair_vocabularies import fair_vocabularies
 
 #PRINT THE METADATI OF A KG
 def printMetadatiKG(metadct):
