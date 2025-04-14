@@ -35,7 +35,7 @@ class EvaluateFAIRness:
         vocabs = 1 if self.kg_quality.verifiability.vocabularies not in ['-', '', '[]'] and len(self.kg_quality.verifiability.vocabularies) > 0 else 0
 
         if available_on_search_engine:
-            links = 1 if (self.kg_quality.interlinking.degreeConnection != '-' and int(self.kg_quality.interlinking.degreeConnection) > 0) else 0
+            links = 1 if (self.kg_quality.interlinking.degreeConnection != '-' and isinstance(int,self.kg_quality.interlinking.degreeConnection) and int(self.kg_quality.interlinking.degreeConnection) > 0) else 0
         else:
             links = 1 if (
                 (self.kg_quality.interlinking.sameAs not in ['-', '0', ''] and int(self.kg_quality.interlinking.sameAs) > 0) or

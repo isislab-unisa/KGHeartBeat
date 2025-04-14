@@ -50,7 +50,7 @@ def getPageRank(graph,idKg):
 
 def getDegreeOfConnection(graph,idKg):
     try:
-        degree = graph.degree(nbunch=idKg)
+        degree = graph.degree[idKg]
         return degree
     except:
         return '-'
