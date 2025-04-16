@@ -114,9 +114,9 @@ def getOtherResources(idKG):
         otResourcesLODC = []
     otherResources = utils.mergeResources(otResourcesDH,otResourcesLODC)
     if manual_refined_resources != False:
-        otherResources + manual_refined_resources
+        otherResources = otherResources + manual_refined_resources
     if otResourcesMR != False:
-        otherResources + otResourcesMR
+        otherResources = otherResources + otResourcesMR
 
     return otherResources
 
