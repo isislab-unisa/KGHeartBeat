@@ -28,6 +28,7 @@ import json
 import ssl
 from API import Aggregator
 from API.fair_vocabularies import fair_vocabularies
+from collections import Counter
 
 #PRINT THE METADATI OF A KG
 def printMetadatiKG(metadct):
@@ -1312,3 +1313,21 @@ def check_at_least_sparql_on(sparql_url):
     except requests.exceptions.RequestException as e:
         # Handle any exceptions that may occur
         return 0
+
+def save_only_unique_values(string_list):
+    counts = Counter(string_list)
+
+    unique_strings = [s for s in string_list if counts[s] == 1]
+    
+    return unique_strings
+
+def save_only_regex(string_list):
+    valid_regexes = []
+    for s in string_list:
+        try:
+            re.compile(s)
+            valid_regexes.append(s)
+        except re.error:
+            pass  # Skip if it's not a valid regex
+
+    return valid_regexes
