@@ -73,6 +73,7 @@ if (len(id) == 1 and 'all' in id) or (len(name) == 1 and 'all' in name) or (len(
     kg_added_by_users = monitoring_requests.getIDs() 
     print(f"Number of KG found from AGAPI: {len(kgFound)}")
     print(f"Number of KGs from monitoring requests: {len(kg_added_by_users)}")
+    print(f"Number of KGs from CHe Cloud: {len(CHe_Cloud)}")
     toAnalyze = toAnalyze + kgFound + kg_added_by_users + CHe_Cloud
 
 toAnalyze = toAnalyze + tuple_id

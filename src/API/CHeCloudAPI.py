@@ -21,7 +21,6 @@ def getAllDatasetIDs():
 
 def getDatasetMetadata(idKG):
     url = f'http://isislab.it:12280/che-cloud/api/CHe_cloud_data/dataset_metadata/{str(idKG)}'
-    print(url)
     try:
         response = requests.get(url,verify=False)    
         if response.status_code == 200:
