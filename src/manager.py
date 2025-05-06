@@ -14,6 +14,7 @@ import fromCSV_to_KG
 import Graph
 from API.monitoring_requests import MonitoringRequests
 from evaluate_fairness import EvaluateFAIRness
+from API import CHeCloudAPI
 useDB = False
 # try : 
 #     import pymongo
@@ -67,16 +68,15 @@ if 'all' not in name:
 
 if (len(id) == 1 and 'all' in id) or (len(name) == 1 and 'all' in name) or (len(input.get('sparql_url')) == 1 and 'all' in input.get('sparql_url')): #SPECIAL INPUT, WE ANALYZE ALL KG DISCOVERABLE
     kgFound = AGAPI.getIdByName('')
+    CHe_Cloud = CHeCloudAPI.getAllDatasetIDs()
     monitoring_requests = MonitoringRequests()
     kg_added_by_users = monitoring_requests.getIDs() 
     print(f"Number of KG found from AGAPI: {len(kgFound)}")
     print(f"Number of KGs from monitoring requests: {len(kg_added_by_users)}")
-    toAnalyze = toAnalyze + kgFound + kg_added_by_users
-    toAnalyze = kg_added_by_users
+    toAnalyze = toAnalyze + kgFound + kg_added_by_users + CHe_Cloud
 
 toAnalyze = toAnalyze + tuple_id
 toAnalyze = list(dict.fromkeys(toAnalyze)) #CLEAN THE LIST FROM DUPLICATES
-
 # graph = Graph.check_for_the_KGs_graph()
 # if graph:
 #     need_to_update = Graph.cheks_for_changes_in_graph()

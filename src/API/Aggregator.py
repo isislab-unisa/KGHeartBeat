@@ -1,6 +1,7 @@
 from API import DataHubAPI
 from API import LODCloudAPI
 from API.monitoring_requests import MonitoringRequests
+from API import CHeCloudAPI
 import utils
 
 def getDataPackage(idKG):
@@ -8,10 +9,13 @@ def getDataPackage(idKG):
     metadataLODC = LODCloudAPI.getJSONMetadata(idKG)
     monitoring_resources = MonitoringRequests()
     metadata_monitoring_resources = monitoring_resources.getMetadata(idKG)
+    metadataCHeCloud = CHeCloudAPI.getDatasetMetadata(idKG)
     if isinstance(metadataLODC,dict):
         return metadataLODC
     elif isinstance(metadataDH,dict):
         return metadataDH
+    elif isinstance(metadataCHeCloud,dict):
+        return metadataCHeCloud
     elif isinstance(metadata_monitoring_resources,dict):
         return metadata_monitoring_resources
     else:
@@ -87,8 +91,11 @@ def getSPARQLEndpoint(idKG):
     endpointMR = monitoring_resources.getSPARQLEndpoint(idKG)
     endpointLODC = LODCloudAPI.getSPARQLEndpoint(metadataLODC)  
     endpointDH = DataHubAPI.getSPARQLEndpoint(metadataDH)
+    endpointCHeCloud = CHeCloudAPI.getSPARQLEndpoint(idKG)
     if endpointMR != False:
         return endpointMR
+    if endpointCHeCloud != False and endpointCHeCloud != '':
+        return endpointCHeCloud
     if endpointLODC != False:
         if isinstance(endpointLODC,str):
             if endpointLODC != '':
@@ -105,6 +112,7 @@ def getOtherResources(idKG):
     metadataLODC = LODCloudAPI.getJSONMetadata(idKG)
     otResourcesDH = DataHubAPI.getOtherResources(metadataDH)
     otResourcesLODC = LODCloudAPI.getOtherResources(metadataLODC)
+    otResourcesCHeCloud = CHeCloudAPI.getOtherResources(idKG)
     monitoring_resources = MonitoringRequests()
     otResourcesMR = monitoring_resources.getOtherResources(idKG)
     manual_refined_resources = utils.return_updated_rdf_dump(idKG)
@@ -112,6 +120,10 @@ def getOtherResources(idKG):
         otResourcesDH = []
     if otResourcesLODC == False:
         otResourcesLODC = []
+    if otResourcesLODC == False and otResourcesCHeCloud != False:
+        otResourcesLODC = otResourcesCHeCloud
+    else:
+        otResourcesCHeCloud = []
     otherResources = utils.mergeResources(otResourcesDH,otResourcesLODC)
     if manual_refined_resources != False:
         otherResources = otherResources + manual_refined_resources
@@ -127,6 +139,7 @@ def getExternalLinks(idKG):
     if linksDH == False or linksDH is None:
         linksDH = {}   #BECAUSE IS USED TO CLEAN THE RESULTS FROM LODCLOUD (IN CASE DATAHUB NOT HAVE EXTERNAL LINKS)
     linksLODC = LODCloudAPI.getExternalLinks(metadataLODC)
+    linksCHeCloud = CHeCloudAPI.getExternalLinks(idKG)
     monitoring_requests = MonitoringRequests()
     linksMR = monitoring_requests.getExternalLinks(idKG)
     if isinstance(linksLODC,list):
@@ -139,6 +152,13 @@ def getExternalLinks(idKG):
     elif isinstance(linksMR,list):
         for i in range(len(linksMR)):
             d = linksMR[i]
+            key = d.get('target')
+            value = d.get('value')
+            linksDH[key] = value
+        return linksDH
+    elif isinstance(linksCHeCloud,list):
+        for i in range(len(linksCHeCloud)):
+            d = linksCHeCloud[i]
             key = d.get('target')
             value = d.get('value')
             linksDH[key] = value
@@ -173,19 +193,23 @@ def getKeywords(idKg):
     metadataLODC = LODCloudAPI.getJSONMetadata(idKg)
     keywordsDH = DataHubAPI.getKeywords(metadataDH)
     keywordsLODC = LODCloudAPI.getKeywords(metadataLODC)
+    keywordsCHeCloud = CHeCloudAPI.getKeywords(idKg)
     monitoring_resources = MonitoringRequests()
     keywordsMR = monitoring_resources.getKeywords(idKg)
-    keywords = keywordsDH + keywordsLODC + keywordsMR
+    keywords = keywordsDH + keywordsLODC + keywordsMR + keywordsCHeCloud
     return keywords
 
 def getDOI(idKG):
     metadataLODC = LODCloudAPI.getJSONMetadata(idKG)
     doiLODC = LODCloudAPI.getDOI(metadataLODC)
+    doiCHeCloud = CHeCloudAPI.getDOI(idKG)
     monitoring_resources = MonitoringRequests()
     doiMR = monitoring_resources.getDOI(idKG)
     if doiLODC != False:
         return doiLODC
     if doiMR != False:
         return doiMR
+    if doiCHeCloud != False:
+        return doiCHeCloud
     
     return False
