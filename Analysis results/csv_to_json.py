@@ -88,7 +88,7 @@ def full_csv():
                                     'a2M' : rows['A2-M Registered in search engines'],
                                     'a_score' : rows['A score'],
                                     'r1_1' : rows['R1.1 Machine- or human-readable license retrievable via any primary source'],
-                                    'r1_2' : rows['R1.2 Publisher information, such as authors, contributors, publishers, and sources'],
+                                    'r1_2' : rows['R1.2 Publisher information such as authors-contributors-publishers and sources'],
                                     'r1_3D' : rows['R1.3-D Data organized in a standardized way'],
                                     'r1_3M' : rows['R1.3-M Metadata are described with VoID/DCAT predicates'],
                                     'r_score' : rows['R score'],
