@@ -91,7 +91,10 @@ def getKeywords(idKG):
     metadata = getDatasetMetadata(idKG)
     if isinstance(metadata,dict):
         keywords = metadata.get('keywords')
-        return keywords
+        if isinstance(keywords,list):
+            return keywords
+        else:
+            return []
     else:
         return []
 
