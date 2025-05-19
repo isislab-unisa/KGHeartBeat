@@ -809,7 +809,7 @@ def getModificationDate(url):
         UNION
         { ?dataset a void:Dataset ; dcterms:modified ?o . }
     }
-    ORDER BY ASC(?modified)
+    ORDER BY ASC(?o)
     LIMIT 1
     ''')
     sparql.setTimeout(300)
@@ -1258,7 +1258,7 @@ def getAllTriplesSPO(url):
         query = '''
                 SELECT *
                 WHERE{?s ?p ?o}
-               '''
+                '''
         results = queryWithSingleAcceptFromat(url,query) #TRY TO GET RESULTS IN JSON BY SETTING A SINGLE ACCEPT HEADER (SOME ENDPOINTS MAY BE NOT SUPPORT MULTIPLE ACCEPT FORMAT)
     else:
         results = sparql.query().convert()

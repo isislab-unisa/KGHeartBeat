@@ -81,13 +81,6 @@ def analyses(analysis_date,idKG = None,nameKG = None, sparql_endpoint = None):
         except:
             nameKG = ''
 
-    if idKG == '' or idKG == False:
-        idKG = sparql_endpoint
-        try:
-            nameKG = query.get_kg_name(accessUrl)
-        except:
-            nameKG = ''
-
         metadata = None
     if nameKG == '' or nameKG == False:
         nameKG = sparql_endpoint
@@ -601,7 +594,6 @@ def analyses(analysis_date,idKG = None,nameKG = None, sparql_endpoint = None):
             regex = query.checkUriRegex(accessUrl)
             if isinstance(regex,list) and len(regex) > 0:
                 regex = utils.save_only_regex(regex)
-                regex = utils.save_only_unique_values(regex)
         except Exception as error:
             logger.warning(f'Understandability | URIs regex | {str(error)}',extra=kg_info)
             regex = '-'
