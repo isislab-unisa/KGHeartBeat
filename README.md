@@ -38,6 +38,47 @@
 ## 🚀 What's New?  
 - **SPARQL endpoint as input** – It is now possible to analyze the quality of any desired Knowledge Graph by indicating its SPARQL endpoint in the input configuration of KGHeartBeat and without it is necessarily registered in LOD Cloud or Datahub. See the section [Input configuration](#input-configuration) for more info.
 
+<p align="center">
+  <img src="./img/logo.png" alt="KGHeartBeat Logo" width="200"/>
+</p>
+
+<h1 align="center">KGHeartBeat</h1>
+
+<p align="center">
+  <i>An Open Source Tool for Periodically Evaluating the Quality of Knowledge Graphs</i>
+</p>
+
+---
+
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li><a href="#repository-structure">Repository structure</a></li>
+    <li><a href="#quality-metrics-covered">Quality metrics covered</a></li>
+    <li><a href="#test">Test</a></li>
+    <li><a href="#performance">Performance</a></li>
+    <li><a href="#license">License</a></li>
+    <li>
+        <a href="#how-to-use-kgheartbeat">How To Use KGHeartbeat?</a>
+        <ul>
+            <li><a href="#dependencies">Dependencies</a></li>
+            <li><a href="#input-configuration">Input configuration</a></li>
+            <li><a href="#results">Results</a></li>
+            <li><a href="#look-directly-the-quality">Look directly the quality</a></li>
+        </ul>
+    </li>
+    <li><a href="#how-include-a-new-quality-metric">How include a new quality metric?</a></li>
+    <li><a href="#how-to-cite-our-work">How to cite our work</a></li>
+    <li><a href="#how-include-a-new-quality-metric">How include a new quality metric?</a></li>
+    <li><a href="./Generate%20KG%20from%20csv%20(ESWC%20Workshop)/">Generate RDF graph from csv (ESWC Workshop)</a></li>
+    <li><a href="#roadmap-">Roadmap</a></li>
+  </ol>
+</details>
+
+## 🚀 What's New?  
+- **SPARQL endpoint as input** – It is now possible to analyze the quality of any desired Knowledge Graph by indicating its SPARQL endpoint in the input configuration of KGHeartBeat and without it is necessarily registered in LOD Cloud or Datahub. See the section [Input configuration](#input-configuration) for more info.
+
+- [Roadmap](#roadmap-)
 
 ## Repository structure
 ```

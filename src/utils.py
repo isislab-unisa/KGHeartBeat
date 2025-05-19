@@ -26,7 +26,9 @@ import urllib.request
 from urllib.parse import urlparse
 import json
 import ssl
-
+from API import Aggregator
+from API.fair_vocabularies import fair_vocabularies
+from collections import Counter
 
 #PRINT THE METADATI OF A KG
 def printMetadatiKG(metadct):
@@ -1173,6 +1175,7 @@ def is_valid_void_url(url):
         return True
     except Exception as e:
         return False
+        
 def return_updated_sparql_endpoint(id_kg):
     if id_kg == 'hungarian-national-library-catalog':
         return 'http://setaria.oszk.hu/sparql'
@@ -1193,7 +1196,36 @@ def return_updated_sparql_endpoint(id_kg):
     if id_kg == 'zbw-pressemappe20':
         return 'https://zbw.eu/beta/sparql/pm20/query'
     
-    return False
+    with open(input_file, "r", encoding="utf-8") as infile, open(output_file, "w", encoding="utf-8") as outfile:
+        inside_target_block, multiline = False, False
+        new_value_buffer = None
+        
+        for line in infile:
+            stripped = line.strip()
+            
+            if stripped.startswith("dqv:isMeasurementOf") and target_metric in stripped:
+                inside_target_block = True
+            
+            if inside_target_block and stripped.startswith("dqv:value"):
+                multiline = not stripped.endswith('^^xsd:string ;')
+                new_value_buffer = stripped.split('dqv:value', 1)[1].strip().strip('"')
+                continue
+            
+            if multiline:
+                if stripped.endswith('^^xsd:string ;'):
+                    new_value_buffer += ' ' + stripped.strip().strip('"')
+                    multiline = False
+                else:
+                    new_value_buffer += ' ' + stripped.strip().strip('"')
+                continue
+            
+            if new_value_buffer is not None:
+                cleaned_value = clean_value(new_value_buffer)
+                outfile.write(f'    dqv:value "{cleaned_value}"^^xsd:string ;\n')
+                new_value_buffer, inside_target_block = None, False
+                continue
+            
+            outfile.write(line)
 
 def return_updated_rdf_dump(id_kg):
     dumps = [{
@@ -1259,9 +1291,43 @@ def return_updated_rdf_dump(id_kg):
 
     return False
     
-    
+def check_publisher_info(kg_quality):
+    author_query = 1 if kg_quality.verifiability.authorQ != '-' and len(kg_quality.verifiability.authorQ) > 0 else 0
 
-    
+    author_metadata = 0
+    if kg_quality.verifiability.authorM not in [False,'False']:
+        if not re.fullmatch(r"Name:\s*absent,\s*email:\s*absent", kg_quality.verifiability.authorM, re.IGNORECASE):
+            author_metadata = 1
+        
+    contributors = 1 if kg_quality.verifiability.contributor != '-' and len(kg_quality.verifiability.contributor) > 0 else 0
+
+    publishers = 1 if kg_quality.verifiability.publisher != '-' and len(kg_quality.verifiability.publisher) > 0 else 0
 
 
+    sources = 0
+    if kg_quality.verifiability.sources.name not in ['absent','Absent',''] or kg_quality.verifiability.sources.web not in ['absent','Absent',''] or kg_quality.verifiability.sources.email not in ['absent','Absent','']:
+        sources = 1
+
+    return 1 if author_query or author_metadata or contributors or publishers or sources else 0
+
+def find_search_engine_from_keywords(kg_id):
+    keywords = Aggregator.getKeywords(kg_id)
+    for keyword in keywords:
+        keyword = keyword.strip()
+        if any(k in keyword for k in ['github', 'zenodo', 'fairsharing']):
+            return 1
+        else:
+            return 0
+    return 0
     
+def check_if_fair_vocabs(vocabs):
+    vocabs = vocabs.replace('[','')
+    vocabs = vocabs.replace(']','')
+    vocabs = vocabs.split(',')
+    total_vocabs = len(vocabs)
+    fair_vocabularies = []
+    for vocab in vocabs:
+        vocab = vocab.strip()
+        if vocab in fair_vocabularies:
+            fair_vocabularies.append(vocab)
+    return len(fair_vocabularies) / total_vocabs if total_vocabs > 0 else 0

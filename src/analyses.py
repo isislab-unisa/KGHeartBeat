@@ -81,6 +81,13 @@ def analyses(analysis_date,idKG = None,nameKG = None, sparql_endpoint = None):
         except:
             nameKG = ''
 
+    if idKG == '' or idKG == False:
+        idKG = sparql_endpoint
+        try:
+            nameKG = query.get_kg_name(accessUrl)
+        except:
+            nameKG = ''
+
         metadata = None
     if nameKG == '' or nameKG == False:
         nameKG = sparql_endpoint
@@ -440,6 +447,8 @@ def analyses(analysis_date,idKG = None,nameKG = None, sparql_endpoint = None):
             objectList = []
             triplesO = query.getAllTypeO(accessUrl)
             newTermsD = LOVAPI.searchTermsList(triplesO)
+            if isinstance(newTermsD,list) and len(newTermsD) > 0:
+                newTermsD = utils.save_only_unique_values(newTermsD)
             end_analysis = time.time()
             utils.write_time(nameKG,end_analysis-start_analysis,'New terms check', 'Interoperability',analysis_date)
         except Exception as error:
@@ -503,6 +512,8 @@ def analyses(analysis_date,idKG = None,nameKG = None, sparql_endpoint = None):
         start_analysis = time.time()
         try:
             formats = query.checkSerialisationFormat(accessUrl)   #CHECK IF THE LINK IS ONLINE
+            if isinstance(formats,list) and len(formats) > 0:
+                formats = utils.save_only_unique_values(formats)
         except Exception as error:
             logger.warning(f'Versatility | Serialization formats | {str(error)}',extra=kg_info)
             formats = '-'
@@ -588,6 +599,9 @@ def analyses(analysis_date,idKG = None,nameKG = None, sparql_endpoint = None):
         regex = []
         try:
             regex = query.checkUriRegex(accessUrl)
+            if isinstance(regex,list) and len(regex) > 0:
+                regex = utils.save_only_regex(regex)
+                regex = utils.save_only_unique_values(regex)
         except Exception as error:
             logger.warning(f'Understandability | URIs regex | {str(error)}',extra=kg_info)
             regex = '-'
@@ -613,6 +627,8 @@ def analyses(analysis_date,idKG = None,nameKG = None, sparql_endpoint = None):
             logger.warning(f'Understandability | Vocabularies | {str(error)}',extra=kg_info)
             vocabularies = '-'
         end_analysis = time.time()
+        if isinstance(vocabularies,list) and len(vocabularies) > 0:
+            vocabularies = utils.save_only_unique_values(vocabularies)
         utils.write_time(nameKG,end_analysis-start_analysis,'Vocabs check', 'Understandability',analysis_date) 
         
         #GET THE AUTHOR OF THE DATASET WITH A QUERY
@@ -783,6 +799,8 @@ def analyses(analysis_date,idKG = None,nameKG = None, sparql_endpoint = None):
         start_analysis = time.time()
         try:
             frequency = query.getFrequency(accessUrl)
+            if isinstance(frequency,list) and len(frequency) > 0:
+                frequency = utils.save_only_unique_values(frequency)
         except Exception as error:
             logger.warning(f'Volatility | Timeliness frequency | {str(error)}',extra=kg_info)
             frequency = '-'
@@ -999,6 +1017,8 @@ def analyses(analysis_date,idKG = None,nameKG = None, sparql_endpoint = None):
                         newVocab.append(vocab)
             end_analysis = time.time()
             utils.write_time(nameKG,end_analysis-start_analysis,'New vocabularies check','Interoperability',analysis_date)
+            if isinstance(newVocab,list) and len(newVocab) > 0:
+                newVocab = utils.save_only_unique_values(newVocab)
         except Exception as error:
             logger.warning(f'Representational-consistency | re-use of existing terms | {str(error)}',extra=kg_info)
             newVocab = '-'
@@ -1533,17 +1553,25 @@ def analyses(analysis_date,idKG = None,nameKG = None, sparql_endpoint = None):
                 if void is not None:
                     void = True
                     vocabularies = VoIDAnalyses.getVocabularies(voidFile)
+                    if isinstance(vocabularies,list) and len(vocabularies) > 0:
+                        vocabularies = utils.save_only_unique_values(vocabularies)
                     creationDate = VoIDAnalyses.getCreationDate(voidFile)
                     modificationDate = VoIDAnalyses.getModificationDate(voidFile)
                     availableDump = VoIDAnalyses.getDataDump(voidFile)
                     licenseMr = VoIDAnalyses.getLicense(voidFile)
-                    authorQ = VoIDAnalyses.getCreators(voidFile)
-                    publisher = VoIDAnalyses.getPublishers(voidFile)
+                    #authorQ = VoIDAnalyses.getCreators(voidFile)
+                    #publisher = VoIDAnalyses.getPublishers(voidFile)
                     numEntities = VoIDAnalyses.getNumEntities(voidFile)
                     frequency = VoIDAnalyses.getFrequency(voidFile)
-                    contributors = VoIDAnalyses.getContributors(voidFile)
+                    if isinstance(frequency,list) and len(frequency) > 0:   
+                        frequency = utils.save_only_frequency(frequency)
+                    #contributors = VoIDAnalyses.getContributors(voidFile)
                     regex = VoIDAnalyses.getUriRegex(voidFile)
+                    if isinstance(regex,list) and len(regex) > 0:
+                        regex = utils.save_only_regex(regex)
                     formats = VoIDAnalyses.getSerializationFormats(voidFile)
+                    if isinstance(formats,list) and len(formats) > 0:
+                        formats = utils.save_only_formats(formats)
                     languages = VoIDAnalyses.getLanguage(voidFile)
                 else:
                     void = False
@@ -1553,17 +1581,25 @@ def analyses(analysis_date,idKG = None,nameKG = None, sparql_endpoint = None):
                     if void is not None:
                         void = True
                         vocabularies = VoIDAnalyses.getVocabularies(voidFile)
+                        if isinstance(vocabularies,list) and len(vocabularies) > 0:
+                            vocabularies = utils.save_only_unique_values(vocabularies)
                         creationDate = VoIDAnalyses.getCreationDate(voidFile)
                         modificationDate = VoIDAnalyses.getModificationDate(voidFile)
                         availableDump = VoIDAnalyses.getDataDump(voidFile)
                         licenseMr = VoIDAnalyses.getLicense(voidFile)
-                        authorQ = VoIDAnalyses.getCreators(voidFile)
-                        publisher = VoIDAnalyses.getPublishers(voidFile)
+                        #authorQ = VoIDAnalyses.getCreators(voidFile)
+                        #publisher = VoIDAnalyses.getPublishers(voidFile)
                         numEntities = VoIDAnalyses.getNumEntities(voidFile)
                         frequency = VoIDAnalyses.getFrequency(voidFile)
-                        contributors = VoIDAnalyses.getContributors(voidFile)
+                        if isinstance(frequency,list) and len(frequency) > 0:
+                            frequency = utils.save_only_frequency(frequency)
+                        #contributors = VoIDAnalyses.getContributors(voidFile)
                         regex = VoIDAnalyses.getUriRegex(voidFile)
+                        if isinstance(regex,list) and len(regex) > 0:
+                            regex = utils.save_only_regex(regex)
                         formats = VoIDAnalyses.getSerializationFormats(voidFile)
+                        if isinstance(formats,list) and len(formats) > 0:
+                            formats = utils.save_only_formats(formats)
                         languages = VoIDAnalyses.getLanguage(voidFile)
                     else:
                         void = False
@@ -1586,6 +1622,8 @@ def analyses(analysis_date,idKG = None,nameKG = None, sparql_endpoint = None):
                     newVocab.append(vocab)
         end_analysis = time.time()
         utils.write_time(nameKG,end_analysis-start_analysis,'Check the re-using of existing vocabs', 'Interoperability',analysis_date)
+        if isinstance(newVocab,list) and len(newVocab) > 0:
+            newVocab = utils.save_only_unique_values(newVocab)
     except Exception as error:
         logger.warning(f"Representational-consistency | Re-use of existing terms | Impossible to recover the vocabularies in the KG",extra=kg_info)
         newVocab = '-'

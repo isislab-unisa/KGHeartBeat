@@ -73,7 +73,32 @@ def full_csv():
                                 "performanceScoreValue": rows['Performance score'],"accuracyScoreValue" : rows['Accuracy score'],"consistencyScoreValue" : rows['Consistency score'],"concisenessScoreValue" : rows['Conciseness score'],"verifiabilityScoreValue" : rows['Verifiability score'],"reputationScoreValue" : rows['Reputation score'],
                                 "believabilityScoreValue" : rows['Believability score'],"currencyScoreValue" : rows['Currency score'],"volatilityScoreValue" : rows['Volatility score'],"completenessScoreValue" : rows['Completeness score'],"amountScoreValue" : rows['Amount of data score'],"repConsScoreValue" : rows['Representational-Consistency score'],
                                 "repConcScoreValue" : rows['Representational-Conciseness score'],"understScoreValue" : rows['Understandability score'],"interpretabilityScoreValue" : rows['Interpretability score'],"versatilityScoreValue" : rows['Versatility score'],"securityScoreValue" : rows['Security score']},
-                        "Extra": {"sparql_link" : rows['SPARQL endpoint URL'], "rdf_dump_link": rows['URL for download the dataset'], "external_links": rows['External links']}
+                        "Extra": {"sparql_link" : rows['SPARQL endpoint URL'], "rdf_dump_link": rows['URL for download the dataset'], "external_links": rows['External links']},
+                        "FAIRness":{
+                                    'f1M' : rows.get('F1-M Unique and persistent ID', ''),
+                                    'f1D' : rows.get('F1-D URIs dereferenceability', ''),
+                                    'f2aM' : rows.get('F2a-M - Metadata availability via standard primary sources', ''),
+                                    'f2bM' : rows.get('F2b-M Metadata availability for all the attributes covered in the FAIR score computation', ''),
+                                    'f3M' : rows.get('F3-M Data referrable via a DOI', ''),
+                                    'f4M' : rows.get('F4-M Metadata registered in a searchable engine', ''),
+                                    'f_score' : rows.get('F score', ''),
+                                    'a1D' : rows.get('A1-D Working access point(s)', ''),
+                                    'a1M' : rows.get('A1-M Metadata availability via working primary sources', ''),
+                                    'a1_2' : rows.get('A1.2 Authentication & HTTPS support', ''),
+                                    'a2M' : rows.get('A2-M Registered in search engines', ''),
+                                    'a_score' : rows.get('A score', ''),
+                                    'r1_1' : rows.get('R1.1 Machine- or human-readable license retrievable via any primary source', ''),
+                                    'r1_2' : rows.get('R1.2 Publisher information such as authors-contributors-publishers and sources', ''),
+                                    'r1_3D' : rows.get('R1.3-D Data organized in a standardized way', ''),
+                                    'r1_3M' : rows.get('R1.3-M Metadata are described with VoID/DCAT predicates', ''),
+                                    'r_score' : rows.get('R score', ''),
+                                    'i1D' : rows.get('I1-D Standard & open representation format', ''),
+                                    'i1M' : rows.get('I1-M Metadata are described with VoID/DCAT predicates', ''),
+                                    'i2' : rows.get('I2 Use of FAIR vocabularies', ''),
+                                    'i3D' : rows.get('I3-D Degree of connection', ''),
+                                    'i_score' : rows.get('I score', ''),
+                                    'fair_score' : rows.get('FAIR score', ''),
+                        }
                     }
                 else:
                     data = {
@@ -101,7 +126,32 @@ def full_csv():
                                             {"Interpretability" : {'numBN' : rows['Number of blank nodes'], 'RDFStructures' : rows['Uses RDF structures']}}, 
                                             {"Versatility" : {'languagesQ' : rows['Languages (query)'], 'languagesM' : rows['Languages (metadata)'], 'serializationFormats' : rows['Serialization formats'], 'sparqlEndpoint' : rows['SPARQL endpoint URL'], 'availabilityDownloadQ' : rows['Availability of RDF dump (query)'], 'availabilityDownloadM' : rows['Availability of RDF dump (metadata)']}}],
                         "Score": {"totalScore" : rows['Score']},
-                        "Extra": {"sparql_link" : rows['SPARQL endpoint URL'], "rdf_dump_link": rows['URL for download the dataset'], "external_links": rows['External links']}
+                        "Extra": {"sparql_link" : rows['SPARQL endpoint URL'], "rdf_dump_link": rows['URL for download the dataset'], "external_links": rows['External links']},
+                        "FAIRness":{
+                                    'f1M' : rows.get('F1-M Unique and persistent ID', ''),
+                                    'f1D' : rows.get('F1-D URIs dereferenceability', ''),
+                                    'f2aM' : rows.get('F2a-M - Metadata availability via standard primary sources', ''),
+                                    'f2bM' : rows.get('F2b-M Metadata availability for all the attributes covered in the FAIR score computation', ''),
+                                    'f3M' : rows.get('F3-M Data referrable via a DOI', ''),
+                                    'f4M' : rows.get('F4-M Metadata registered in a searchable engine', ''),
+                                    'f_score' : rows.get('F score', ''),
+                                    'a1D' : rows.get('A1-D Working access point(s)', ''),
+                                    'a1M' : rows.get('A1-M Metadata availability via working primary sources', ''),
+                                    'a1_2' : rows.get('A1.2 Authentication & HTTPS support', ''),
+                                    'a2M' : rows.get('A2-M Registered in search engines', ''),
+                                    'a_score' : rows.get('A score', ''),
+                                    'r1_1' : rows.get('R1.1 Machine- or human-readable license retrievable via any primary source', ''),
+                                    'r1_2' : rows.get('R1.2 Publisher information such as authors-contributors-publishers and sources', ''),
+                                    'r1_3D' : rows.get('R1.3-D Data organized in a standardized way', ''),
+                                    'r1_3M' : rows.get('R1.3-M Metadata are described with VoID/DCAT predicates', ''),
+                                    'r_score' : rows.get('R score', ''),
+                                    'i1D' : rows.get('I1-D Standard & open representation format', ''),
+                                    'i1M' : rows.get('I1-M Metadata are described with VoID/DCAT predicates', ''),
+                                    'i2' : rows.get('I2 Use of FAIR vocabularies', ''),
+                                    'i3D' : rows.get('I3-D Degree of connection', ''),
+                                    'i_score' : rows.get('I score', ''),
+                                    'fair_score' : rows.get('FAIR score', ''),
+                        }
                     }
 
                 with open('json_files/' + kg_id + ' ' + filename + '.json','w',encoding='utf-8') as jsonFile:

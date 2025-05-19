@@ -155,4 +155,4 @@ def getKeywords(jsonFile):
         keywords = jsonFile.get('keywords')
         return keywords
     else:
-        return False
+        return []
