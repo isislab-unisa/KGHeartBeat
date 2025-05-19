@@ -38,60 +38,52 @@
 ## 🚀 What's New?  
 - **SPARQL endpoint as input** – It is now possible to analyze the quality of any desired Knowledge Graph by indicating its SPARQL endpoint in the input configuration of KGHeartBeat and without it is necessarily registered in LOD Cloud or Datahub. See the section [Input configuration](#input-configuration) for more info.
 
+<p align="center">
+  <img src="./img/logo.png" alt="KGHeartBeat Logo" width="200"/>
+</p>
+
+<h1 align="center">KGHeartBeat</h1>
+
+<p align="center">
+  <i>An Open Source Tool for Periodically Evaluating the Quality of Knowledge Graphs</i>
+</p>
+
+---
+
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li><a href="#repository-structure">Repository structure</a></li>
+    <li><a href="#quality-metrics-covered">Quality metrics covered</a></li>
+    <li><a href="#test">Test</a></li>
+    <li><a href="#performance">Performance</a></li>
+    <li><a href="#license">License</a></li>
+    <li>
+        <a href="#how-to-use-kgheartbeat">How To Use KGHeartbeat?</a>
+        <ul>
+            <li><a href="#dependencies">Dependencies</a></li>
+            <li><a href="#input-configuration">Input configuration</a></li>
+            <li><a href="#results">Results</a></li>
+            <li><a href="#look-directly-the-quality">Look directly the quality</a></li>
+        </ul>
+    </li>
+    <li><a href="#how-include-a-new-quality-metric">How include a new quality metric?</a></li>
+    <li><a href="#how-to-cite-our-work">How to cite our work</a></li>
+    <li><a href="#how-include-a-new-quality-metric">How include a new quality metric?</a></li>
+    <li><a href="./Generate%20KG%20from%20csv%20(ESWC%20Workshop)/">Generate RDF graph from csv (ESWC Workshop)</a></li>
+    <li><a href="#roadmap-">Roadmap</a></li>
+  </ol>
+</details>
+
+## 🚀 What's New?  
+- **SPARQL endpoint as input** – It is now possible to analyze the quality of any desired Knowledge Graph by indicating its SPARQL endpoint in the input configuration of KGHeartBeat and without it is necessarily registered in LOD Cloud or Datahub. See the section [Input configuration](#input-configuration) for more info.
+
 - [Roadmap](#roadmap-)
 
 ## Repository structure
 ```
 KG-HeartBeat
     | - Analysis results/       Directory with KGs data quality obtained from measurement.
-        |- YYYY-MM-DD.csv  
-    | - db_files                Contains data and docker compose to create the MongoDB instance
-    | - docs                    Directory with the data related to the GitHub page with the documentation
-    | - examples                Directory with some examples on how use KGHeartBeat and the Web-App
-    | - img                     Directory that contains the images used in the README
-    | - WebApp/                 Directory that contains all the files needed to boot locally KGHeartBeat Web-App.
-    | - src                     Directory with all the application code
-      | - API/                   
-          |- AGAPI                Interface to KnowledgeGraph search engine.
-          |- Aggregator.py        Brings together all the metadata for the KG from the various services used.
-          |- DataHubAPI.py        Module to retrieve KGs metadata from DataHub.
-          |- LODCloudAPI.py       Module to retrieve KGs metadata from LODCloud.
-          |- LOVAPI.py            Module used to retrieve standard vocabularies and terms from LOV.
-      | - db_files/
-          |- docker-compose.yml   File to create a MongoDB container to contain the analysis data (useful only for the Web-App)     
-          |- docker-entrypoint-initdb.d
-            |- init-mongo.js     Script to create DB and collection.
-      | - docs/                   Contains file related to the documentation.
-      | - examples/               Contains example on how to use KGHeartBeat
-      | - QualityDimensions       All classes representing the measured quality dimensions.
-          |- AmountOfData.py
-          |- Availability.py
-          |- Believability.py
-          ...
-          ...
-          ...
-      | - test/                   Folder containing files and scripts relating to the test
-          |- analyses_test.py     Script to run the test 
-          |- SPARQLES_APIS.py     Module used as interface to the SPARQLES API.
-          |- test_output.txt      File containing the result of the test performed.
-      | - analyses.py             Module that calculates all quality metrics.
-      | - bloomfilter.py          Class used to istantiate the Bloom-Filter structure.
-      | - Configuration.py        Module used to create the configration.json file if isn't available.
-      | - db_interface.py         Allows you to insert new quality data into the DB.
-      | - ExternalLink.py         Class used to model the external links of a KG.
-      | - Graph.py  Module        Used to build the graph with all the KGs and to calculate all the interlinking dimension metric.
-      | - InputValidator.py       Abstract class to validate the input.
-      | - JsonValidator.py        Class that implements the validation of JSON files in input.
-      | - KnowledgeGraph.py       Class that contains the quality data of for the KG.
-      | - manager.py              Module responsible for orchestrating the application and calling the various modules for analysis.
-      | - MetricsOutput.py        Abstract class to return output from the application.
-      | - OutputCSV.py            Class used to shape the output in CSV format.
-      | - query.py                Contains all the queries needed to calculate quality metrics.
-      | - Resources.py            Class used to aggregate all resources available for the analyzed KG.
-      | - score.py                Class that calculates the score for each quality dimension analyzed and the total score
-      | - Sources.py              Class with all info related to the KG sources.
-      | - utils.py                Aggregates all useful functions for calculating quality metrics.
-      | - VoIDAnalyses.py         Module used for parsing and extracting all useful information from the VoID file
         |- YYYY-MM-DD.csv  
     | - db_files                Contains data and docker compose to create the MongoDB instance
     | - docs                    Directory with the data related to the GitHub page with the documentation
@@ -202,7 +194,7 @@ pip install -r requirements.txt
 ## Input configuration
 From the [KG-quality-analysis/configuration.json](configuration.json) file, you can choose the Knowledge Graph to analyze. You can analyze it by using a list of keywords, ids (indicated in LOD cloud or DataHUB) or by explicitly indicating the SPARQL endpoint (also a combination of these methods is possible). In the example below, all the Knowledge Graphs that have the keywords *"museum"* will be analyzed.
 ```
-{"name": ["museum"], "id": [], "sparql_url" : [], "sparql_url" : []}
+{"name": ["museum"], "id": [], "sparql_url" : []}
 ```
 Or, by a list of ids like this:
 ```
@@ -216,7 +208,6 @@ If instead, you want to analyze all the Knowledge Graphs automatically discovera
 <a name="all-kgs-conf"></a>
 ```
 {"name": ["all"], "id": [], "sparql_url" : []}
-
 ```
 After the input configuration, to execute the analysis simply launch form the main directory of the project:
 ```
@@ -249,8 +240,10 @@ Link to the paper: [https://link.springer.com/chapter/10.1007/978-3-031-77847-6_
   organization={Springer}
 }
 ```
-
 ## Roadmap 🚀
 - [ ] Better filtering of inactive KGs from the Web-App, not just based on SPARQL endpoint (possible cue from YummyData).
 - [ ] Increase the number of KGs monitored by the tool, including through the use of scraping in GitHub/Git Lab repositories (as suggested in the [#1 issue](https://github.com/isislab-unisa/KGHeartbeat/issues/1) by @vemonet).
 - [ ] Grouping KGs with the same SPARQL endpoint, but referring to a different sub-graph.
+
+
+
