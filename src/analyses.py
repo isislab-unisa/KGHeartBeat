@@ -594,6 +594,7 @@ def analyses(analysis_date,idKG = None,nameKG = None, sparql_endpoint = None):
             regex = query.checkUriRegex(accessUrl)
             if isinstance(regex,list) and len(regex) > 0:
                 regex = utils.save_only_regex(regex)
+                regex = utils.save_only_unique_values(regex)
         except Exception as error:
             logger.warning(f'Understandability | URIs regex | {str(error)}',extra=kg_info)
             regex = '-'
