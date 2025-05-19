@@ -1175,7 +1175,7 @@ def is_valid_void_url(url):
         return True
     except Exception as e:
         return False
-        
+    
 def return_updated_sparql_endpoint(id_kg):
     if id_kg == 'hungarian-national-library-catalog':
         return 'http://setaria.oszk.hu/sparql'
@@ -1187,45 +1187,12 @@ def return_updated_sparql_endpoint(id_kg):
         return 'https://dutchshipsandsailors.nl/?page_id=50'
     if id_kg == 'geographic-names-information-system-gnis':
         return 'https://gnis-ld.org/queries'
-    if id_kg == 'nomisma_org':
-        return 'https://nomisma.org/sparql/'
-    if id_kg == 'rism':
-        return 'https://opac.rism.info/sparql-endpoint'
-    if id_kg == 'the-european-library-open-dataset0000018aeec2aa8f':
+    if id_kg == 'the-european-library-open-dataset':
         return 'https://sparql.europeana.eu/'
     if id_kg == 'zbw-pressemappe20':
         return 'https://zbw.eu/beta/sparql/pm20/query'
     
-    with open(input_file, "r", encoding="utf-8") as infile, open(output_file, "w", encoding="utf-8") as outfile:
-        inside_target_block, multiline = False, False
-        new_value_buffer = None
-        
-        for line in infile:
-            stripped = line.strip()
-            
-            if stripped.startswith("dqv:isMeasurementOf") and target_metric in stripped:
-                inside_target_block = True
-            
-            if inside_target_block and stripped.startswith("dqv:value"):
-                multiline = not stripped.endswith('^^xsd:string ;')
-                new_value_buffer = stripped.split('dqv:value', 1)[1].strip().strip('"')
-                continue
-            
-            if multiline:
-                if stripped.endswith('^^xsd:string ;'):
-                    new_value_buffer += ' ' + stripped.strip().strip('"')
-                    multiline = False
-                else:
-                    new_value_buffer += ' ' + stripped.strip().strip('"')
-                continue
-            
-            if new_value_buffer is not None:
-                cleaned_value = clean_value(new_value_buffer)
-                outfile.write(f'    dqv:value "{cleaned_value}"^^xsd:string ;\n')
-                new_value_buffer, inside_target_block = None, False
-                continue
-            
-            outfile.write(line)
+    return False
 
 def return_updated_rdf_dump(id_kg):
     dumps = [{
@@ -1270,10 +1237,10 @@ def return_updated_rdf_dump(id_kg):
             'format' : ''
         })
         return dumps
-    if id_kg == 'roceeh-road0000018fe7952923':
+    if id_kg == 'roceeh-road':
         dumps[0]['path'] = 'https://github.com/gbv/JITA?tab=readme-ov-file'
         return dumps
-    if id_kg == 'rlcsh':
+    if id_kg == 'lcsh':
         dumps[0]['path'] = 'https://id.loc.gov/download/'
         return dumps
     if id_kg == 'lcsubjects':
@@ -1282,7 +1249,7 @@ def return_updated_rdf_dump(id_kg):
     if id_kg == 'talis-openlibrary':
         dumps[0]['path'] = 'https://openlibrary.org/developers/dumps'
         return dumps
-    if id_kg == 'bncf-ns000001932a10400a':
+    if id_kg == 'bncf-ns':
         dumps[0]['path'] = 'https://www.data.gov.uk/dataset/6fa6a421-e515-4ab7-bbd6-1e60c2b60706/the-linked-open-british-national-bibliography'
         return dumps
     if id_kg == 'http:cultural-opposition.eu':
@@ -1316,18 +1283,51 @@ def find_search_engine_from_keywords(kg_id):
         keyword = keyword.strip()
         if any(k in keyword for k in ['github', 'zenodo', 'fairsharing']):
             return 1
-        else:
-            return 0
     return 0
     
 def check_if_fair_vocabs(vocabs):
-    vocabs = vocabs.replace('[','')
-    vocabs = vocabs.replace(']','')
-    vocabs = vocabs.split(',')
     total_vocabs = len(vocabs)
-    fair_vocabularies = []
+    fair_vocabularies_defined = []
     for vocab in vocabs:
         vocab = vocab.strip()
         if vocab in fair_vocabularies:
-            fair_vocabularies.append(vocab)
-    return len(fair_vocabularies) / total_vocabs if total_vocabs > 0 else 0
+            fair_vocabularies_defined.append(vocab)
+    return len(fair_vocabularies_defined) / total_vocabs if total_vocabs > 0 else 0
+
+def check_at_least_sparql_on(sparql_url):
+    '''
+    Check if the SPARQL endpoint return a 200 status, also if the sparql editor is not interoperable
+    '''
+    try:
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        }
+        
+        response = requests.get(sparql_url, headers=headers, timeout=10)
+        
+        if 200 <= response.status_code < 300:
+            return 1
+        else:
+            return 0
+        
+    except requests.exceptions.RequestException as e:
+        # Handle any exceptions that may occur
+        return 0
+
+def save_only_unique_values(string_list):
+    counts = Counter(string_list)
+
+    unique_strings = [s for s in string_list if counts[s] == 1]
+    
+    return unique_strings
+
+def save_only_regex(string_list):
+    valid_regexes = []
+    for s in string_list:
+        try:
+            re.compile(s)
+            valid_regexes.append(s)
+        except re.error:
+            pass  # Skip if it's not a valid regex
+
+    return valid_regexes
