@@ -119,7 +119,7 @@ class EvaluateFAIRness:
         if available_on_search_engine:
             try:
                 self.fairness.i3D = 1 if self.kg_quality.interlinking.degreeConnection not in ['-', '', '0'] and int(self.kg_quality.interlinking.degreeConnection) > 0 else 0
-            except ValueError:
+            except TypeError:
                 self.fairness.i3D = 0
         else:
             sameAs_valid = self.kg_quality.interlinking.sameAs not in ['-', '0', ''] and int(self.kg_quality.interlinking.sameAs) > 0
