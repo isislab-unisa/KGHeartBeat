@@ -153,6 +153,9 @@ def getExtrasLang(jsonFile):
 def getKeywords(jsonFile):
     if isinstance(jsonFile,dict):
         keywords = jsonFile.get('keywords')
-        return keywords
+        if isinstance(keywords,list):
+            return keywords
+        else:
+            return []
     else:
         return []

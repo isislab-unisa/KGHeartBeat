@@ -62,7 +62,11 @@ class MonitoringRequests:
     
     def getKeywords(self,id_kg):
         if id_kg in self.dataset_metadata:
-            return self.dataset_metadata[id_kg]['keywords']
+            keywords = self.dataset_metadata[id_kg]['keywords']
+            if isinstance(keywords,list):
+                return keywords
+            else:
+                return []
         else: 
             return []
     

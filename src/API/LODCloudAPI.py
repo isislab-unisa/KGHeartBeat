@@ -160,7 +160,10 @@ def getDescription(jsonFile):
 def getKeywords(jsonfile):
     if isinstance(jsonfile,dict):
         keywords = jsonfile.get('keywords')
-        return keywords
+        if isinstance(keywords,list):
+            return keywords
+        else:
+            return []
     else:
         return []
 
