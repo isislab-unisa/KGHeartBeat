@@ -30,7 +30,7 @@ layout: home
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/availability#accessibility-of-the-sparql-endpoint" target="_blank">Availability/SPARQL-endpoint</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/availability#accessibility-of-the-sparql-endpoint" target="_blank">Availability/SPARQL-endpoint</a>
             </td>
         </tr>
         <tr>
@@ -59,7 +59,7 @@ layout: home
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/availability#accessibility-of-the-rdf-dump" target="_blank">Availability/RDF-Dump</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/availability#accessibility-of-the-rdf-dump" target="_blank">Availability/RDF-Dump</a>
             </td>
         </tr>
         <tr>
@@ -88,7 +88,7 @@ layout: home
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/availability#derefereaceability-of-the-uri" target="_blank">Availability/URIs-dereferenciability</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/availability#derefereaceability-of-the-uri" target="_blank">Availability/URIs-dereferenciability</a>
             </td>
         </tr>
         <tr>
@@ -112,7 +112,7 @@ layout: home
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/licensing#machine-readable-license" target="_blank">Licensing/MR-License</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/licensing#machine-readable-license" target="_blank">Licensing/MR-License</a>
             </td>
         </tr>
         <tr>
@@ -137,7 +137,7 @@ layout: home
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/licensing#human-readable-license" target="_blank">Licensing/Human-readable</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/licensing#human-readable-license" target="_blank">Licensing/Human-readable</a>
             </td>
         </tr>
         <tr>
@@ -166,7 +166,7 @@ richness through sameAs by using network measures</i></td>
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/interlinking#degree-of-connection" target="_blank">Interlinking/Degr-Connection</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/interlinking#degree-of-connection" target="_blank">Interlinking/Degr-Connection</a>
             </td>
         </tr>
         <tr>
@@ -188,7 +188,7 @@ richness through sameAs by using network measures</i></td>
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/interlinking#clustering-coefficient" target="_blank">Interlinking/Clustering-coefficient</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/interlinking#clustering-coefficient" target="_blank">Interlinking/Clustering-coefficient</a>
             </td>
         </tr>
         <tr>
@@ -210,7 +210,7 @@ richness through sameAs by using network measures</i></td>
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/interlinking#centrality" target="_blank">Interlinking/Centrality</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/interlinking#centrality" target="_blank">Interlinking/Centrality</a>
             </td>
         </tr>
         <tr>
@@ -233,7 +233,7 @@ richness through sameAs by using network measures</i></td>
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/interlinking#sameas-chains" target="_blank">Interlinking/sameAs</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/interlinking#sameas-chains" target="_blank">Interlinking/sameAs</a>
             </td>
         </tr>
         <tr>
@@ -255,7 +255,7 @@ richness through sameAs by using network measures</i></td>
     <tr>
         <td rowspan="1">Algorithm</td>
         <td colspan="3">
-        <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/interlinking#skos-mapping-properties" target="_blank">Interlinking/skos:*Match</a>
+        <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/interlinking#skos-mapping-properties" target="_blank">Interlinking/skos:*Match</a>
         </td>
     </tr>
     <tr>
@@ -279,7 +279,7 @@ richness through sameAs by using network measures</i></td>
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/security#access-to-data-is-secure" target="_blank">Security/Sec-acc</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/security#access-to-data-is-secure" target="_blank">Security/Sec-acc</a>
             </td>
         </tr>
         <tr>
@@ -304,7 +304,7 @@ richness through sameAs by using network measures</i></td>
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/security#use-https" target="_blank">Security/https</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/security#use-https" target="_blank">Security/https</a>
             </td>
         </tr>
         <tr>
@@ -332,7 +332,7 @@ richness through sameAs by using network measures</i></td>
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/performance#low-latency" target="_blank">Performance/Latency</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/performance#low-latency" target="_blank">Performance/Latency</a>
             </td>
         </tr>
         <tr>
@@ -353,7 +353,7 @@ richness through sameAs by using network measures</i></td>
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/performance#high-throughput" target="_blank">Performance/Throughput</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/performance#high-throughput" target="_blank">Performance/Throughput</a>
             </td>
         </tr>
         <tr>
@@ -380,7 +380,7 @@ richness through sameAs by using network measures</i></td>
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/semantic-accuracy##empty-annotation-labels" target="_blank">Accuracy/Empty-label</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/semantic-accuracy##empty-annotation-labels" target="_blank">Accuracy/Empty-label</a>
             </td>
         </tr>
         <tr>
@@ -401,7 +401,7 @@ richness through sameAs by using network measures</i></td>
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/semantic-accuracy#white-space-in-annotation" target="_blank">Accuracy/Whitespace</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/semantic-accuracy#white-space-in-annotation" target="_blank">Accuracy/Whitespace</a>
             </td>
         </tr>
         <tr>
@@ -422,7 +422,7 @@ richness through sameAs by using network measures</i></td>
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/semantic-accuracy#datatype-consistency" target="_blank">Accuracy/Datatype</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/semantic-accuracy#datatype-consistency" target="_blank">Accuracy/Datatype</a>
             </td>
         </tr>
         <tr>
@@ -443,7 +443,7 @@ richness through sameAs by using network measures</i></td>
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/semantic-accuracy#functional-property-violation" target="_blank">Accuracy/FP</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/semantic-accuracy#functional-property-violation" target="_blank">Accuracy/FP</a>
             </td>
         </tr>
         <tr>
@@ -464,7 +464,7 @@ richness through sameAs by using network measures</i></td>
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/semantic-accuracy#inverse-functional-property-violation" target="_blank">Accuracy/IFP</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/semantic-accuracy#inverse-functional-property-violation" target="_blank">Accuracy/IFP</a>
             </td>
         </tr>
         <tr>
@@ -488,7 +488,7 @@ richness through sameAs by using network measures</i></td>
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/consistency#entities-as-members-of-disjoint-classes" target="_blank">Consistency/Disjoint</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/consistency#entities-as-members-of-disjoint-classes" target="_blank">Consistency/Disjoint</a>
             </td>
         </tr>
         <tr>
@@ -509,7 +509,7 @@ richness through sameAs by using network measures</i></td>
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/consistency#misplaced-class" target="_blank">Consistency/Misplaced</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/consistency#misplaced-class" target="_blank">Consistency/Misplaced</a>
             </td>
         </tr>
                 <tr>
@@ -530,7 +530,7 @@ richness through sameAs by using network measures</i></td>
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/consistency#use-of-members-of-deprecated-classes-or-properties" target="_blank">Consistency/Deprecated</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/consistency#use-of-members-of-deprecated-classes-or-properties" target="_blank">Consistency/Deprecated</a>
             </td>
         </tr>
         <tr>
@@ -551,7 +551,7 @@ richness through sameAs by using network measures</i></td>
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/consistency#undefined-classes" target="_blank">Consistency/Undefined</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/consistency#undefined-classes" target="_blank">Consistency/Undefined</a>
             </td>
         </tr>
         <tr>
@@ -572,7 +572,7 @@ richness through sameAs by using network measures</i></td>
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/consistency#ontology-hijacking" target="_blank">Consistency/Hijacking</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/consistency#ontology-hijacking" target="_blank">Consistency/Hijacking</a>
             </td>
         </tr>
         <tr>
@@ -596,7 +596,7 @@ richness through sameAs by using network measures</i></td>
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/conciseness#intensional-conciseness" target="_blank">Conciseness/Int-Conc</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/conciseness#intensional-conciseness" target="_blank">Conciseness/Int-Conc</a>
             </td>
         </tr>
         <tr>
@@ -617,7 +617,7 @@ richness through sameAs by using network measures</i></td>
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/conciseness#extensional-conciseness" target="_blank">Conciseness/Ext-Conc</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/conciseness#extensional-conciseness" target="_blank">Conciseness/Ext-Conc</a>
             </td>
         </tr>
         <tr>
@@ -644,7 +644,7 @@ richness through sameAs by using network measures</i></td>
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/reputation#reputation-of-the-dataset" target="_blank">Reputation/PageRank</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/reputation#reputation-of-the-dataset" target="_blank">Reputation/PageRank</a>
             </td>
         </tr>
         <tr>
@@ -668,7 +668,7 @@ richness through sameAs by using network measures</i></td>
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/believability#meta-information-about-the-identity-of-information-provider" target="_blank">Believability/Meta-info</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/believability#meta-information-about-the-identity-of-information-provider" target="_blank">Believability/Meta-info</a>
             </td>
         </tr>
         <tr>
@@ -692,7 +692,7 @@ richness through sameAs by using network measures</i></td>
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/verifiability#verifying-publisher-information" target="_blank">Verifiability/Publisher-info</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/verifiability#verifying-publisher-information" target="_blank">Verifiability/Publisher-info</a>
             </td>
         </tr>
         <tr>
@@ -717,7 +717,7 @@ richness through sameAs by using network measures</i></td>
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/verifiability#verifying-authenticity-of-the-dataset" target="_blank">Verifiability/Vocabs</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/verifiability#verifying-authenticity-of-the-dataset" target="_blank">Verifiability/Vocabs</a>
             </td>
         </tr>
         <tr>
@@ -738,7 +738,7 @@ richness through sameAs by using network measures</i></td>
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/verifiability#verifying-usage-of-digital-signatures" target="_blank">Verifiability/Publisher-info</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/verifiability#verifying-usage-of-digital-signatures" target="_blank">Verifiability/Publisher-info</a>
             </td>
         </tr>
 <tr>
@@ -769,7 +769,7 @@ richness through sameAs by using network measures</i></td>
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/currency#time-since-last-modification" target="_blank">Currency/LastModification</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/currency#time-since-last-modification" target="_blank">Currency/LastModification</a>
             </td>
         </tr>
         <tr>
@@ -794,7 +794,7 @@ richness through sameAs by using network measures</i></td>
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/currency#specification-of-the-modification-date-of-statements" target="_blank">Currency/Modification</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/currency#specification-of-the-modification-date-of-statements" target="_blank">Currency/Modification</a>
             </td>
         </tr>
         <tr>
@@ -819,7 +819,7 @@ richness through sameAs by using network measures</i></td>
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/currency#age-of-data" target="_blank">Currency/AgeOfData</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/currency#age-of-data" target="_blank">Currency/AgeOfData</a>
             </td>
         </tr>
         <tr>
@@ -847,7 +847,7 @@ richness through sameAs by using network measures</i></td>
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/timeliness#stating-the-recency-and-frequency-of-data-validation" target="_blank">Timeliness/Frequency</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/timeliness#stating-the-recency-and-frequency-of-data-validation" target="_blank">Timeliness/Frequency</a>
             </td>
         </tr>
         <tr>
@@ -878,7 +878,7 @@ richness through sameAs by using network measures</i></td>
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/completeness#interlinking-completeness" target="_blank">Completeness/Interl</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/completeness#interlinking-completeness" target="_blank">Completeness/Interl</a>
             </td>
         </tr>
         <tr>
@@ -902,7 +902,7 @@ richness through sameAs by using network measures</i></td>
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/amount_of_data#number-of-triples" target="_blank">AmountOfData/Triples</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/amount_of_data#number-of-triples" target="_blank">AmountOfData/Triples</a>
             </td>
         </tr>
         <tr>
@@ -927,7 +927,7 @@ richness through sameAs by using network measures</i></td>
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/amount_of_data#level-of-detail" target="_blank">AmountOfData/Property</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/amount_of_data#level-of-detail" target="_blank">AmountOfData/Property</a>
             </td>
         </tr>
         <tr>
@@ -952,7 +952,7 @@ richness through sameAs by using network measures</i></td>
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/amount_of_data#scope" target="_blank">AmountOfData/Entities</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/amount_of_data#scope" target="_blank">AmountOfData/Entities</a>
             </td>
         </tr>
         <tr>
@@ -983,7 +983,7 @@ richness through sameAs by using network measures</i></td>
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/representational_conciseness#keeping-uri-short">Rep-Conc/ShortUri</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/representational_conciseness#keeping-uri-short">Rep-Conc/ShortUri</a>
             </td>
         </tr>
         <tr>
@@ -1007,7 +1007,7 @@ richness through sameAs by using network measures</i></td>
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/interoperability#re-use-of-existing-vocabularies">Rep-Cons/NewVocabs</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/interoperability#re-use-of-existing-vocabularies">Rep-Cons/NewVocabs</a>
             </td>
         </tr>
 <tr>
@@ -1032,7 +1032,7 @@ richness through sameAs by using network measures</i></td>
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/interoperability#re-use-of-existing-terms">Rep-Cons/NewTerms</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/interoperability#re-use-of-existing-terms">Rep-Cons/NewTerms</a>
             </td>
         </tr>
 <tr>
@@ -1060,7 +1060,7 @@ richness through sameAs by using network measures</i></td>
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/understandability#human-readable-labelling-of-classes-properties-and-entities-by-providing-rdfslabel">Under/Label</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/understandability#human-readable-labelling-of-classes-properties-and-entities-by-providing-rdfslabel">Under/Label</a>
             </td>
         </tr>
         <tr>
@@ -1081,7 +1081,7 @@ richness through sameAs by using network measures</i></td>
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/understandability#indication-of-metadata-about-a-dataset">Under/info</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/understandability#indication-of-metadata-about-a-dataset">Under/info</a>
             </td>
         </tr>
         <tr>
@@ -1106,7 +1106,7 @@ richness through sameAs by using network measures</i></td>
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/understandability#indication-of-an-exemplary-sparql-query">Under/example</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/understandability#indication-of-an-exemplary-sparql-query">Under/example</a>
             </td>
         </tr>
         <tr>
@@ -1132,7 +1132,7 @@ URIs is present </i></td>
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/understandability#indication-of-a-regular-expression-that-matches-the-uris-of-a-dataset">Under/regex</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/understandability#indication-of-a-regular-expression-that-matches-the-uris-of-a-dataset">Under/regex</a>
             </td>
         </tr>
         <tr>
@@ -1157,7 +1157,7 @@ URIs is present </i></td>
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/understandability#indication-of-the-vocabularies-used-in-the-dataset">Under/Vocabs</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/understandability#indication-of-the-vocabularies-used-in-the-dataset">Under/Vocabs</a>
             </td>
         </tr>
         <tr>
@@ -1181,7 +1181,7 @@ URIs is present </i></td>
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/interpretability#no-misinterpretation-of-missing-values">Under/Bns</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/interpretability#no-misinterpretation-of-missing-values">Under/Bns</a>
             </td>
         </tr>
         <tr>
@@ -1202,7 +1202,7 @@ URIs is present </i></td>
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/interpretability#atypical-use-of-collections-containers-and-reification">Under/Rdf</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/interpretability#atypical-use-of-collections-containers-and-reification">Under/Rdf</a>
             </td>
         </tr>
         <tr>
@@ -1230,7 +1230,7 @@ URIs is present </i></td>
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/versatility#usage-of-multiple-languages">Versatility/Languages</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/versatility#usage-of-multiple-languages">Versatility/Languages</a>
             </td>
         </tr>
         <tr>
@@ -1255,7 +1255,7 @@ URIs is present </i></td>
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/versatility#different-serialization-formats">Versatility/Serialization</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/versatility#different-serialization-formats">Versatility/Serialization</a>
             </td>
         </tr>
         <tr>
@@ -1280,7 +1280,7 @@ URIs is present </i></td>
         <tr>
             <td rowspan="1">Algorithm</td>
             <td colspan="3">
-            <a href="https://isislab-unisa.github.io/KGHeartbeat/quality_dimensions/versatility#accessing-of-data-in-different-ways">Versatility/Access</a>
+            <a href="https://isislab-unisa.github.io/KGHeartBeat/quality_dimensions/versatility#accessing-of-data-in-different-ways">Versatility/Access</a>
             </td>
         </tr>
         <tr>
