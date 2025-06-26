@@ -198,8 +198,8 @@ def convert_to_kg_code_from_llm(filename):
 
             # Process score columns
             else:
-                score_uri = URIRef(f"http://example.org/score/{column}")
-                score_observation_uri = URIRef(f"http://example.org/observation/{kg_id}/{column}_{analysis_date}")
+                score_uri = URIRef(f"http://example.org/score/{safe_column}")
+                score_observation_uri = URIRef(f"http://example.org/observation/{kg_id}/{safe_column}_{analysis_date}")
 
                 g.add((score_uri, RDF.type, DQV.Metric))
                 g.add((score_uri, RDFS.label, Literal(column, lang="en")))
