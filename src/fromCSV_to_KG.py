@@ -9,6 +9,7 @@ from from_kg_to_csv.prompt_llms  import PromptLLMS
 from from_kg_to_csv.evaluate_answer import EvaluateKG
 from datetime import datetime
 from pathlib import Path
+import re
 
 ontology_path = './Generate KG from csv (ESWC Workshop)/dqv.ttl'
 kg_as_example_path = './Generate KG from csv (ESWC Workshop)/Full/cz-nace-full.ttl'
@@ -154,9 +155,12 @@ def convert_to_kg_code_from_llm(filename):
             
             if '_' in column:
                 dimension, metric = column.split('_', 1)
-                dimension_uri = URIRef(f"http://example.org/dimension/{dimension}")
-                metric_uri = URIRef(f"http://example.org/metric/{metric}")
-                observation_uri = URIRef(f"http://example.org/observation/{kg_id}/{column}_{analysis_date}")
+                safe_dimension = re.sub(r'\W+', '_', dimension.strip())
+                safe_metric = re.sub(r'\W+', '_', metric.strip())
+                safe_column = re.sub(r'\W+', '_', column.strip())
+                dimension_uri = URIRef(f"http://example.org/dimension/{safe_dimension}")
+                metric_uri = URIRef(f"http://example.org/metric/{safe_metric}")
+                observation_uri = URIRef(f"http://example.org/observation/{kg_id}/{safe_column}_{analysis_date}")
                 
                 # Add dimension and metric to graph
                 g.add((dimension_uri, RDF.type, DQV.Dimension))
