@@ -131,7 +131,7 @@ The box plot illustred below shows the times for calculating the quality for eac
 KGHeartbeat is licensed under the [MIT License](https://opensource.org/license/mit/).
 
 # How to Use KGHeartBeat
-This section provides an overview about the use of KGHeartbeat and how it can be extended.
+This section provides an overview about the use of KGHeartbeat and how it can be extended. The Project has been tested and is working using **Python version 3.11**.
 To follow the next steps, clone the project with the following command
 ```
 git clone https://github.com/isislab-unisa/KGHeartbeat.git
