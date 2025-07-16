@@ -111,7 +111,7 @@ class EvaluateFAIRness:
         has_void = self.kg_quality.extra.urlVoid != ''
         has_void_from_endpoint = query.check_void_dcat(self.kg_quality.extra.endpointUrl) != False
         lic_in_meta = 1 if self.kg_quality.licensing.licenseQuery != '-' and len(self.kg_quality.licensing.licenseQuery) > 0 else 0
-        self.fairness.i1M = 1 if has_void or has_void_from_endpoint or lic_in_meta else 0
+        self.fairness.i1M = 1 if has_void or has_void_from_endpoint else 0
 
         has_vocab = self.kg_quality.verifiability.vocabularies not in ['-', '', '[]'] and len(self.kg_quality.verifiability.vocabularies) > 0
         self.fairness.i2 = utils.check_if_fair_vocabs(self.kg_quality.verifiability.vocabularies) if has_vocab else 0
