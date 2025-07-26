@@ -205,11 +205,12 @@ def getDOI(idKG):
     doiCHeCloud = CHeCloudAPI.getDOI(idKG)
     monitoring_resources = MonitoringRequests()
     doiMR = monitoring_resources.getDOI(idKG)
-    if doiLODC != False:
+    print(f"DOI from LODC: {doiLODC}, CHeCloud: {doiCHeCloud}, MR: {doiMR}")
+    if doiLODC != False and doiLODC != None:
         return doiLODC
-    if doiMR != False:
+    if doiMR != False and doiMR != None:
         return doiMR
-    if doiCHeCloud != False:
+    if doiCHeCloud != False and doiCHeCloud != None:
         return doiCHeCloud
     
     return False
