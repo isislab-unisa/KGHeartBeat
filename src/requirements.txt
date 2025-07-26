@@ -4,7 +4,7 @@ matplotlib==3.5.1
 mechanize==0.4.7
 mmh3==3.0.0
 networkx==2.6.3
-numpy==1.22.2
+numpy<1.28.0
 pandas==1.4.1
 rdflib==6.1.1
 requests==2.27.1
@@ -15,6 +15,7 @@ xmltodict==0.12.0
 scipy
 python-dotenv
 langchain
+langchain-core
 langchain_community
 langchain_openai
 langchain_google_genai
