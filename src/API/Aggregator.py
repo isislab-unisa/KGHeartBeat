@@ -10,14 +10,14 @@ def getDataPackage(idKG):
     monitoring_resources = MonitoringRequests()
     metadata_monitoring_resources = monitoring_resources.getMetadata(idKG)
     metadataCHeCloud = CHeCloudAPI.getDatasetMetadata(idKG)
-    if isinstance(metadataLODC,dict):
-        return metadataLODC
-    elif isinstance(metadataDH,dict):
-        return metadataDH
-    elif isinstance(metadataCHeCloud,dict):
+    if isinstance(metadataCHeCloud,dict):
         return metadataCHeCloud
     elif isinstance(metadata_monitoring_resources,dict):
         return metadata_monitoring_resources
+    elif isinstance(metadataLODC,dict):
+        return metadataLODC
+    elif isinstance(metadataDH,dict):
+        return metadataDH
     else:
         return False
 
