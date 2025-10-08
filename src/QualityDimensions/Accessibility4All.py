@@ -1,7 +1,13 @@
 import requests
+import query
+import VoIDAnalyses
+import utils
+from API import Aggregator
 
 class Accessibility4All:
     def __init__(self):
+        self.open_license_value = None
+        self.assistive_technologies_value = None
         return None
 
     def open_license(self, kg_license):
@@ -32,3 +38,119 @@ class Accessibility4All:
         else:
             # Request failed
             return {"error": "Failed to retrieve license information"}
+
+    def assistive_technologies(self, sparql_endpoint, void_file_url):
+        void_file = VoIDAnalyses.parseVoID(void_file_url)
+        ass_tech_in_void = VoIDAnalyses.check_acc_feature(void_file)
+        ass_tech_in_kg = query.check_acc_feature(sparql_endpoint)
+        ass_tech_in_kg = 1 if isinstance(ass_tech_in_kg, list) and len(ass_tech_in_kg) > 0 else 0
+
+        return 1 if ass_tech_in_void == True or ass_tech_in_kg == 1 else 0
+    
+    def webpage_status(self, website_url):
+        try:
+            response = requests.get(website_url)
+            if response.status_code == 200:
+                return 1
+            else:
+                return 0
+        except:
+            return 0
+
+    def metadata_broken_links_rate(self, sparql_endpoint, void_file_url):
+        all_obj_sparql = query.get_all_metadata_obj(sparql_endpoint)
+        all_obj_void = VoIDAnalyses.get_all_obj(void_file_url)
+        if len(all_obj_void) > 0:
+            broken_links = 0
+            for obj in all_obj_void:
+                if utils.is_url(obj):
+                    try:
+                        response = requests.get(obj)
+                        if response.status_code != 200:
+                            broken_links += 1
+                    except:
+                        broken_links += 1
+            return broken_links / len(all_obj_void)
+        elif len(all_obj_sparql) > 0:
+            broken_links = 0
+            for obj in all_obj_sparql:
+                if utils.is_url(obj):
+                    try:
+                        response = requests.get(obj)
+                        if response.status_code != 200:
+                            broken_links += 1
+                    except:
+                        broken_links += 1
+            return broken_links / len(all_obj_sparql)
+        else:
+            return 'No metadata objects found'
+        
+    def robots_txt(self, search_engine_metadata, sparql_endpoint, website_url):
+        if utils.is_url(sparql_endpoint):
+            robots_url = sparql_endpoint.rstrip('/') + '/robots.txt'
+            try:
+                response = requests.get(robots_url)
+                if response.status_code == 200:
+                    return 1
+                else:
+                    return 0
+            except:
+                return 0
+        if utils.is_url(website_url):
+            robots_url = website_url.rstrip('/') + '/robots.txt'
+            try:
+                response = requests.get(robots_url)
+                if response.status_code == 200:
+                    return 1
+                else:
+                    return 0
+            except:
+                return 0
+        other_downlaoads = search_engine_metadata.get('other_downloads', [])
+        for link in other_downlaoads:
+            if 'robots.txt' in link['access_url']:
+                try:
+                    response = requests.get(link)
+                    if response.status_code == 200:
+                        return 1
+                    else:
+                        return 0
+                except:
+                    return 0
+        return 0
+    
+
+    def common_formats_availability(self, idKG):
+        resourcesDH = Aggregator.getOtherResources(idKG)
+        resourcesDH = utils.insertAvailability(resourcesDH)
+        metadata_media_type = utils.extract_media_type(resourcesDH)
+        common_formats_availability = utils.check_common_acceppted_format(metadata_media_type)
+        if common_formats_availability:
+            return 1   
+        else:    
+            return 0
+    
+    def check_authentication(self, sparql_endpoint):
+        if utils.is_url(sparql_endpoint):
+            try:
+                response = requests.get(sparql_endpoint)
+                if response.status_code == 200:
+                    return 1
+                elif response.status_code == 401:
+                    return 0
+            except Exception as e:
+                return f'Error accessig SPARQL endpoint: {e}'
+        else:
+            return 0
+    
+    def version(self, void_file_url, sparql_endpoint):
+        if utils.is_url(sparql_endpoint):
+            version_in_kg = query.get_version(sparql_endpoint)
+            if isinstance(version_in_kg, list) and len(version_in_kg) > 0:
+                return 1
+        if utils.is_url(void_file_url):
+            version_in_void = VoIDAnalyses.get_version(void_file_url)
+            if version_in_void != False:
+                return 1
+        
+        return 0

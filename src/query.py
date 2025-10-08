@@ -1767,7 +1767,7 @@ def check_void_dcat(endpoint_url):
     WHERE {
     {?s ?p void:Dataset .}
     UNION
-    {?S ?p dcat:Dataset}
+    {?s ?p dcat:Dataset}
     }
 
     LIMIT 1
@@ -1785,6 +1785,116 @@ def check_void_dcat(endpoint_url):
         elif isinstance(results,Document):
             urls = utils.getResultsFromXML(results)
             return urls
+        else:
+            return False
+    except:
+        return False
+
+def check_acc_feature(endpoint_url):
+    sparql = SPARQLWrapper(endpoint_url)
+    query = """
+        PREFIX schema: <https://schema.org/>
+
+        SELECT ?o
+        WHERE {
+        ?s schema:accessibilityFeature ?o .
+        }
+    """
+    try:
+        sparql.setQuery(query)
+        sparql.setTimeout(300)
+        sparql.setReturnFormat(JSON)
+        results = sparql.query().convert()
+        if isinstance(results,dict):
+            triples = utils.getResultsFromJSON(results)
+            return triples
+        elif isinstance(results,Document):
+            triples = utils.getResultsFromXML(results)
+            return triples
+        else:
+            return False
+    except:
+        return False
+
+def get_all_metadata_obj(endpoint_url):
+    sparql = SPARQLWrapper(endpoint_url)
+    query = """
+        PREFIX void: <http://rdfs.org/ns/void#>
+        PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+        PREFIX dcat: <http://www.w3.org/ns/dcat#>
+
+        SELECT DISTINCT ?o
+        WHERE {
+        {
+            ?dataset a void:Dataset ;
+                   ?p ?o .
+        }
+        UNION
+        {
+            ?dataset a dcat:Dataset ;
+                    ?p ?o .
+        }
+        }
+        """
+    try:
+        sparql.setQuery(query)
+        sparql.setTimeout(300)
+        sparql.setReturnFormat(JSON)
+        results = sparql.query().convert()
+        if isinstance(results,dict):
+            triples = utils.getResultsFromJSON(results)
+            return triples
+        elif isinstance(results,Document):
+            triples = utils.getResultsFromXML(results)
+            return triples
+        else:
+            return False
+    except:
+        return False
+    
+def get_version(endpoint_url):
+    sparql = SPARQLWrapper(endpoint_url)
+    query = """
+    PREFIX void: <http://rdfs.org/ns/void#>
+    PREFIX dcat: <http://www.w3.org/ns/dcat#>
+    PREFIX schema: <https://schema.org/>
+    PREFIX dcterms: <http://purl.org/dc/terms/>
+
+    SELECT DISTINCT ?o
+    WHERE {
+    {
+        ?dataset a void:Dataset ;
+                dcat:hasVersion ?o .
+    }
+    UNION
+    {
+        ?dataset a dcat:Dataset ;
+                dcat:hasVersion ?o .
+    }
+    UNION
+    {
+        ?dataset a void:Dataset ;
+                dcterms:hasVersion ?o .
+    }
+    UNION
+    {
+        ?dataset a dcat:Dataset ;
+                dcterms:hasVersion ?o .
+    }
+    }
+    LIMIT 1
+    """
+    try:
+        sparql.setQuery(query)
+        sparql.setTimeout(300)
+        sparql.setReturnFormat(JSON)
+        results = sparql.query().convert()
+        if isinstance(results,dict):
+            triples = utils.getResultsFromJSON(results)
+            return triples
+        elif isinstance(results,Document):
+            triples = utils.getResultsFromXML(results)
+            return triples
         else:
             return False
     except:

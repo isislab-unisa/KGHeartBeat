@@ -29,6 +29,7 @@ import ssl
 from API import Aggregator
 from API.fair_vocabularies import fair_vocabularies
 from collections import Counter
+import re
 
 #PRINT THE METADATI OF A KG
 def printMetadatiKG(metadct):
@@ -1331,3 +1332,11 @@ def save_only_regex(string_list):
             pass  # Skip if it's not a valid regex
 
     return valid_regexes
+
+def is_url(string):
+    pattern = re.compile(
+        r'^(https?://)?'           # optional http or https
+        r'([\w.-]+)\.([a-z\.]{2,6})'  # domain
+        r'([/\w\.-]*)*/?$'         # optional path
+    )
+    return bool(pattern.match(string))

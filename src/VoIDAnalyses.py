@@ -1,6 +1,6 @@
 import datetime
 import re
-from rdflib import DCAT, Graph, URIRef
+from rdflib import DCAT, Graph, URIRef, Namespace
 from rdflib.namespace import DC, DCTERMS, DOAP, FOAF, SKOS, OWL, RDF, RDFS, VOID, XMLNS, XSD
 
 
@@ -198,3 +198,24 @@ def getClasses(graph):
         return classes
     else:
         return 'absent'
+    
+def check_acc_feature(graph):
+    schema = Namespace("https://schema.org/")
+    if (None, schema.accessibilityFeature, None) in graph:
+        return True
+    else:
+        return False
+    
+def get_all_obj(graph):
+    objects = []
+    for s,p,o in graph:
+        o = str(o)
+        objects.append(o)
+    return objects
+
+def get_version(graph):
+    for s,p,o in graph:
+        if p == DCAT.hasVersion or DCTERMS.hasVersion:
+            o = str(o)
+            return o
+    return False
