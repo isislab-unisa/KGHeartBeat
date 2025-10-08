@@ -219,3 +219,18 @@ def get_version(graph):
             o = str(o)
             return o
     return False
+
+def get_identifier(graph):
+    schema = Namespace("https://schema.org/")
+    for s,p,o in graph:
+        if p == DCTERMS.identifier or p == schema.identifier or DCTERMS.bibliographicCitation:
+            o = str(o)
+            return o
+    return False
+
+def get_contact_point(graph):
+    for s,p,o in graph:
+        if p == DCAT.contactPoint:
+            o = str(o)
+            return o
+    return False

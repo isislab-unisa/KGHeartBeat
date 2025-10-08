@@ -154,3 +154,34 @@ class Accessibility4All:
                 return 1
         
         return 0
+
+    def canonical_citation(self, void_file_url, sparql_endpoint):
+        if utils.is_url(sparql_endpoint):
+            identifier = query.get_identifier(sparql_endpoint)
+            if isinstance(identifier, list) and len(identifier) > 0:
+                return 1
+        if utils.is_url(void_file_url):
+            identifier = VoIDAnalyses.get_identifier(void_file_url)
+            if identifier != False:
+                return 1
+        
+        return 0
+    
+    def contact_point(self, search_engine_metadata, sparql_endpoint, void_file_url):
+        contact_in_metadata = search_engine_metadata.get('contact_point', False)
+        name = contact_in_metadata.get('name', False)
+        email = contact_in_metadata.get('email', False)
+        if email != False or name != False and name != 'null' or email != 'null':
+            return 1
+        
+        if utils.is_url(sparql_endpoint):
+            contact_in_sparql = query.get_contact_point(sparql_endpoint)
+            if isinstance(contact_in_sparql, list) and len(contact_in_sparql) > 0:
+                return 1
+        
+        if utils.is_url(void_file_url):
+            contact_in_void = VoIDAnalyses.get_contact_point(void_file_url)
+            if isinstance(contact_in_void, list) and len(contact_in_void) > 0:
+                return 1
+
+        return 0
