@@ -58,7 +58,7 @@ def getModificationDate(graph):
 
 def getDataDump(graph):
     for s,p,o in graph:
-        if p == VOID.dataDump:
+        if p == VOID.dataDump or p == DCAT.downloadURL:
             o = str(o)
             return o
     return 'absent'
@@ -136,7 +136,7 @@ def getUriRegex(graph):
 def getSerializationFormats(graph):
     formats = []
     for s,p,o in graph:
-        if p == VOID.feature or DCAT.mediaType:
+        if p == VOID.feature or DCAT.mediaType or DCTERMS.format:
             o = str(o)
             formats.append(o)
     if len(formats) > 0:       
@@ -234,3 +234,14 @@ def get_contact_point(graph):
             o = str(o)
             return o
     return False
+
+def getExamples(graph):
+    examples = []
+    for s,p,o in graph:
+        if p == VOID.exampleResource:
+            o = str(o)
+            examples.append(o)
+    if len(examples) > 0:       
+        return examples
+    else:
+        return False
