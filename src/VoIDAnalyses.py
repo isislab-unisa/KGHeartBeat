@@ -245,3 +245,17 @@ def getExamples(graph):
         return examples
     else:
         return False
+
+def getSparqlEndpoint(graph):
+    for s,p,o in graph:
+        if p == VOID.sparqlEndpoint:
+            o = str(o)
+            return o
+    return False
+
+def getAccessPoint(graph):
+    for s,p,o in graph:
+        if p == VOID.uriLookupEndpoint or p == DCAT.accessURL or p == DCAT.endpointURL:
+            o = str(o)
+            return o
+    return False

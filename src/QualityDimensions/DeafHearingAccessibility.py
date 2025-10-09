@@ -1,6 +1,8 @@
 import VoIDAnalyses
 import utils
 import query
+from API import Aggregator
+
 
 class DeafHearingAccessibility:
     def __init__(self):
@@ -13,7 +15,8 @@ class DeafHearingAccessibility:
             return 1
 
         if utils.is_url(void_file_url):
-            examples_void = VoIDAnalyses.getExamples(void_file_url)
+            void_file = VoIDAnalyses.parseVoID(void_file_url)
+            examples_void = VoIDAnalyses.getExamples(void_file)
             if examples_void and len(examples_void) > 0:
                 return 1
         
@@ -23,3 +26,66 @@ class DeafHearingAccessibility:
                 return 1
         
         return 0
+    
+    def alternative_access_point(self, void_file_url, sparql_endpoint_url, idKG):
+        available_download = False
+        available_sparql = False
+        available_api = False
+
+        # Check availability in the download links in the search engine metadata
+        resourcesDH = Aggregator.getOtherResources(idKG)
+        resourcesDH = utils.insertAvailability(resourcesDH)
+        available_download = any(res.get("status") == "active" for res in resourcesDH)
+
+        # Check links availability from the SPARQL endpoint if online
+        if utils.is_url(sparql_endpoint_url):
+            available_sparql = bool(query.check_if_up(sparql_endpoint_url))
+
+            if available_sparql:
+                # Check API links
+                for link in query.get_apis_url(sparql_endpoint_url):
+                    if utils.checkAvailabilityResource(link):
+                        available_api = True
+                        break
+
+                # Check dump links
+                for link in query.get_download_link(sparql_endpoint_url):
+                    if utils.checkAvailabilityResource(link):
+                        available_download = True
+                        break
+        
+        # Check links availability from the VoID file if provided
+        if utils.is_url(void_file_url):
+            void_file = VoIDAnalyses.parseVoID(void_file_url)
+
+            # Data dumps
+            for link in VoIDAnalyses.getDataDump(void_file):
+                if utils.checkAvailabilityResource(link):
+                    available_download = True
+                    break
+
+            # SPARQL endpoint
+            sparql_endpoint = VoIDAnalyses.getSparqlEndpoint(void_file)
+            if utils.is_url(sparql_endpoint):
+                available_sparql = bool(query.check_if_up(sparql_endpoint))
+
+            # API links
+            for link in VoIDAnalyses.getAccessPoint(void_file):
+                if utils.checkAvailabilityResource(link):
+                    available_api = True
+                    break
+
+        # To have 1 as result, at least two access points must be available
+        result = int(sum([available_download, available_sparql, available_api]) >= 2)
+        return result
+
+
+    def human_redeable_labels(self, sparql_endpoint):
+        if utils.is_url(sparql_endpoint):
+            num_labels = query.count_res_with_label(sparql_endpoint)
+            num_res = query.count_res(sparql_endpoint)
+            if num_res > 0:
+                ratio = num_labels / num_res
+                return ratio
+            return  "Error during query"
+        return "SPARQL endpoint not available"

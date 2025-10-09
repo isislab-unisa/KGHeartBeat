@@ -30,6 +30,43 @@ def checkEndPoint(url):
     result = sparql.query().convert()
     return result
 
+def check_if_up(url):
+    sparql = SPARQLWrapper(url)
+    sparql.setQuery("""
+        SELECT ?s ?p ?o
+        WHERE { ?s ?p ?o }
+        LIMIT 1
+    """)
+    sparql.setTimeout(300)  # 5 minutes
+
+    try:
+        # Try JSON first
+        sparql.setReturnFormat(JSON)
+        results = sparql.query().convert()
+
+        if "results" in results and "bindings" in results["results"]:
+            bindings = results["results"]["bindings"]
+            if len(bindings) > 0:
+                print("✅ Endpoint is up and returned a triple (JSON).")
+                print("Triple:", bindings[0])
+                return True
+            else:
+                print("⚠️ Endpoint is up but returned no triples (JSON).")
+                return False
+    except Exception as e_json:
+        try:
+            sparql.setReturnFormat(XML)
+            xml_data = sparql.query().convert()
+            root = ET.fromstring(xml_data)
+            results = root.findall(".//{http://www.w3.org/2005/sparql-results#}result")
+
+            if len(results) > 0:
+                return True
+            else:
+                return False
+        except Exception as e_xml:
+            return False
+
 @log_in_out
 def TPQuery(url,offset): 
     sparql = SPARQLWrapper(url) 
@@ -2025,4 +2062,104 @@ def get_examples(endpoint_url):
         else:
             return False
     except:
+        return False
+    
+
+@log_in_out
+def get_apis_url(endpoint_url):
+    sparql = SPARQLWrapper(endpoint_url)
+    query = """
+        PREFIX void: <http://rdfs.org/ns/void#>
+        PREFIX dcat: <http://www.w3.org/ns/dcat#>
+        PREFIX dcterms: <http://purl.org/dc/terms/>
+
+        SELECT DISTINCT ?o
+        WHERE {
+            ?dataset a ?type ;
+                    ?p ?o .
+            VALUES ?type { void:Dataset dcat:Dataset dcat:Distribution }
+            VALUES ?p { void:uriLookupEndpoint dcat:accessURL dcat:endpointURL }
+        }
+        LIMIT 1
+    """
+    try:
+        sparql.setQuery(query)
+        sparql.setTimeout(300)
+        sparql.setReturnFormat(JSON)
+        results = sparql.query().convert()
+        if isinstance(results,dict):
+            triples = utils.getResultsFromJSON(results)
+            return triples
+        elif isinstance(results,Document):
+            triples = utils.getResultsFromXML(results)
+            return triples
+        else:
+            return False
+    except:
+        return False
+    
+def count_res_with_label(endpoint_url):
+    sparql = SPARQLWrapper(endpoint_url)
+    sparql.setQuery('''
+        PREFIX skosxl: <http://www.w3.org/2008/05/skos-xl#>
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+        PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+        PREFIX dcterms: <http://purl.org/dc/terms/>
+        PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+        PREFIX awol: <http://bblfish.net/work/atom-owl/2006-06-06/#>
+        PREFIX wdrs: <http://www.w3.org/2007/05/powder-s#>
+        PREFIX schema: <http://schema.org/>
+
+        SELECT (COUNT(DISTINCT ?s) AS ?triples)
+        WHERE {
+        { ?s rdfs:label ?o }
+        UNION { ?s foaf:name ?o }
+        UNION { ?s skos:prefLabel ?o }
+        UNION { ?s dcterms:title ?o }
+        UNION { ?s dcterms:description ?o }
+        UNION { ?s rdfs:comment ?o }
+        UNION { ?s awol:label ?o }
+        UNION { ?s dcterms:alternative ?o }
+        UNION { ?s skos:altLabel ?o }
+        UNION { ?s skos:note ?o }
+        UNION { ?s wdrs:text ?o }
+        UNION { ?s skosxl:altLabel ?o }
+        UNION { ?s skosxl:hiddenLabel ?o }
+        UNION { ?s skosxl:prefLabel ?o }
+        UNION { ?s skosxl:literalForm ?o }
+        UNION { ?s schema:name ?o }
+        UNION { ?s schema:description ?o }
+        UNION { ?s schema:alternateName ?o }
+        }
+
+    ''')
+    sparql.setTimeout(300)
+    sparql.setReturnFormat(JSON)
+    results = sparql.query().convert()
+    if isinstance(results,dict):
+        value = utils.getResultsFromJSONCountInt(results)
+        return value
+    elif isinstance(results,Document):
+        value = utils.getResultsFromXMLCount(results)
+        return value
+    else:
+        return False
+    
+def count_res(endpoint_url):
+    sparql = SPARQLWrapper(endpoint_url)
+    sparql.setQuery('''
+        SELECT (COUNT(DISTINCT ?s) AS ?triples)
+        WHERE {
+        ?s ?p ?o .
+        }''')
+    sparql.setTimeout(300)
+    sparql.setReturnFormat(JSON)
+    results = sparql.query().convert()
+    if isinstance(results,dict):
+        value = utils.getResultsFromJSONCountInt(results)
+        return value
+    elif isinstance(results,Document):
+        value = utils.getResultsFromXMLCount(results)
+        return value
+    else:
         return False
