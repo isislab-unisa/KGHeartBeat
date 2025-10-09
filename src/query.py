@@ -180,31 +180,18 @@ def checkRDFDataStructures(url):
 def checkSerialisationFormat(url):
     sparql = SPARQLWrapper(url)
     sparql.setQuery('''
-    PREFIX dcterms: <http://purl.org/dc/terms/>
-    PREFIX schema: <http://schema.org/>
-    PREFIX dcat: <http://www.w3.org/ns/dcat#>
-    PREFIX void: <http://rdfs.org/ns/void#>
+        PREFIX dcterms: <http://purl.org/dc/terms/>
+        PREFIX dcat: <http://www.w3.org/ns/dcat#>
+        PREFIX void: <http://rdfs.org/ns/void#>
 
-    SELECT ?o
-    WHERE {
-    { ?dataset a dcat:Dataset ; dcat:mediaType ?o . }
-    UNION
-    { ?dataset a dcat:Dataset ; void:feature ?o . }
-    UNION
-    { ?dataset a dcat:Dataset ; dcterms:format ?o . }
-    UNION
-    { ?dataset a dcat:Distribution ; dcat:mediaType ?o . }
-    UNION
-    { ?dataset a dcat:Distribution ; dcterms:format ?o . }
-    UNION
-    { ?dataset a dcat:Distribution ; void:feature ?o . }
-    UNION
-    { ?dataset a void:Dataset ; dcat:mediaType ?o . }
-    UNION
-    { ?dataset a void:Dataset ; void:feature ?o . }
-    UNION
-    { ?dataset a void:Dataset ; dcterms:format ?o . }
-    }
+        SELECT ?o
+        WHERE {
+        VALUES ?type { dcat:Dataset dcat:Distribution void:Dataset }
+        VALUES ?prop { dcat:mediaType void:feature dcterms:format dcat:compressFormat dcat:packageFormat }
+
+        ?dataset a ?type ;
+                ?prop ?o .
+        }
     ''')
     sparql.setTimeout(300)
     sparql.setReturnFormat(JSON)
@@ -1567,10 +1554,17 @@ def queryWithSingleAcceptFromat(url,query):
 def get_download_link(url):
     sparql = SPARQLWrapper(url)
     sparql.setQuery('''
-    PREFIX dcat: <http://www.w3.org/ns/dcat#>
-    SELECT DISTINCT ?o
-    WHERE {?s dcat:downloadURL ?o.}
-    ''')
+       PREFIX dcterms: <http://purl.org/dc/terms/>
+        PREFIX dcat: <http://www.w3.org/ns/dcat#>
+        PREFIX void: <http://rdfs.org/ns/void#>
+
+        SELECT ?o
+        WHERE {
+        VALUES ?type { dcat:Dataset dcat:Distribution void:Dataset }
+        VALUES ?prop {  void:dataDump dcat:downloadURL }
+        ?dataset a ?type ;
+                ?prop ?o .
+        }''')
     sparql.setTimeout(300)
     sparql.setReturnFormat(JSON)
     results = sparql.query().convert()
@@ -1965,3 +1959,70 @@ def get_contact_point(endpoint_url):
             return False
     except:
         return False    
+    
+
+def get_string_literals(endpoint_url):
+    sparql = SPARQLWrapper(endpoint_url)
+    # We have to recover it like this because the string with the language tag is not recognized as a string with datatype xsd:string
+    #?lang is empty if no lang tag is present or is xsd:string
+    query = """
+    PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+    PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>a
+    SELECT ?o (lang(?o) AS ?lang)
+    WHERE { 
+        ?s ?p ?o .
+        FILTER ( isLiteral(?o) && (datatype(?o) = xsd:string || lang(?o) != "") )
+    }
+                
+    """
+    try:
+        sparql = SPARQLWrapper(endpoint_url)
+        sparql.setQuery(query)
+        sparql.setReturnFormat(JSON)
+        results = sparql.query().convert()
+
+        # Store triples in list as (object, lang)
+        triples_list = []
+        for result in results["results"]["bindings"]:
+            obj = result["o"]["value"]
+            lang = result.get("lang", {}).get("value", "")
+            triples_list.append((obj, lang))
+
+        # Count totals
+        total_count = len(triples_list)
+        lang_filtered_count = sum(1 for _, lang in triples_list if lang and lang != "xsd:string")
+
+        return total_count, lang_filtered_count
+    except Exception as e:
+        return False
+        
+
+def get_examples(endpoint_url):
+    sparql = SPARQLWrapper(endpoint_url)
+    query = """
+    PREFIX void: <http://rdfs.org/ns/void#>
+    PREFIX dcat: <http://www.w3.org/ns/dcat#>
+    PREFIX dcterms: <http://purl.org/dc/terms/>
+    PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+    PREFIX schema: <https://schema.org/>
+
+    SELECT DISTINCT ?o
+    WHERE {
+            ?dataset a void:Dataset ;
+                    void:exampleResource ?o .
+    } """
+    try:
+        sparql.setQuery(query)
+        sparql.setTimeout(300)
+        sparql.setReturnFormat(JSON)
+        results = sparql.query().convert()
+        if isinstance(results,dict):
+            triples = utils.getResultsFromJSON(results)
+            return triples
+        elif isinstance(results,Document):
+            triples = utils.getResultsFromXML(results)
+            return triples
+        else:
+            return False
+    except:
+        return False
