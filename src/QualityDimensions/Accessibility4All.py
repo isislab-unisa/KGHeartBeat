@@ -171,7 +171,7 @@ class Accessibility4All:
         contact_in_metadata = search_engine_metadata.get('contact_point', False)
         name = contact_in_metadata.get('name', False)
         email = contact_in_metadata.get('email', False)
-        if email != False or name != False and name != 'null' or email != 'null':
+        if (email and email != 'null') or (name and name != 'null'):
             return 1
         
         if utils.is_url(sparql_endpoint):
@@ -185,3 +185,25 @@ class Accessibility4All:
                 return 1
 
         return 0
+
+'''
+    def data_lang_and_encode(self, sparql_endpoint, void_file_url, idKG):
+        total_string, lang_string = query.get_string_literals(sparql_endpoint)
+
+        # Encode on resources indexed in the search engine metadata
+        resourcesDH = Aggregator.getOtherResources(idKG)
+        if len(resourcesDH) > 0:
+            resourcesDH = utils.insertAvailability(resourcesDH)
+            metadata_media_type = utils.extract_media_type(resourcesDH)
+
+        # Encode of the link in the VoID file
+        if utils.is_url(void_file_url):
+            void_file = VoIDAnalyses.parseVoID(void_file_url)
+            serialzation_formats = VoIDAnalyses.getSerializationFormats(void_file)
+            total_dump = VoIDAnalyses.getDataDump(void_file)
+
+        # Encode of the link in the SPARQL endpoint
+        if utils.is_url(sparql_endpoint):
+            dump_query = query.get_download_link(sparql_endpoint)
+            serialzation_formats_query = query.checkSerialisationFormats(sparql_endpoint)
+'''
