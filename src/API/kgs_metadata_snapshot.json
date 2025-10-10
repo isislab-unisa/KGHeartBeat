@@ -69212,7 +69212,7 @@
             "title": "Pers\u00e9e in RDF",
             "description": "![data.persee.fr](http://data.persee.fr/cropped-Logo-data.persee_petit.png)\r\n\r\n[data.persee.fr](http://data.persee.fr) is a triplestore opened in 2017. It gathers all the metadata produced by Pers\u00e9e and makes it available in a structured way (RDF graph) according to the semantic web principles (DCMI, FRBR, FOAF, CITO, BIBO, SKOS). The mapping between Pers\u00e9e\u2019s data and international information systems enables the researchers to explore Pers\u00e9e database and to link to data offered by the library community (IdRef, data.bnf.fr, etc.), the scientific community (the Cairo Gazetteer, the Global Biodiversity Information Facility - GBIF) and other crowded sources (DBpedia)",
             "website": "http://data.persee.fr/",
-            "triples": "48000000",
+            "triples": "42000000",
             "keywords": [
                 "dataset-collection",
                 "deref-vocab",
@@ -69238,7 +69238,7 @@
             "links": [
                 {
                     "target": "data-bnf-fr",
-                    "value": "65000"
+                    "value": "55000"
                 },
                 {
                     "target": "dbpedia",
@@ -69250,23 +69250,23 @@
                 },
                 {
                     "target": "gbif",
-                    "value": "78000"
+                    "value": "58000"
                 },
                 {
                     "target": "idhal",
-                    "value": "3500"
+                    "value": "2200"
                 },
                 {
                     "target": "idreffr",
-                    "value": "114000"
+                    "value": "83000"
                 },
                 {
                     "target": "isni",
-                    "value": "87000"
+                    "value": "55000"
                 },
                 {
                     "target": "orcid",
-                    "value": "4000"
+                    "value": "1100"
                 },
                 {
                     "target": "taxonconcept",
@@ -69274,15 +69274,15 @@
                 },
                 {
                     "target": "viaf",
-                    "value": "104000"
+                    "value": "79000"
                 },
                 {
                     "target": "wikidata",
-                    "value": "35000"
+                    "value": "22000"
                 },
                 {
                     "target": "wikipedia",
-                    "value": "21000"
+                    "value": "12000"
                 }
             ],
             "sparql": {
@@ -69705,7 +69705,7 @@
         {
             "id": "dbnary",
             "title": "dbnary",
-            "description": "Extracts of wiktionary data for several languages, structured as an RDF graph, based mainly on the LEMON model. Bulgarian, Dutch, English, Finnish, French, German, Greek, Indonesian, Italian, Japanese, Kurdish, Latin, Lithanian, Malagasy, Norvegian, Portuguese, Russian, Serbo-Croatian, Swedish and Turkish.",
+            "description": "Extracts of wiktionary data for several languages, structured as an RDF graph, based mainly on the LEMON model. Bulgarian, Dutch, English, Finnish, French, German, Greek, Indonesian, Italian, Japanese, Latin, Lithanian, Malagasy, Norvegian, Portuguese, Russian, Serbo-Croatian, Swedish and Turkish.",
             "website": "http://kaiko.getalp.org/about-dbnary",
             "triples": "191801778",
             "keywords": [
@@ -69720,7 +69720,6 @@
                 "indonesian",
                 "italian",
                 "japanese",
-                "kurdish",
                 "latin",
                 "lemon",
                 "lexical-resources",
@@ -77266,7 +77265,7 @@
         {
             "id": "gemeenschappelijke-thesaurus-audiovisuele-archieven",
             "title": "Gemeenschappelijke Thesaurus Audiovisuele Archieven ? Common Thesaurus Audiovisual Archives",
-            "description": "The Netherlands Institute for Sound and Vision\r\n<http://portal.beeldengeluid.nl/> is the Dutch archive for public broadcast television. They employ the GTAA, which is a Dutch acronym for Common Thesaurus [for] Audiovisual Archives, to index and disclose their\r\naudiovisual documents.\r\n\r\nThe GTAA closely follows the ISO-2788 standard for\r\nthesaurus structures. The thesaurus consists of several facets for describing TV programs: subjects; people mentioned; named entities (Corporation names, music bands etc); locations; genres; makers and presentators.\r\n\r\nThe GTAA contains approximately 160.000 terms: ~3800 Subjects, ~97.000 Persons, ~27.000 Names, ~14.000 Locations, 113 Genres and ~18.000 Makers, and is continually updated as new concepts emerge on TV.\r\n",
+            "description": "The Netherlands Institute for Sound and Vision\r\n<http://portal.beeldengeluid.nl/> is the Dutch archive for public broadcast television. They employ the GTAA, which is a Dutch acronym for Common Thesaurus [for] Audiovisual Archives, to index and disclose their\r\naudiovisaul documents.\r\n\r\nThe GTAA closely follows the ISO-2788 standard for\r\nthesaurus structures. The thesaurus consists of several facets for describing TV programs: subjects; people mentioned; named entities (Corporation names, music bands etc); locations; genres; makers and presentators.\r\n\r\nThe GTAA contains approximately 160.000 terms: ~3800 Subjects, ~97.000 Persons, ~27.000 Names, ~14.000 Locations, 113 Genres and ~18.000 Makers, and is continually updated as new concepts emerge on TV.\r\n",
             "website": "http://data.beeldengeluid.nl/gtaa/GTAA",
             "triples": "992797",
             "keywords": [
@@ -104541,9 +104540,9 @@
         {
             "id": "taxref-ld",
             "title": "TAXREF-LD: Linked Data French Taxonomic Register",
-            "description": "TAXREF-LD is the Linked Data representation of TAXREF (https://inpn.mnhn.fr/programme/referentiel-taxonomique-taxref?lg=en), the French national taxonomical register for fauna, flora and fungus, that covers mainland France and overseas territories.\r\n\r\nTAXREF-LD is a joint initiative of the National Museum of Natural History (http://www.mnhn.fr/) and the I3S laboratory (http://www.i3s.unice.fr/) (Universit\u00e9 C\u00f4te d'Azur, CNRS, Inria). Its model is described in [1].\r\n\r\n[1] Michel F., Gargominy O., Tercerie S. & Faron-Zucker C. (2017). A Model to Represent Nomenclatural and Taxonomic Information as Linked Data. Application to the French Taxonomic Register, TAXREF. In _Proceedings of the 2nd International Workshop on Semantics for Biodiversity (S4BioDiv) co-located with ISWC 2017_ vol. 1933. Vienna, Austria. CEUR.",
+            "description": "TAXREF-LD is the Linked Data representation of TAXREF (https://inpn.mnhn.fr/programme/referentiel-taxonomique-taxref?lg=en), the French national taxonomical register for fauna, flora and fungus, that covers mainland France and overseas territories. It accounts for over 500000 scientific names.\r\n\r\nTAXREF-LD is a joint initiative of the National Museum of Natural History (http://www.mnhn.fr/) and the I3S laboratory (http://www.i3s.unice.fr/) (Universit\u00e9 C\u00f4te d'Azur, CNRS, Inria). Its model is described in [1].\r\n\r\n[1] Michel F., Gargominy O., Tercerie S. & Faron-Zucker C. (2017). A Model to Represent Nomenclatural and Taxonomic Information as Linked Data. Application to the French Taxonomic Register, TAXREF. In _Proceedings of the 2nd International Workshop on Semantics for Biodiversity (S4BioDiv) co-located with ISWC 2017_ vol. 1933. Vienna, Austria. CEUR.",
             "website": "https://inpn.mnhn.fr/programme/referentiel-taxonomique-taxref?lg=en",
-            "triples": "35486931",
+            "triples": "26773706",
             "keywords": [
                 "biodiversity",
                 "deref-vocab",
@@ -104572,17 +104571,33 @@
             "links": [
                 {
                     "target": "agrovoc-skos",
-                    "value": "2875"
+                    "value": "4244"
+                },
+                {
+                    "target": "bioportal-envo",
+                    "value": "5"
                 },
                 {
                     "target": "bioportal-ncbitaxon",
-                    "value": "84336"
+                    "value": "89484"
+                },
+                {
+                    "target": "geonames",
+                    "value": "15"
+                },
+                {
+                    "target": "geospecies",
+                    "value": "4272"
+                },
+                {
+                    "target": "taxonconcept",
+                    "value": "20000"
                 }
             ],
             "sparql": {
                 "title": "SPARQL endpoint",
                 "description": "SPARQL endpoint",
-                "access_url": "https://taxref.mnhn.fr/sparql",
+                "access_url": "http://taxref.mnhn.fr/sparql",
                 "status": "active"
             },
             "pagerank": "0"

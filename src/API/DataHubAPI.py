@@ -17,14 +17,14 @@ def getDataPackage(idDataset, pages=12, rows=1000, snapshot='./datahub.json'):
         try:
             response = requests.get(base_url, params=params, timeout=15)
             if response.status_code == 200:
-                print(f"✅ Request {i+1}/{pages} successful — start={start}")
+                print(f"Request {i+1}/{pages} successful — start={start}")
                 data = response.json()
                 currentDS = data.get("result", {}).get("results", [])
                 datasets.extend(currentDS)
             else:
-                print(f"⚠️ Request {i+1} failed with status {response.status_code}")
+                print(f"DataHub Request {i+1} failed with status {response.status_code}")
         except Exception as e:
-            print(f"⚠️ Request {i+1} failed: {e}")
+            print(f"DataHub Request {i+1} failed: {e}")
         start += rows
 
     if os.path.exists(snapshot) and len(datasets) == 0:
