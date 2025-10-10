@@ -1,25 +1,44 @@
 from importlib import resources
 import json
 import requests
-import utils
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+import os
 
 #INPUT: DATASET ID TO LOOK FOR
 #OUTPUT: FILE JSON WITH METADATA OF THE DATASET
-def getDataPackage(idDataset):
-    api_url = "https://old.datahub.io/dataset/%s/datapackage.json" %idDataset
-    try:
-        response = requests.get(api_url,verify=False)
-        if response.status_code == 200:
-            responseApi = response.json()
-            return responseApi
-        elif response.status_code == 404:
-            print("Dataset not found on DataHub")
-            return False
-    except:
-        print('Failed to connect to DataHub')
-        return False
+def getDataPackage(idDataset, pages=12, rows=1000, snapshot='./datahub.json'):
+    datasets = []
+    start = 0
+    base_url = "https://old.datahub.io/api/3/action/package_search"
+
+    for i in range(pages):
+        params = {"rows": rows, "start": start}
+        try:
+            response = requests.get(base_url, params=params, timeout=15)
+            if response.status_code == 200:
+                print(f"✅ Request {i+1}/{pages} successful — start={start}")
+                data = response.json()
+                currentDS = data.get("result", {}).get("results", [])
+                datasets.extend(currentDS)
+            else:
+                print(f"⚠️ Request {i+1} failed with status {response.status_code}")
+        except Exception as e:
+            print(f"⚠️ Request {i+1} failed: {e}")
+        start += rows
+
+    if os.path.exists(snapshot) and len(datasets) == 0:
+        print(f"Loading metadata for '{idDataset}' from local snapshot...")
+        with open(snapshot, 'r', encoding='utf-8') as f:
+            datasets = json.load(f)
+    elif len(datasets) > 0:
+        with open(snapshot, 'w', encoding='utf-8') as f:
+            json.dump(datasets, f, ensure_ascii=False, indent=2)
+
+    # Search for dataset with matching field
+    for ds in datasets:
+        if ds.get('name') == idDataset:
+            return ds
 
 def getNameKG(metadata):
     if isinstance(metadata,dict):
