@@ -4,20 +4,39 @@ import requests
 import utils
 import itertools
 import urllib3
+import os
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+abs_path = os.path.dirname(os.path.abspath(__file__))
 
-def getJSONMetadata(idKG):
-    url = 'https://lod-cloud.net/json/%s'%idKG
+def getJSONMetadata(idKG, snapshot= f'{abs_path}/lodcloud.json'):
+    """
+    Retrieve JSON metadata for a given Knowledge Graph (KG) from the LOD Cloud.
+    Falls back to a local snapshot if the online source is unavailable.
+    """
+    url = f'https://lod-cloud.net/versions/latest/lod-data.json'
+
     try:
-        response = requests.get(url,verify=False)
+        response = requests.get(url, verify=False, timeout=10)
         if response.status_code == 200:
             jsonMetadata = response.json()
-            return jsonMetadata
-        elif response.status_code == 404:
-            print('Dataset not found on LOD Cloud')
-            return False
-    except:
-        print('Failed to connect  to LOD Cloud')
+
+            with open(snapshot, 'w', encoding='utf-8') as f:
+                json.dump(jsonMetadata, f, ensure_ascii=False, indent=2)
+
+            return jsonMetadata[idKG]
+        else:
+            print(f"LOD Cloud responded with status {response.status_code}, loading local snapshot if available.")
+    except Exception as e:
+        print(f"Failed to connect to LOD Cloud: {e}")
+
+    # Fallback: load local snapshot
+    if os.path.exists(snapshot):
+        print(f"Loading metadata for '{idKG}' from local snapshot...")
+        with open(snapshot, 'r', encoding='utf-8') as f:
+            jsonMetadata = json.load(f)
+            return jsonMetadata[idKG]
+    else:
+        print(f"No local snapshot found for '{idKG}'.")
         return False
 
 def getNameKG(metadata):

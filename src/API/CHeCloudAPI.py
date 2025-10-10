@@ -1,25 +1,38 @@
 import requests
 import json
+import os
+abs_path = os.path.dirname(os.path.abspath(__file__))
 
-def getAllDatasetIDs():
+def getAllDatasetIDs(snapshot_path=f'{abs_path}/CHeCLOUD.json'):
     dataset_ids = []
     url = 'http://isislab.it:12280/che-cloud/api/CHe_cloud_data/get_all'
+
     try:
-        response = requests.get(url,verify=False)    
+        response = requests.get(url, verify=False, timeout=10)
         if response.status_code == 200:
-            print("Connection to API successful and data recovered")
-            response = response.json()
-            for el in response:
-                dataset_ids.append((el.get('identifier'),el.get('title')))
+            data = response.json()
+            dataset_ids = [(el.get('identifier'), el.get('title')) for el in data]
+
+            # Save snapshot
+            with open(snapshot_path, 'w', encoding='utf-8') as f:
+                json.dump(data, f, ensure_ascii=False, indent=2)
             return dataset_ids
         else:
-            print("Connection failed")
-            return False
-    except:
-        print('Connection failed')
-        return False
+            print(f"LOD Cloud responded with status {response.status_code}, loading local snapshot if available.")
+    except Exception as e:
+        print(f"LOD Cloud Connection failed: {e}")
 
-def getDatasetMetadata(idKG):
+    if os.path.exists(snapshot_path):
+        print("Loading LOD Cloud data from local snapshot...")
+        with open(snapshot_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+            dataset_ids = [(el.get('identifier'), el.get('title')) for el in data]
+        return dataset_ids
+    else:
+        print("No local snapshot available.")
+        return []
+
+def getDatasetMetadata(idKG, snapshot=f'{abs_path}/CHeCLOUD.json'):
     url = f'http://isislab.it:12280/che-cloud/api/CHe_cloud_data/dataset_metadata/{str(idKG)}'
     try:
         response = requests.get(url,verify=False)    
@@ -29,7 +42,10 @@ def getDatasetMetadata(idKG):
             return response
         else:
             print("Connection failed")
-            return False
+            print(f"LOD Cloud responded with status {response.status_code}, loading local snapshot if available.")
+            with open(snapshot, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+                return data.get(str(idKG), False)
     except Exception as e:
         print('Connection failed')
         return False
