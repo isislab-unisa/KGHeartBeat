@@ -23,9 +23,9 @@ class Accessibility4All:
         if response.status_code == 200:
             open_license_data = response.json()
 
-            # Extract all URLs from the OKFN list
-            okfn_urls = {lic["url"] for lic in open_license_data if "url" in lic}
-
+            # Extract URLs of open licenses
+            okfn_urls = [lic["url"] for lic in open_license_data.values() if lic.get("url")]
+   
             # At least one KG license matches an open license
             if any(license in okfn_urls for license in kg_license):
                 self.open_license_value = 1
@@ -40,10 +40,16 @@ class Accessibility4All:
             return {"error": "Failed to retrieve license information"}
 
     def assistive_technologies(self, sparql_endpoint, void_file_url):
-        void_file = VoIDAnalyses.parseVoID(void_file_url)
-        ass_tech_in_void = VoIDAnalyses.check_acc_feature(void_file)
-        ass_tech_in_kg = query.check_acc_feature(sparql_endpoint)
-        ass_tech_in_kg = 1 if isinstance(ass_tech_in_kg, list) and len(ass_tech_in_kg) > 0 else 0
+        if utils.is_url(void_file_url):
+            void_file = VoIDAnalyses.parseVoID(void_file_url)
+            ass_tech_in_void = VoIDAnalyses.check_acc_feature(void_file)
+        else:
+            ass_tech_in_void = False
+        if utils.is_url(sparql_endpoint):
+            ass_tech_in_kg = query.check_acc_feature(sparql_endpoint)
+            ass_tech_in_kg = 1 if isinstance(ass_tech_in_kg, list) and len(ass_tech_in_kg) > 0 else 0
+        else:
+            ass_tech_in_kg = False
 
         return 1 if ass_tech_in_void == True or ass_tech_in_kg == 1 else 0
     
@@ -57,34 +63,73 @@ class Accessibility4All:
         except:
             return 0
 
-    def metadata_broken_links_rate(self, sparql_endpoint, void_file_url):
-        all_obj_sparql = query.get_all_metadata_obj(sparql_endpoint)
-        all_obj_void = VoIDAnalyses.get_all_obj(void_file_url)
-        if len(all_obj_void) > 0:
+    def metadata_broken_links_rate(self, search_engine_metadata, sparql_endpoint, void_file_url, kg_id):
+        if utils.is_url(sparql_endpoint):
+            all_obj_sparql = query.get_all_metadata_obj(sparql_endpoint)
+        else:
+            all_obj_sparql = "Can't query metadata from SPARQL endpoint"
+        if utils.is_url(void_file_url):
+            void_file = VoIDAnalyses.parseVoID(void_file_url)
+            all_obj_void = VoIDAnalyses.get_all_obj(void_file)
+        else:
+            all_obj_void = "Can't query metadata from VoID file"
+
+        if isinstance(all_obj_void, list) and len(all_obj_void) > 0:
             broken_links = 0
+            no_broken_links = 0
             for obj in all_obj_void:
                 if utils.is_url(obj):
                     try:
                         response = requests.get(obj)
                         if response.status_code != 200:
                             broken_links += 1
+                        elif response.status_code == 200:
+                            no_broken_links += 1
                     except:
                         broken_links += 1
-            return broken_links / len(all_obj_void)
-        elif len(all_obj_sparql) > 0:
+            return broken_links / (no_broken_links + broken_links) if (no_broken_links + broken_links) > 0 else 0
+        elif isinstance(all_obj_sparql, list) and len(all_obj_sparql) > 0:
             broken_links = 0
+            no_broken_links = 0
             for obj in all_obj_sparql:
                 if utils.is_url(obj):
                     try:
                         response = requests.get(obj)
                         if response.status_code != 200:
                             broken_links += 1
+                        elif response.status_code == 200:
+                            no_broken_links += 1
                     except:
                         broken_links += 1
-            return broken_links / len(all_obj_sparql)
-        else:
-            return 'No metadata objects found'
-        
+            return broken_links / (no_broken_links + broken_links) if (no_broken_links + broken_links) > 0 else 0
+        elif isinstance(search_engine_metadata, dict):
+            available_resources_count = 0
+            unavailable_resources_count = 0
+
+            # Check website link
+            website_links = search_engine_metadata.get('website', [])
+            if utils.is_url(website_links):
+                try:
+                    response = requests.get(website_links)
+                    if response.status_code == 200:
+                        available_resources_count += 1
+                    else:
+                        unavailable_resources_count += 1
+                except:
+                    unavailable_resources_count += 1
+
+            resources = Aggregator.getOtherResources(kg_id)
+            resources = utils.insertAvailability(resources)
+            
+            available_resources = [res for res in resources if res.get("status") == "active"]
+            unavailable_resources = [res for res in resources if res.get("status") == "offline"]
+            available_resources_count += len(available_resources)
+            unavailable_resources_count += len(unavailable_resources)
+
+            return unavailable_resources_count / (available_resources_count + unavailable_resources_count) if (available_resources_count + unavailable_resources_count) > 0 else 0
+
+        return 'No metadata objects found'
+
     def robots_txt(self, search_engine_metadata, sparql_endpoint, website_url):
         if utils.is_url(sparql_endpoint):
             robots_url = sparql_endpoint.rstrip('/') + '/robots.txt'

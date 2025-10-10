@@ -1334,6 +1334,8 @@ def save_only_regex(string_list):
     return valid_regexes
 
 def is_url(string):
+    if not isinstance(string, str):
+        return False
     pattern = re.compile(
         r'^(https?://)?'           # optional http or https
         r'([\w.-]+)\.([a-z\.]{2,6})'  # domain
