@@ -23,6 +23,7 @@ print(f"Number of KGs from monitoring requests: {len(kg_added_by_users)}")
 print(f"Number of KGs from CHe Cloud: {len(CHe_Cloud)}")
 toAnalyze = toAnalyze + kgFound + kg_added_by_users + CHe_Cloud
 
+results = {}
 for kg_id in toAnalyze:
     print(f"Analyzing {kg_id[0]} - {kg_id[1]}")
     metadata = Aggregator.getDataPackage(kg_id[0])
@@ -52,7 +53,6 @@ for kg_id in toAnalyze:
     if not license and utils.is_url(file_void_url):
         license = VoIDAnalyses.getLicense(file_void_url)
     
-    results = {}
     results[kg_id[0]] = {}
     results[kg_id[0]]['sparql_endpoint'] = sparql_endpoint_url
     results[kg_id[0]]['void_file'] = file_void_url
