@@ -2133,16 +2133,20 @@ def count_res_with_label(endpoint_url):
         }
 
     ''')
-    sparql.setTimeout(300)
-    sparql.setReturnFormat(JSON)
-    results = sparql.query().convert()
-    if isinstance(results,dict):
-        value = utils.getResultsFromJSONCountInt(results)
-        return value
-    elif isinstance(results,Document):
-        value = utils.getResultsFromXMLCount(results)
-        return value
-    else:
+    try:
+        sparql.setTimeout(300)
+        sparql.setReturnFormat(JSON)
+        results = sparql.query().convert()
+        if isinstance(results,dict):
+            value = utils.getResultsFromJSONCountInt(results)
+            return value
+        elif isinstance(results,Document):
+            value = utils.getResultsFromXMLCount(results)
+            return value
+        else:
+            return False
+    except Exception as e:
+        print(e)
         return False
     
 def count_res(endpoint_url):
@@ -2152,14 +2156,18 @@ def count_res(endpoint_url):
         WHERE {
         ?s ?p ?o .
         }''')
-    sparql.setTimeout(300)
-    sparql.setReturnFormat(JSON)
-    results = sparql.query().convert()
-    if isinstance(results,dict):
-        value = utils.getResultsFromJSONCountInt(results)
-        return value
-    elif isinstance(results,Document):
-        value = utils.getResultsFromXMLCount(results)
-        return value
-    else:
+    try:
+        sparql.setTimeout(300)
+        sparql.setReturnFormat(JSON)
+        results = sparql.query().convert()
+        if isinstance(results,dict):
+            value = utils.getResultsFromJSONCountInt(results)
+            return value
+        elif isinstance(results,Document):
+            value = utils.getResultsFromXMLCount(results)
+            return value
+        else:
+            return False
+    except Exception as e:
+        print(e)
         return False
