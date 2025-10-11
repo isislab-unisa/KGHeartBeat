@@ -33,11 +33,14 @@ for kg_id in toAnalyze:
     if not utils.is_url(file_void_url):
         website_url = metadata['website']
         file_void_url_wb = website_url.rstrip('/') + '/.well-known/void'
-        void_file_avilability = requests.get(file_void_url_wb)
-        if void_file_avilability.status_code != 200:
+        try:
+            file_void_availability = requests.get(file_void_url_wb, timeout=10)
+            if file_void_availability.status_code != 200:
+                file_void_url = False
+            else:
+                file_void_url = file_void_url_wb
+        except:
             file_void_url = False
-        else:
-            file_void_url = file_void_url_wb
 
     accessibility4all = Accessibility4All()
     # Metadata license
