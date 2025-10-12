@@ -31,8 +31,8 @@ for kg_id in toAnalyze:
     resourcesDH = Aggregator.getOtherResources(kg_id[0])
     otResources = utils.toObjectResources(resourcesDH)
     file_void_url = utils.getUrlVoID(otResources)
-    if not utils.is_url(file_void_url):
-        website_url = metadata['website']
+    website_url = metadata['website']
+    if not utils.is_url(file_void_url) and utils.is_url(website_url):
         file_void_url_wb = website_url.rstrip('/') + '/.well-known/void'
         try:
             file_void_availability = requests.get(file_void_url_wb, timeout=10)
