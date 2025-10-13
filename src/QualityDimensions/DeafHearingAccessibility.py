@@ -12,20 +12,20 @@ class DeafHearingAccessibility:
         
         examples = search_engine_metadata.get("example", [])
         if len(examples) > 0:
-            return 1
+            return (1, examples)
 
         if utils.is_url(void_file_url):
             void_file = VoIDAnalyses.parseVoID(void_file_url)
             examples_void = VoIDAnalyses.getExamples(void_file)
             if examples_void and len(examples_void) > 0:
-                return 1
+                return (1, examples_void)
         
         if utils.is_url(sparql_endpoint_url):
             examples_sparql = query.get_examples(sparql_endpoint_url)
             if examples_sparql and len(examples_sparql) > 0:
-                return 1
+                return (1, examples_sparql)
         
-        return 0
+        return 0, "No examples found"
     
     def alternative_access_point(self, void_file_url, sparql_endpoint_url, idKG):
         available_download = False
@@ -77,7 +77,11 @@ class DeafHearingAccessibility:
 
         # To have 1 as result, at least two access points must be available
         result = int(sum([available_download, available_sparql, available_api]) >= 2)
-        return result
+        return (result, {
+            "download": available_download, 
+            "sparql_endpoint": available_sparql,
+            "api": available_api
+        })
 
 
     def human_redeable_labels(self, sparql_endpoint):
@@ -86,6 +90,6 @@ class DeafHearingAccessibility:
             num_res = query.count_res(sparql_endpoint)
             if num_res > 0:
                 ratio = num_labels / num_res
-                return ratio
-            return  "Error during query"
-        return "SPARQL endpoint not available"
+                return (ratio, num_labels)
+            return (0, "No resources found")
+        return (0, "SPARQL endpoint not available")

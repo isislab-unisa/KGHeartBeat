@@ -2181,3 +2181,119 @@ def count_res(endpoint_url):
     except Exception as e:
         print(e)
         return False
+
+@log_in_out
+def getImagesTriples(endpoint_url):
+    sparql = SPARQLWrapper(endpoint_url)
+    sparql.setQuery('''
+    PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+    PREFIX schema: <http://schema.org/>
+    PREFIX dbo: <http://dbpedia.org/ontology/>
+    PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+    PREFIX dcterms: <http://purl.org/dc/terms/>
+    PREFIX sioc: <http://rdfs.org/sioc/ns#>
+    PREFIX edm: <http://www.europeana.eu/schemas/edm/>
+    PREFIX oa: <http://www.w3.org/ns/oa#>
+    PREFIX exif: <http://www.w3.org/2003/12/exif/ns#>
+    PREFIX dcmitype: <http://purl.org/dc/dcmitype/>
+    SELECT (COUNT(DISTINCT ?resource) AS ?triples)
+    WHERE {
+    VALUES ?prop { foaf:depiction dcterms:thumbnail foaf:img foaf:thumbnail schema:image schema:photo 
+                    schema:logo schema:thumbnail schema:thumbnailUrl foaf:image schema:contentUrl dbo:thumbnail dbo:image
+                    sioc:avatar wdt:P18 <http://example.org/hasImage> exif:image dcmitype:Image}
+    ?resource ?prop ?image .
+    }
+    ''')
+    try:
+        sparql.setTimeout(300)
+        sparql.setReturnFormat(JSON)
+        results = sparql.query().convert()
+        if isinstance(results,dict):
+            value = utils.getResultsFromJSONCountInt(results)
+            return value
+        elif isinstance(results,Document):
+            value = utils.getResultsFromXMLCount(results)
+            return value
+        else:
+            return False
+    except Exception as e:
+        print(e)
+        return False
+
+@log_in_out
+def getImageIri(endpoint_url):
+    sparql = SPARQLWrapper(endpoint_url)
+    sparql.setQuery('''
+    PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+    PREFIX schema: <http://schema.org/>
+    PREFIX dbo: <http://dbpedia.org/ontology/>
+    PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+    PREFIX dcterms: <http://purl.org/dc/terms/>
+    PREFIX sioc: <http://rdfs.org/sioc/ns#>
+    PREFIX exif: <http://www.w3.org/2003/12/exif/ns#>
+    PREFIX dcmitype: <http://purl.org/dc/dcmitype/>
+
+    SELECT DISTINCT ?o
+    WHERE {
+    VALUES ?prop {
+        foaf:depiction dcterms:thumbnail foaf:img foaf:thumbnail schema:image schema:photo 
+        schema:logo schema:thumbnail schema:thumbnailUrl foaf:image schema:contentUrl 
+        dbo:thumbnail dbo:image sioc:avatar wdt:P18 <http://example.org/hasImage> exif:image dcmitype:Image
+    }
+    ?resource ?prop ?o .
+    }''')
+    try:
+        sparql.setTimeout(300)
+        sparql.setReturnFormat(JSON)
+        results = sparql.query().convert()
+        if isinstance(results,dict):
+            value = utils.getResultsFromJSON(results)
+            return value
+        elif isinstance(results,Document):
+            value = utils.getResultsFromXML(results)
+            return value
+        else:
+            return False
+    except Exception as e:
+        print(e)
+        return False
+
+def hasAltDescription(endpoint_url,image_iri):
+    sparql = SPARQLWrapper(endpoint_url)
+    sparql.setQuery(f"""
+    PREFIX skosxl: <http://www.w3.org/2008/05/skos-xl#>
+    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+    PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+    PREFIX dcterms: <http://purl.org/dc/terms/>
+    PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+    PREFIX awol: <http://bblfish.net/work/atom-owl/2006-06-06/#>
+    PREFIX wdrs: <http://www.w3.org/2007/05/powder-s#>
+    PREFIX schema: <http://schema.org/>
+    SELECT ?o
+    WHERE {{
+        VALUES ?prop {{ rdfs:label foaf:name schema:alternateName dcterms:description skos:prefLabel dcterms:alternative skos:altLabel dcterms:title
+                     rdfs:comment awol:label dcterms:alternative skos:altLabel skos:note wdrs:text skosxl:altLabel skosxl:hiddenLabel skosxl:prefLabel
+                     skosxl:literalForm schema:name schema:description schema:alternateName }}
+        <{image_iri}> ?prop ?o .}}
+        """)
+    try:
+        sparql.setTimeout(300)
+        sparql.setReturnFormat(JSON)
+        results = sparql.query().convert()
+        if isinstance(results,dict):
+            value = utils.getResultsFromJSON(results)
+            if isinstance(value,list) and len(value)>0:
+                return True
+            else:
+                return False
+        elif isinstance(results,Document):
+            value = utils.getResultsFromXML(results)
+            if isinstance(value,list) and len(value)>0:
+                return True
+            else:
+                return False
+        else:
+            return False
+    except Exception as e:
+        print(e)
+        return False

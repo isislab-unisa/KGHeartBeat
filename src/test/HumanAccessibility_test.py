@@ -7,6 +7,7 @@ import utils
 import requests
 from QualityDimensions.Accessibility4All import Accessibility4All
 from QualityDimensions.DeafHearingAccessibility import DeafHearingAccessibility
+from QualityDimensions.Accessibility4VisuallyImpaired import Accessibility4VisuallyImpaired
 import query
 import VoIDAnalyses
 import json
@@ -72,11 +73,16 @@ for kg_id in toAnalyze:
     results[kg_id[0]]['version'] = accessibility4all.version(file_void_url, sparql_endpoint_url)
     results[kg_id[0]]['canonical_citation'] = accessibility4all.canonical_citation(file_void_url, sparql_endpoint_url)
     results[kg_id[0]]['contact_point'] = accessibility4all.contact_point(metadata, sparql_endpoint_url, file_void_url)
+    results[kg_id[0]]['image'] = accessibility4all.image(sparql_endpoint_url)
 
     defhearing_accessibility = DeafHearingAccessibility()
     results[kg_id[0]]['example'] = defhearing_accessibility.examples(file_void_url, sparql_endpoint_url, metadata)
     results[kg_id[0]]['alternative_access_point'] = defhearing_accessibility.alternative_access_point(file_void_url, sparql_endpoint_url, kg_id[0])
     results[kg_id[0]]['human_redeable_labels'] = defhearing_accessibility.human_redeable_labels(sparql_endpoint_url)
+
+
+    accessibility4visually_impaired = Accessibility4VisuallyImpaired()
+    results[kg_id[0]]['alt_image'] = accessibility4visually_impaired.alt_image(sparql_endpoint_url)
 
     print(results[kg_id[0]])
 
