@@ -24,7 +24,6 @@ print(f"Number of KGs from CHe Cloud: {len(CHe_Cloud)}")
 toAnalyze = toAnalyze + kgFound + kg_added_by_users + CHe_Cloud
 
 results = {}
-toAnalyze = [('A1','')]
 for kg_id in toAnalyze:
     print(f"Analyzing {kg_id[0]} - {kg_id[1]}")
     metadata = Aggregator.getDataPackage(kg_id[0])
