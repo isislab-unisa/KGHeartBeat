@@ -90,6 +90,6 @@ class DeafHearingAccessibility:
             num_res = query.count_res(sparql_endpoint)
             if num_res > 0:
                 ratio = num_labels / num_res
-                return (ratio, num_labels)
+                return (ratio, f"Number of resources in the KG:{num_res}")
             return (0, "No resources found")
         return (0, "SPARQL endpoint not available")

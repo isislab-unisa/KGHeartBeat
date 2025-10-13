@@ -94,9 +94,21 @@ for kg_id in toAnalyze:
     df = pd.DataFrame.from_dict(results, orient='index')
     df.index.name = 'KG_ID'
     df.reset_index(inplace=True)
-    df.to_csv('HumanAccessibility_results.csv', index=False)
+    df.to_csv('HumanAccessibility_results_verbose.csv', index=False)
+    
+score_rows = []
 
+for kg_id_key, metrics in results.items():
+    score_entry = {"KG_ID": kg_id_key}
+    for metric, value in metrics.items():
+        if metric in ['sparql_endpoint', 'void_file']:
+            print("Val",value)
+            score_entry[metric] = value
+        elif isinstance(value, tuple) and len(value) > 0:
+            score_entry[metric] = value[0]
+        else:
+            score_entry[metric] = None 
+    score_rows.append(score_entry)
 
-
-
-        
+df_scores = pd.DataFrame(score_rows)
+df_scores.to_csv('HumanAccessibility_results_scores.csv', index=False)
