@@ -11,6 +11,10 @@ class Accessibility4All:
         return None
 
     def open_license(self, kg_license):
+        if kg_license == False:
+            self.open_license_value = 0
+            return self.open_license_value
+
         # Case 1: all elements are '-'
         if all(license == '-' for license in kg_license):
             self.open_license_value = 0
