@@ -39,6 +39,7 @@ def getDataPackage(idDataset, pages=12, rows=1000, snapshot='./datahub.json'):
     for ds in datasets:
         if ds.get('name') == idDataset:
             return ds
+    return False
 
 def getNameKG(metadata):
     if isinstance(metadata,dict):
