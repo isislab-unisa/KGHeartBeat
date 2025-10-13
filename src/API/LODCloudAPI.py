@@ -23,7 +23,7 @@ def getJSONMetadata(idKG, snapshot= f'{abs_path}/lodcloud.json'):
             with open(snapshot, 'w', encoding='utf-8') as f:
                 json.dump(jsonMetadata, f, ensure_ascii=False, indent=2)
 
-            return jsonMetadata[idKG]
+            return jsonMetadata.get(idKG, False)
         else:
             print(f"LOD Cloud responded with status {response.status_code}, loading local snapshot if available.")
     except Exception as e:
@@ -34,7 +34,7 @@ def getJSONMetadata(idKG, snapshot= f'{abs_path}/lodcloud.json'):
         print(f"Loading metadata for '{idKG}' from local snapshot...")
         with open(snapshot, 'r', encoding='utf-8') as f:
             jsonMetadata = json.load(f)
-            return jsonMetadata[idKG]
+            return jsonMetadata.get(idKG, False)
     else:
         print(f"No local snapshot found for '{idKG}'.")
         return False
