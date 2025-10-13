@@ -222,10 +222,11 @@ class Accessibility4All:
     
     def contact_point(self, search_engine_metadata, sparql_endpoint, void_file_url):
         contact_in_metadata = search_engine_metadata.get('contact_point', False)
-        name = contact_in_metadata.get('name', False)
-        email = contact_in_metadata.get('email', False)
-        if (email and email != 'null') or (name and name != 'null'):
-            return (1, contact_in_metadata)
+        if contact_in_metadata != False and isinstance(contact_in_metadata, dict):
+            name = contact_in_metadata.get('name', False)
+            email = contact_in_metadata.get('email', False)
+            if (email and email != 'null') or (name and name != 'null'):
+                return (1, contact_in_metadata)
         
         if utils.is_url(sparql_endpoint):
             contact_in_sparql = query.get_contact_point(sparql_endpoint)
