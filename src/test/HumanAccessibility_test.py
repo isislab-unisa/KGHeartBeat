@@ -27,6 +27,9 @@ results = {}
 for kg_id in toAnalyze:
     print(f"Analyzing {kg_id[0]} - {kg_id[1]}")
     metadata = Aggregator.getDataPackage(kg_id[0])
+    if metadata == False:
+        print(f"Metadata not found for {kg_id[0]}")
+        continue
     sparql_endpoint_url = Aggregator.getSPARQLEndpoint(kg_id[0])
     resourcesDH = Aggregator.getOtherResources(kg_id[0])
     otResources = utils.toObjectResources(resourcesDH)
