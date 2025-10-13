@@ -82,7 +82,7 @@ for kg_id in toAnalyze:
 
     # Save results in JSON file
     with open('HumanAccessibility_results.json', 'w', encoding='utf-8') as f:
-        json.dump(results, f, ensure_ascii=False, indent=2)
+        json.dump(results, f, ensure_ascii=False, indent=2, default=str)
 
     # Save results in CSV file
     df = pd.DataFrame.from_dict(results, orient='index')
