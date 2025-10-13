@@ -64,8 +64,8 @@ class Accessibility4All:
                 return 1
             else:
                 return 0
-        except:
-            return 0
+        except Exception as e:
+            return e
 
     def metadata_broken_links_rate(self, search_engine_metadata, sparql_endpoint, void_file_url, kg_id):
         if utils.is_url(sparql_endpoint):
@@ -143,8 +143,8 @@ class Accessibility4All:
                     return 1
                 else:
                     return 0
-            except:
-                return 0
+            except Exception as e:
+                return e
         if utils.is_url(website_url):
             robots_url = website_url.rstrip('/') + '/robots.txt'
             try:
@@ -153,8 +153,8 @@ class Accessibility4All:
                     return 1
                 else:
                     return 0
-            except:
-                return 0
+            except Exception as e:
+                return e
         other_downlaoads = search_engine_metadata.get('other_downloads', [])
         for link in other_downlaoads:
             if 'robots.txt' in link['access_url']:
@@ -164,8 +164,8 @@ class Accessibility4All:
                         return 1
                     else:
                         return 0
-                except:
-                    return 0
+                except Exception as e:
+                    return e
         return 0
     
 

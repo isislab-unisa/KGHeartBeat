@@ -47,11 +47,8 @@ def check_if_up(url):
         if "results" in results and "bindings" in results["results"]:
             bindings = results["results"]["bindings"]
             if len(bindings) > 0:
-                print("✅ Endpoint is up and returned a triple (JSON).")
-                print("Triple:", bindings[0])
                 return True
             else:
-                print("⚠️ Endpoint is up but returned no triples (JSON).")
                 return False
     except Exception as e_json:
         try:
@@ -280,18 +277,21 @@ def checkLicenseMR(url): #PROBLEM ON http://lod.b3kat.de/sparql
     }
     LIMIT 1
     ''')
-    sparql.setTimeout(300)
-    sparql.setReturnFormat(JSON)
-    results = sparql.query().convert()
-    if isinstance(results,dict):
-        licenses = utils.getResultsFromJSON(results)
-        return licenses
-    elif isinstance(results,Document):
-        licenses = utils.getResultsFromXML(results)
-        return licenses
-    else:
+    try:
+        sparql.setTimeout(300)
+        sparql.setReturnFormat(JSON)
+        results = sparql.query().convert()
+        if isinstance(results,dict):
+            licenses = utils.getResultsFromJSON(results)
+            return licenses
+        elif isinstance(results,Document):
+            licenses = utils.getResultsFromXML(results)
+            return licenses
+        else:
+            return False
+    except Exception as e:
         return False
-
+    
 @log_in_out
 def checkLicenseMR2(url):   #USED IN CASE THE QUERY WITH VALUES ISN'T SUPPORTED
     sparql = SPARQLWrapper(url)
@@ -1613,7 +1613,8 @@ def get_download_link(url):
         return urls
     else:
         return False
-    
+
+@log_in_out
 def get_kg_name(url):
     sparql = SPARQLWrapper(url)
     query = """
@@ -1652,7 +1653,7 @@ def get_kg_name(url):
     else:
         return False  
 
-
+@log_in_out
 def get_kg_url(endpoint_url):
     sparql = SPARQLWrapper(endpoint_url)
     query = """
@@ -1691,6 +1692,7 @@ def get_kg_url(endpoint_url):
     else:
         return False
 
+@log_in_out
 def get_kg_id(endpoint_url):
     sparql = SPARQLWrapper(endpoint_url)
     query = """
@@ -1721,6 +1723,7 @@ def get_kg_id(endpoint_url):
     else:
         return False
 
+@log_in_out
 def get_kg_void(endpoint_url):
     sparql = SPARQLWrapper(endpoint_url)
     sparql.setQuery("""
@@ -1787,6 +1790,7 @@ def get_kg_void(endpoint_url):
     
     return g
 
+@log_in_out
 def check_void_dcat(endpoint_url):
     sparql = SPARQLWrapper(endpoint_url)
     query = """
@@ -1821,6 +1825,7 @@ def check_void_dcat(endpoint_url):
     except:
         return False
 
+@log_in_out
 def check_acc_feature(endpoint_url):
     sparql = SPARQLWrapper(endpoint_url)
     query = """
@@ -1847,6 +1852,7 @@ def check_acc_feature(endpoint_url):
     except:
         return False
 
+@log_in_out
 def get_all_metadata_obj(endpoint_url):
     sparql = SPARQLWrapper(endpoint_url)
     query = """
@@ -1882,7 +1888,8 @@ def get_all_metadata_obj(endpoint_url):
             return False
     except:
         return False
-    
+
+@log_in_out
 def get_version(endpoint_url):
     sparql = SPARQLWrapper(endpoint_url)
     query = """
@@ -1931,7 +1938,7 @@ def get_version(endpoint_url):
     except:
         return False
     
-
+@log_in_out
 def get_identifier(endpoint_url):
     sparql = SPARQLWrapper(endpoint_url)
     query = """
@@ -1964,7 +1971,8 @@ def get_identifier(endpoint_url):
             return False
     except:
         return False
-    
+
+@log_in_out
 def get_contact_point(endpoint_url):
     sparql = SPARQLWrapper(endpoint_url)
     query = """
@@ -1997,7 +2005,7 @@ def get_contact_point(endpoint_url):
     except:
         return False    
     
-
+@log_in_out
 def get_string_literals(endpoint_url):
     sparql = SPARQLWrapper(endpoint_url)
     # We have to recover it like this because the string with the language tag is not recognized as a string with datatype xsd:string
@@ -2033,7 +2041,7 @@ def get_string_literals(endpoint_url):
     except Exception as e:
         return False
         
-
+@log_in_out
 def get_examples(endpoint_url):
     sparql = SPARQLWrapper(endpoint_url)
     query = """
@@ -2097,7 +2105,8 @@ def get_apis_url(endpoint_url):
             return False
     except:
         return False
-    
+
+@log_in_out
 def count_res_with_label(endpoint_url):
     sparql = SPARQLWrapper(endpoint_url)
     sparql.setQuery('''
@@ -2148,7 +2157,8 @@ def count_res_with_label(endpoint_url):
     except Exception as e:
         print(e)
         return False
-    
+
+@log_in_out
 def count_res(endpoint_url):
     sparql = SPARQLWrapper(endpoint_url)
     sparql.setQuery('''
