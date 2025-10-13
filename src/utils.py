@@ -30,6 +30,7 @@ from API import Aggregator
 from API.fair_vocabularies import fair_vocabularies
 from collections import Counter
 import re
+from urllib.parse import urlparse
 
 #PRINT THE METADATI OF A KG
 def printMetadatiKG(metadct):
@@ -1334,11 +1335,7 @@ def save_only_regex(string_list):
     return valid_regexes
 
 def is_url(string):
-    if not isinstance(string, str):
+    if not isinstance(string, str) or not string.strip():
         return False
-    pattern = re.compile(
-        r'^(https?://)?'           # optional http or https
-        r'([\w.-]+)\.([a-z\.]{2,6})'  # domain
-        r'([/\w\.-]*)*/?$'         # optional path
-    )
-    return bool(pattern.match(string))
+    parsed = urlparse(string)
+    return all([parsed.scheme in ("http", "https"), parsed.netloc])

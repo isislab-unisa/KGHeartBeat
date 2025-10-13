@@ -7,8 +7,11 @@ from rdflib.namespace import DC, DCTERMS, DOAP, FOAF, SKOS, OWL, RDF, RDFS, VOID
 def parseVoID(url):
     g = Graph()
     fmt = 'ttl' if url.lower().endswith('.ttl') else None
-    g.parse(url, format=fmt)
-    return g
+    try:
+        g.parse(url, format=fmt)
+        return g
+    except:
+        return False
 
 def parseVoIDTtl(url):
     g = Graph()

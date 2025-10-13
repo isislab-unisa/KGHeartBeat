@@ -24,6 +24,7 @@ print(f"Number of KGs from CHe Cloud: {len(CHe_Cloud)}")
 toAnalyze = toAnalyze + kgFound + kg_added_by_users + CHe_Cloud
 
 results = {}
+toAnalyze = [('A1','')]
 for kg_id in toAnalyze:
     print(f"Analyzing {kg_id[0]} - {kg_id[1]}")
     metadata = Aggregator.getDataPackage(kg_id[0])
@@ -40,9 +41,12 @@ for kg_id in toAnalyze:
                 file_void_url = False
             else:
                 file_void_url = file_void_url_wb
+                parsed_void = VoIDAnalyses.parseVoID(file_void_url)
+                if parsed_void == False:
+                    file_void_url = False
         except:
             file_void_url = False
-
+    
     accessibility4all = Accessibility4All()
     # Metadata license
     license = Aggregator.getLicense(metadata)
