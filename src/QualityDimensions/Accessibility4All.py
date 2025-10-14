@@ -202,7 +202,8 @@ class Accessibility4All:
             if isinstance(version_in_kg, list) and len(version_in_kg) > 0:
                 return (1, version_in_kg)
         if utils.is_url(void_file_url):
-            version_in_void = VoIDAnalyses.get_version(void_file_url)
+            void_file = VoIDAnalyses.parseVoID(void_file_url)
+            version_in_void = VoIDAnalyses.get_version(void_file)
             if version_in_void != False:
                 return (1, version_in_void)
         
@@ -214,7 +215,8 @@ class Accessibility4All:
             if isinstance(identifier, list) and len(identifier) > 0:
                 return (1, identifier)
         if utils.is_url(void_file_url):
-            identifier = VoIDAnalyses.get_identifier(void_file_url)
+            void_file = VoIDAnalyses.parseVoID(void_file_url)
+            identifier = VoIDAnalyses.get_identifier(void_file)
             if identifier != False:
                 return (1, identifier)
         
@@ -234,7 +236,8 @@ class Accessibility4All:
                 return (1, contact_in_sparql)
         
         if utils.is_url(void_file_url):
-            contact_in_void = VoIDAnalyses.get_contact_point(void_file_url)
+            void_file = VoIDAnalyses.parseVoID(void_file_url)
+            contact_in_void = VoIDAnalyses.get_contact_point(void_file)
             if isinstance(contact_in_void, list) and len(contact_in_void) > 0:
                 return (1, contact_in_void)
 

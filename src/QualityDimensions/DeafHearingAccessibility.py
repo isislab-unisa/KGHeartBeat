@@ -70,11 +70,12 @@ class DeafHearingAccessibility:
                 available_sparql = bool(query.check_if_up(sparql_endpoint))
 
             # API links
-            for link in VoIDAnalyses.getAccessPoint(void_file):
-                if utils.checkAvailabilityResource(link):
-                    available_api = True
-                    break
-
+            access_points = VoIDAnalyses.getAccessPoint(void_file)
+            if isinstance(access_points, list): 
+                for link in access_points:
+                    if utils.checkAvailabilityResource(link):
+                        available_api = True
+                        break
         # To have 1 as result, at least two access points must be available
         result = int(sum([available_download, available_sparql, available_api]) >= 2)
         return (result, {
