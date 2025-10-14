@@ -67,7 +67,7 @@ for kg_id in toAnalyze:
     results[kg_id[0]]['assistive_technologies'] = accessibility4all.assistive_technologies(sparql_endpoint_url, file_void_url)
     results[kg_id[0]]['webpage_status'] = accessibility4all.webpage_status(metadata['website'])
     results[kg_id[0]]['metadata_broken_links_rate'] = accessibility4all.metadata_broken_links_rate(metadata, sparql_endpoint_url, file_void_url, kg_id[0])
-    results[kg_id[0]]['robots_txt'] = accessibility4all.robots_txt(metadata, sparql_endpoint_url, website_url)
+    results[kg_id[0]]['robots_txt'] = accessibility4all.robots_txt(resourcesDH, sparql_endpoint_url, website_url)
     results[kg_id[0]]['common_format_availability'] = accessibility4all.common_formats_availability(kg_id[0])
     results[kg_id[0]]['check_authentication'] = accessibility4all.check_authentication(sparql_endpoint_url)
     results[kg_id[0]]['version'] = accessibility4all.version(file_void_url, sparql_endpoint_url)
@@ -82,7 +82,7 @@ for kg_id in toAnalyze:
 
 
     accessibility4visually_impaired = Accessibility4VisuallyImpaired()
-    results[kg_id[0]]['alt_image'] = accessibility4visually_impaired.alt_image(sparql_endpoint_url)
+    #results[kg_id[0]]['alt_image'] = accessibility4visually_impaired.alt_image(sparql_endpoint_url)
 
     print(results[kg_id[0]])
 

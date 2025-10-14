@@ -138,7 +138,7 @@ class Accessibility4All:
 
         return (1, "No metadata found in SPARQL endpoint, VoID file or search engine metadata")
 
-    def robots_txt(self, search_engine_metadata, sparql_endpoint, website_url):
+    def robots_txt(self, resources, sparql_endpoint, website_url):
         if utils.is_url(sparql_endpoint):
             robots_url = sparql_endpoint.rstrip('/') + '/robots.txt'
             try:
@@ -159,15 +159,14 @@ class Accessibility4All:
                     return (0, robots_url)
             except Exception as e:
                 return e
-        other_downlaoads = search_engine_metadata.get('other_downloads', [])
-        for link in other_downlaoads:
-            if 'robots.txt' in link['access_url']:
+        for link in resources:
+            if 'robots.txt' in link['path']:
                 try:
-                    response = requests.get(link)
+                    response = requests.get(link['path'])
                     if response.status_code == 200:
-                        return (1, link)
+                        return (1, link['path'])
                     else:
-                        return (0, link)
+                        return (0, link['path'])
                 except Exception as e:
                     return (0, str(e))
         return (0, "No robots.txt found")

@@ -263,3 +263,10 @@ def getAccessPoint(graph):
             o = str(o)
             return o
     return False
+
+def getObj(graph):
+    objects = []
+    for s,p,o in graph:
+        o = str(o)
+        objects.append(o)
+    return objects

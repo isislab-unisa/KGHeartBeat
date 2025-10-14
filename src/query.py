@@ -8,6 +8,7 @@ import utils
 import warnings
 import xml.etree.ElementTree as ET
 import rdflib
+from urllib.parse import quote
 
 def log_in_out(func):
 
@@ -2258,8 +2259,10 @@ def getImageIri(endpoint_url):
         print(e)
         return False
 
-def hasAltDescription(endpoint_url,image_iri):
+@log_in_out
+def hasAltDescription(endpoint_url,iri_to_check):
     sparql = SPARQLWrapper(endpoint_url)
+    encoded_iri = quote(iri_to_check, safe="/:#?&=%")
     sparql.setQuery(f"""
     PREFIX skosxl: <http://www.w3.org/2008/05/skos-xl#>
     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -2274,7 +2277,7 @@ def hasAltDescription(endpoint_url,image_iri):
         VALUES ?prop {{ rdfs:label foaf:name schema:alternateName dcterms:description skos:prefLabel dcterms:alternative skos:altLabel dcterms:title
                      rdfs:comment awol:label dcterms:alternative skos:altLabel skos:note wdrs:text skosxl:altLabel skosxl:hiddenLabel skosxl:prefLabel
                      skosxl:literalForm schema:name schema:description schema:alternateName }}
-        <{image_iri}> ?prop ?o .}}
+        <{encoded_iri}> ?prop ?o .}}
         """)
     try:
         sparql.setTimeout(300)
@@ -2297,3 +2300,130 @@ def hasAltDescription(endpoint_url,image_iri):
     except Exception as e:
         print(e)
         return False
+
+@log_in_out
+def fetch_objects(endpoint_url, limit=1000, condition = ()):
+    sparql = SPARQLWrapper(endpoint_url)
+    offset = 0
+    count = 0
+
+    while True:
+        query = f"""
+        SELECT DISTINCT ?o
+        WHERE {{
+            ?s ?p ?o .
+            FILTER(isIRI(?o))
+        }}
+        ORDER BY ?o
+        LIMIT {limit}
+        OFFSET {offset}
+        """
+        try:
+            sparql.setQuery(query)
+            sparql.setReturnFormat(JSON)
+            results = sparql.query().convert()
+            bindings = results.get("results", {}).get("bindings", [])
+
+            if not bindings:
+                break  # no more results
+
+            for result in bindings:
+                o = result["o"]["value"].lower()
+                if o.endswith(condition):
+                    count += 1
+            offset += limit
+            
+            return count
+        except Exception as e:
+            return e
+    
+@log_in_out
+def count_audio_objects_sparql(endpoint_url):
+    sparql = SPARQLWrapper(endpoint_url)
+    query = """
+        SELECT (COUNT(DISTINCT ?o) AS ?audioCount)
+        WHERE {
+        ?s ?p ?o .
+        FILTER(isIRI(?o)) .
+        FILTER(REGEX(STR(?o), "\\\\.(mp3|wav|flac|ogg|m4a|aac|wma|aiff)$", "i"))
+        }
+    """
+    try:
+        sparql.setQuery(query)
+        sparql.setTimeout(300)
+        sparql.setReturnFormat(JSON)
+        results = sparql.query().convert()
+        if isinstance(results,dict):
+            return int(results["results"]["bindings"][0]["audioCount"]["value"])
+        elif isinstance(results,Document):
+            value = utils.getResultsFromXMLCount(results)
+            return value
+        else:
+            return False
+    except Exception as e:
+        return e
+    
+@log_in_out
+def check_video_presence(endpoint_url):
+    sparql = SPARQLWrapper(endpoint_url)
+    query = """
+        SELECT ?o
+        WHERE {
+        ?s ?p ?o .
+        FILTER(isIRI(?o)) .
+        FILTER(REGEX(STR(?o), "\\\\.(mp4|avi|mov|wmv|flv|mkv|webm|mpeg|mpg)$", "i"))
+        }
+        LIMIT 1
+    """
+    try:
+        sparql.setQuery(query)
+        sparql.setTimeout(300)
+        sparql.setReturnFormat(JSON)
+        results = sparql.query().convert()
+        if isinstance(results,dict):
+            value = utils.getResultsFromJSON(results)
+            if isinstance(value,list) and len(value)>0:
+                return True
+            else:
+                return False
+        elif isinstance(results,Document):
+            value = utils.getResultsFromXML(results)
+            if isinstance(value,list) and len(value)>0:
+                return True
+            else:
+                return False
+        else:
+            return False
+    except Exception as e:
+        return e
+    
+def get_all_obj_in_meta(endpoint_url):
+    sparql = SPARQLWrapper(endpoint_url)
+    query = """
+    PREFIX void: <http://rdfs.org/ns/void#>
+    PREFIX dcat: <http://www.w3.org/ns/dcat#>
+    PREFIX dcterms: <http://purl.org/dc/terms/>
+
+    SELECT DISTINCT ?o
+    WHERE {
+        ?dataset a ?type ;
+                ?p ?o .
+        VALUES ?type { void:Dataset dcat:Dataset dcat:Distribution}
+    }
+    """
+    try:
+        sparql.setQuery(query)
+        sparql.setTimeout(300)
+        sparql.setReturnFormat(JSON)
+        results = sparql.query().convert()
+        if isinstance(results,dict):
+            triples = utils.getResultsFromJSON(results)
+            return triples
+        elif isinstance(results,Document):
+            triples = utils.getResultsFromXML(results)
+            return triples
+        else:
+            return False
+    except Exception as e:
+        return e
+    
