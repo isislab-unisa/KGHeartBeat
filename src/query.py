@@ -2286,20 +2286,19 @@ def hasAltDescription(endpoint_url,iri_to_check):
         if isinstance(results,dict):
             value = utils.getResultsFromJSON(results)
             if isinstance(value,list) and len(value)>0:
-                return True
+                return True, value
             else:
-                return False
+                return False, []
         elif isinstance(results,Document):
             value = utils.getResultsFromXML(results)
             if isinstance(value,list) and len(value)>0:
-                return True
+                return True, value
             else:
-                return False
+                return False, []
         else:
-            return False
+            return False, []
     except Exception as e:
-        print(e)
-        return False
+        return e
 
 @log_in_out
 def fetch_objects(endpoint_url, limit=1000, condition = ()):
@@ -2336,6 +2335,42 @@ def fetch_objects(endpoint_url, limit=1000, condition = ()):
             return count
         except Exception as e:
             return e
+
+@log_in_out
+def fetch_objects_value(endpoint_url, limit=1000, condition = ()):
+    sparql = SPARQLWrapper(endpoint_url)
+    offset = 0
+    values = []
+
+    while True:
+        query = f"""
+        SELECT DISTINCT ?o
+        WHERE {{
+            ?s ?p ?o .
+            FILTER(isIRI(?o))
+        }}
+        ORDER BY ?o
+        LIMIT {limit}
+        OFFSET {offset}
+        """
+        try:
+            sparql.setQuery(query)
+            sparql.setReturnFormat(JSON)
+            results = sparql.query().convert()
+            bindings = results.get("results", {}).get("bindings", [])
+
+            if not bindings:
+                break  # no more results
+
+            for result in bindings:
+                o = result["o"]["value"].lower()
+                if o.endswith(condition):
+                    values.append(o)
+            offset += limit
+            
+            return values
+        except Exception as e:
+            return e
     
 @log_in_out
 def count_audio_objects_sparql(endpoint_url):
@@ -2364,7 +2399,7 @@ def count_audio_objects_sparql(endpoint_url):
         return e
     
 @log_in_out
-def check_video_presence(endpoint_url):
+def check_video_presence(endpoint_url, limit = True):
     sparql = SPARQLWrapper(endpoint_url)
     query = """
         SELECT ?o
@@ -2373,8 +2408,9 @@ def check_video_presence(endpoint_url):
         FILTER(isIRI(?o)) .
         FILTER(REGEX(STR(?o), "\\\\.(mp4|avi|mov|wmv|flv|mkv|webm|mpeg|mpg)$", "i"))
         }
-        LIMIT 1
     """
+    if limit:
+        query += f"LIMIT {limit}"
     try:
         sparql.setQuery(query)
         sparql.setTimeout(300)
@@ -2383,19 +2419,55 @@ def check_video_presence(endpoint_url):
         if isinstance(results,dict):
             value = utils.getResultsFromJSON(results)
             if isinstance(value,list) and len(value)>0:
-                return True
+                return True, value
             else:
-                return False
+                return False, []
         elif isinstance(results,Document):
             value = utils.getResultsFromXML(results)
             if isinstance(value,list) and len(value)>0:
-                return True
+                return True, value
             else:
-                return False
+                return False, []
         else:
-            return False
+            return False, []
     except Exception as e:
-        return e
+        return e, []
+    
+
+@log_in_out
+def check_audio_presence(endpoint_url, limit = True):
+    sparql = SPARQLWrapper(endpoint_url)
+    query = """
+        SELECT ?o
+        WHERE {
+        ?s ?p ?o .
+        FILTER(isIRI(?o)) .
+        FILTER(REGEX(STR(?o), "\\\\.(mp3|wav|flac|ogg|m4a|aac|wma|aiff)$", "i"))
+        }
+    """
+    if limit:
+        query += f"LIMIT {limit}"
+    try:
+        sparql.setQuery(query)
+        sparql.setTimeout(300)
+        sparql.setReturnFormat(JSON)
+        results = sparql.query().convert()
+        if isinstance(results,dict):
+            value = utils.getResultsFromJSON(results)
+            if isinstance(value,list) and len(value)>0:
+                return True, value
+            else:
+                return False, []
+        elif isinstance(results,Document):
+            value = utils.getResultsFromXML(results)
+            if isinstance(value,list) and len(value)>0:
+                return True, value
+            else:
+                return False, []
+        else:
+            return False, []
+    except Exception as e:
+        return e, []
     
 def get_all_obj_in_meta(endpoint_url):
     sparql = SPARQLWrapper(endpoint_url)

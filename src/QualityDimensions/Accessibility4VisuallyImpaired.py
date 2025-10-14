@@ -10,46 +10,6 @@ class Accessibility4VisuallyImpaired:
     def __init__(self):
         pass
 
-    def _check_metadata(self, sparql_endpoint, void_file_url, resources, media_type):
-        # Check Search Engine Metadata resources
-        for res in resources:
-            path = res.get('path', '')
-            if path and utils.is_url(path):
-                try:
-                    response = requests.head(path, timeout=10, allow_redirects=True)
-                    if media_type in response.headers.get('Content-Type', ''):
-                        return 1, path
-                except requests.RequestException:
-                    continue
-
-        # Check VoID file
-        if utils.is_url(void_file_url):
-            void_file = VoIDAnalyses.parseVoID(void_file_url)
-            objects = VoIDAnalyses.get_all_obj(void_file)
-            for obj in objects:
-                if utils.is_url(obj):
-                    try:
-                        response = requests.hea
-                        d(obj, timeout=10, allow_redirects=True)
-                        if media_type in response.headers.get('Content-Type', ''):
-                            return 1, obj
-                    except requests.RequestException:
-                        continue
-
-        # Check SPARQL endpoint
-        if utils.is_url(sparql_endpoint):
-            objects = query.get_all_obj_in_meta(sparql_endpoint)
-            for obj in objects:
-                if utils.is_url(obj):
-                    try:
-                        response = requests.head(obj, timeout=10, allow_redirects=True)
-                        if media_type in response.headers.get('Content-Type', ''):
-                            return 1, obj
-                    except requests.RequestException:
-                        continue
-
-        return 0, f"No {media_type} metadata found"
-
     def alt_image(self,sparql_endpoint):
         if not utils.is_url(sparql_endpoint):
             return (0, "No SPARQL endpoint provided")
@@ -58,7 +18,8 @@ class Accessibility4VisuallyImpaired:
             if isinstance(images, list) and len(images) > 0:
                 count_with_alt = 0
                 for i, img in enumerate(images, 1):
-                    if query.hasAltDescription(sparql_endpoint, img):
+                    res = query.hasAltDescription(sparql_endpoint, img)
+                    if res[0]:
                         count_with_alt += 1
                     if i % 50 == 0:
                         print(f"Processed {i}/{len(images)} images...")
@@ -84,33 +45,10 @@ class Accessibility4VisuallyImpaired:
                     return ratio, audio_count
                 else:
                     return 0, f"Error counting audio resources: {audio_count}"
-                
-    def video(self, sparql_endpoint):
-        if not utils.is_url(sparql_endpoint):
-            return (0, "No SPARQL endpoint provided")
-        else:
-            video_exts = ('.mp4', '.avi', '.mov', '.wmv', '.flv', '.mkv', '.webm','.mpeg', '.mpg')
-            video_count = query.fetch_objects(sparql_endpoint,condition=video_exts)
-            if isinstance(video_count,int):
-                if video_count > 0:
-                    return 1, video_count
-                else: 
-                    return 0, "No video resources found in the KG"
-            else:
-                video_count = query.check_video_presence(sparql_endpoint)
-                if isinstance(video_count,bool):
-                    return int(video_count), video_count
-                else:
-                    return 0, f"Error counting video resources: {video_count}"
     
-    def image_metadata(self, sparql_endpoint, void_file_url, resources):
-        return self._check_metadata(sparql_endpoint, void_file_url, resources, "image/")
-
     def audio_meta(self, sparql_endpoint, void_file_url, resources):
-        return self._check_metadata(sparql_endpoint, void_file_url, resources, "audio/")
+        return utils.check_metadata_media_type(sparql_endpoint, void_file_url, resources, "audio/")
 
-    def video_meta(self, sparql_endpoint, void_file_url, resources):
-        return self._check_metadata(sparql_endpoint, void_file_url, resources, "video/")
     
 # Test
 if __name__ == "__main__":

@@ -31,6 +31,10 @@ from API.fair_vocabularies import fair_vocabularies
 from collections import Counter
 import re
 from urllib.parse import urlparse
+import nltk
+from nltk.tokenize import sent_tokenize, word_tokenize
+import VoIDAnalyses
+
 
 #PRINT THE METADATI OF A KG
 def printMetadatiKG(metadct):
@@ -1339,3 +1343,58 @@ def is_url(string):
         return False
     parsed = urlparse(string)
     return all([parsed.scheme in ("http", "https"), parsed.netloc])
+
+def is_subtitle(text):
+    # Check for common subtitle patterns (e.g., "00:00:00,000 --> 00:00:05,000")
+    if re.search(r'\d{2}:\d{2}:\d{2},\d{3} --> \d{2}:\d{2}:\d{2},\d{3}', text):
+        return True
+    
+    sentences = sent_tokenize(text)
+    if len(sentences) == 0:
+        return False
+    avg_len = sum(len(word_tokenize(s)) for s in sentences) / len(sentences)
+    
+    if avg_len < 8:
+        return True
+    
+    return False
+
+def check_metadata_media_type(sparql_endpoint, void_file_url, resources, media_type):
+    # Check Search Engine Metadata resources
+    if isinstance(resources, list) and len(resources) > 0:
+        for res in resources:
+            path = res.get('path', '')
+            if path and is_url(path):
+                try:
+                    response = requests.head(path, timeout=10, allow_redirects=True)
+                    if media_type in response.headers.get('Content-Type', ''):
+                        return 1, path
+                except requests.RequestException:
+                    continue
+
+    # Check VoID file
+    if is_url(void_file_url):
+        void_file = VoIDAnalyses.parseVoID(void_file_url)
+        objects = VoIDAnalyses.get_all_obj(void_file)
+        for obj in objects:
+            if is_url(obj):
+                try:
+                    response = requests.head(obj, timeout=10, allow_redirects=True)
+                    if media_type in response.headers.get('Content-Type', ''):
+                        return 1, obj
+                except requests.RequestException:
+                    continue
+
+    # Check SPARQL endpoint
+    if is_url(sparql_endpoint):
+        objects = query.get_all_obj_in_meta(sparql_endpoint)
+        for obj in objects:
+            if is_url(obj):
+                try:
+                    response = requests.head(obj, timeout=10, allow_redirects=True)
+                    if media_type in response.headers.get('Content-Type', ''):
+                        return 1, obj
+                except requests.RequestException:
+                    continue
+
+    return 0, f"No {media_type} metadata found"
