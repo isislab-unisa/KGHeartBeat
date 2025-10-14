@@ -3625,7 +3625,7 @@
         "media_type": "application/rdf+xml",
         "description": "Example resource",
         "access_url": "http://rainbowdash.net/beatsperpony/foaf",
-        "status": "FAIL (404)"
+        "status": "FAIL (502)"
       }
     ],
     "sparql": [],
@@ -3835,7 +3835,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "Converted test.conllu using ACoLi's conll-rdf converter",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "UD_Italian RDF Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/69473f3f-7593-4c81-86e6-def3ca79b579/resource/fc55b86f-09a6-4c1f-a25d-577f2ec21cc4/download/uditalian.rdf"
@@ -4093,14 +4093,14 @@
         "media_type": "text/turtle",
         "description": "",
         "access_url": "http://data.lenka.no/geo/inndeling/06",
-        "status": "FAIL (502)"
+        "status": "FAIL (308)"
       },
       {
         "title": "Example center",
         "media_type": "text/turtle",
         "description": "",
         "access_url": "http://data.lenka.no/geo/sted/60196",
-        "status": "FAIL (502)"
+        "status": "FAIL (308)"
       }
     ],
     "sparql": [
@@ -4108,14 +4108,14 @@
         "title": "SPARQL Endpoint",
         "description": "",
         "access_url": "http://data.lenka.no/sparql",
-        "status": "FAIL (502)"
+        "status": "FAIL (308)"
       }
     ],
     "other_download": [
       {
         "media_type": "meta/void",
         "description": "A basic VoID description of the dataset.",
-        "status": "FAIL (HTTP error fetching URL. Status=502, URL=[http://data.lenka.no/])",
+        "status": "FAIL (HTTP error fetching URL. Status=404, URL=[https://data.lenka.no/])",
         "title": "VoID description",
         "mirror": [],
         "access_url": "http://data.lenka.no/"
@@ -4123,7 +4123,7 @@
       {
         "media_type": "text/turtle",
         "description": "",
-        "status": "FAIL (Unhandled content type. Must be text/*, application/xml, or application/*+xml)",
+        "status": "FAIL (HTTP error fetching URL. Status=404, URL=[https://data.lenka.no/dumps/fylke-geonames.ttl])",
         "title": "Links from Fylke to Geonames",
         "mirror": [],
         "access_url": "http://data.lenka.no/dumps/fylke-geonames.ttl"
@@ -4131,7 +4131,7 @@
       {
         "media_type": "text/turtle",
         "description": "",
-        "status": "FAIL (Unhandled content type. Must be text/*, application/xml, or application/*+xml)",
+        "status": "FAIL (HTTP error fetching URL. Status=404, URL=[https://data.lenka.no/dumps/kommune-navn.ttl])",
         "title": "Municipality names",
         "mirror": [],
         "access_url": "http://data.lenka.no/dumps/kommune-navn.ttl"
@@ -4139,7 +4139,7 @@
       {
         "media_type": "text/turtle",
         "description": "",
-        "status": "FAIL (Unhandled content type. Must be text/*, application/xml, or application/*+xml)",
+        "status": "FAIL (HTTP error fetching URL. Status=404, URL=[https://data.lenka.no/dumps/kommunesentre-geonames.ttl])",
         "title": "Municipality centre names with geoname links",
         "mirror": [],
         "access_url": "http://data.lenka.no/dumps/kommunesentre-geonames.ttl"
@@ -9719,14 +9719,14 @@
         "media_type": "application/rdf+xml; charset=UTF-8",
         "description": "Link to an example data item within the dataset (RDF/XML)\r\nThe actual URI is http://dbpedia.org/resource/Paris, which redirect via 303 to application/rdf+xml",
         "access_url": "http://fr.dbpedia.org/data/Paris.rdf",
-        "status": "OK"
+        "status": "FAIL (Read timed out)"
       },
       {
         "title": "Turtle Example",
         "media_type": "example/n3",
         "description": "Link to an example data item within the dataset (text/n3)\r\nThe actual URI is http://dbpedia.org/resource/Paris, which redirect via 303 to text/n3",
         "access_url": "http://fr.dbpedia.org/data/Paris.n3",
-        "status": "FAIL (406)"
+        "status": "FAIL (Read timed out)"
       },
       {
         "title": "RDFa Example",
@@ -9755,7 +9755,7 @@
       {
         "media_type": "",
         "description": "The resource will be resolved via content negotiation to either:\r\nhttp://dbpedia.org/page/Paris\r\nor \r\nhttp://dbpedia.org/data/Paris.rdf\r\nhttp://dbpedia.org/data/Paris.n3\r\nhttp://dbpedia.org/data/Paris.json\r\n",
-        "status": "OK",
+        "status": "FAIL (Read timed out)",
         "title": "Linked Data entry example",
         "mirror": [],
         "access_url": "http://fr.dbpedia.org/resource/Paris"
@@ -14844,10 +14844,10 @@
     "example": [
       {
         "title": null,
-        "media_type": "text/html",
+        "media_type": "example/rdf+xml",
         "description": "Example (RDF/XML)",
         "access_url": "http://uberblic.org/resource/55c53674-2ac1-4070-8e56-3fd780ab9aa1#thing",
-        "status": "OK"
+        "status": "FAIL (301)"
       }
     ],
     "sparql": [
@@ -14855,14 +14855,14 @@
         "title": null,
         "description": "Sparql endpoint",
         "access_url": "http://platform.uberblic.org/api/v1/sparql",
-        "status": "FAIL (platform.uberblic.org)"
+        "status": "FAIL (301)"
       }
     ],
     "other_download": [
       {
         "media_type": "",
         "description": "Download",
-        "status": "FAIL (platform.uberblic.org)",
+        "status": "OK",
         "title": null,
         "mirror": [],
         "access_url": "http://platform.uberblic.org/dumps/"
@@ -16077,10 +16077,10 @@
         "title": "PREJUST4WOMEN KG APP1 .ttl",
         "description": "This knowledge graph offers an innovative approach to the issue of violence against women by providing an interconnected, machine-interpretable representation of legal documents. It includes judgments from the European Court of Human Rights related to gender-based violence.",
         "access_url": "",
-        "media_type": "",
+        "media_type": "text/turtle",
         "download_url": "https://github.com/PeppeRubini/EVA-KG/blob/main/KG.ttl",
         "mirror": [],
-        "status": "OK"
+        "status": "FAIL (HTTP error fetching URL. Status=429, URL=[https://github.com/PeppeRubini/EVA-KG/blob/main/KG.ttl])"
       },
       {
         "_id": "47952257-d193-a54c-a24b-eb82af3bd5c6",
@@ -16107,10 +16107,10 @@
         "title": "PREJUST4WOMEN KG APP2",
         "description": "This knowledge graph models the dynamics of abuse against women, connecting key entities like victims, perpetrators, and legal cases while capturing contextual, legal, and consequential details.",
         "access_url": "",
-        "media_type": "",
+        "media_type": "text/turtle",
         "download_url": "https://github.com/Fra3005/PreJust4Womans/blob/main/Commons/final_onto.ttl",
         "mirror": [],
-        "status": "OK"
+        "status": "FAIL (HTTP error fetching URL. Status=429, URL=[https://github.com/Fra3005/PreJust4Womans/blob/main/Commons/final_onto.ttl])"
       }
     ],
     "keywords": [
@@ -17672,7 +17672,7 @@
       {
         "media_type": "meta/void",
         "description": "voiD description",
-        "status": "FAIL (HTTP error fetching URL. Status=404, URL=[https://ineverycrea.net/voidIneveryCREAGNOSS.n3])",
+        "status": "FAIL (HTTP error fetching URL. Status=500, URL=[https://ineverycrea.net/voidIneveryCREAGNOSS.n3])",
         "title": "voiD description",
         "mirror": [],
         "access_url": "http://ineverycrea.net/voidIneveryCREAGNOSS.n3"
@@ -21330,7 +21330,7 @@
       {
         "media_type": "text/n3",
         "description": "voiD description",
-        "status": "FAIL (Too many redirects occurred trying to load URL http://museos.gnoss.com/Error.htm?aspxerrorpath=/error)",
+        "status": "FAIL (Read timed out)",
         "title": "voiD description",
         "mirror": [],
         "access_url": "http://museos.gnoss.com/voidMuseosdeEspañaGNOSS.n3"
@@ -22131,7 +22131,7 @@
         "media_type": "application/rdf+xml",
         "description": "Example resource",
         "access_url": "http://resourcelists.st-andrews.ac.uk/lists/A99D9239-0866-D6F4-9728-61E65C2C0974",
-        "status": "FAIL (303)"
+        "status": "FAIL (404)"
       }
     ],
     "sparql": [],
@@ -25503,7 +25503,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "Converted test.conllu using ACoLi's conll-rdf converter",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "UD_Catalan RDF Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/cca2b820-e5e9-428e-8454-8df56ddfe403/resource/a94f67fc-a16d-4198-9516-889fe689f6c2/download/udcatalan.rdf"
@@ -26714,7 +26714,7 @@
       {
         "media_type": "",
         "description": "",
-        "status": "OK",
+        "status": "FAIL (Read timed out)",
         "title": "vann RDF Schema",
         "mirror": [],
         "access_url": "http://purl.org/vocab/vann/"
@@ -26964,7 +26964,7 @@
       {
         "media_type": "text/turtle",
         "description": "",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "VOID description",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/6c9ea600-1c75-4f81-b245-45563c5190e8/resource/9d3820b2-f6ae-445d-a546-81dd54b90986/download/void.ttl"
@@ -28110,7 +28110,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "Converted test.conllu using ACoLi's conll-rdf converter",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "UD_Old_Church_Slavonic RDF Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/8e1b3a4f-9f5f-4f8c-8ad7-9599e0bc85c0/resource/08f808b5-e5da-444e-8702-ee2cac1bf059/download/udoldchurchslavonic.rdf"
@@ -28239,7 +28239,7 @@
       {
         "media_type": "application/vnd.rar",
         "description": "Symptom entities, symptom-related entities and their properties in Chinese.",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "Dataset of Symptoms in Chinese",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/003abde3-aa16-4126-a8da-2f5d9e472285/resource/8d8bf867-23f6-475a-b023-91ec6093b7bf/download/dsc.nlp-bigdatalab.org.rar"
@@ -28247,7 +28247,7 @@
       {
         "media_type": "text/plain",
         "description": "",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "Dataset description in DCAT",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/003abde3-aa16-4126-a8da-2f5d9e472285/resource/600164ff-fdf5-40cf-9d03-3efbb7ef4d95/download/dataset-description-in-dcat.txt"
@@ -28255,7 +28255,7 @@
       {
         "media_type": "text/turtle",
         "description": "",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/003abde3-aa16-4126-a8da-2f5d9e472285/resource/c68762ff-fa0b-443b-882a-f090faab052d/download/example.ttl"
@@ -28263,7 +28263,7 @@
       {
         "media_type": "text/plain",
         "description": "Schema of the dataset",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/003abde3-aa16-4126-a8da-2f5d9e472285/resource/9c38197a-c7e0-4d9c-ab27-5005dc8a41ac/download/dsc-schema.txt"
@@ -28271,7 +28271,7 @@
       {
         "media_type": "application/vnd.rar",
         "description": "We sampled 417 triples from 26445 triples which describe the rdf:type of the instances is symptom for calculating the precision of symptoms. We sampled 423 triples from 364,657 triples which are related to symptom (triples containing rdf:type and same:As are not involved). We sampled 395 triples from 6024 triples which describe the links (sameAs) to UMLS. The precisions are 98%, 96%, 92%.",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "Evaluation results of the dataset",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/003abde3-aa16-4126-a8da-2f5d9e472285/resource/e902e889-25a5-4320-acf7-dd96a240d61a/download/evaluation-results-of-the-dataset.rar"
@@ -32686,7 +32686,7 @@
       {
         "media_type": "",
         "description": "",
-        "status": "OK",
+        "status": "FAIL (Read timed out)",
         "title": "dc RDF Schema",
         "mirror": [],
         "access_url": "http://purl.org/dc/terms/"
@@ -33072,7 +33072,7 @@
       {
         "media_type": "meta/void",
         "description": "voiD description",
-        "status": "FAIL (Too many redirects occurred trying to load URL http://museos.gnoss.com/Error.htm?aspxerrorpath=/error)",
+        "status": "FAIL (Read timed out)",
         "title": "voiD description",
         "mirror": [],
         "access_url": "http://museos.gnoss.com/voidLaboratorioDeIdeas.n3"
@@ -35712,10 +35712,10 @@
     "example": [
       {
         "title": null,
-        "media_type": "text/html; charset=UTF-8",
+        "media_type": "text/html; charset=utf-8",
         "description": "Example resource",
         "access_url": "http://legadolibre.com.ar/serafasto/foaf",
-        "status": "FAIL (301)"
+        "status": "OK"
       }
     ],
     "sparql": [],
@@ -37897,7 +37897,7 @@
       {
         "media_type": "",
         "description": "",
-        "status": "OK",
+        "status": "FAIL (Read timed out)",
         "title": "conv RDF Schema",
         "mirror": [],
         "access_url": "http://purl.org/twc/vocab/conversion/"
@@ -38149,7 +38149,7 @@
       {
         "media_type": "",
         "description": "",
-        "status": "OK",
+        "status": "FAIL (Read timed out)",
         "title": "voiD file",
         "mirror": [],
         "access_url": "http://purl.org/NET/ThISTVOID"
@@ -40106,7 +40106,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "Converted test.conllu using ACoLi's conll-rdf converter",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "UD_Spanish RDF Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/65d27687-8a08-48a8-b714-7fee2e7dc6e4/resource/c80686d7-32b2-4aa0-b02f-4a85de494c95/download/udspanish.rdf"
@@ -44811,7 +44811,7 @@
       {
         "media_type": "",
         "description": "",
-        "status": "FAIL (HTTP error fetching URL. Status=429, URL=[https://github.com/martavillegas/EuroWordNetLemon/blob/master/glg-30-lmf.v2.xml.ttl?raw=true])",
+        "status": "OK",
         "title": "Galician EuroWordNet-lemon lexicon",
         "mirror": [],
         "access_url": "https://github.com/martavillegas/EuroWordNetLemon/blob/master/glg-30-lmf.v2.xml.ttl?raw=true"
@@ -45598,7 +45598,7 @@
         "_id": "2336f56a-befd-ad62-f24f-40388101b2ab",
         "description": "",
         "access_url": "https://sparql.crssnky.xyz/spql/imas/query?query=",
-        "status": "FAIL (503)"
+        "status": "FAIL (400)"
       }
     ],
     "image": "https://sparql.crssnky.xyz/imas/css/img/top.png",
@@ -48507,7 +48507,7 @@
         "title": "Wikidata SPARQL Endpoint",
         "description": "",
         "access_url": "https://query.wikidata.org/sparql",
-        "status": "OK"
+        "status": "FAIL (Read timed out)"
       }
     ],
     "contact_point": {
@@ -49155,7 +49155,7 @@
       {
         "media_type": "XML",
         "description": "Example top concept (RDF only, no conneg)",
-        "status": "FAIL (HTTP error fetching URL. Status=404, URL=[https://semanticweb.cs.vu.nl/europeana/lod/purl/vocabularies/cornetto/synset-iets-2-noun.rdf])",
+        "status": "FAIL (Read timed out)",
         "title": "iets (eng: something)",
         "mirror": [],
         "access_url": "http://purl.org/vocabularies/cornetto/synset-iets-2-noun.rdf"
@@ -52342,7 +52342,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "Converted test.conllu using ACoLi's conll-rdf converter",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "UD_Spanish-AnCora RDF Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/4020fff0-316b-4263-be86-72241c2ff5fa/resource/ca85cd13-29b7-464b-b5ba-9075042b93ad/download/udspanish-ancora.rdf"
@@ -52943,7 +52943,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "Converted test.conllu using ACoLi's conll-rdf converter",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "UD_Dutch RDF Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/781f6ad5-3fa5-4063-a4f6-1c8e5dd9fa5e/resource/35c5d6cb-44c5-49a6-bdca-1c687d1891b1/download/uddutch.rdf"
@@ -53377,7 +53377,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "Converted test.conllu using ACoLi's conll-rdf converter",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "UD_English RDF Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/b0f1f6df-bc12-43ff-83fd-f929827edac7/resource/f824a85f-51dc-452e-a20a-0080ba8d1966/download/udenglish.rdf"
@@ -53521,7 +53521,7 @@
         "media_type": "application/rdf+xml",
         "description": "Example (RDF/XML)",
         "access_url": "http://edgarwrap.ontologycentral.com/cik/links.rdf",
-        "status": "FAIL (503)"
+        "status": "FAIL (500)"
       },
       {
         "title": null,
@@ -54931,7 +54931,7 @@
         "media_type": "",
         "description": "Defines the schema informing cedict_1_0_ts_utf-8_mdbg. Aligned to Ontolex.",
         "download_url": "https://github.com/ont-app/cedict/blob/master/data/cedict-schema.ttl",
-        "status": "FAIL (HTTP error fetching URL. Status=429, URL=[https://github.com/ont-app/cedict/blob/master/data/cedict-schema.ttl])",
+        "status": "OK",
         "title": "cedict-schema",
         "mirror": [],
         "_id": "ff69a7f9-1fdc-6edd-f2ae-a6d539ceadf7",
@@ -55360,7 +55360,7 @@
       {
         "media_type": "meta/rdf-schema",
         "description": "",
-        "status": "FAIL (sparql.tw.rpi.edu)",
+        "status": "FAIL (Read timed out)",
         "title": "datafaqs RDF Schema",
         "mirror": [],
         "access_url": "http://purl.org/twc/vocab/datafaqs"
@@ -55472,7 +55472,7 @@
       {
         "media_type": "",
         "description": "",
-        "status": "FAIL (HTTP error fetching URL. Status=403, URL=[https://trdf.sourceforge.net/provenance/ns])",
+        "status": "FAIL (Read timed out)",
         "title": "prov RDF Schema",
         "mirror": [],
         "access_url": "http://purl.org/net/provenance/ns"
@@ -55605,7 +55605,7 @@
       {
         "media_type": "text/html; charset=utf-8",
         "description": "An example synset identifier",
-        "status": "FAIL (403)",
+        "status": "FAIL (301)",
         "title": "Example Resource",
         "_id": "b9a3d21f-e25b-2fae-91a7-47982ef3a3cd",
         "access_url": "http://globalwordnet.org/ili/i84846"
@@ -56365,7 +56365,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "Converted test.conllu using ACoLi's conll-rdf converter",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "UD_Basque RDF Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/46f2d67c-f088-4609-8b84-680859214067/resource/71e7045b-4830-490f-be95-a9a23ed20eea/download/udbasque.rdf"
@@ -56957,13 +56957,13 @@
       {
         "media_type": "application/xml",
         "access_url": "http://id.eaufrance.fr/apt/3944.rdf",
-        "status": "FAIL (302)"
+        "status": "OK"
       }
     ],
     "sparql": [
       {
         "access_url": "http://id.eaufrance.fr/sparql",
-        "status": "FAIL (502)"
+        "status": "OK"
       }
     ],
     "other_download": [],
@@ -57289,9 +57289,9 @@
         "title": "Landsat-8-OLI_TIRS raw remote sensing image dataset for China region, May 2013-April 2022",
         "description": "",
         "access_url": "https://data.casearth.cn/sdo/detail/6253cddb819aec49731a4b61",
-        "media_type": "data",
+        "media_type": "",
         "mirror": [],
-        "status": "FAIL (PKIX path validation failed: java.security.cert.CertPathValidatorException: validity check failed)"
+        "status": "OK"
       },
       {
         "_id": "76dbe202-df3d-be70-7a23-191b31e068c8",
@@ -58385,7 +58385,7 @@
         "media_type": "example/rdf+xml",
         "description": "Example resource",
         "access_url": "http://data.opendatascotland.org/data/simd/employment-rank/2012/S01000969",
-        "status": "FAIL (400)"
+        "status": "FAIL (403)"
       }
     ],
     "sparql": [],
@@ -60913,7 +60913,7 @@
         "media_type": "application/rdf+xml",
         "description": "",
         "access_url": "http://zhishi.me/data/zhwiki/resource/Shanghai",
-        "status": "FAIL (403)"
+        "status": "FAIL (400)"
       }
     ],
     "sparql": [
@@ -60921,7 +60921,7 @@
         "title": "SPARQL endpoint",
         "description": "",
         "access_url": "http://zhishi.me/sparql",
-        "status": "OK"
+        "status": "FAIL (403)"
       }
     ],
     "other_download": [],
@@ -61230,7 +61230,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "Converted test.conllu using ACoLi's conll-rdf converter",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "UD_Romanian RDF Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/45bbfb77-9de4-42a8-8e71-05f08a5d3b76/resource/75f51566-8cc4-45fe-94a0-fd012e10c757/download/udromanian.rdf"
@@ -63711,7 +63711,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "Converted test.conllu using ACoLi's conll-rdf converter",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "UD_Latin-PROIEL RDF Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/53daee93-f868-401d-a83d-55ae58ae4c11/resource/0aae3178-5c2f-4391-b9db-791f3def7161/download/udlatin-proiel.rdf"
@@ -63831,7 +63831,7 @@
       {
         "media_type": "",
         "description": "",
-        "status": "OK",
+        "status": "FAIL (Read timed out)",
         "title": "dc RDF Schema",
         "mirror": [],
         "access_url": "http://purl.org/dc/terms/"
@@ -65213,7 +65213,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "Converted test.conllu using ACoLi's conll-rdf converter",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "UD_Russian RDF Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/420234c3-c5ee-4e9e-9af1-785fb5473b40/resource/d1e7b34d-a31d-4beb-bd0b-b771b2d58ec1/download/udrussian.rdf"
@@ -66783,7 +66783,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "Converted test.conllu using ACoLi's conll-rdf converter",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "UD_Czech-CAC RDF Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/c11a0d4e-3c2f-4797-9956-4336d36cdfd9/resource/3a78788e-f153-446c-9d8c-39ec913940b3/download/udczech-cac.rdf"
@@ -69516,7 +69516,7 @@
       {
         "media_type": "text/turtle",
         "description": "",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "VOID file for The European Library Open Dataset",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/71714db9-6dd7-4551-b021-83f0ed82ab87/resource/5b33837e-2588-4295-bef0-90051c9547ac/download/theeuropeanlibraryopendataset.ttl"
@@ -69951,7 +69951,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "Converted test.conllu using ACoLi's conll-rdf converter",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "UD_English-LinES RDF Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/3f7e0bb8-f83b-4587-9cc2-7b37b5e79897/resource/abebded2-7d24-45a3-b8b5-9e88b121b663/download/udenglish-lines.rdf"
@@ -71476,7 +71476,7 @@
       {
         "media_type": "",
         "description": "",
-        "status": "FAIL (HTTP error fetching URL. Status=403, URL=[https://trdf.sourceforge.net/provenance/ns])",
+        "status": "FAIL (Read timed out)",
         "title": "prv RDF Schema",
         "mirror": [],
         "access_url": "http://purl.org/net/provenance/ns#"
@@ -72418,7 +72418,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "Converted test.conllu using ACoLi's conll-rdf converter",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "UD_Portuguese-Bosque RDF Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/86f72658-3781-482e-a8c5-274ad1f0aede/resource/92feb211-a382-4ee3-b629-ab1949c5f9ca/download/udportuguese-bosque.rdf"
@@ -73882,7 +73882,7 @@
       {
         "media_type": "",
         "description": "",
-        "status": "OK",
+        "status": "FAIL (Read timed out)",
         "title": "conv RDF Schema",
         "mirror": [],
         "access_url": "http://purl.org/twc/vocab/conversion/"
@@ -75649,7 +75649,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "Converted test.conllu using ACoLi's conll-rdf converter",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "UD_Slovak RDF Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/b19be93d-9fee-4043-908d-ca8eb34b9e0e/resource/d897eae0-7154-4348-962d-4b37f81528f3/download/udslovak.rdf"
@@ -76870,7 +76870,7 @@
       {
         "media_type": "application/zip",
         "description": "It contains two lexicons (ES, CA) and the Translation Set ES-CA, as well as the metadata file.",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "Zipped RDF data dump",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/144f420d-7d7a-436a-8522-86c3a2f9d7d1/resource/0e312c8d-4cb8-4027-8da7-b2922ce85563/download/apertium-es-ca-rdf.zip"
@@ -76910,7 +76910,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "This extends the metadata in http://datahub.ckan.io/dataset/apertium-rdf-es-ca.rdf with licence and provenance",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "Dataset description in DCAT",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/144f420d-7d7a-436a-8522-86c3a2f9d7d1/resource/6e82a312-e3fe-45cf-bb66-49eabea14cf0/download/apertium-es-ca_dataset_metadata.rdf"
@@ -79049,7 +79049,7 @@
       {
         "media_type": "",
         "description": "The Catalan lexicon is linked to the Catalan Parole/Simple lemon lexicon. Gloss and rgloss relations between synsets are not included. For LexicalEntries and LexicalSenses, original ID's are encoded in dcterms:source and the URIs follow the pattern '../lemma-PoS'. For Synsets and Translations original IDs are used in the URIs (.../ID). Synset rdfs:labels were generated as follows:\r\n\r\nINSERT {?synset rdfs:label ?labels } WHERE {SELECT ?synset (GROUP_CONCAT(?label; separator = ' ; ') as ?labels) { ?sense lemon:reference ?synset; rdfs:label ?label . } GROUP BY ?synset }\r\n\r\nThe lexicon is published at http://lodserver.iula.upf.edu/id/WordNetLemon/CAT/",
-        "status": "FAIL (HTTP error fetching URL. Status=429, URL=[https://github.com/martavillegas/EuroWordNetLemon/blob/master/cat-30-lmf.xml.ttl])",
+        "status": "OK",
         "title": "Catalan EuroWordNet-lemon lexicon",
         "mirror": [],
         "access_url": "https://github.com/martavillegas/EuroWordNetLemon/blob/master/cat-30-lmf.xml.ttl"
@@ -79458,7 +79458,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "This ontology describes a degree of higher education and the direction of bachelor's and master's degrees in the Russian Federation and their compliance with the various official lists. It is assumed that a given ontology can be used in various applications of the Semantic Web in Russian higher education.",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "Russian University Specialities",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/c8bb2280-5919-4fbb-85b1-52d03d403e21/resource/38b05231-715e-411e-9c04-4752d08dfa6d/download/specialitydatahub.rdf"
@@ -79569,7 +79569,7 @@
         "media_type": "example/rdf+xml",
         "description": "Example resource",
         "access_url": "http://dbtune.org/musicbrainz/all",
-        "status": "FAIL (500)"
+        "status": "FAIL (Read timed out)"
       }
     ],
     "sparql": [
@@ -79577,7 +79577,7 @@
         "title": null,
         "description": "SPARQL endpoint",
         "access_url": "http://dbtune.org/musicbrainz/sparql",
-        "status": "FAIL (400)"
+        "status": "FAIL (Read timed out)"
       }
     ],
     "other_download": [],
@@ -80116,7 +80116,7 @@
       {
         "media_type": "application/n-triples",
         "description": "A sample output produced by using RML Processor in triplifying the US Patents XML data",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "RML Mapping Sample Output",
         "mirror": [],
         "download_url": "https://datahub.ckan.io/dataset/476fc1ee-5bd8-4551-bf67-4fe4e7fa349b/resource/4e1618db-819c-4338-8003-64a53b2f4b89/download/outputsample.nt"
@@ -80144,7 +80144,7 @@
       {
         "media_type": "text/turtle",
         "description": "The mapping file used by RML Processor for triplifying the US Patents dataset\r\n\r\n",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "RML Mapping File",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/476fc1ee-5bd8-4551-bf67-4fe4e7fa349b/resource/c550c190-f891-409c-ae72-9feb7daf58a8/download/mapping.ttl"
@@ -80152,7 +80152,7 @@
       {
         "media_type": "text/turtle",
         "description": "It is a report file for the mapping errors and warnings. \r\nRML Validator in url https://github.com/mmlab/RMLValidator validates the mapping files to the syntax and rules of [R2]RM.\r\n",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "RML Mapping Validation Report",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/476fc1ee-5bd8-4551-bf67-4fe4e7fa349b/resource/30666992-a075-4c2c-addc-63794e13380e/download/output.ttl"
@@ -80160,7 +80160,7 @@
       {
         "media_type": "text/turtle",
         "description": "Detailed validation report of the mapping files using the RML Validator https://github.com/mmlab/RMLValidator",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "RML Mapping Validation Report (Detailed)",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/476fc1ee-5bd8-4551-bf67-4fe4e7fa349b/resource/8a8e089f-7692-4f4b-b672-756a3c966cb5/download/detailedreport.rml.ttl"
@@ -80168,7 +80168,7 @@
       {
         "media_type": "application/octet-stream",
         "description": "The used ontology for defining the US-Patent",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "US Patents Ontology",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/476fc1ee-5bd8-4551-bf67-4fe4e7fa349b/resource/f694fd04-8753-44ad-b0db-315e10eb7e1c/download/patents.owl"
@@ -81515,7 +81515,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "Converted test.conllu using ACoLi's conll-rdf converter",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "UD_Norwegian RDF Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/04c1abc1-b1e6-427a-8f95-c02306febac9/resource/0bc799f5-ace5-471e-8d7a-dee04d508c7f/download/udnorwegian.rdf"
@@ -83614,7 +83614,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "Converted test.conllu using ACoLi's conll-rdf converter",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "UD_Dutch-LassySmall RDF Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/1b752dc7-2e99-4453-95c7-629d27a6f3c6/resource/43134eba-1439-4e4f-a478-1496504979bf/download/uddutch-lassysmall.rdf"
@@ -85918,7 +85918,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "Converted test.conllu using ACoLi's conll-rdf converter",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "UD_Bulgarian RDF Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/cb7d1e3f-bc09-4785-bcf6-25f745a8e90d/resource/09000b85-b50a-4c55-b331-2fd673f260c1/download/udbulgarian.rdf"
@@ -90718,7 +90718,7 @@
       {
         "media_type": "",
         "description": "The Catalan Parole/Simple lemon lexicon includes 20545 entries annotated with syntactic information half of which are also annotated with semantic information. The latest version of the Catalan lexicon is linked to the Catalan EuroWordNet lemon lexicon (http://lod.iula.upf.edu/resources/WordNetLemonCAT).\r\n\r\nThe lexicon is published at http://lodserver.iula.upf.edu/id/ParoleSimple/lexiconCAT/",
-        "status": "FAIL (HTTP error fetching URL. Status=429, URL=[https://github.com/martavillegas/ParoleSimpleLemon/blob/master/ParoleSimpleCatala.ttl])",
+        "status": "OK",
         "title": "Parole/Simple 'lemon' Catalan lexicon",
         "mirror": [],
         "access_url": "https://github.com/martavillegas/ParoleSimpleLemon/blob/master/ParoleSimpleCatala.ttl"
@@ -91862,7 +91862,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "Converted test.conllu using ACoLi's conll-rdf converter",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "UD_Hebrew RDF Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/6519afd2-0293-42c0-8324-10ffad9f5be2/resource/89db5d95-dad5-44d6-8f2e-9f4f3fb81339/download/udhebrew.rdf"
@@ -92713,7 +92713,7 @@
         "media_type": "text/html",
         "description": "Example resource",
         "access_url": "http://s.thornton2.com/notifications/foaf",
-        "status": "FAIL (404)"
+        "status": "FAIL (301)"
       }
     ],
     "sparql": [],
@@ -92945,14 +92945,14 @@
         "media_type": "application/rdf+xml; charset=utf-8",
         "description": "A publication example resource",
         "access_url": "http://www.eea.europa.eu/publications/progress-towards-kyoto/@@rdf",
-        "status": "OK"
+        "status": "FAIL (301)"
       },
       {
         "title": "Natura 2000 data - the European network of protected sites",
         "media_type": "application/rdf+xml; charset=utf-8",
         "description": "A dataset example resource",
         "access_url": "http://www.eea.europa.eu/data-and-maps/data/natura-1/@@rdf",
-        "status": "OK"
+        "status": "FAIL (301)"
       }
     ],
     "sparql": [
@@ -92967,7 +92967,7 @@
       {
         "media_type": "text/xml; charset=\"utf-8\"",
         "description": "EEA Full content catalogue for Linked Data spiders",
-        "status": "FAIL (HTTP error fetching URL. Status=404, URL=[http://www.eea.europa.eu/sitemap-all-content-rdf.xml])",
+        "status": "FAIL (Too many redirects occurred trying to load URL https://www.eea.europa.eu:443/sitemap-all-content-rdf.xml)",
         "title": "",
         "mirror": [],
         "access_url": "http://www.eea.europa.eu/sitemap-all-content-rdf.xml"
@@ -94211,7 +94211,7 @@
         "media_type": "",
         "description": "",
         "access_url": "",
-        "status": "FAIL (HTTP error fetching URL. Status=503, URL=[http://www.esisalama.org])",
+        "status": "FAIL (HTTP error fetching URL. Status=404, URL=[http://www.esisalama.org])",
         "title": "E-Learning Esis",
         "mirror": [],
         "_id": "0c6b319a-e4fb-aa72-dcc0-59e7b1d1be80",
@@ -94739,7 +94739,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "Converted test.conllu using ACoLi's conll-rdf converter",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "UD_Uyghur RDF Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/66b97945-adca-4f6f-82e5-37c147f7ca42/resource/f9905ec5-f258-4c4d-abd9-f73609224ccd/download/uduyghur.rdf"
@@ -96770,7 +96770,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "Converted test.conllu using ACoLi's conll-rdf converter",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "UD_Polish RDF Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/289f14c4-d50d-4158-b41f-90ff73514baf/resource/4fde99f7-4b7f-442c-b642-cd02d139b330/download/udpolish.rdf"
@@ -97182,7 +97182,7 @@
       {
         "media_type": "text/plain",
         "description": "This file lists URIs of all resources from the \"Rainis and Aspazija\" (RunA) Linked Digital Collection.\r\n\r\nNote: the URIs listed are without the trailing slash. This is a temporary measure due to a bug (being fixed) that prevents content negotiation on RunA URIs with a trailing slash. When crawling the dataset please use URIs without the trailing slash.",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "List of URIs (for crawling)",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/4329e622-a001-4922-b111-60b9046c4660/resource/85f69bce-c988-4100-aa2a-656038956347/download/runaalluris.txt"
@@ -97865,6 +97865,66 @@
       "name": "Thesaurus Editorial Team",
       "email": "thesaurus@geologie.ac.at"
     }
+  },
+  "trackloaded": {
+    "owner": {
+      "name": "",
+      "email": "trackloaded.com.ng@gmail.com"
+    },
+    "image": "https://trackloaded.com/wp-content/uploads/2025/04/Trackloaded-New-scaled.png",
+    "identifier": "trackloaded",
+    "website": "https://trackloaded.com",
+    "triples": "",
+    "full_download": [],
+    "keywords": [
+      "Trackloaded",
+      "Artist Profiles",
+      "Nigeria Artists"
+    ],
+    "description": {
+      "en": "Trackloaded is a Nigerian music and entertainment platform that publishes artist profiles, songs, albums, and awards. This dataset provides structured RDF access to artist profiles including name, homepage, date of birth, bio, images, sameAs (Wikidata, Instagram), and more, powered by a SPARQL endpoint."
+    },
+    "title": "Trackloaded Artist Profiles",
+    "Image": "",
+    "example": [],
+    "license": "http://www.opendefinition.org/licenses/cc-by",
+    "other_download": [
+      {
+        "_id": "9c553a6a-ceed-c9d2-61c9-6f6d92f27a83",
+        "title": "Void",
+        "description": "",
+        "access_url": "https://trackloaded.com/.well-known/void.ttl",
+        "media_type": "",
+        "mirror": [],
+        "status": "OK"
+      }
+    ],
+    "domain": "media",
+    "namespace": "Trackloaded",
+    "links": [],
+    "_id": "trackloaded000001988f440bb3",
+    "time": "000001988f440bb3",
+    "sparql": [
+      {
+        "_id": "59030d10-13af-b68d-e3a5-645b6e376a64",
+        "title": "Trackloaded Artist RDF Endpoint",
+        "description": "A public SPARQL endpoint exposing structured RDF data of Nigerian artists featured on Trackloaded, including name, homepage, birth date, aliases, biography, and social profiles.",
+        "access_url": "https://trackloaded.com/sparql-endpoint.php",
+        "status": "FAIL (403)"
+      },
+      {
+        "_id": "63cc2d2f-b22e-0dcb-2c7d-7aff7f87e14d",
+        "title": "RDF Endpoint",
+        "description": "",
+        "access_url": "https://trackloaded.com/sparql-endpoint.php?query=SELECT+?name+?url+WHERE+{+?x+foaf:name+?name+;+foaf:homepage+?url+}",
+        "status": "FAIL (403)"
+      }
+    ],
+    "contact_point": {
+      "name": "Aperoja Taofeek",
+      "email": "tao@trackloaded.com"
+    },
+    "doi": "10.5281/zenodo.16777415"
   },
   "ookaboo-rdf-dump": {
     "_id": "ookaboo-rdf-dump",
@@ -102818,7 +102878,7 @@
       {
         "media_type": "meta/void",
         "description": "VoID description of the Allie RDF dataset.",
-        "status": "FAIL (HTTP error fetching URL. Status=404, URL=[https://allie.dbcls.jp/void.ttl])",
+        "status": "FAIL (HTTP error fetching URL. Status=404, URL=[https://errordocument.dbcls.jp/404])",
         "title": "voiD description",
         "mirror": [],
         "access_url": "http://allie.dbcls.jp/void.ttl"
@@ -103044,7 +103104,7 @@
         "media_type": "text/turtle; charset=UTF-8",
         "description": "",
         "access_url": "http://id.myopenlink.net/describe/?url=http%3A%2F%2Fid.myopenlink.net%2Fdataspace%2Fperson%2Fdemo%2Fabout.rdf",
-        "status": "FAIL (400)"
+        "status": "FAIL (406)"
       }
     ],
     "sparql": [],
@@ -103160,7 +103220,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "Converted test.conllu using ACoLi's conll-rdf converter.",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "UD_Coptic RDF Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/6c72b87e-8ae1-4105-87b4-1890f8c83dc0/resource/f354f34a-6a12-4f60-82e8-19b68726c5b9/download/udcoptic.rdf"
@@ -104678,9 +104738,9 @@
         "title": "ASTER GDEM dataset for Heihe River basin",
         "description": "InputData",
         "access_url": "http://www.ncdc.ac.cn/portal/metadata/af25f2d2-1d5f-4dc2-81be-3915d83f70e0",
-        "media_type": "",
+        "media_type": "data",
         "mirror": [],
-        "status": "OK"
+        "status": "FAIL (HTTP error fetching URL. Status=403, URL=[https://www.ncdc.ac.cn/portal/metadata/af25f2d2-1d5f-4dc2-81be-3915d83f70e0])"
       },
       {
         "_id": "1ac37dcf-88f5-cd75-ad13-a270a5b32074",
@@ -105449,7 +105509,7 @@
   "ASCDC-Qing-Secret-Societies": {
     "owner": {
       "name": "",
-      "email": "luluyen1210@gmail.com"
+      "email": "trenamccaslin832@gmail.com"
     },
     "identifier": "ASCDC-Qing-Secret-Societies",
     "website": "https://www1.ihp.sinica.edu.tw/en/Fellows/Shu-Jiun_Chen",
@@ -105558,17 +105618,9 @@
         "value": "97"
       }
     ],
-    "_id": "ASCDC-Qing-Secret-Societies000001926f32dacb",
-    "time": "000001926f32dacb",
-    "sparql": [
-      {
-        "_id": "51813cc2-f9bf-0804-3be5-f30e96c1eb85",
-        "title": "ASCDC LODDatasets – SPARQL Queries",
-        "description": "Access to the SPARQL endpoint of ASCDC's LOD datasets for data retrieval (with template-based examples), downloads and further reuse.",
-        "access_url": "https://data.ascdc.tw/en/sparql.php",
-        "status": "FAIL (401)"
-      }
-    ],
+    "_id": "ASCDC-Qing-Secret-Societies00000198e56f8207",
+    "time": "00000198e56f8207",
+    "sparql": [],
     "contact_point": {
       "name": "Dr. Shu-Jiun Sophy Chen (Academia Sinica Center for Digital Cultures, Taiwan R.O.C.)",
       "email": "sophy@sinica.edu.tw"
@@ -109875,7 +109927,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "Converted test.conllu using ACoLi's conll-rdf converter",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "UD_Hindi RDF Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/4ce8159b-51de-45ce-96d0-1390ef4d026b/resource/a7245996-6130-48bc-b86e-9da543e2be5d/download/udhindi.rdf"
@@ -110725,10 +110777,10 @@
     "example": [
       {
         "title": null,
-        "media_type": "example/rdf+xml",
+        "media_type": "text/html; charset=utf-8",
         "description": "Example resource",
         "access_url": "http://data.opendatascotland.org/data/simd/housing-rank/2012/S01000967",
-        "status": "FAIL (403)"
+        "status": "OK"
       }
     ],
     "sparql": [],
@@ -111254,9 +111306,9 @@
         "access_url": "http://babelnet.org/data/babelnet-2.0-lemon-URIs.tar.xz"
       },
       {
-        "media_type": "text/html;charset=utf-8",
+        "media_type": "",
         "description": "Home page",
-        "status": "FAIL (HTTP error fetching URL. Status=503, URL=[http://babelnet.org/rdf/])",
+        "status": "OK",
         "title": "Linked Data interface",
         "mirror": [],
         "access_url": "http://babelnet.org/rdf/"
@@ -112094,7 +112146,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "Converted test.conllu using ACoLi's conll-rdf converter",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "UD_Portuguese-BR RDF Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/5880a928-16ce-4867-ad67-daeaa4f61d1a/resource/0744a49e-5439-415f-ae18-b9729b875440/download/udportuguese-br.rdf"
@@ -113344,7 +113396,7 @@
         "title": "B3Kat SPARQL-Endpoint",
         "description": "",
         "access_url": "http://lod.b3kat.de/sparql",
-        "status": "FAIL (404)"
+        "status": "FAIL (Read timed out)"
       }
     ],
     "other_download": [
@@ -114453,7 +114505,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "Converted test.conllu using ACoLi's conll-rdf converter",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "UD_Turkish RDF Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/28dc5265-58c7-46d9-ba1d-4a2122c99c9e/resource/641c152a-bdd2-45cc-9422-26e955761d58/download/udturkish.rdf"
@@ -116229,7 +116281,7 @@
       {
         "media_type": "meta/void",
         "description": "voiD description",
-        "status": "FAIL (HTTP error fetching URL. Status=404, URL=[https://ineverycrea.net/voidArteNuevosMediosGNOSS.n3])",
+        "status": "FAIL (HTTP error fetching URL. Status=500, URL=[https://ineverycrea.net/voidArteNuevosMediosGNOSS.n3])",
         "title": "voiD description",
         "mirror": [],
         "access_url": "http://ineverycrea.net/voidArteNuevosMediosGNOSS.n3"
@@ -116675,10 +116727,10 @@
         "title": "RDF data",
         "description": "Data in Turtle format",
         "access_url": "",
-        "media_type": "",
+        "media_type": "Turtle",
         "download_url": "https://github.com/SofiBar/IconologyDataset/blob/main/data/icondataset.ttl",
         "mirror": [],
-        "status": "OK"
+        "status": "FAIL (HTTP error fetching URL. Status=429, URL=[https://github.com/SofiBar/IconologyDataset/blob/main/data/icondataset.ttl])"
       }
     ],
     "keywords": [],
@@ -116707,6 +116759,37 @@
     "contact_point": {
       "name": "Sofia Baroncini",
       "email": "baroncini@ieg-mainz.de"
+    },
+    "doi": ""
+  },
+  "Previsible": {
+    "owner": {
+      "name": "",
+      "email": "david@previsible.io"
+    },
+    "identifier": "Previsible",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Previsible-SEO-Logo.png/500px-Previsible-SEO-Logo.png",
+    "website": "https://previsible.io",
+    "triples": 0,
+    "full_download": [],
+    "keywords": [],
+    "description": {
+      "en": "SEO Consulting, Content & Education - Enterprise AI Search - https://previsible.io"
+    },
+    "title": "Previsible",
+    "Image": "",
+    "example": [],
+    "license": "http://www.opendefinition.org/licenses/cc-by",
+    "other_download": [],
+    "domain": "media",
+    "namespace": "",
+    "links": [],
+    "_id": "Previsible000001985d88b775",
+    "time": "000001985d88b775",
+    "sparql": [],
+    "contact_point": {
+      "name": "Previsible Team",
+      "email": "contact@previsible.io"
     },
     "doi": ""
   },
@@ -117446,7 +117529,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "Converted test.conllu using ACoLi's conll-rdf converter",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "UD_Latin-ITTB RDF Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/34ee0d83-9540-4254-b685-19bf1f93fa22/resource/b2c17c3e-6aad-484a-b72c-52c0ea735aa0/download/udlatin-ittb.rdf"
@@ -117964,9 +118047,9 @@
         "title": "2018 30 m resolution land use map",
         "description": "InputData",
         "access_url": "http://www.resdc.cn/",
-        "media_type": "",
+        "media_type": "data",
         "mirror": [],
-        "status": "OK"
+        "status": "FAIL (Read timed out)"
       },
       {
         "_id": "91cf9637-4b86-ea15-f7df-3580ab68ba6a",
@@ -118347,7 +118430,7 @@
       {
         "media_type": "HTML",
         "description": "Linked Data Frontend-Statistical classification of products by activity (CPA)",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (Read timed out)",
         "title": "Linked Data Frontend-Statistical classification of products by activity (CPA)",
         "mirror": [],
         "access_url": "http://purl.org/weso/pscs/cpa/2008/resource/ds"
@@ -118355,7 +118438,7 @@
       {
         "media_type": "meta/void",
         "description": "VoID of Statistical classification of products by activity (CPA)",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (Read timed out)",
         "title": "VoID of Statistical classification of products by activity (CPA)",
         "mirror": [],
         "access_url": "http://purl.org/weso/pscs/cpa/2008/resource/ds"
@@ -118727,18 +118810,18 @@
         "title": "2010 Gross Domestic Product",
         "description": "InputData",
         "access_url": "http://www.resdc.cn",
-        "media_type": "",
+        "media_type": "data",
         "mirror": [],
-        "status": "OK"
+        "status": "FAIL (Read timed out)"
       },
       {
         "_id": "0876a273-044d-bf94-b3df-3777704a9813",
         "title": "National land use data with 30m resolution from 2000 to 2010",
         "description": "InputData",
         "access_url": "http://www.resdc.cn",
-        "media_type": "",
+        "media_type": "data",
         "mirror": [],
-        "status": "OK"
+        "status": "FAIL (Read timed out)"
       },
       {
         "_id": "e57f3b9c-e947-fddc-b5dd-f7e32e193719",
@@ -119665,7 +119748,7 @@
       {
         "media_type": "",
         "description": "data from Historical Archive of Chamber of deputies",
-        "status": "OK",
+        "status": "FAIL (HTTP error fetching URL. Status=429, URL=[https://github.com/regestaexe/ReloadProject/blob/master/data/cd/commissioniParlamentariInchiesta.rdf])",
         "title": "commissioni parlamentari d'inchiesta",
         "mirror": [],
         "access_url": "https://github.com/regestaexe/ReloadProject/tree/master/data/cd/commissioniParlamentariInchiesta.rdf"
@@ -119705,7 +119788,7 @@
       {
         "media_type": "",
         "description": "",
-        "status": "OK",
+        "status": "FAIL (HTTP error fetching URL. Status=429, URL=[https://github.com/regestaexe/ReloadProject/blob/master/data/ibc/caster_complessi.rdf])",
         "title": "Units of description from Istituto per i beni culturali dell?Emilia Romagna",
         "mirror": [],
         "access_url": "https://github.com/regestaexe/ReloadProject/tree/master/data/ibc/caster_complessi.rdf"
@@ -119713,7 +119796,7 @@
       {
         "media_type": "",
         "description": "",
-        "status": "FAIL (HTTP error fetching URL. Status=429, URL=[https://github.com/regestaexe/ReloadProject/blob/master/data/ibc/caster_soggettiConservatori.rdf])",
+        "status": "OK",
         "title": "Corporate body from Istituto per i beni culturali dell?Emilia Romagna",
         "mirror": [],
         "access_url": "https://github.com/regestaexe/ReloadProject/tree/master/data/ibc/caster_soggettiConservatori.rdf"
@@ -119721,7 +119804,7 @@
       {
         "media_type": "",
         "description": "",
-        "status": "FAIL (HTTP error fetching URL. Status=429, URL=[https://github.com/regestaexe/ReloadProject/blob/master/data/ibc/caster_soggettiProduttori.rdf])",
+        "status": "OK",
         "title": "Corporate body from Istituto per i beni culturali dell?Emilia Romagna",
         "mirror": [],
         "access_url": "https://github.com/regestaexe/ReloadProject/tree/master/data/ibc/caster_soggettiProduttori.rdf"
@@ -121558,7 +121641,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "Converted test.conllu using ACoLi's conll-rdf converter",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "UD_Estonian RDF Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/74f858f4-c411-46bd-8676-eee91ada1c96/resource/4eabacdc-1139-425b-bd9d-35c4bd203f95/download/udestonian.rdf"
@@ -122443,7 +122526,7 @@
       {
         "media_type": "text/turtle",
         "description": "Converted test.conllu using ACoLi's conll-rdf converter",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "UD_Swedish_Sign_Language RDF Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/a8358247-8be1-43d9-8f83-1faab89ba27a/resource/17217240-f1d1-4541-82d8-d8bc4a5592cc/download/udswedishsignlanguage.ttl"
@@ -122566,7 +122649,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "Converted test.conllu using ACoLi's conll-rdf converter",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "UD_Czech RDF Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/15e61cac-1f5c-4998-85fa-940e50fbf59e/resource/584cf002-f7e1-4d40-a90d-f028e47d44b8/download/udczech.rdf"
@@ -123759,7 +123842,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "Converted test.conllu using ACoLi's conll-rdf converter",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "UD_Ukrainian RDF Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/1891eb54-ab56-4b26-a977-76ccac97b7b1/resource/5fe0ce7e-e206-4d2c-8cbe-fcc8ac810951/download/udukrainian.rdf"
@@ -125662,7 +125745,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "Converted test.conllu using ACoLi's conll-rdf converter",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "UD_Ancient_Greek RDF Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/860319a1-0558-4ecd-872a-ee40f5b620a0/resource/c00d234a-2f39-4652-a625-d4db15017c2f/download/udancientgreek.rdf"
@@ -125778,9 +125861,9 @@
         "title": "DCAT daset description on data.europa.eu",
         "description": "",
         "access_url": "https://data.europa.eu/api/hub/repo/datasets/portuguese-prisons-releases-jan-2018-dec-2023.ttl?useNormalizedId=true&locale=en",
-        "media_type": "text/turtle",
+        "media_type": "",
         "mirror": [],
-        "status": "FAIL (Read timed out)"
+        "status": "OK"
       }
     ],
     "domain": "government",
@@ -126850,7 +126933,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "Converted test.conllu using ACoLi's conll-rdf converter",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "UD_Slovenian-SST RDF Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/478e3983-4471-4c95-8ba2-5ce12cc98584/resource/783a1671-f9e4-48ae-b2e6-94e50fe9f3e3/download/udslovenian-sst.rdf"
@@ -128865,7 +128948,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "Converted test.conllu using ACoLi's conll-rdf converter",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "UD_Portuguese RDF Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/a61de4d7-5612-43dc-ab6c-663f52c7e4d3/resource/7232dc5a-7909-4a7d-b02c-471d1bc79347/download/udportuguese.rdf"
@@ -130203,7 +130286,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "Dataset description in DCAT",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/3132a738-4714-4036-ae11-843af152dba5/resource/d4337c93-ada3-4978-9154-740b1f8e6b1e/download/meta.rdf"
@@ -130211,7 +130294,7 @@
       {
         "media_type": "application/n-triples",
         "description": "",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/3132a738-4714-4036-ae11-843af152dba5/resource/7837b0ab-b0bd-494d-8dc7-b520a15a531a/download/example.nt"
@@ -131295,7 +131378,7 @@
       {
         "media_type": "text/rdf+n3",
         "description": "Product Scheme Classifications Catalogue",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (Read timed out)",
         "title": "Product Scheme Classifications Catalogue",
         "mirror": [],
         "access_url": "http://purl.org/weso/pscs/data/resource/ds?output=ttl"
@@ -131303,7 +131386,7 @@
       {
         "media_type": "HTML",
         "description": "Linked Data Frontend-Product Scheme Classifications Catalogue",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (Read timed out)",
         "title": "Linked Data Frontend-Product Scheme Classifications Catalogue",
         "mirror": [],
         "access_url": "http://purl.org/weso/pscs/"
@@ -131741,7 +131824,7 @@
       {
         "media_type": "",
         "description": "Linked Data representations of concepts described in several encyclopediae.",
-        "status": "OK",
+        "status": "FAIL (HTTP error fetching URL. Status=404, URL=[https://data.judaicalink.org/data/html/yivo/moscow])",
         "title": "JudaicaLink Linked Data API",
         "mirror": [],
         "access_url": "http://data.judaicalink.org/data/"
@@ -131749,7 +131832,7 @@
       {
         "media_type": "",
         "description": "Linked Data representations of concepts described in various encyclopediae",
-        "status": "OK",
+        "status": "FAIL (HTTP error fetching URL. Status=404, URL=[https://data.judaicalink.org/data/html/yivo/moscow])",
         "title": "JudaicaLink Linked Data API",
         "mirror": [],
         "access_url": "http://data.judaicalink.org/data/"
@@ -131830,7 +131913,7 @@
       {
         "media_type": "text/turtle",
         "description": "Data Dump Common Procurement Vocabulary 2008",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (Read timed out)",
         "title": "Common Procurement Vocabulary 2008",
         "mirror": [],
         "access_url": "http://purl.org/weso/datasets/pscs/cpv/2008/cpv-2008.ttl"
@@ -131838,7 +131921,7 @@
       {
         "media_type": "HTML",
         "description": "Linked Data Frontend-Common Procurement Vocabulary 2008",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (Read timed out)",
         "title": "Linked Data Frontend-Common Procurement Vocabulary 2008",
         "mirror": [],
         "access_url": "http://purl.org/weso/pscs/cpv/2008/resource/ds"
@@ -131946,7 +132029,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "Converted test.conllu using ACoLi's conll-rdf converter",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "UD_Slovenian RDF Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/2e3023d2-2321-4520-a763-06951dd7cf05/resource/5d96ef33-fbf8-4f7a-baa4-1411d844afb2/download/udslovenian.rdf"
@@ -132187,7 +132270,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "Converted test.conllu using ACoLi's conll-rdf converter",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "UD_Vietnamese RDF Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/1b6bef97-224b-4365-b814-1811ba07754a/resource/634b0c44-cdb7-4fd5-997e-37a5f89a5d81/download/udvietnamese.rdf"
@@ -132268,7 +132351,7 @@
       {
         "media_type": "text/turtle",
         "description": "Data Dump Common Procurement Vocabulary 2003",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (Read timed out)",
         "title": "Common Procurement Vocabulary 2003",
         "mirror": [],
         "access_url": "http://purl.org/weso/datasets/pscs/cpv/2003/cpv-2003.ttl"
@@ -132276,7 +132359,7 @@
       {
         "media_type": "HTML",
         "description": "Linked Data Frontend-Common Procurement Vocabulary 2003",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (Read timed out)",
         "title": "Linked Data Frontend-Common Procurement Vocabulary 2003",
         "mirror": [],
         "access_url": "http://purl.org/weso/pscs/cpv/2003/resource/ds"
@@ -132284,7 +132367,7 @@
       {
         "media_type": "meta/void",
         "description": "VoID of Common Procurement Vocabulary 2003",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (Read timed out)",
         "title": "VoID of Common Procurement Vocabulary 2003",
         "mirror": [],
         "access_url": "http://purl.org/weso/pscs/data/cpv/2003/resource/ds?output=ttl"
@@ -132437,7 +132520,7 @@
       {
         "media_type": "meta/void",
         "description": "voiD description",
-        "status": "FAIL (HTTP error fetching URL. Status=404, URL=[https://ineverycrea.net/voidIneveryCREAArg.n3])",
+        "status": "FAIL (HTTP error fetching URL. Status=500, URL=[https://ineverycrea.net/voidIneveryCREAArg.n3])",
         "title": "voiD description",
         "mirror": [],
         "access_url": "http://ineverycrea.net/voidIneveryCREAArg.n3"
@@ -132536,7 +132619,7 @@
         "title": "RISM SPARQL Endpoint",
         "description": "",
         "access_url": "http://data.rism.info/sparql",
-        "status": "FAIL (404)"
+        "status": "FAIL (Read timed out)"
       }
     ],
     "other_download": [
@@ -132855,7 +132938,7 @@
       {
         "media_type": "",
         "description": "meteo Schema",
-        "status": "OK",
+        "status": "FAIL (Read timed out)",
         "title": null,
         "mirror": [],
         "access_url": "http://purl.org/ns/meteo#"
@@ -133330,7 +133413,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "Converted test.conllu using ACoLi's conll-rdf converter",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "UD_Indonesian RDF Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/84c78a3a-a29e-4f34-b546-1dfaec9a211c/resource/e711acb3-a79c-4a40-a00e-308e79a46886/download/udindonesian.rdf"
@@ -133980,7 +134063,7 @@
       {
         "media_type": "meta/void",
         "description": "voiD description",
-        "status": "FAIL (HTTP error fetching URL. Status=404, URL=[https://ineverycrea.net/voidUnoi.n3])",
+        "status": "FAIL (HTTP error fetching URL. Status=500, URL=[https://ineverycrea.net/voidUnoi.n3])",
         "title": "voiD description",
         "mirror": [],
         "access_url": "http://ineverycrea.net/voidUnoi.n3"
@@ -135183,7 +135266,7 @@
       {
         "media_type": "text/turtle",
         "description": "Data Dump Standard International Trade Classification V4",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (Read timed out)",
         "title": "Standard International Trade Classification V4",
         "mirror": [],
         "access_url": "http://purl.org/weso/datasets/pscs/sitc/v4/sitc-v4.ttl"
@@ -135191,7 +135274,7 @@
       {
         "media_type": "HTML",
         "description": "Linked Data Frontend-Standard International Trade Classification V4",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (Read timed out)",
         "title": "Linked Data Frontend-Standard International Trade Classification V4",
         "mirror": [],
         "access_url": "http://purl.org/weso/pscs/sitc/v4/resource/ds"
@@ -137257,7 +137340,7 @@
         "media_type": "application/octet-stream",
         "download_url": "https://data.cinematheque.qc.ca/doc/datasets/cmtq-dataset.ttl.gz",
         "mirror": [],
-        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)"
+        "status": "FAIL (Connection refused)"
       },
       {
         "_id": "aac26b16-d6cc-da23-366c-4320fc97c830",
@@ -137267,7 +137350,7 @@
         "media_type": "application/octet-stream",
         "download_url": "https://data.cinematheque.qc.ca/doc/datasets/cmtq-dataset.nt.gz",
         "mirror": [],
-        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)"
+        "status": "FAIL (Connection refused)"
       },
       {
         "_id": "16734507-8fe2-8e15-bbbe-665ee1eed63a",
@@ -137277,7 +137360,7 @@
         "media_type": "application/octet-stream",
         "download_url": "https://data.cinematheque.qc.ca/doc/datasets/cmtq-dataset.hdt",
         "mirror": [],
-        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)"
+        "status": "FAIL (Connection refused)"
       },
       {
         "_id": "e57601b8-41a7-e703-3088-f4b0c65255e3",
@@ -137287,7 +137370,7 @@
         "media_type": "asdasd",
         "download_url": "https://data.cinematheque.qc.ca/doc/lod/datasets",
         "mirror": [],
-        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)"
+        "status": "FAIL (Connection refused)"
       }
     ],
     "keywords": [
@@ -137308,7 +137391,7 @@
         "title": "entity node for Pierre Falardeau",
         "description": "",
         "access_url": "https://data.cinematheque.qc.ca/resource/Person28485",
-        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
+        "status": "FAIL (Connection refused)",
         "media_type": "application/rdf+xml"
       },
       {
@@ -137316,7 +137399,7 @@
         "title": "data node for Pierre Falardeau",
         "description": "",
         "access_url": "https://data.cinematheque.qc.ca/data/Person28485",
-        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
+        "status": "FAIL (Connection refused)",
         "media_type": "application/rdf+xml"
       },
       {
@@ -137324,7 +137407,7 @@
         "title": "wiki page for Pierre Falardeau",
         "description": "",
         "access_url": "https://data.cinematheque.qc.ca/page/Person28485",
-        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
+        "status": "FAIL (Connection refused)",
         "media_type": "text/html; charset=utf-8"
       },
       {
@@ -137332,7 +137415,7 @@
         "title": "Turtle data for Pierre Falardeau",
         "description": "",
         "access_url": "https://data.cinematheque.qc.ca/data/Person28485.ttl",
-        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
+        "status": "FAIL (Connection refused)",
         "media_type": "text/turtle"
       },
       {
@@ -137340,7 +137423,7 @@
         "title": "N-Triples data for Pierre Falardeau",
         "description": "",
         "access_url": "https://data.cinematheque.qc.ca/data/Person28485.nt",
-        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
+        "status": "FAIL (Connection refused)",
         "media_type": "application/n-triples"
       },
       {
@@ -137348,7 +137431,7 @@
         "title": "RDF/XML data for Pierre Falardeau",
         "description": "",
         "access_url": "https://data.cinematheque.qc.ca/data/Person28485.rdf",
-        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
+        "status": "FAIL (Connection refused)",
         "media_type": "application/rdf+xml"
       },
       {
@@ -137356,7 +137439,7 @@
         "title": "VoID dataset description",
         "description": "Description of published datasets using the VoID ontology. Can also be accessed with https://data.cinematheque.qc.ca/.well-known/void",
         "access_url": "https://data.cinematheque.qc.ca/void/Dataset",
-        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
+        "status": "FAIL (Connection refused)",
         "media_type": "application/rdf+xml"
       }
     ],
@@ -137369,7 +137452,7 @@
         "access_url": "https://data.cinematheque.qc.ca/doc/sparql",
         "media_type": "asdasd",
         "mirror": [],
-        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)"
+        "status": "FAIL (Connection refused)"
       }
     ],
     "domain": "media",
@@ -137389,7 +137472,7 @@
         "title": "SPARQL Query Service",
         "description": "The Query Service has a hard timeout of 60s.",
         "access_url": "https://data.cinematheque.qc.ca/sparql",
-        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)"
+        "status": "FAIL (Connection refused)"
       }
     ],
     "contact_point": {
@@ -137444,35 +137527,35 @@
         "media_type": "application/rdf+xml; charset=UTF-8",
         "description": "BIBFRAME in http://www.w3.org/ns/formats/RDF_XML",
         "access_url": "http://data.hnm.hu/doc/colls/lib/bib/Instance/MNMKVT19563.rdf",
-        "status": "FAIL (Connect timed out)"
+        "status": "FAIL (Host is unreachable)"
       },
       {
         "title": "Example resource of the colls-lib-bib subset",
         "media_type": "example/turtle",
         "description": "BIBFRAME in http://www.w3.org/ns/formats/Turtle",
         "access_url": "http://data.hnm.hu/doc/colls/lib/bib/Instance/MNMKVT19563.ttl",
-        "status": "FAIL (Host is unreachable)"
+        "status": "FAIL (Connect timed out)"
       },
       {
         "title": "Example resource of the colls-lib-bib subset",
         "media_type": "example/ntriples",
         "description": "BIBFRAME in http://www.w3.org/ns/formats/N-Triples",
         "access_url": "http://data.hnm.hu/doc/colls/lib/bib/Instance/MNMKVT19563.nt",
-        "status": "FAIL (Host is unreachable)"
+        "status": "FAIL (Connect timed out)"
       },
       {
         "title": "Example resource of the colls-lib-bib subset",
         "media_type": "example/rdf+json",
         "description": "BIBFRAME in http://www.w3.org/ns/formats/RDF_JSON",
         "access_url": "http://data.hnm.hu/doc/colls/lib/bib/Instance/MNMKVT19563.json",
-        "status": "FAIL (Host is unreachable)"
+        "status": "FAIL (Connect timed out)"
       },
       {
         "title": "Example resource of the colls-lib-bib subset",
         "media_type": "application/ld+json",
         "description": "BIBFRAME in http://www.w3.org/ns/formats/JSON-LD",
         "access_url": "http://data.hnm.hu/doc/colls/lib/bib/Instance/MNMKVT19563.jsonld",
-        "status": "FAIL (Host is unreachable)"
+        "status": "FAIL (Connect timed out)"
       }
     ],
     "sparql": [
@@ -137511,7 +137594,7 @@
       {
         "media_type": "text/html; charset=UTF-8",
         "description": "BIBFRAME in text/html",
-        "status": "FAIL (Host is unreachable)",
+        "status": "FAIL (Connect timed out)",
         "title": "Example resource of the colls-lib-bib subset",
         "mirror": [],
         "access_url": "http://data.hnm.hu/doc/colls/lib/bib/Instance/MNMKVT19563"
@@ -137519,7 +137602,7 @@
       {
         "media_type": "text/html;charset=UTF-8",
         "description": "MARC in OPAC",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (Host is unreachable)",
         "title": "Example resource of the colls-lib-bib subset",
         "mirror": [],
         "access_url": "http://data.hnm.hu/doc/colls/lib/bib/Instance/MNMKVT19563.opac"
@@ -137616,7 +137699,7 @@
       {
         "media_type": "meta/rdf-schema",
         "description": "RDF Schema",
-        "status": "FAIL (HTTP error fetching URL. Status=404, URL=[https://purl.archive.org/ontology/wo])",
+        "status": "FAIL (Read timed out)",
         "title": null,
         "mirror": [],
         "access_url": "http://purl.org/ontology/wo"
@@ -140431,7 +140514,7 @@
       {
         "media_type": "text/html; charset=utf-8",
         "description": "Schema for the TCGA Roadmap as a Turtle File",
-        "status": "FAIL (tcga.github.com)",
+        "status": "FAIL (Read timed out)",
         "title": "Schema",
         "mirror": [],
         "access_url": "http://purl.org/tcga/core"
@@ -142682,7 +142765,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "Converted test.conllu using ACoLi's conll-rdf converter",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "UD_French RDF Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/95a607ea-1409-44c7-acdc-696a195c84fd/resource/8f9c0b59-7a9f-4af5-9ce4-bbb50e104c0a/download/udfrench.rdf"
@@ -143437,9 +143520,9 @@
         "title": "dblp RDF schema documentation",
         "description": "The dblp RDF schema is an ontology that models the semantic contents of the dblp computer science bibliography.",
         "access_url": "https://dblp.org/rdf/docu/",
-        "media_type": "text/html",
+        "media_type": "",
         "mirror": [],
-        "status": "FAIL (Read timed out)"
+        "status": "OK"
       },
       {
         "_id": "fdf0de9d-f644-4e9e-6fef-56f382f37a25",
@@ -143974,7 +144057,7 @@
       {
         "media_type": "HTML",
         "description": "Example synset (RDF/XML or HTML - conneg)",
-        "status": "FAIL (HTTP error fetching URL. Status=404, URL=[https://semanticweb.cs.vu.nl/europeana/lod/purl/vocabularies/princeton/wn30/synset-chair-noun-1])",
+        "status": "FAIL (Read timed out)",
         "title": "",
         "mirror": [],
         "access_url": "http://purl.org/vocabularies/princeton/wn30/synset-chair-noun-1"
@@ -144523,9 +144606,9 @@
         "title": "DCAT daset description on data.europa.eu",
         "description": "",
         "access_url": "https://data.europa.eu/api/hub/repo/datasets/greek-prisons-releases-jan-2018-dec-2023.ttl?useNormalizedId=true&locale=en",
-        "media_type": "application/x-turtle",
+        "media_type": "",
         "mirror": [],
-        "status": "FAIL (Read timed out)"
+        "status": "OK"
       }
     ],
     "domain": "government",
@@ -145035,28 +145118,28 @@
         "media_type": "application/rdf+xml",
         "description": "Example (RDF/XML)",
         "access_url": "http://chroniclingamerica.loc.gov/lccn/sn85038615.rdf",
-        "status": "FAIL (301)"
+        "status": "FAIL (307)"
       },
       {
         "title": "",
         "media_type": "application/rdf+xml",
         "description": "Example (RDF/XML)",
         "access_url": "http://chroniclingamerica.loc.gov/lccn/sn83045555/1889-11-21/ed-1.rdf",
-        "status": "FAIL (301)"
+        "status": "FAIL (307)"
       },
       {
         "title": "",
         "media_type": "application/rdf+xml",
         "description": "Example (RDF/XML)",
         "access_url": "http://chroniclingamerica.loc.gov/lccn/sn83030214/1905-01-15/ed-1/seq-25.rdf",
-        "status": "FAIL (301)"
+        "status": "FAIL (307)"
       },
       {
         "title": "",
         "media_type": "application/rdf+xml",
         "description": "Example (RDF/XML)",
         "access_url": "http://chroniclingamerica.loc.gov/awardees/mohi.rdf",
-        "status": "FAIL (301)"
+        "status": "FAIL (307)"
       }
     ],
     "sparql": [],
@@ -145064,7 +145147,7 @@
       {
         "media_type": "RDF",
         "description": "Linked Data entry point",
-        "status": "FAIL (Read timed out)",
+        "status": "FAIL (HTTP error fetching URL. Status=404, URL=[https://www.loc.gov/chroniclingamerica/newspapers.rdf])",
         "title": "",
         "mirror": [],
         "access_url": "http://chroniclingamerica.loc.gov/newspapers.rdf"
@@ -146790,7 +146873,7 @@
       {
         "media_type": "RDF",
         "description": "",
-        "status": "FAIL (aquarius.tw.rpi.edu)",
+        "status": "FAIL (Read timed out)",
         "title": "Download",
         "mirror": [],
         "access_url": "http://purl.org/twc/arrayexpress/dump/E-MTAB-104.rdf"
@@ -152722,7 +152805,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "Converted test.conllu using ACoLi's conll-rdf converter",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "UD_Finnish-FTB RDF Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/32284135-64fb-4042-9de9-eec4aad43cb2/resource/694dc13a-9117-4c71-a9ef-0a9c6878f9e0/download/udfinnish-ftb.rdf"
@@ -153644,7 +153727,8 @@
         "title": "Twitter",
         "description": "",
         "access_url": "https://twitter.com/sonclubcx",
-        "status": "FAIL (400)"
+        "status": "OK",
+        "media_type": "text/html; charset=utf-8"
       }
     ],
     "license": "http://www.opendefinition.org/licenses/odc-odbl",
@@ -153694,7 +153778,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "Converted test.conllu using ACoLi's conll-rdf converter",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "UD_Japanese RDF Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/671feab9-719a-47d1-95fc-bf08e33c61b2/resource/3b7028f4-b3e6-48be-8c96-30f226055216/download/udjapanese.rdf"
@@ -153746,7 +153830,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "Converted test.conllu using ACoLi's conll-rdf converter",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "UD_Kazakh RDF Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/a425a448-ac4c-48cd-94e9-aca8c5f1d0d9/resource/4c91a6a1-ed1f-4cc8-bf69-4c3c8b624121/download/udkazakh.rdf"
@@ -157013,7 +157097,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "Converted test.conllu using ACoLi's conll-rdf converter",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "UD_Arabic RDF Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/4a059399-2314-4225-96e4-d42b991ce1ff/resource/0aee5d8a-de54-4ec8-b1a1-3711175cfee1/download/udarabic.rdf"
@@ -157065,7 +157149,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "Converted test.conllu using ACoLi's conll-rdf converter",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "UD_Croatian RDF Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/40a0a2ef-9736-45fe-bf59-afd7db934929/resource/fe313ade-b4d4-4de2-b362-af115381d06f/download/udcroatian.rdf"
@@ -158642,7 +158726,7 @@
       {
         "media_type": "",
         "description": "RDF Schema",
-        "status": "OK",
+        "status": "FAIL (Read timed out)",
         "title": null,
         "mirror": [],
         "access_url": "http://purl.org/net/lio"
@@ -163774,7 +163858,7 @@
       {
         "media_type": "meta/rdf-schema",
         "description": "RDF Schema (VERON)",
-        "status": "FAIL (Connection reset)",
+        "status": "FAIL (Connect timed out)",
         "title": null,
         "mirror": [],
         "access_url": "http://aseg.cs.concordia.ca/ontologies/2010/11/veron.rdf"
@@ -165168,7 +165252,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "Converted test.conllu using ACoLi's conll-rdf converter",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "UD_English-ESL RDF Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/74929f42-7b93-4469-a86a-49af08069183/resource/1fc7f315-246e-4091-aac2-7e59e08ce78e/download/udenglish-esl.rdf"
@@ -168322,7 +168406,7 @@
         "media_type": "",
         "download_url": "https://github.com/cks1999/EOKP/blob/master/EOKP.rdf",
         "mirror": [],
-        "status": "OK"
+        "status": "FAIL (HTTP error fetching URL. Status=429, URL=[https://github.com/cks1999/EOKP/blob/master/EOKP.rdf])"
       }
     ],
     "keywords": [],
@@ -173916,7 +174000,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "Converted test.conllu using ACoLi's conll-rdf converter",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "UD_Galician RDF Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/4a41b95f-30e4-41ac-b3f7-d51cf8520203/resource/a663c46c-a999-442a-bdbe-48ea80e14c89/download/udgalician.rdf"
@@ -176828,7 +176912,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "Converted test.conllu using ACoLi's conll-rdf converter",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "UD_Tamil RDF Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/60303b15-3a53-41ef-b4ec-5b535d79a41b/resource/7216cb7b-0067-45a5-8ad1-643a439e4a55/download/udtamil.rdf"
@@ -176944,7 +177028,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "Converted test.conllu using ACoLi's conll-rdf converter",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "UD_Czech-CLTT RDF Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/1266f55a-3d3f-4e56-992b-0e3122ce8542/resource/b4d404b8-6c73-47ea-895b-d42de61154ca/download/udczech-cltt.rdf"
@@ -178264,7 +178348,7 @@
         "media_type": "text/turtle",
         "description": "One example of concept",
         "access_url": "https://datahub.ckan.io/dataset/11d67b88-bed3-4016-b88b-3b8fdf77ba20/resource/a75e14bc-447a-4f44-86b3-44a49f47bfb8/download/example.ttl",
-        "status": "FAIL (Connect timed out)"
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)"
       }
     ],
     "sparql": [],
@@ -178280,7 +178364,7 @@
       {
         "media_type": "text/turtle",
         "description": "RDF Dump in format text/turtle",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "RDF Dump",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/11d67b88-bed3-4016-b88b-3b8fdf77ba20/resource/06baff90-92b2-460a-9cdd-95758e0ada7b/download/copyrighttermbank.ttl"
@@ -178288,7 +178372,7 @@
       {
         "media_type": "application/n-triples",
         "description": "RDF Dump In format NTRIPLES",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "RDF Dump",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/11d67b88-bed3-4016-b88b-3b8fdf77ba20/resource/6ebb4098-8443-42c4-a4fa-07c06f81d52e/download/copyrighttermbank.nt"
@@ -178348,7 +178432,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "Converted test.conllu using ACoLi's conll-rdf converter",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "UD_Latvian RDF Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/3c9aff64-2557-426a-a20b-f3f9170bf171/resource/e40a32d4-1570-4a65-ad24-f83f8270f4c6/download/udlatvian.rdf"
@@ -178401,7 +178485,7 @@
       {
         "media_type": "",
         "description": "Sparql Endpoint",
-        "status": "OK",
+        "status": "FAIL (Host is unreachable)",
         "title": "Sparql Endpoint",
         "mirror": [],
         "access_url": "http://190.15.141.102:8890/sparql"
@@ -181391,7 +181475,7 @@
         "title": "Example series",
         "description": "",
         "access_url": "https://d-nb.info/011078677/about/lds",
-        "status": "FAIL (400)"
+        "status": "FAIL (Remote host terminated the handshake)"
       },
       {
         "_id": "0a8fff80-b665-c00f-b64c-a917631413e2",
@@ -181412,7 +181496,7 @@
         "title": "Example book",
         "description": "",
         "access_url": "https://d-nb.info/1022139770/about/lds",
-        "status": "FAIL (400)"
+        "status": "FAIL (Remote host terminated the handshake)"
       },
       {
         "_id": "e85069fb-661d-1c26-3a3e-42706d5499fb",
@@ -183579,7 +183663,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "Converted test.conllu using ACoLi's conll-rdf converter",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "UD_Sanskrit RDF Example",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/bcb61961-9337-4380-a548-b489e38f5c5e/resource/0ef1a07f-5914-4b18-9232-6fe4eff232ff/download/udsanskrit.rdf"
@@ -184958,10 +185042,10 @@
     "triples": "848213",
     "full_download": [
       {
-        "media_type": "",
+        "media_type": "application/zip",
         "description": "RDF/XML version of Thesaurus BNCF (update of march 2018)",
         "download_url": "https://github.com/m-pepe/BNCF-NS/blob/main/ns201803.zip",
-        "status": "OK",
+        "status": "FAIL (HTTP error fetching URL. Status=429, URL=[https://github.com/m-pepe/BNCF-NS/blob/main/ns201803.zip])",
         "title": "BNCF-NS-201803",
         "mirror": [],
         "_id": "2f368cff-749b-cb1e-b7c3-27a96b2a223b",
@@ -184998,23 +185082,23 @@
         "download_url": "https://github.com/m-pepe/BNCF-NS/blob/main/ns201910.zip"
       },
       {
-        "media_type": "",
+        "media_type": "application/zip",
         "description": "RDF/XML version of Thesaurus BNCF (update of april 2020)",
         "access_url": "",
-        "status": "OK",
+        "status": "FAIL (HTTP error fetching URL. Status=429, URL=[https://github.com/m-pepe/BNCF-NS/blob/main/ns202004.zip])",
         "title": "BNCF-NS-202004",
         "mirror": [],
         "_id": "df008d5b-9eb4-6c01-82f3-df449e6821dd",
         "download_url": "https://github.com/m-pepe/BNCF-NS/blob/main/ns202004.zip"
       },
       {
-        "media_type": "application/zip",
+        "media_type": "",
         "description": "RDF/XML version of Thesaurus BNCF (update of october 2020)",
         "download_url": "https://github.com/m-pepe/BNCF-NS/blob/main/ns202010.zip",
         "mirror": [],
         "title": "BNCF-NS-202010",
         "_id": "971de31a-b164-a0d5-9188-4300f73a70c1",
-        "status": "FAIL (HTTP error fetching URL. Status=429, URL=[https://github.com/m-pepe/BNCF-NS/blob/main/ns202010.zip])",
+        "status": "OK",
         "access_url": ""
       },
       {
@@ -185022,10 +185106,10 @@
         "title": "BNCF-NS-202104",
         "description": "RDF/XML version of Thesaurus BNCF (update of april 2021)",
         "access_url": "",
-        "media_type": "application/zip",
+        "media_type": "",
         "download_url": "https://github.com/m-pepe/BNCF-NS/blob/main/ns202104.zip",
         "mirror": [],
-        "status": "FAIL (HTTP error fetching URL. Status=429, URL=[https://github.com/m-pepe/BNCF-NS/blob/main/ns202104.zip])"
+        "status": "OK"
       },
       {
         "_id": "1b7870a8-6aab-5c80-0618-2a0a866aed81",
@@ -185042,30 +185126,30 @@
         "title": "BNCF-NS-202203",
         "description": "RDF/XML version of Thesaurus BNCF (update of march 2022)",
         "access_url": "",
-        "media_type": "",
+        "media_type": "application/zip",
         "download_url": "https://github.com/m-pepe/BNCF-NS/blob/main/ns202203.zip",
         "mirror": [],
-        "status": "OK"
+        "status": "FAIL (HTTP error fetching URL. Status=429, URL=[https://github.com/m-pepe/BNCF-NS/blob/main/ns202203.zip])"
       },
       {
         "_id": "db34dae1-017b-4e14-8a8f-63117200e106",
         "title": "BNCF-NS-202210",
         "description": "RDF/XML version of Thesaurus BNCF (update of october 2022)",
         "access_url": "",
-        "media_type": "",
+        "media_type": "application/zip",
         "download_url": "https://github.com/m-pepe/BNCF-NS/blob/main/ns202210.zip",
         "mirror": [],
-        "status": "OK"
+        "status": "FAIL (HTTP error fetching URL. Status=429, URL=[https://github.com/m-pepe/BNCF-NS/blob/main/ns202210.zip])"
       },
       {
         "_id": "2e1020fc-d939-cd38-eedc-4c68e9dc0fd8",
         "title": "BNCF-NS-202303",
         "description": "RDF/XML version of Thesaurus BNCF (update of march 2023)",
         "access_url": "",
-        "media_type": "application/zip",
+        "media_type": "",
         "download_url": "https://github.com/m-pepe/BNCF-NS/blob/main/ns202303.zip",
         "mirror": [],
-        "status": "FAIL (HTTP error fetching URL. Status=429, URL=[https://github.com/m-pepe/BNCF-NS/blob/main/ns202303.zip])"
+        "status": "OK"
       },
       {
         "_id": "d9af323e-20df-4137-636e-968eca3f7fd4",
@@ -185082,10 +185166,10 @@
         "title": "BNCF-NS-202403",
         "description": "RDF/XML version of Thesaurus BNCF (update of march 2024)",
         "access_url": "",
-        "media_type": "application/zip",
+        "media_type": "",
         "download_url": "https://github.com/m-pepe/BNCF-NS/blob/main/ns202403.zip",
         "mirror": [],
-        "status": "FAIL (HTTP error fetching URL. Status=429, URL=[https://github.com/m-pepe/BNCF-NS/blob/main/ns202403.zip])"
+        "status": "OK"
       },
       {
         "_id": "b3d3bc1b-bc4a-b53f-4e17-6e102171c284",
@@ -185102,10 +185186,10 @@
         "title": "BNCF-NS-202503",
         "description": "RDF/XML version of Thesaurus BNCF (update of march 2025)",
         "access_url": "",
-        "media_type": "",
+        "media_type": "application/zip",
         "download_url": "https://github.com/m-pepe/BNCF-NS/blob/main/ns202503.zip",
         "mirror": [],
-        "status": "OK"
+        "status": "FAIL (HTTP error fetching URL. Status=429, URL=[https://github.com/m-pepe/BNCF-NS/blob/main/ns202503.zip])"
       }
     ],
     "keywords": [
@@ -185501,7 +185585,7 @@
       {
         "media_type": "application/rdf+xml",
         "description": "Link to an example data item within the dataset (RDF/XML). The actual URI is http://www.influencetracker.com/resource/User/barackobama, which redirects via 303 to application/rdf+xml.",
-        "status": "FAIL (Connect timed out)",
+        "status": "FAIL (PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target)",
         "title": "Link to an example data item within the dataset (RDF/XML)",
         "mirror": [],
         "access_url": "https://datahub.ckan.io/dataset/22501d75-4348-4e67-a1c2-7ecf58420ff7/resource/05eb2dfa-97e6-45ba-8aec-3b9ac3b8e826/download/barackobama.rdf"
@@ -185941,7 +186025,7 @@
         "media_type": "application/octet-stream",
         "description": "The latest “truthy” dump of all Wikidata entity data, in N-Triples format, compressed with bzip2. This contains only “truthy” or “best” statements, without qualifiers or references. Dumps are generated on a weekly basis.",
         "download_url": "https://dumps.wikimedia.org/wikidatawiki/entities/latest-truthy.nt.bz2",
-        "status": "FAIL (Unhandled content type. Must be text/*, application/xml, or application/*+xml)",
+        "status": "FAIL (HTTP error fetching URL. Status=404, URL=[https://dumps.wikimedia.org/wikidatawiki/entities/latest-truthy.nt.bz2])",
         "title": "Latest truthy dump, bzip2 compressed",
         "mirror": [],
         "_id": "a1431906-76e5-021b-a55f-21b0fec4f37a",
@@ -185951,7 +186035,7 @@
         "media_type": "application/octet-stream",
         "description": "The latest “truthy” dump of all Wikidata entity data, in N-Triples format, compressed with gzip. This contains only “truthy” or “best” statements, without qualifiers or references. Dumps are generated on a weekly basis.",
         "download_url": "https://dumps.wikimedia.org/wikidatawiki/entities/latest-truthy.nt.gz",
-        "status": "FAIL (Unhandled content type. Must be text/*, application/xml, or application/*+xml)",
+        "status": "FAIL (HTTP error fetching URL. Status=404, URL=[https://dumps.wikimedia.org/wikidatawiki/entities/latest-truthy.nt.gz])",
         "title": "Latest truthy dump, gzip compressed",
         "mirror": [],
         "_id": "b38b980b-ed07-d4ef-c371-027cf7e083cd",
@@ -185973,7 +186057,7 @@
       {
         "media_type": "application/ld+json; charset=UTF-8",
         "description": "The data node for Wikidata’s concept of Nelson Mandela. In the linked data interface, this node is the subject of triples describing metadata about the entity record on Wikidata. (In the Wikidata Query Service, the data node is merged into the entity node.) This is the URI that actually implements content negotiation depending on the client’s Accept headers; the entity URI, when accessed, unconditionally redirects to this one.",
-        "status": "OK",
+        "status": "FAIL (403)",
         "title": "data node for Nelson Mandela",
         "_id": "93621ff0-ddcc-78d1-fe2a-ac2fe64f3bde",
         "access_url": "https://www.wikidata.org/wiki/Special:EntityData/Q8023"
@@ -185981,7 +186065,7 @@
       {
         "media_type": "text/html; charset=UTF-8",
         "description": "The Wikidata wiki page for Nelson Mandela, showing the terms, statements and sitelinks of the item. This is what the data node URI redirects to when opened in a browser, and the main way for humans to interact with the item.",
-        "status": "OK",
+        "status": "FAIL (403)",
         "title": "wiki page for Nelson Mandela",
         "_id": "1569a4e8-bfc4-bbc4-6677-73ebedf31c55",
         "access_url": "https://www.wikidata.org/wiki/Q8023"
@@ -185989,7 +186073,7 @@
       {
         "media_type": "application/json; charset=UTF-8",
         "description": "The Wikibase-specific representation of Wikidata’s information about Nelson Mandela in JSON format. This is what the data node URI redirects to when the client does not send any Accept headers.",
-        "status": "OK",
+        "status": "FAIL (403)",
         "title": "JSON data for Nelson Mandela",
         "_id": "428edd63-9568-1619-34f5-657bf8b8201b",
         "access_url": "https://www.wikidata.org/wiki/Special:EntityData/Q8023.json"
@@ -185997,7 +186081,7 @@
       {
         "media_type": "application/rdf+xml; charset=UTF-8",
         "description": "Wikidata’s data relating to the concept of Nelson Mandela, in RDF/XML format. This is what the data node URI redirects to when the client accepts the RDF/XML format.",
-        "status": "OK",
+        "status": "FAIL (403)",
         "title": "RDF/XML data for Nelson Mandela",
         "_id": "5cd69422-d48a-907e-a8aa-c47621c3f349",
         "access_url": "https://www.wikidata.org/wiki/Special:EntityData/Q8023.rdf"
@@ -186005,7 +186089,7 @@
       {
         "media_type": "text/turtle; charset=UTF-8",
         "description": "Wikidata’s data relating to the concept of Nelson Mandela, in Turtle format. This is what the data node URI redirects to when the client accepts the Turtle format.",
-        "status": "OK",
+        "status": "FAIL (403)",
         "title": "Turtle data for Nelson Mandela",
         "_id": "baad1fa9-3180-ab27-52da-a6a5bcc7e632",
         "access_url": "https://www.wikidata.org/wiki/Special:EntityData/Q8023.ttl"
@@ -186013,7 +186097,7 @@
       {
         "media_type": "application/n-triples; charset=UTF-8",
         "description": "Wikidata’s data relating to the concept of Nelson Mandela, in N-Triples format. This is what the data node URI redirects to when the client accepts the N-Triples format.",
-        "status": "OK",
+        "status": "FAIL (403)",
         "title": "N-Triples data for Nelson Mandela",
         "_id": "459b9668-e5b9-ca77-bda6-b9068d0c62ae",
         "access_url": "https://www.wikidata.org/wiki/Special:EntityData/Q8023.nt"
