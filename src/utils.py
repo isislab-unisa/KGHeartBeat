@@ -34,7 +34,8 @@ from urllib.parse import urlparse
 import nltk
 from nltk.tokenize import sent_tokenize, word_tokenize
 import VoIDAnalyses
-
+import re
+_NETLOC_PATTERN = re.compile(r'^[\w\-\.]+(?:\:\d+)?$')
 
 #PRINT THE METADATI OF A KG
 def printMetadatiKG(metadct):
@@ -1340,9 +1341,45 @@ def save_only_regex(string_list):
 
 def is_url(string):
     if not isinstance(string, str) or not string.strip():
+            return False
+        
+    try:
+        parsed = urlparse(string)
+    except Exception:
         return False
-    parsed = urlparse(string)
-    return all([parsed.scheme in ("http", "https"), parsed.netloc])
+    
+    netloc = parsed.netloc
+    
+    # Quick checks first (fail fast)
+    if (not netloc or 
+        parsed.scheme not in ("http", "https") or
+        " " in netloc or
+        ".." in netloc or 
+        netloc[0] == "." or 
+        netloc[-1] == "."):
+        return False
+    
+    # Check for control characters (ASCII < 33)
+    if any(ord(c) < 33 for c in netloc):
+        return False
+    
+    # Validate netloc format with pre-compiled regex
+    if not _NETLOC_PATTERN.match(netloc):
+        return False
+    
+    # Extract domain (remove port if present)
+    domain = netloc.split(':', 1)[0] if ':' in netloc else netloc
+    
+    # Validate domain labels
+    labels = domain.split('.')
+    for label in labels:
+        label_len = len(label)
+        # Combined check for efficiency
+        if not label_len or label_len > 63 or not (label[0].isalnum() and label[-1].isalnum()):
+            return False
+    
+    return True
+
 
 def is_subtitle(text):
     # Check for common subtitle patterns (e.g., "00:00:00,000 --> 00:00:05,000")
@@ -1361,7 +1398,9 @@ def is_subtitle(text):
 
 def check_metadata_media_type(sparql_endpoint, void_file_url, resources, media_type):
     # Check Search Engine Metadata resources
+    objects = []
     if isinstance(resources, list) and len(resources) > 0:
+        objects = resources
         for res in resources:
             path = res.get('path', '')
             if path and is_url(path):
@@ -1388,13 +1427,52 @@ def check_metadata_media_type(sparql_endpoint, void_file_url, resources, media_t
     # Check SPARQL endpoint
     if is_url(sparql_endpoint):
         objects = query.get_all_obj_in_meta(sparql_endpoint)
-        for obj in objects:
-            if is_url(obj):
-                try:
-                    response = requests.head(obj, timeout=10, allow_redirects=True)
-                    if media_type in response.headers.get('Content-Type', ''):
-                        return 1, obj
-                except requests.RequestException:
-                    continue
+        if isinstance(objects, list):
+            for obj in objects:
+                if is_url(obj):
+                    try:
+                        response = requests.head(obj, timeout=10, allow_redirects=True)
+                        if media_type in response.headers.get('Content-Type', ''):
+                            return 1, obj
+                    except requests.RequestException:
+                        continue
 
-    return 0, f"No {media_type} metadata found"
+    return 0, f"No media_type metadata found: {objects}"
+
+def check_sign_lang_string(string):
+    sign_pattern = re.compile(r"signlanguage|sgn|ase|bfi|fsl|libras|lsf", re.IGNORECASE)
+    return bool(sign_pattern.search(string))
+
+
+def estimate_file_size_gb(url, sample_bytes=5_000_000):
+    """
+    Estimate the file size of a remote file in gigabytes (GB).
+    
+    - Uses HEAD if available (exact).
+    - Otherwise streams up to `sample_bytes` to estimate.
+    """
+    #Try HEAD first
+    response = requests.head(url, allow_redirects=True)
+    size = response.headers.get('Content-Length')
+    if size:
+        return int(size) / (1024 ** 3)
+    
+    # Fallback: estimate via streaming
+    response = requests.get(url, stream=True)
+    total = 0
+    start = time.time()
+    chunk_size = 8192  # 8 KB
+
+    for chunk in response.iter_content(chunk_size=chunk_size):
+        total += len(chunk)
+        if total >= sample_bytes:
+            break
+
+    elapsed = time.time() - start
+    if elapsed == 0:
+        return None
+
+    # Estimate total size from transfer rate (approximation)
+    rate = total / elapsed  
+    estimated_total = rate * 10  
+    return estimated_total / (1024 ** 3)

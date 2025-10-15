@@ -1605,14 +1605,17 @@ def get_download_link(url):
         }''')
     sparql.setTimeout(300)
     sparql.setReturnFormat(JSON)
-    results = sparql.query().convert()
-    if isinstance(results,dict):
-        urls = utils.getResultsFromJSON(results)
-        return urls
-    elif isinstance(results,Document):
-        urls = utils.getResultsFromXML(results)
-        return urls
-    else:
+    try:
+        results = sparql.query().convert()
+        if isinstance(results,dict):
+            urls = utils.getResultsFromJSON(results)
+            return urls
+        elif isinstance(results,Document):
+            urls = utils.getResultsFromXML(results)
+            return urls
+        else:
+            return False
+    except Exception:
         return False
 
 @log_in_out
@@ -2499,3 +2502,44 @@ def get_all_obj_in_meta(endpoint_url):
     except Exception as e:
         return e
     
+@log_in_out
+def check_sign_language(endpoint_url, iri_to_check):
+    encoded_iri = quote(iri_to_check, safe="/:#?&=%")
+    sparql = SPARQLWrapper(endpoint_url)
+    sparql.setQuery(f"""
+    PREFIX skosxl: <http://www.w3.org/2008/05/skos-xl#>
+    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+    PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+    PREFIX dcterms: <http://purl.org/dc/terms/>
+    PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+    PREFIX awol: <http://bblfish.net/work/atom-owl/2006-06-06/#>
+    PREFIX wdrs: <http://www.w3.org/2007/05/powder-s#>
+    PREFIX schema: <http://schema.org/>
+    PREFIX dct: <http://purl.org/dc/terms/>
+    SELECT ?o
+    WHERE {{
+        VALUES ?prop {{ rdfs:label foaf:name schema:alternateName dcterms:description skos:prefLabel dcterms:alternative skos:altLabel dcterms:title
+                     rdfs:comment awol:label dcterms:alternative skos:altLabel skos:note wdrs:text skosxl:altLabel skosxl:hiddenLabel skosxl:prefLabel
+                     skosxl:literalForm schema:name schema:description schema:alternateName schema:inLanguage schema:accessMode schema:accessibilityFeature dct:language}}
+        <{encoded_iri}> ?prop ?o .}}
+        """)
+    try:
+        sparql.setTimeout(300)
+        sparql.setReturnFormat(JSON)
+        results = sparql.query().convert()
+        if isinstance(results,dict):
+            value = utils.getResultsFromJSON(results)
+            if isinstance(value,list) and len(value)>0:
+                return True, value
+            else:
+                return False, []
+        elif isinstance(results,Document):
+            value = utils.getResultsFromXML(results)
+            if isinstance(value,list) and len(value)>0:
+                return True, value
+            else:
+                return False, []
+        else:
+            return False, []
+    except Exception as e:
+        return e, []

@@ -27,6 +27,9 @@ class Accessibility4VisuallyImpaired:
             if isinstance(images, list) and len(images) == 0:
                 return (0, "No images found in the KG")
     
+    def audio_meta(self, sparql_endpoint, void_file_url, resources):
+        return utils.check_metadata_media_type(sparql_endpoint, void_file_url, resources, "audio/")
+    
     def audio(self, sparql_endpoint):
         if not utils.is_url(sparql_endpoint):
             return (0, "No SPARQL endpoint provided")
@@ -45,9 +48,7 @@ class Accessibility4VisuallyImpaired:
                     return ratio, audio_count
                 else:
                     return 0, f"Error counting audio resources: {audio_count}"
-    
-    def audio_meta(self, sparql_endpoint, void_file_url, resources):
-        return utils.check_metadata_media_type(sparql_endpoint, void_file_url, resources, "audio/")
+
 
     
 # Test

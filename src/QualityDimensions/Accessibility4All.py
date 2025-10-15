@@ -27,37 +27,30 @@ class Accessibility4All:
         if response.status_code == 200:
             open_license_data = response.json()
 
-            # Extract URLs of open licenses
-            okfn_urls = [lic["url"] for lic in open_license_data.values() if lic.get("url")]
-   
+            # Extract URLs of open licenses and normalize by removing protocol
+            okfn_urls = [lic["url"].replace("http://", "").replace("https://", "") 
+                        for lic in open_license_data.values() if lic.get("url")]
+
+            def normalize(url):
+                return url.replace("http://", "").replace("https://", "")
+
             # At least one KG license matches an open license
-            if any(license in okfn_urls for license in kg_license):
-                self.open_license_value = (1, kg_license)
+            if isinstance(kg_license, list):
+                if any(normalize(license) in okfn_urls for license in kg_license):
+                    self.open_license_value = (1, kg_license)
+                else:
+                    self.open_license_value = (0.5, kg_license)
             else:
-                # Case 3: licenses are present but not recognized as open
-                self.open_license_value = (0.5, kg_license)
+                if normalize(kg_license) in okfn_urls:
+                    self.open_license_value = (1, kg_license)
+                else:
+                    self.open_license_value = (0.5, kg_license)
 
             return self.open_license_value
-
         else:
             # Request failed
-            return {"error": "Failed to retrieve license information"}
-
-    def assistive_technologies(self, sparql_endpoint, void_file_url):
-        ass_tech = []
-        if utils.is_url(void_file_url):
-            void_file = VoIDAnalyses.parseVoID(void_file_url)
-            ass_tech = VoIDAnalyses.check_acc_feature(void_file)
-        else:
-            ass_tech= False
-        if utils.is_url(sparql_endpoint):
-            ass_tech = query.check_acc_feature(sparql_endpoint)
-
-        if isinstance(ass_tech, list) and len(ass_tech) > 0:
-            return (1, ass_tech)
-        else:
-            return (0, ass_tech)
-    
+            return (0, "Failed to retrieve open license list")
+        
     def webpage_status(self, website_url):
         try:
             response = requests.get(website_url)
@@ -67,6 +60,22 @@ class Accessibility4All:
                 return (0, website_url)
         except Exception as e:
             return (0, e)
+        
+    def check_authentication(self, sparql_endpoint):
+        if utils.is_url(sparql_endpoint):
+            try:
+                response = requests.get(sparql_endpoint)
+                if response.status_code == 200:
+                    return (1, sparql_endpoint)
+                elif response.status_code == 401:
+                    return (0, sparql_endpoint)
+                else:
+                    return (0, f"{sparql_endpoint} (status: {response.status_code})")
+            except Exception as e:
+                return (0, str(e))
+        else:
+            return (0, "No SPARQL endpoint provided")
+
 
     def metadata_broken_links_rate(self, search_engine_metadata, sparql_endpoint, void_file_url, kg_id):
         if utils.is_url(sparql_endpoint):
@@ -92,7 +101,7 @@ class Accessibility4All:
                             no_broken_links += 1
                     except:
                         broken_links += 1
-            broken_links_ratio =  broken_links / (no_broken_links + broken_links) if (no_broken_links + broken_links) > 0 else 0
+            broken_links_ratio =  0 - (broken_links / (no_broken_links + broken_links)) if (no_broken_links + broken_links) > 0 else 0
             return (broken_links_ratio, f"Metadata from VoID file: {all_obj_void}")
         elif isinstance(all_obj_sparql, list) and len(all_obj_sparql) > 0:
             broken_links = 0
@@ -107,7 +116,7 @@ class Accessibility4All:
                             no_broken_links += 1
                     except:
                         broken_links += 1
-            broken_links_ratio =  broken_links / (no_broken_links + broken_links) if (no_broken_links + broken_links) > 0 else 0
+            broken_links_ratio =  0 - (broken_links / (no_broken_links + broken_links)) if (no_broken_links + broken_links) > 0 else 0
             return (broken_links_ratio, f"Metadata from SPARQL endpoint: {all_obj_sparql}")
         elif isinstance(search_engine_metadata, dict):
             available_resources_count = 0
@@ -133,94 +142,69 @@ class Accessibility4All:
             available_resources_count += len(available_resources)
             unavailable_resources_count += len(unavailable_resources)
 
-            broken_links_ratio = unavailable_resources_count / (available_resources_count + unavailable_resources_count) if (available_resources_count + unavailable_resources_count) > 0 else 0
+            broken_links_ratio = 0 - (unavailable_resources_count / (available_resources_count + unavailable_resources_count)) if (available_resources_count + unavailable_resources_count) > 0 else 0
             return (broken_links_ratio, f"Metadata from Search engine file: {resources}")
 
-        return (1, "No metadata found in SPARQL endpoint, VoID file or search engine metadata")
+        return (-1, "No metadata found in SPARQL endpoint, VoID file or search engine metadata")
 
-    def robots_txt(self, resources, sparql_endpoint, website_url):
-        if utils.is_url(sparql_endpoint):
-            robots_url = sparql_endpoint.rstrip('/') + '/robots.txt'
-            try:
-                response = requests.get(robots_url)
-                if response.status_code == 200:
-                    return (1, robots_url)
-                else:
-                    return (0, robots_url)
-            except Exception as e:
-                return (0, str(e))
-        if utils.is_url(website_url):
-            robots_url = website_url.rstrip('/') + '/robots.txt'
-            try:
-                response = requests.get(robots_url)
-                if response.status_code == 200:
-                    return (1, robots_url)
-                else:
-                    return (0, robots_url)
-            except Exception as e:
-                return e
-        for link in resources:
-            if 'robots.txt' in link['path']:
-                try:
-                    response = requests.get(link['path'])
-                    if response.status_code == 200:
-                        return (1, link['path'])
-                    else:
-                        return (0, link['path'])
-                except Exception as e:
-                    return (0, str(e))
-        return (0, "No robots.txt found")
-    
-
-    def common_formats_availability(self, idKG):
-        resourcesDH = Aggregator.getOtherResources(idKG)
-        resourcesDH = utils.insertAvailability(resourcesDH)
-        metadata_media_type = utils.extract_media_type(resourcesDH)
-        common_formats_availability = utils.check_common_acceppted_format(metadata_media_type)
-        if common_formats_availability:
-            return (1, metadata_media_type)
-        else:    
-            return (0, metadata_media_type)
-    
-    def check_authentication(self, sparql_endpoint):
-        if utils.is_url(sparql_endpoint):
-            try:
-                response = requests.get(sparql_endpoint)
-                if response.status_code == 200:
-                    return (1, sparql_endpoint)
-                elif response.status_code == 401:
-                    return (0, sparql_endpoint)
-            except Exception as e:
-                return (0, str(e))
-        else:
-            return (0, "No SPARQL endpoint provided")
-    
     def version(self, void_file_url, sparql_endpoint):
+        version = False
         if utils.is_url(sparql_endpoint):
             version_in_kg = query.get_version(sparql_endpoint)
-            if isinstance(version_in_kg, list) and len(version_in_kg) > 0:
-                return (1, version_in_kg)
+            if isinstance(version_in_kg, list):
+                if len(version_in_kg) > 0:
+                    version = version_in_kg
         if utils.is_url(void_file_url):
             void_file = VoIDAnalyses.parseVoID(void_file_url)
             version_in_void = VoIDAnalyses.get_version(void_file)
             if version_in_void != False:
-                return (1, version_in_void)
-        
-        return (0, "No SPARQL endpoint or VoID file provided")
+                version = version_in_void
 
-    def canonical_citation(self, void_file_url, sparql_endpoint):
+        if version != False:
+            return (1, version)
+        else:
+            return (0, "No version found")
+
+    def assistive_technologies(self, sparql_endpoint, void_file_url):
+        ass_tech = []
+        if utils.is_url(void_file_url):
+            void_file = VoIDAnalyses.parseVoID(void_file_url)
+            ass_tech = VoIDAnalyses.check_acc_feature(void_file)
+        else:
+            ass_tech= False
+        if utils.is_url(sparql_endpoint):
+            ass_tech = query.check_acc_feature(sparql_endpoint)
+
+        if isinstance(ass_tech, list) and len(ass_tech) > 0:
+            return (1, ass_tech)
+        else:
+            return (0, ass_tech)
+        
+
+    def canonical_citation(self, void_file_url, sparql_endpoint, search_engine_metadata):
+        citation = False
+        if isinstance(search_engine_metadata, dict):
+            doi = search_engine_metadata.get('doi', False)
+            if doi != False and doi != '':
+                citation = doi
+
         if utils.is_url(sparql_endpoint):
             identifier = query.get_identifier(sparql_endpoint)
-            if isinstance(identifier, list) and len(identifier) > 0:
-                return (1, identifier)
+            if isinstance(identifier, list):
+                if len(identifier) > 0:
+                    citation = identifier
+
         if utils.is_url(void_file_url):
             void_file = VoIDAnalyses.parseVoID(void_file_url)
             identifier = VoIDAnalyses.get_identifier(void_file)
             if identifier != False:
-                return (1, identifier)
-        
-        return (0, "No SPARQL endpoint or VoID file provided")
-    
+                citation = identifier
+
+        if citation != False:
+            return (1, citation)
+        else:
+            return (0, "No citation found")
+
     def contact_point(self, search_engine_metadata, sparql_endpoint, void_file_url):
         contact_in_metadata = search_engine_metadata.get('contact_point', False)
         if contact_in_metadata != False and isinstance(contact_in_metadata, dict):
@@ -242,6 +226,46 @@ class Accessibility4All:
 
         return (0, "No contact point found")
 
+    def dump_size(self, void_file_url, sparql_endpoint, idKG):
+        resourcesDH = Aggregator.getOtherResources(idKG)
+        resourcesDH = utils.insertAvailability(resourcesDH)
+        small_dump = False
+        dumps = []
+        for resources in resourcesDH:
+            if resources.get("status") == "active":
+                dumps.append(resources['path'])
+                size = utils.estimate_file_size_gb(resources['path'])
+                if isinstance(size, float) and size < 4:
+                    small_dump = True
+                    break
+        
+        if utils.is_url(void_file_url):
+            void_file = VoIDAnalyses.parseVoID(void_file_url)
+            dump = VoIDAnalyses.getDataDump(void_file)
+            if utils.is_url(dump):
+                dumps.append(dump)
+                if isinstance(size, float) and size < 4:
+                    small_dump = True
+    
+        if utils.is_url(sparql_endpoint):
+            sparql_dumps = query.get_download_link(sparql_endpoint)
+            if isinstance(sparql_dumps, list):
+                for dump_link in sparql_dumps:
+                    if utils.is_url(dump_link):
+                        dumps.append(dump_link)
+                        size = utils.estimate_file_size_gb(dump_link)
+                        if isinstance(size, float) and size < 4:
+                            small_dump = True
+                            break
+        
+        if small_dump:
+            return (1, f"At least one dump is smaller than 4GB: {dumps}")
+        elif len(dumps) > 0:
+            return (0, f"No dump smaller than 4GB found. Dumps found: {dumps}")
+        else:
+            return (0, f"No dumps found: {dumps}")
+        
+    
     def image(self, sparql_endpoint):
         if utils.is_url(sparql_endpoint):
             image_in_kg = query.getImagesTriples(sparql_endpoint)
@@ -255,7 +279,7 @@ class Accessibility4All:
                 return (0, "No images found")
         else:
             return (0, "No SPARQL endpoint provided")
-        
+    
     def human_redeable_labels(self, sparql_endpoint):
         if utils.is_url(sparql_endpoint):
             num_labels = query.count_res_with_label(sparql_endpoint)
@@ -265,7 +289,74 @@ class Accessibility4All:
                 return (ratio, f"Number of resources in the KG:{num_res}")
             return (0, "No resources found")
         return (0, "SPARQL endpoint not available")
+
+    def robots_txt(self, resources, sparql_endpoint, website_url):
+        def check_robots(url):
+            try:
+                response = requests.get(url, timeout=10, allow_redirects=True)
+                content_type = response.headers.get("Content-Type", "").lower()
+
+                # Accept only text/plain or text/* as valid robots.txt responses
+                if response.status_code == 200 and content_type.startswith("text/"):
+                    return (1, url)
+                elif response.status_code == 200:
+                    # 200 but not text-based → invalid robots.txt
+                    return (0, f"{url} (invalid Content-Type: {content_type})")
+                else:
+                    return (0, f"{url} (status: {response.status_code})")
+            except Exception as e:
+                return (0, str(e))
+
+        if utils.is_url(sparql_endpoint):
+            robots_url = sparql_endpoint.rstrip('/') + '/robots.txt'
+            result = check_robots(robots_url)
+            if result[0] == 1:
+                return result
+
+        if utils.is_url(website_url):
+            robots_url = website_url.rstrip('/') + '/robots.txt'
+            result = check_robots(robots_url)
+            if result[0] == 1:
+                return result
+
+        for link in resources or []:
+            path = link.get('path', '')
+            if 'robots.txt' in path and utils.is_url(path):
+                result = check_robots(path)
+                if result[0] == 1:
+                    return result
+
+        return (0, "No valid robots.txt found")
     
+
+    def common_formats_availability(self, idKG):
+        resourcesDH = Aggregator.getOtherResources(idKG)
+        resourcesDH = utils.insertAvailability(resourcesDH)
+        metadata_media_type = utils.extract_media_type(resourcesDH)
+        common_formats_availability = utils.check_common_acceppted_format(metadata_media_type)
+        if common_formats_availability:
+            return (1, metadata_media_type)
+        else:    
+            return (0, metadata_media_type)
+
+    def examples(self, void_file_url, sparql_endpoint_url, search_engine_metadata):
+        
+        examples = search_engine_metadata.get("example", [])
+        if len(examples) > 0:
+            return (1, examples)
+
+        if utils.is_url(void_file_url):
+            void_file = VoIDAnalyses.parseVoID(void_file_url)
+            examples_void = VoIDAnalyses.getExamples(void_file)
+            if examples_void and len(examples_void) > 0:
+                return (1, examples_void)
+        
+        if utils.is_url(sparql_endpoint_url):
+            examples_sparql = query.get_examples(sparql_endpoint_url)
+            if examples_sparql and len(examples_sparql) > 0:
+                return (1, examples_sparql)
+        
+        return 0, "No examples found"
 
     def alternative_access_point(self, void_file_url, sparql_endpoint_url, idKG):
         available_download = False
@@ -323,25 +414,6 @@ class Accessibility4All:
             "sparql_endpoint": available_sparql,
             "api": available_api
         })
-
-    def examples(self, void_file_url, sparql_endpoint_url, search_engine_metadata):
-        
-        examples = search_engine_metadata.get("example", [])
-        if len(examples) > 0:
-            return (1, examples)
-
-        if utils.is_url(void_file_url):
-            void_file = VoIDAnalyses.parseVoID(void_file_url)
-            examples_void = VoIDAnalyses.getExamples(void_file)
-            if examples_void and len(examples_void) > 0:
-                return (1, examples_void)
-        
-        if utils.is_url(sparql_endpoint_url):
-            examples_sparql = query.get_examples(sparql_endpoint_url)
-            if examples_sparql and len(examples_sparql) > 0:
-                return (1, examples_sparql)
-        
-        return 0, "No examples found"
 
 
 '''

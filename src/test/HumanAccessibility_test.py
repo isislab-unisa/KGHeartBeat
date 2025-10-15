@@ -25,6 +25,7 @@ print(f"Number of KGs from CHe Cloud: {len(CHe_Cloud)}")
 toAnalyze = toAnalyze + kgFound + kg_added_by_users + CHe_Cloud
 
 results = {}
+
 for kg_id in toAnalyze:
     print(f"Analyzing {kg_id[0]} - {kg_id[1]}")
     metadata = Aggregator.getDataPackage(kg_id[0])
@@ -49,6 +50,8 @@ for kg_id in toAnalyze:
                     file_void_url = False
         except:
             file_void_url = False
+    elif not utils.is_url(file_void_url) and not utils.is_url(website_url):
+        file_void_url = False
     
     accessibility4all = Accessibility4All()
     # Metadata license
@@ -64,25 +67,39 @@ for kg_id in toAnalyze:
     results[kg_id[0]]['sparql_endpoint'] = sparql_endpoint_url
     results[kg_id[0]]['void_file'] = file_void_url
     results[kg_id[0]]['open_license'] = accessibility4all.open_license(license)
-    results[kg_id[0]]['assistive_technologies'] = accessibility4all.assistive_technologies(sparql_endpoint_url, file_void_url)
     results[kg_id[0]]['webpage_status'] = accessibility4all.webpage_status(metadata['website'])
+    results[kg_id[0]]['check_authentication'] = accessibility4all.check_authentication(sparql_endpoint_url)
     results[kg_id[0]]['metadata_broken_links_rate'] = accessibility4all.metadata_broken_links_rate(metadata, sparql_endpoint_url, file_void_url, kg_id[0])
+    results[kg_id[0]]['version'] = accessibility4all.version(file_void_url, sparql_endpoint_url)
+    results[kg_id[0]]['assistive_technologies'] = accessibility4all.assistive_technologies(sparql_endpoint_url, file_void_url)
+    results[kg_id[0]]['canonical_citation'] = accessibility4all.canonical_citation(file_void_url, sparql_endpoint_url, metadata)
+    results[kg_id[0]]['contact_point'] = accessibility4all.contact_point(metadata, sparql_endpoint_url, file_void_url)
+    results[kg_id[0]]['dump_size'] = accessibility4all.dump_size(file_void_url,sparql_endpoint_url, kg_id[0]) 
+    results[kg_id[0]]['image'] = accessibility4all.image(sparql_endpoint_url)
+    results[kg_id[0]]['human_redeable_labels'] = accessibility4all.human_redeable_labels(sparql_endpoint_url)
     results[kg_id[0]]['robots_txt'] = accessibility4all.robots_txt(resourcesDH, sparql_endpoint_url, website_url)
     results[kg_id[0]]['common_format_availability'] = accessibility4all.common_formats_availability(kg_id[0])
-    results[kg_id[0]]['check_authentication'] = accessibility4all.check_authentication(sparql_endpoint_url)
-    results[kg_id[0]]['version'] = accessibility4all.version(file_void_url, sparql_endpoint_url)
-    results[kg_id[0]]['canonical_citation'] = accessibility4all.canonical_citation(file_void_url, sparql_endpoint_url)
-    results[kg_id[0]]['contact_point'] = accessibility4all.contact_point(metadata, sparql_endpoint_url, file_void_url)
-    results[kg_id[0]]['image'] = accessibility4all.image(sparql_endpoint_url)
+    results[kg_id[0]]['example'] = accessibility4all.examples(file_void_url, sparql_endpoint_url, metadata)
+    results[kg_id[0]]['alternative_access_point'] = accessibility4all.alternative_access_point(file_void_url, sparql_endpoint_url, kg_id[0])
 
-    defhearing_accessibility = DeafHearingAccessibility()
-    results[kg_id[0]]['example'] = defhearing_accessibility.examples(file_void_url, sparql_endpoint_url, metadata)
-    results[kg_id[0]]['alternative_access_point'] = defhearing_accessibility.alternative_access_point(file_void_url, sparql_endpoint_url, kg_id[0])
-    results[kg_id[0]]['human_redeable_labels'] = defhearing_accessibility.human_redeable_labels(sparql_endpoint_url)
-
+    deaf_hearing_accessibility = DeafHearingAccessibility()
+    results[kg_id[0]]['image_metadata'] = deaf_hearing_accessibility.image_metadata(sparql_endpoint_url, file_void_url, resourcesDH)
+    results[kg_id[0]]['video_meta'] = deaf_hearing_accessibility.video_meta(sparql_endpoint_url, file_void_url, resourcesDH)
+    results[kg_id[0]]['video'] = deaf_hearing_accessibility.video(sparql_endpoint_url)
+    video_descriptions = deaf_hearing_accessibility.check_video_description_subtitles(sparql_endpoint_url)
+    results[kg_id[0]]['video_description_ratio'] = video_descriptions['description_ratio']
+    results[kg_id[0]]['video_subtitle_ratio'] = video_descriptions['subtitle_ratio']
+    results[kg_id[0]]['video_sign_language_ratio'] = video_descriptions['sign_language_ratio']
+    audio_descriptions = deaf_hearing_accessibility.check_audio_description_subtitles(sparql_endpoint_url)
+    results[kg_id[0]]['audio_description_ratio'] = audio_descriptions['description_ratio']
+    results[kg_id[0]]['audio_subtitle_ratio'] = audio_descriptions['subtitle_ratio']
+    results[kg_id[0]]['audio_sign_language_ratio'] = audio_descriptions['sign_language_ratio']
 
     accessibility4visually_impaired = Accessibility4VisuallyImpaired()
-    #results[kg_id[0]]['alt_image'] = accessibility4visually_impaired.alt_image(sparql_endpoint_url)
+    results[kg_id[0]]['alt_image'] = accessibility4visually_impaired.alt_image(sparql_endpoint_url)
+    results[kg_id[0]]['audio_meta'] = accessibility4visually_impaired.audio_meta(sparql_endpoint_url, file_void_url, resourcesDH)
+    results[kg_id[0]]['audio'] = accessibility4visually_impaired.audio(sparql_endpoint_url)
+
 
     print(results[kg_id[0]])
 
