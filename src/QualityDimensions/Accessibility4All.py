@@ -414,7 +414,31 @@ class Accessibility4All:
             "sparql_endpoint": available_sparql,
             "api": available_api
         })
+    
+    def description_readability(self, sparql_endpoint_url, void_file_url, description_metadata):
+        description = False
+        if isinstance(description_metadata, str) and description_metadata != 'absent' and description_metadata != '':
+            description = description_metadata
+            readability_score = utils.flesch_reading_ease(description)
+            return (round(readability_score / 100, 2), f"Description from search engine metadata: {description}")
 
+        if utils.is_url(sparql_endpoint_url):
+            description_sparql = query.getDescription(sparql_endpoint_url)
+            if isinstance(description_sparql, list) and len(description_sparql) > 0:
+                description = description_sparql[0]
+                if isinstance(description, str):
+                    return (round(readability_score / 100, 2), f"Description from SPARQL endpoint: {description}")
+
+        if utils.is_url(void_file_url):
+            void_file = VoIDAnalyses.parseVoID(void_file_url)
+            description_void = VoIDAnalyses.getDescription(void_file)
+            if isinstance(description_void, list) and len(description_void) > 0:
+                description = description_void[0]
+                readability_score = utils.flesch_reading_ease(description)
+                return (round(readability_score / 100, 2), f"Description from VoID file: {description}")
+
+        if description == False or description == '':
+            return (0, "No description found")
 
 '''
     def data_lang_and_encode(self, sparql_endpoint, void_file_url, idKG):
