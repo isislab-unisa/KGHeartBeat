@@ -270,3 +270,14 @@ def getObj(graph):
         o = str(o)
         objects.append(o)
     return objects
+
+def getDescription(graph):
+    descriptions = []
+    for s,p,o in graph:
+        if p == DCTERMS.description:
+            o = str(o)
+            descriptions.append(o)
+    if len(descriptions) > 0:       
+        return descriptions
+    else:
+        return False

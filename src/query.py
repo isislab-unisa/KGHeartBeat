@@ -2543,3 +2543,34 @@ def check_sign_language(endpoint_url, iri_to_check):
             return False, []
     except Exception as e:
         return e, []
+    
+def getDescription(endpoint_url):
+    sparql = SPARQLWrapper(endpoint_url)
+    query = """
+    PREFIX void: <http://rdfs.org/ns/void#>
+    PREFIX dcat: <http://www.w3.org/ns/dcat#>
+    PREFIX dcterms: <http://purl.org/dc/terms/>
+
+    SELECT DISTINCT ?o
+    WHERE {
+        ?dataset a ?type ;
+                ?p ?o .
+        VALUES ?type { void:Dataset dcat:Dataset dcat:Distribution }
+        VALUES ?p { dcterms:description }
+    }
+    """
+    try:
+        sparql.setQuery(query)
+        sparql.setTimeout(300)
+        sparql.setReturnFormat(JSON)
+        results = sparql.query().convert()
+        if isinstance(results,dict):
+            triples = utils.getResultsFromJSON(results)
+            return triples
+        elif isinstance(results,Document):
+            triples = utils.getResultsFromXML(results)
+            return triples
+        else:
+            return False
+    except Exception as e:
+        return e

@@ -81,6 +81,7 @@ for kg_id in toAnalyze:
     results[kg_id[0]]['common_format_availability'] = accessibility4all.common_formats_availability(kg_id[0])
     results[kg_id[0]]['example'] = accessibility4all.examples(file_void_url, sparql_endpoint_url, metadata)
     results[kg_id[0]]['alternative_access_point'] = accessibility4all.alternative_access_point(file_void_url, sparql_endpoint_url, kg_id[0])
+    results[kg_id[0]]['description_readability'] = accessibility4all.description_readability(sparql_endpoint_url, file_void_url, Aggregator.getDescription(metadata))
 
     deaf_hearing_accessibility = DeafHearingAccessibility()
     results[kg_id[0]]['image_metadata'] = deaf_hearing_accessibility.image_metadata(sparql_endpoint_url, file_void_url, resourcesDH)
