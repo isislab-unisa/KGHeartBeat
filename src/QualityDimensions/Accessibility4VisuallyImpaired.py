@@ -19,10 +19,13 @@ class Accessibility4VisuallyImpaired:
                 count_with_alt = 0
                 for i, img in enumerate(images, 1):
                     res = query.hasAltDescription(sparql_endpoint, img)
-                    if res[0]:
-                        count_with_alt += 1
-                    if i % 50 == 0:
-                        print(f"Processed {i}/{len(images)} images...")
+                    if isinstance(res, tuple) and len(res) == 2:
+                        if res[0]:
+                            count_with_alt += 1
+                        if i % 50 == 0:
+                            print(f"Processed {i}/{len(images)} images...")
+                    else:
+                        continue
                 return (count_with_alt / len(images), len(images))
             if isinstance(images, list) and len(images) == 0:
                 return (0, "No images found in the KG")
