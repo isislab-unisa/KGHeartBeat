@@ -15,6 +15,7 @@ import Graph
 from API.monitoring_requests import MonitoringRequests
 from evaluate_fairness import EvaluateFAIRness
 from API import CHeCloudAPI
+from API import YummyDataAPI
 useDB = False
 # try : 
 #     import pymongo
@@ -121,15 +122,16 @@ for i in range(len(toAnalyze)):
     csv_with_dim.writeRow(filename,include_dimensions=True)
     print(f"KG score: {kg.extra.score}")
     if(useDB == True):
-        mongo_interface = DBinterface()
-        mongo_interface.insert_quality_data(kg,score)
+         mongo_interface = DBinterface()
+         mongo_interface.insert_quality_data(kg,score)
     del csv
     del kg
     gc.collect()
-    #print(kg.getQualityKG()) #PRINT THE KG QUALITY ON THE COMAND LINE
-
-if len(input.get('sparql_url')) > 0 and not 'all' in input.get('sparql_url'):
-    sparql_urls = input.get('sparql_url')
+    print(kg.getQualityKG()) #PRINT THE KG QUALITY ON THE COMAND LINE
+    
+sparql_urls = YummyDataAPI.getSPARQLEndpointURLs()
+if len(input.get('sparql_url')) > 0 and not 'all' in input.get('sparql_url') or len(sparql_urls) > 0:
+    sparql_urls.extend(input.get('sparql_url'))
     for sparql_url in sparql_urls:
         start_analysis = time.time()
         kg = analyses.analyses(filename,sparql_endpoint=sparql_url)
