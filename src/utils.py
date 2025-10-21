@@ -1263,7 +1263,7 @@ def return_updated_rdf_dump(id_kg):
     return False
     
 def check_publisher_info(kg_quality):
-    author_query = 1 if kg_quality.verifiability.authorQ != '-' and len(kg_quality.verifiability.authorQ) > 0 else 0
+    author_query = 1 if kg_quality.verifiability.authorQ != '-' and kg_quality.verifiability.authorQ != False and len(kg_quality.verifiability.authorQ) > 0 else 0
 
     author_metadata = 0
     if kg_quality.verifiability.authorM not in [False,'False']:
