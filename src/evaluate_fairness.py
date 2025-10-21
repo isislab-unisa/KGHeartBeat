@@ -31,8 +31,8 @@ class EvaluateFAIRness:
         dump_indication = 1 if self.kg_quality.availability.RDFDumpM in [1, "1"] else 0
         verifiability_info = utils.check_publisher_info(self.kg_quality)
         mediatype_indication = 1 if len(self.kg_quality.extra.metadataMediaType) > 0 else 0
-        license = 1 if (self.kg_quality.licensing.licenseMetadata not in [False, 'False', '', '-', '[]']) or (self.kg_quality.licensing.licenseQuery != '-' and len(self.kg_quality.licensing.licenseQuery) > 0) else 0
-        vocabs = 1 if self.kg_quality.verifiability.vocabularies not in ['-', '', '[]'] and len(self.kg_quality.verifiability.vocabularies) > 0 else 0
+        license = 1 if (self.kg_quality.licensing.licenseMetadata not in [False, 'False', '', '-', '[]']) or (self.kg_quality.licensing.licenseQuery != '-' and self.kg_quality.licensing.licenseQuery != False and len(self.kg_quality.licensing.licenseQuery) > 0) else 0
+        vocabs = 1 if self.kg_quality.verifiability.vocabularies not in ['-', '', '[]', False] and len(self.kg_quality.verifiability.vocabularies) > 0 else 0
 
         if available_on_search_engine:
             links = 1 if (self.kg_quality.interlinking.degreeConnection != '-' and isinstance(self.kg_quality.interlinking.degreeConnection,int) and int(self.kg_quality.interlinking.degreeConnection) > 0) else 0
