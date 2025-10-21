@@ -144,14 +144,14 @@ if len(input.get('sparql_url')) > 0 and not 'all' in input.get('sparql_url') or 
         kg.extra.score = totalScore
         kg.extra.normalizedScore = normalizedScore
         kg.extra.scoreObj = score
-
-        fairness = EvaluateFAIRness(kg)
-        fairness.evaluate_findability()
-        fairness.evaluate_availability()
-        fairness.evaluate_interoperability()
-        fairness.evaluate_reusability()
-        fairness.calculate_FAIR_score()
-        kg.fairness = fairness
+        
+        evaluation = EvaluateFAIRness(kg)
+        evaluation.evaluate_findability()
+        evaluation.evaluate_availability()
+        evaluation.evaluate_interoperability()
+        evaluation.evaluate_reusability()
+        evaluation.calculate_FAIR_score()
+        kg.fairness = evaluation.fairness
 
         end_analysis = time.time()
         utils.write_time(sparql_url,end_analysis-start_analysis,'--- Analysis','INFO',filename)
