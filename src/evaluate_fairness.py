@@ -82,8 +82,8 @@ class EvaluateFAIRness:
     def evaluate_reusability(self):
 
         has_license_metadata = 1 if self.kg_quality.licensing.licenseMetadata not in [False, 'False', '', '-', '[]'] else 0
-        has_license_query = 1 if self.kg_quality.licensing.licenseQuery != '-' and len(self.kg_quality.licensing.licenseQuery) > 0 else 0
-        has_license_hr = 1 if self.kg_quality.licensing.licenseHR != '-' and self.kg_quality.licensing.licenseHR == True else 0
+        has_license_query = 1 if self.kg_quality.licensing.licenseQuery not in ['-', '', '[]', False, 'False'] and len(self.kg_quality.licensing.licenseQuery) > 0 else 0
+        has_license_hr = 1 if self.kg_quality.licensing.licenseHR not in ['-', '', '[]', False, 'False'] and self.kg_quality.licensing.licenseHR == True else 0
         self.fairness.r1_1 = 1 if has_license_metadata or has_license_query or has_license_hr else 0
 
         self.fairness.r1_2 = utils.check_publisher_info(self.kg_quality)
@@ -94,7 +94,7 @@ class EvaluateFAIRness:
 
         has_void = self.kg_quality.extra.urlVoid != ''
         has_void_from_endpoint = query.check_void_dcat(self.kg_quality.extra.endpointUrl) != False
-        lic_in_meta = 1 if self.kg_quality.licensing.licenseQuery != '-' and len(self.kg_quality.licensing.licenseQuery) > 0 else 0
+        lic_in_meta = 1 if self.kg_quality.licensing.licenseQuery not in ['-', '', '[]', False, 'False'] and len(self.kg_quality.licensing.licenseQuery) > 0 else 0
         self.fairness.r1_3M = 1 if has_void or has_void_from_endpoint or lic_in_meta else 0
 
         self.fairness.r_score = round((self.fairness.r1_1 + self.fairness.r1_2 + self.fairness.r1_3D + self.fairness.r1_3M) / 4, 2)
@@ -110,10 +110,9 @@ class EvaluateFAIRness:
 
         has_void = self.kg_quality.extra.urlVoid != ''
         has_void_from_endpoint = query.check_void_dcat(self.kg_quality.extra.endpointUrl) != False
-        lic_in_meta = 1 if self.kg_quality.licensing.licenseQuery != '-' and len(self.kg_quality.licensing.licenseQuery) > 0 else 0
         self.fairness.i1M = 1 if has_void or has_void_from_endpoint else 0
 
-        has_vocab = self.kg_quality.verifiability.vocabularies not in ['-', '', '[]'] and len(self.kg_quality.verifiability.vocabularies) > 0
+        has_vocab = self.kg_quality.verifiability.vocabularies not in ['-', '', '[]', False, 'False'] and len(self.kg_quality.verifiability.vocabularies) > 0
         self.fairness.i2 = utils.check_if_fair_vocabs(self.kg_quality.verifiability.vocabularies) if has_vocab else 0
 
         if available_on_search_engine:
@@ -122,8 +121,8 @@ class EvaluateFAIRness:
             except TypeError:
                 self.fairness.i3D = 0
         else:
-            sameAs_valid = self.kg_quality.interlinking.sameAs not in ['-', '0', ''] and int(self.kg_quality.interlinking.sameAs) > 0
-            skos_valid = self.kg_quality.interlinking.skosMapping not in ['-', '0', ''] and int(self.kg_quality.interlinking.skosMapping) > 0
+            sameAs_valid = self.kg_quality.interlinking.sameAs not in ['-', '0', '', False, 'False'] and int(self.kg_quality.interlinking.sameAs) > 0
+            skos_valid = self.kg_quality.interlinking.skosMapping not in ['-', '0', '', False, 'False'] and int(self.kg_quality.interlinking.skosMapping) > 0
             self.fairness.i3D = 1 if sameAs_valid or skos_valid else 0
 
         self.fairness.i_score = round((self.fairness.i1D + self.fairness.i1M + self.fairness.i2 + self.fairness.i3D) / 4, 2)
