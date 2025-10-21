@@ -1269,14 +1269,14 @@ def check_publisher_info(kg_quality):
     if kg_quality.verifiability.authorM not in [False,'False']:
         if not re.fullmatch(r"Name:\s*absent,\s*email:\s*absent", kg_quality.verifiability.authorM, re.IGNORECASE):
             author_metadata = 1
-        
-    contributors = 1 if kg_quality.verifiability.contributor != '-' and len(kg_quality.verifiability.contributor) > 0 else 0
 
-    publishers = 1 if kg_quality.verifiability.publisher != '-' and len(kg_quality.verifiability.publisher) > 0 else 0
+    contributors = 1 if kg_quality.verifiability.contributor != '-' and kg_quality.verifiability.contributor != False and len(kg_quality.verifiability.contributor) > 0 else 0
+
+    publishers = 1 if kg_quality.verifiability.publisher != '-' and kg_quality.verifiability.publisher != False and len(kg_quality.verifiability.publisher) > 0 else 0
 
 
     sources = 0
-    if kg_quality.verifiability.sources.name not in ['absent','Absent',''] or kg_quality.verifiability.sources.web not in ['absent','Absent',''] or kg_quality.verifiability.sources.email not in ['absent','Absent','']:
+    if kg_quality.verifiability.sources.name not in ['absent','Absent','', False] or kg_quality.verifiability.sources.web not in ['absent','Absent','', False] or kg_quality.verifiability.sources.email not in ['absent','Absent','', False]:
         sources = 1
 
     return 1 if author_query or author_metadata or contributors or publishers or sources else 0
