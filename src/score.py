@@ -4,6 +4,7 @@ import utils
 from string import whitespace
 import time
 import query
+import utils
 
 AVAILABILITY_METRICS = 4
 LICENSING_METRICS = 2
@@ -524,7 +525,7 @@ class Score:
         sparqlUrl = self.kg.extra.endpointUrl
         if self.kg.availability.sparqlEndpoint == 'Available':
             try:
-                allSubject = query.getNumS(sparqlUrl)
+                allSubject = utils.run_with_timeout(query.getNumS, args=(sparqlUrl,), timeout=300)
                 numLabel = self.kg.understendability.numLabel
                 if allSubject > 0 and isinstance(numLabel,int):
                     if allSubject >= numLabel:

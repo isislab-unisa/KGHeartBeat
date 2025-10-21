@@ -1,7 +1,7 @@
 import datetime
 import re
 from SPARQLWrapper import *
-from SPARQLWrapper import SPARQLWrapper
+from SPARQLWrapper import SPARQLWrapper2
 from xml.dom.minidom import Document
 import time
 import utils
@@ -21,7 +21,7 @@ def log_in_out(func):
     return decorated_func
 @log_in_out
 def checkEndPoint(url): 
-    sparql = SPARQLWrapper(url) 
+    sparql = SPARQLWrapper2(url) 
     sparql.setQuery("""
     SELECT ?s
     WHERE {?s ?p ?o .}
@@ -32,7 +32,7 @@ def checkEndPoint(url):
     return result
 
 def check_if_up(url):
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery("""
         SELECT ?s ?p ?o
         WHERE { ?s ?p ?o }
@@ -67,7 +67,7 @@ def check_if_up(url):
 
 @log_in_out
 def TPQuery(url,offset): 
-    sparql = SPARQLWrapper(url) 
+    sparql = SPARQLWrapper2(url) 
     sparql.setQuery("""
     SELECT ?s
     WHERE {?s ?p ?o .}
@@ -80,7 +80,7 @@ def TPQuery(url,offset):
 
 @log_in_out
 def getNumTripleQuery(url): #TODO QUERY WITHOUT COUNT (MAY NOT BE SUPPORTED)
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery("""
     SELECT (COUNT(?s) AS ?triples) 
     WHERE { ?s ?p ?o }
@@ -96,7 +96,7 @@ def getNumTripleQuery(url): #TODO QUERY WITHOUT COUNT (MAY NOT BE SUPPORTED)
 
 @log_in_out
 def testLatency(url): 
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     latency = []
     for i in range(5):
         sparql.setQuery("""
@@ -113,7 +113,7 @@ def testLatency(url):
 
 @log_in_out
 def numBlankNode(url):
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery("""
     SELECT (COUNT(?bnode) AS ?triples) 
     WHERE { ?bnode ?p ?o
@@ -134,7 +134,7 @@ def numBlankNode(url):
 @log_in_out
 def getLangugeSupported(url):
     languages = []
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery("""
     SELECT DISTINCT ?triples 
     WHERE{
@@ -155,7 +155,7 @@ def getLangugeSupported(url):
 
 @log_in_out
 def checkRDFDataStructures(url):  
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery("""
     PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -213,7 +213,7 @@ def checkRDFDataStructures(url):
 
 @log_in_out
 def checkSerialisationFormat(url):
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery('''
         PREFIX dcterms: <http://purl.org/dc/terms/>
         PREFIX dcat: <http://www.w3.org/ns/dcat#>
@@ -242,7 +242,7 @@ def checkSerialisationFormat(url):
 
 @log_in_out
 def checkDataDump(url):
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery('''
     PREFIX void: <http://rdfs.org/ns/void#>
     SELECT DISTINCT ?o 
@@ -263,7 +263,7 @@ def checkDataDump(url):
 
 @log_in_out
 def checkLicenseMR(url): #PROBLEM ON http://lod.b3kat.de/sparql
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery('''
     PREFIX cc: <http://creativecommons.org/ns#>
     PREFIX dc: <http://purl.org/dc/elements/1.1/>
@@ -295,7 +295,7 @@ def checkLicenseMR(url): #PROBLEM ON http://lod.b3kat.de/sparql
     
 @log_in_out
 def checkLicenseMR2(url):   #USED IN CASE THE QUERY WITH VALUES ISN'T SUPPORTED
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery('''
     PREFIX cc: <http://creativecommons.org/ns#>
     PREFIX dc: <http://purl.org/dc/elements/1.1/>
@@ -336,7 +336,7 @@ def checkLicenseMR2(url):   #USED IN CASE THE QUERY WITH VALUES ISN'T SUPPORTED
         return False
 @log_in_out
 def checkLicenseHR(url):
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery('''
     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
     PREFIX dct: <http://purl.org/dc/terms/>
@@ -378,7 +378,7 @@ def checkLicenseHR(url):
         return False
 @log_in_out
 def numberOfProperty(url):
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery('''
     PREFIX owl: <http://www.w3.org/2002/07/owl#>
     PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
@@ -415,7 +415,7 @@ def numberOfProperty(url):
         return False
 @log_in_out
 def getNumLabel(url):
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery('''
     PREFIX skosxl:<http://www.w3.org/2008/05/skos-xl#>
     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -477,7 +477,7 @@ def getNumLabel(url):
         return False
 @log_in_out
 def checkUriRegex(url):
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery('''
     PREFIX void: <http://rdfs.org/ns/void#>
     SELECT DISTINCT ?o 
@@ -500,7 +500,7 @@ def checkUriRegex(url):
         return False
 @log_in_out
 def checkUriPattern(url):
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery('''
     PREFIX void: <http://rdfs.org/ns/void#>
     SELECT DISTINCT ?o 
@@ -520,7 +520,7 @@ def checkUriPattern(url):
         return False
 @log_in_out
 def getVocabularies(url):
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery('''
     PREFIX dcterms: <http://purl.org/dc/terms/>
     PREFIX dcat: <http://www.w3.org/ns/dcat#>
@@ -548,7 +548,7 @@ def getVocabularies(url):
         return False
 @log_in_out
 def getCreator(url):
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery('''
     PREFIX dcterms: <http://purl.org/dc/terms/>
     PREFIX dcat: <http://www.w3.org/ns/dcat#>
@@ -583,7 +583,7 @@ def getCreator(url):
         return False
 @log_in_out
 def getPublisher(url):
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery('''                    
     PREFIX dcterms: <http://purl.org/dc/terms/>
     PREFIX dcat: <http://www.w3.org/ns/dcat#>
@@ -611,7 +611,7 @@ def getPublisher(url):
         return False
 @log_in_out
 def getNumEntities(url):
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery('''
     PREFIX void: <http://rdfs.org/ns/void#>
     SELECT DISTINCT ?o
@@ -637,7 +637,7 @@ def getNumEntities(url):
     
 @log_in_out
 def getNumEntitiesRegex(url,entityRe):
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery('''
    SELECT (COUNT(?s) as ?triples)
    WHERE{
@@ -658,7 +658,7 @@ def getNumEntitiesRegex(url,entityRe):
         return False        
 @log_in_out
 def getContributors(url):
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery('''
     PREFIX dcterms: <http://purl.org/dc/terms/>
     PREFIX dcat: <http://www.w3.org/ns/dcat#>
@@ -686,7 +686,7 @@ def getContributors(url):
         return False
 @log_in_out
 def getSameAsChains(url):
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery('''
     PREFIX owl: <http://www.w3.org/2002/07/owl#>
     PREFIX schema: <http://schema.org/>
@@ -710,7 +710,7 @@ def getSameAsChains(url):
         return False
 @log_in_out
 def getFrequency(url):
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery('''
     PREFIX dcterms: <http://purl.org/dc/terms/>
     PREFIX dcat: <http://www.w3.org/ns/dcat#>
@@ -744,7 +744,7 @@ def getFrequency(url):
         return False
 @log_in_out
 def getCreationDate(url):
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery('''
     PREFIX dcterms: <http://purl.org/dc/terms/>
     PREFIX dcat: <http://www.w3.org/ns/dcat#>
@@ -783,7 +783,7 @@ def getCreationDate(url):
         return False
 @log_in_out
 def getCreationDateMin(url):
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery('''
     PREFIX dcterms: <http://purl.org/dc/terms/>
     PREFIX void: <http://rdfs.org/ns/void#>
@@ -821,7 +821,7 @@ def getCreationDateMin(url):
         return False
 @log_in_out
 def getModificationDate(url):
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery('''
     PREFIX dcterms: <http://purl.org/dc/terms/>
     PREFIX dcat: <http://www.w3.org/ns/dcat#>
@@ -862,7 +862,7 @@ def getModificationDate(url):
         return False
 @log_in_out
 def getModificationDateMax(url):
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery('''
     PREFIX dcterms: <http://purl.org/dc/terms/>
     PREFIX dcat: <http://www.w3.org/ns/dcat#>
@@ -902,7 +902,7 @@ def getModificationDateMax(url):
 
 @log_in_out
 def getDateUpdates(url):
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery('''
     PREFIX dcterms: <http://purl.org/dc/terms/>
     PREFIX dcat: <http://www.w3.org/ns/dcat#>
@@ -947,7 +947,7 @@ def getDateUpdates(url):
 @log_in_out
 def getNumUpdatedData(url,date):
     if date != False:
-        sparql = SPARQLWrapper(url)
+        sparql = SPARQLWrapper2(url)
         sparql.setQuery('''
         PREFIX dcterms:<http://purl.org/dc/terms/>
         SELECT DISTINCT (COUNT(?o) AS ?triples)
@@ -970,7 +970,7 @@ def getNumUpdatedData(url,date):
 
 @log_in_out
 def getDeprecated(url):
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery('''
     PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
     PREFIX owl: <http://www.w3.org/2002/07/owl#>
@@ -994,7 +994,7 @@ def getDeprecated(url):
         return False
 @log_in_out
 def getLabel(url):
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery('''
     PREFIX skosxl:<http://www.w3.org/2008/05/skos-xl#>
     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -1056,7 +1056,7 @@ def getLabel(url):
         return False
 @log_in_out
 def getDisjoint(url):
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery('''
     PREFIX owl: <http://www.w3.org/2002/07/owl#>
     SELECT DISTINCT (COUNT(?s) AS ?triples) 
@@ -1077,7 +1077,7 @@ def getDisjoint(url):
 
 @log_in_out
 def getAllClasses(url):
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery("""
     PREFIX owl: <http://www.w3.org/2002/07/owl#>
     PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -1097,7 +1097,7 @@ def getAllClasses(url):
         return False
 @log_in_out
 def getAllProperty(url):
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery('''
     PREFIX owl: <http://www.w3.org/2002/07/owl#>
     PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
@@ -1135,7 +1135,7 @@ def getAllProperty(url):
 
 @log_in_out
 def getAllType(url):
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery('''
     PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
     SELECT DISTINCT ?s
@@ -1157,7 +1157,7 @@ def getAllType(url):
         return e
 @log_in_out
 def getAllTypeO(url):
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery('''
     PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
     SELECT DISTINCT ?o
@@ -1177,7 +1177,7 @@ def getAllTypeO(url):
 
 @log_in_out
 def getSkosMapping(url):
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery('''
     PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
     SELECT (COUNT(?o) AS ?triples)
@@ -1207,7 +1207,7 @@ def getSkosMapping(url):
 
 @log_in_out
 def getSkosMapping(url):
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery('''
     PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
     SELECT (COUNT(?o) AS ?triples)
@@ -1237,7 +1237,7 @@ def getSkosMapping(url):
 
 @log_in_out
 def getAllPropertySP(url):
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery('''
     PREFIX owl: <http://www.w3.org/2002/07/owl#>
     PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
@@ -1271,7 +1271,7 @@ def getAllPropertySP(url):
 
 @log_in_out
 def getAllTriplesSPO(url):
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery('''
     SELECT *
     WHERE{?s ?p ?o}
@@ -1299,7 +1299,7 @@ def getAllTriplesSPO(url):
 
 @log_in_out
 def getAllPredicate(url):
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery('''
     SELECT DISTINCT ?p
     WHERE{?s ?p ?o}
@@ -1326,7 +1326,7 @@ def getAllPredicate(url):
 
 @log_in_out
 def getSign(url):
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery('''
     PREFIX swp:<http://www.w3.org/2004/03/trix/swp-2/>
     SELECT ?s ?o
@@ -1359,7 +1359,7 @@ def getSign(url):
         return e
 @log_in_out
 def getDlc(url):
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery('''
     SELECT (COUNT(?o) AS ?triples)
     WHERE{?s ?p ?o.
@@ -1382,7 +1382,7 @@ def getDlc(url):
         return e
 @log_in_out
 def countStruct(url): 
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery("""
      PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -1429,7 +1429,7 @@ def countStruct(url):
 
 @log_in_out
 def getNumDlcBN(url):
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery('''
     SELECT (COUNT(?bnode) AS ?triples)
     WHERE { ?bnode ?p ?o
@@ -1454,29 +1454,29 @@ def getNumDlcBN(url):
 
 @log_in_out
 def getNumS(url):
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery('''
     SELECT (COUNT(?s) AS ?triples)
     WHERE {?s ?p ?o}
     ''')
-    sparql.setTimeout(300)
     sparql.setReturnFormat(JSON)
-    results = sparql.query().convert()
-    sparql.setReturnFormat(JSON) #ASKS TO RECEIVE DATA IN JSON FORMAT IS SUPPORTED
     sparql.setTimeout(300) #5 minutes
-    results = sparql.query().convert()
-    if isinstance(results,dict):
-        numBnode = utils.getResultsFromJSONCountInt(results) #BEFORE WITHOUT INT
-        return numBnode
-    elif isinstance(results,Document):
-        numBnode = utils.getResultsFromXMLCount(results)
-        return numBnode
-    else:
+    try:
+        results = sparql.query().convert()
+        if isinstance(results,dict):
+            numBnode = utils.getResultsFromJSONCountInt(results) #BEFORE WITHOUT INT
+            return numBnode
+        elif isinstance(results,Document):
+            numBnode = utils.getResultsFromXMLCount(results)
+            return numBnode
+        else:
+            return False
+    except Exception:
         return False
     
 @log_in_out
 def getIFP(url):
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery('''
     PREFIX owl: <http://www.w3.org/2002/07/owl#>
     SELECT *
@@ -1498,7 +1498,7 @@ def getIFP(url):
      
 @log_in_out
 def getFP(url):
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery('''
     PREFIX owl: <http://www.w3.org/2002/07/owl#>
     SELECT *
@@ -1520,7 +1520,7 @@ def getFP(url):
     
 @log_in_out
 def getAllPredicate2(url):
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery('''
     SELECT DISTINCT ?p
     WHERE{?s ?p ?o.}
@@ -1539,7 +1539,7 @@ def getAllPredicate2(url):
 
 @log_in_out
 def getAllObject(url):
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery('''
     SELECT DISTINCT ?o
     WHERE{?s ?p ?o.}
@@ -1558,7 +1558,7 @@ def getAllObject(url):
 
 @log_in_out
 def getUris(url):
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery('''
     SELECT DISTINCT ?s
     WHERE {
@@ -1582,7 +1582,7 @@ def getUris(url):
     
 
 def queryWithSingleAcceptFromat(url,query):
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery(query)
     sparql.setTimeout(300) #10 minutes
     sparql.addCustomHttpHeader('Accept','application/sparql-results+json') #SOME ENDPOINT DOESN'T SUPPORT MULTIPLE ACCEPT FORMAT
@@ -1590,7 +1590,7 @@ def queryWithSingleAcceptFromat(url,query):
 
 @log_in_out
 def get_download_link(url):
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     sparql.setQuery('''
        PREFIX dcterms: <http://purl.org/dc/terms/>
         PREFIX dcat: <http://www.w3.org/ns/dcat#>
@@ -1620,7 +1620,7 @@ def get_download_link(url):
 
 @log_in_out
 def get_kg_name(url):
-    sparql = SPARQLWrapper(url)
+    sparql = SPARQLWrapper2(url)
     query = """
     PREFIX dcat: <http://www.w3.org/ns/dcat#>
     PREFIX void: <http://rdfs.org/ns/void#>
@@ -1659,7 +1659,7 @@ def get_kg_name(url):
 
 @log_in_out
 def get_kg_url(endpoint_url):
-    sparql = SPARQLWrapper(endpoint_url)
+    sparql = SPARQLWrapper2(endpoint_url)
     query = """
     PREFIX void: <http://rdfs.org/ns/void#>
     PREFIX foaf: <http://xmlns.com/foaf/0.1/>
@@ -1698,7 +1698,7 @@ def get_kg_url(endpoint_url):
 
 @log_in_out
 def get_kg_id(endpoint_url):
-    sparql = SPARQLWrapper(endpoint_url)
+    sparql = SPARQLWrapper2(endpoint_url)
     query = """
     PREFIX dcat: <http://www.w3.org/ns/dcat#>
     PREFIX void: <http://rdfs.org/ns/void#>
@@ -1729,7 +1729,7 @@ def get_kg_id(endpoint_url):
 
 @log_in_out
 def get_kg_void(endpoint_url):
-    sparql = SPARQLWrapper(endpoint_url)
+    sparql = SPARQLWrapper2(endpoint_url)
     sparql.setQuery("""
     SELECT ?s ?p ?o
     WHERE {
@@ -1796,7 +1796,7 @@ def get_kg_void(endpoint_url):
 
 @log_in_out
 def check_void_dcat(endpoint_url):
-    sparql = SPARQLWrapper(endpoint_url)
+    sparql = SPARQLWrapper2(endpoint_url)
     query = """
     PREFIX dcat: <http://www.w3.org/ns/dcat#>
     PREFIX void: <http://rdfs.org/ns/void#>
@@ -1831,7 +1831,7 @@ def check_void_dcat(endpoint_url):
 
 @log_in_out
 def check_acc_feature(endpoint_url):
-    sparql = SPARQLWrapper(endpoint_url)
+    sparql = SPARQLWrapper2(endpoint_url)
     query = """
         PREFIX schema: <https://schema.org/>
 
@@ -1858,7 +1858,7 @@ def check_acc_feature(endpoint_url):
 
 @log_in_out
 def get_all_metadata_obj(endpoint_url):
-    sparql = SPARQLWrapper(endpoint_url)
+    sparql = SPARQLWrapper2(endpoint_url)
     query = """
         PREFIX void: <http://rdfs.org/ns/void#>
         PREFIX foaf: <http://xmlns.com/foaf/0.1/>
@@ -1895,7 +1895,7 @@ def get_all_metadata_obj(endpoint_url):
 
 @log_in_out
 def get_version(endpoint_url):
-    sparql = SPARQLWrapper(endpoint_url)
+    sparql = SPARQLWrapper2(endpoint_url)
     query = """
     PREFIX void: <http://rdfs.org/ns/void#>
     PREFIX dcat: <http://www.w3.org/ns/dcat#>
@@ -1944,7 +1944,7 @@ def get_version(endpoint_url):
     
 @log_in_out
 def get_identifier(endpoint_url):
-    sparql = SPARQLWrapper(endpoint_url)
+    sparql = SPARQLWrapper2(endpoint_url)
     query = """
     PREFIX void: <http://rdfs.org/ns/void#>
     PREFIX dcat: <http://www.w3.org/ns/dcat#>
@@ -1978,7 +1978,7 @@ def get_identifier(endpoint_url):
 
 @log_in_out
 def get_contact_point(endpoint_url):
-    sparql = SPARQLWrapper(endpoint_url)
+    sparql = SPARQLWrapper2(endpoint_url)
     query = """
     PREFIX void: <http://rdfs.org/ns/void#>
     PREFIX dcat: <http://www.w3.org/ns/dcat#>
@@ -2011,7 +2011,7 @@ def get_contact_point(endpoint_url):
     
 @log_in_out
 def get_string_literals(endpoint_url):
-    sparql = SPARQLWrapper(endpoint_url)
+    sparql = SPARQLWrapper2(endpoint_url)
     # We have to recover it like this because the string with the language tag is not recognized as a string with datatype xsd:string
     #?lang is empty if no lang tag is present or is xsd:string
     query = """
@@ -2025,7 +2025,7 @@ def get_string_literals(endpoint_url):
                 
     """
     try:
-        sparql = SPARQLWrapper(endpoint_url)
+        sparql = SPARQLWrapper2(endpoint_url)
         sparql.setQuery(query)
         sparql.setReturnFormat(JSON)
         results = sparql.query().convert()
@@ -2047,7 +2047,7 @@ def get_string_literals(endpoint_url):
         
 @log_in_out
 def get_examples(endpoint_url):
-    sparql = SPARQLWrapper(endpoint_url)
+    sparql = SPARQLWrapper2(endpoint_url)
     query = """
     PREFIX void: <http://rdfs.org/ns/void#>
     PREFIX dcat: <http://www.w3.org/ns/dcat#>
@@ -2079,7 +2079,7 @@ def get_examples(endpoint_url):
 
 @log_in_out
 def get_apis_url(endpoint_url):
-    sparql = SPARQLWrapper(endpoint_url)
+    sparql = SPARQLWrapper2(endpoint_url)
     query = """
         PREFIX void: <http://rdfs.org/ns/void#>
         PREFIX dcat: <http://www.w3.org/ns/dcat#>
@@ -2112,7 +2112,7 @@ def get_apis_url(endpoint_url):
 
 @log_in_out
 def count_res_with_label(endpoint_url):
-    sparql = SPARQLWrapper(endpoint_url)
+    sparql = SPARQLWrapper2(endpoint_url)
     sparql.setQuery('''
         PREFIX skosxl: <http://www.w3.org/2008/05/skos-xl#>
         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -2164,7 +2164,7 @@ def count_res_with_label(endpoint_url):
 
 @log_in_out
 def count_res(endpoint_url):
-    sparql = SPARQLWrapper(endpoint_url)
+    sparql = SPARQLWrapper2(endpoint_url)
     sparql.setQuery('''
         SELECT (COUNT(DISTINCT ?s) AS ?triples)
         WHERE {
@@ -2188,7 +2188,7 @@ def count_res(endpoint_url):
 
 @log_in_out
 def getImagesTriples(endpoint_url):
-    sparql = SPARQLWrapper(endpoint_url)
+    sparql = SPARQLWrapper2(endpoint_url)
     sparql.setQuery('''
     PREFIX foaf: <http://xmlns.com/foaf/0.1/>
     PREFIX schema: <http://schema.org/>
@@ -2226,7 +2226,7 @@ def getImagesTriples(endpoint_url):
 
 @log_in_out
 def getImageIri(endpoint_url):
-    sparql = SPARQLWrapper(endpoint_url)
+    sparql = SPARQLWrapper2(endpoint_url)
     sparql.setQuery('''
     PREFIX foaf: <http://xmlns.com/foaf/0.1/>
     PREFIX schema: <http://schema.org/>
@@ -2264,7 +2264,7 @@ def getImageIri(endpoint_url):
 
 @log_in_out
 def hasAltDescription(endpoint_url,iri_to_check):
-    sparql = SPARQLWrapper(endpoint_url)
+    sparql = SPARQLWrapper2(endpoint_url)
     encoded_iri = quote(iri_to_check, safe="/:#?&=%")
     sparql.setQuery(f"""
     PREFIX skosxl: <http://www.w3.org/2008/05/skos-xl#>
@@ -2305,7 +2305,7 @@ def hasAltDescription(endpoint_url,iri_to_check):
 
 @log_in_out
 def fetch_objects(endpoint_url, limit=1000, condition = ()):
-    sparql = SPARQLWrapper(endpoint_url)
+    sparql = SPARQLWrapper2(endpoint_url)
     offset = 0
     count = 0
 
@@ -2341,7 +2341,7 @@ def fetch_objects(endpoint_url, limit=1000, condition = ()):
 
 @log_in_out
 def fetch_objects_value(endpoint_url, limit=1000, condition = ()):
-    sparql = SPARQLWrapper(endpoint_url)
+    sparql = SPARQLWrapper2(endpoint_url)
     offset = 0
     values = []
 
@@ -2377,7 +2377,7 @@ def fetch_objects_value(endpoint_url, limit=1000, condition = ()):
     
 @log_in_out
 def count_audio_objects_sparql(endpoint_url):
-    sparql = SPARQLWrapper(endpoint_url)
+    sparql = SPARQLWrapper2(endpoint_url)
     query = """
         SELECT (COUNT(DISTINCT ?o) AS ?audioCount)
         WHERE {
@@ -2403,7 +2403,7 @@ def count_audio_objects_sparql(endpoint_url):
     
 @log_in_out
 def check_video_presence(endpoint_url, limit = True):
-    sparql = SPARQLWrapper(endpoint_url)
+    sparql = SPARQLWrapper2(endpoint_url)
     query = """
         SELECT ?o
         WHERE {
@@ -2439,7 +2439,7 @@ def check_video_presence(endpoint_url, limit = True):
 
 @log_in_out
 def check_audio_presence(endpoint_url, limit = True):
-    sparql = SPARQLWrapper(endpoint_url)
+    sparql = SPARQLWrapper2(endpoint_url)
     query = """
         SELECT ?o
         WHERE {
@@ -2473,7 +2473,7 @@ def check_audio_presence(endpoint_url, limit = True):
         return e, []
     
 def get_all_obj_in_meta(endpoint_url):
-    sparql = SPARQLWrapper(endpoint_url)
+    sparql = SPARQLWrapper2(endpoint_url)
     query = """
     PREFIX void: <http://rdfs.org/ns/void#>
     PREFIX dcat: <http://www.w3.org/ns/dcat#>
@@ -2505,7 +2505,7 @@ def get_all_obj_in_meta(endpoint_url):
 @log_in_out
 def check_sign_language(endpoint_url, iri_to_check):
     encoded_iri = quote(iri_to_check, safe="/:#?&=%")
-    sparql = SPARQLWrapper(endpoint_url)
+    sparql = SPARQLWrapper2(endpoint_url)
     sparql.setQuery(f"""
     PREFIX skosxl: <http://www.w3.org/2008/05/skos-xl#>
     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -2545,7 +2545,7 @@ def check_sign_language(endpoint_url, iri_to_check):
         return e, []
     
 def getDescription(endpoint_url):
-    sparql = SPARQLWrapper(endpoint_url)
+    sparql = SPARQLWrapper2(endpoint_url)
     query = """
     PREFIX void: <http://rdfs.org/ns/void#>
     PREFIX dcat: <http://www.w3.org/ns/dcat#>

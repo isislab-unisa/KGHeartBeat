@@ -36,6 +36,7 @@ from nltk.tokenize import sent_tokenize, word_tokenize
 import VoIDAnalyses
 import re
 _NETLOC_PATTERN = re.compile(r'^[\w\-\.]+(?:\:\d+)?$')
+from multiprocessing import Process, Queue
 
 #PRINT THE METADATI OF A KG
 def printMetadatiKG(metadct):
@@ -1512,3 +1513,16 @@ def flesch_reading_ease(text):
 
     score = 206.835 - 1.015 * words_per_sentence - 84.6 * syllables_per_word
     return round(score, 2)
+
+
+def run_with_timeout(func, args=(), timeout=300):
+    q = Queue()
+    p = Process(target=lambda q, *a: q.put(func(*a)), args=(q, *args))
+    p.start()
+    p.join(timeout)
+    if p.is_alive():
+        p.terminate()
+        p.join()
+        print(f"Terminated due to timeout after {timeout}s")
+        return False
+    return q.get() if not q.empty() else False
