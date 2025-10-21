@@ -708,6 +708,7 @@ def analyses(analysis_date,idKG = None,nameKG = None, sparql_endpoint = None):
             numEntities = '-'
 
         #GET NUMBER OF ENTITIES WITH REGEX
+        entitiesRe = '-'
         try:
             if len(regex) > 0:
                 entitiesRe = 0
@@ -718,7 +719,7 @@ def analyses(analysis_date,idKG = None,nameKG = None, sparql_endpoint = None):
                 logger.warning(f'Amount of data | Scope | Insufficient data',extra=kg_info)
         except Exception as error:
             logger.warning(f'Amount of data | Scope | {str(error)}',extra=kg_info)
-            etitiesRe = '-'
+            entitiesRe = '-'
         
         if not(isinstance(entitiesRe,int)) or entitiesRe == 0: #IF CONTROL WITH SPARQL ENDPOINT FAILS WE COUNT THE ENTITY BY RECOVERING ALL THE TRIPLES
             try:

@@ -14,15 +14,12 @@ from SPARQLWrapper import SPARQLWrapper
 import requests
 import time
 import mechanize
-from twill.commands import browser
 import query
 from Resources import Resources
 from ExternalLink import ExternalLink
 import networkx as nx
 import re
-import validators
 import shutil
-import urllib.request
 from urllib.parse import urlparse
 import json
 import ssl
@@ -31,7 +28,6 @@ from API.fair_vocabularies import fair_vocabularies
 from collections import Counter
 import re
 from urllib.parse import urlparse
-import nltk
 from nltk.tokenize import sent_tokenize, word_tokenize
 import VoIDAnalyses
 import re
