@@ -94,7 +94,7 @@ class Accessibility4All:
             for obj in all_obj_void:
                 if utils.is_url(obj):
                     try:
-                        response = requests.get(obj)
+                        response = requests.get(obj, timeout=10)
                         if response.status_code != 200:
                             broken_links += 1
                         elif response.status_code == 200:
