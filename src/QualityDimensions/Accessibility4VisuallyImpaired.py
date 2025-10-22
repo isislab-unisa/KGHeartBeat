@@ -26,9 +26,11 @@ class Accessibility4VisuallyImpaired:
                             print(f"Processed {i}/{len(images)} images...")
                     else:
                         continue
-                return (count_with_alt / len(images), len(images))
+                return (count_with_alt / len(images), "Total number of images recovered: " + str(len(images)))
             if isinstance(images, list) and len(images) == 0:
                 return (0, "No images found in the KG")
+            else:
+                return 0, f"Error fetching images: {images}"
     
     def audio_meta(self, sparql_endpoint, void_file_url, resources):
         return utils.check_metadata_media_type(sparql_endpoint, void_file_url, resources, "audio/")
