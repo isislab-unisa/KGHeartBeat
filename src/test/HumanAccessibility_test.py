@@ -85,7 +85,11 @@ for kg_id in toAnalyze:
         if isinstance(license_query, list) and len(license_query) > 0:
             license = license_query
     if not license and utils.is_url(file_void_url):
-        license = VoIDAnalyses.getLicense(file_void_url)
+        void_file = VoIDAnalyses.parseVoID(file_void_url)
+        if void_file != False:
+            license = VoIDAnalyses.getLicense(void_file)
+        else:
+            license = False
 
     results[kg_identifier] = {}
     results[kg_identifier]['sparql_endpoint'] = sparql_endpoint_url
