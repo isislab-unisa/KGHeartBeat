@@ -234,7 +234,10 @@ class Accessibility4All:
         for resources in resourcesDH:
             if resources.get("status") == "active":
                 dumps.append(resources['path'])
-                size = utils.estimate_file_size_gb(resources['path'])
+                try:
+                    size = utils.estimate_file_size_gb(resources['path'])
+                except Exception as e:
+                    size = False
                 if isinstance(size, float) and size < 4:
                     small_dump = True
                     break
