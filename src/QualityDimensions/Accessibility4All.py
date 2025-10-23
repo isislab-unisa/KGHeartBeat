@@ -271,10 +271,10 @@ class Accessibility4All:
     
     def image(self, sparql_endpoint):
         if utils.is_url(sparql_endpoint):
-            image_in_kg = query.getImagesTriples(sparql_endpoint)
+            image_in_kg = query.getImageIri(sparql_endpoint)
             total_resources_in_kg = query.count_res(sparql_endpoint)
-            if isinstance(image_in_kg, int) and isinstance(total_resources_in_kg, int) and total_resources_in_kg > 0:
-                image_ratio = image_in_kg / total_resources_in_kg
+            if isinstance(image_in_kg, list) and isinstance(total_resources_in_kg, int) and total_resources_in_kg > 0:
+                image_ratio = len(image_in_kg) / total_resources_in_kg
                 return (image_ratio, image_in_kg)
             elif image_in_kg == False or total_resources_in_kg == False:
                 return (0, 'Error querying SPARQL endpoint')
@@ -335,7 +335,11 @@ class Accessibility4All:
     def common_formats_availability(self, idKG):
         resourcesDH = Aggregator.getOtherResources(idKG)
         resourcesDH = utils.insertAvailability(resourcesDH)
-        metadata_media_type = utils.extract_media_type(resourcesDH)
+        available_download = []
+        for res in resourcesDH:
+            if res.get("status") == "active" and res.get("type") == "full_download" or res.get("type") == "other_download":
+                available_download.append(res)
+        metadata_media_type = utils.extract_media_type(available_download)
         common_formats_availability = utils.check_common_acceppted_format(metadata_media_type)
         if common_formats_availability:
             return (1, metadata_media_type)
@@ -369,7 +373,10 @@ class Accessibility4All:
         # Check availability in the download links in the search engine metadata
         resourcesDH = Aggregator.getOtherResources(idKG)
         resourcesDH = utils.insertAvailability(resourcesDH)
-        available_download = any(res.get("status") == "active" for res in resourcesDH)
+        print("Reources: ",resourcesDH)
+        available_download = any(res.get("status") == "active" and 
+                                 res.get("type") == "full_download" and 
+                                 utils.check_common_acceppted_format(res.get("format")) for res in resourcesDH)
 
         # Check links availability from the SPARQL endpoint if online
         if utils.is_url(sparql_endpoint_url):
