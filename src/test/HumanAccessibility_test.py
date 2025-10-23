@@ -85,12 +85,15 @@ for kg_id in toAnalyze:
         for resource in resourcesDH:
             if resource.get("status") == "active" and resource.get("type") == "full_download" and (utils.check_common_acceppted_format(resource.get("format")) or utils.check_if_zipped_dump(resource.get("format")) or utils.url_points_to_graph_file(resource.get("path"))):
                 print(f"Found active full download resource with accepted format: {resource.get('format')}")
-                rdf_file, archive_file = graphdb_interface.download_rdf(resource.get("path"))
-                graphdb_interface.create_repository()
-                graphdb_interface.load_rdf_dump(rdf_file)
-                sparql_endpoint_url = graphdb_interface.get_sparql_endpoint()
-                print(f"Started local GraphDB SPARQL endpoint at {sparql_endpoint_url}") 
-
+                try:
+                    rdf_file, archive_file = graphdb_interface.download_rdf(resource.get("path"))
+                    graphdb_interface.create_repository()
+                    graphdb_interface.load_rdf_dump(rdf_file)
+                    sparql_endpoint_url = graphdb_interface.get_sparql_endpoint()
+                    print(f"Started local GraphDB SPARQL endpoint at {sparql_endpoint_url}")
+                except Exception as e:
+                    print(f"Error while loading data dump into GraphDB{resource.get('path')}: {e}")
+                    continue
 
 
     accessibility4all = Accessibility4All()
