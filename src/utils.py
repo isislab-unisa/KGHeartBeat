@@ -1114,12 +1114,54 @@ def extract_media_type(resources_metadata):
 def check_common_acceppted_format(media_types):
     common_acceppted_format = ['application/rdf+xml','application/rdf+xml','text/turtle','application/x-ntriples','application/x-nquads', 'application/n-triples',
                                'application/trig','text/n3','rdf','text/rdf+n3','rdf/turtle','plain/text','application/octet-stream','application/x-gzip','gzip:ntriples']
-    for media_type in media_types:
-        if isinstance(media_type,str):
-            if media_type.lower() in common_acceppted_format:
-                return True
+    if isinstance(media_types,list):
+        for media_type in media_types:
+            if isinstance(media_type,str):
+                if media_type.lower() in common_acceppted_format:
+                    return True
 
-    return False 
+        return False 
+    else:
+        return False
+
+def check_if_zipped_dump(media_types):
+    zipped_formats = ['application/x-gzip','application/gzip','application/zip','application/x-zip-compressed','multipart/x-zip']
+    if isinstance(media_types,list):
+        for media_type in media_types:
+            if isinstance(media_type,str):
+                if media_type.lower() in zipped_formats:
+                    return True
+
+        return False
+    else:
+        return False
+
+def url_points_to_graph_file(url):
+    SUPPORTED_EXTENSIONS = ['.ttl', '.rdf', '.nt', '.jsonld', '.xml']
+    try:
+        # Check if URL is valid
+        result = urlparse(url)
+        if not all([result.scheme, result.netloc]):
+            return False
+
+        response = requests.head(url, allow_redirects=True, timeout=10)
+        if response.status_code != 200:
+            return False
+
+        # Check content-type header
+        content_type = response.headers.get('Content-Type', '')
+        if any(ct in content_type for ct in ['text/turtle', 'application/ld+json', 'application/rdf+xml', 'application/n-triples']):
+            return True
+
+        # Check file extension
+        if any(url.lower().endswith(ext) for ext in SUPPORTED_EXTENSIONS):
+            return True
+
+        return False
+
+    except requests.RequestException:
+        return False
+
 
 def is_valid_void_url(url):
     try:

@@ -232,7 +232,7 @@ class Accessibility4All:
         small_dump = False
         dumps = []
         for resources in resourcesDH:
-            if resources.get("status") == "active":
+            if resources.get("status") == "active" and resources.get("type") == "full_download" and (utils.check_common_acceppted_format(resources.get("format")) or utils.check_if_zipped_dump(resources.get("format"))):
                 dumps.append(resources['path'])
                 try:
                     size = utils.estimate_file_size_gb(resources['path'])
@@ -337,7 +337,7 @@ class Accessibility4All:
         resourcesDH = utils.insertAvailability(resourcesDH)
         available_download = []
         for res in resourcesDH:
-            if res.get("status") == "active" and res.get("type") == "full_download" or res.get("type") == "other_download":
+            if res.get("status") == "active" and res.get("type") == "full_download":
                 available_download.append(res)
         metadata_media_type = utils.extract_media_type(available_download)
         common_formats_availability = utils.check_common_acceppted_format(metadata_media_type)
@@ -373,10 +373,9 @@ class Accessibility4All:
         # Check availability in the download links in the search engine metadata
         resourcesDH = Aggregator.getOtherResources(idKG)
         resourcesDH = utils.insertAvailability(resourcesDH)
-        print("Reources: ",resourcesDH)
         available_download = any(res.get("status") == "active" and 
-                                 res.get("type") == "full_download" and 
-                                 utils.check_common_acceppted_format(res.get("format")) for res in resourcesDH)
+                                 res.get("type") == "full_download" and (
+                                 utils.check_common_acceppted_format(res.get("format") or utils.url_points_to_graph_file(res.get("url")))) for res in resourcesDH)
 
         # Check links availability from the SPARQL endpoint if online
         if utils.is_url(sparql_endpoint_url):

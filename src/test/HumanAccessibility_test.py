@@ -3,8 +3,8 @@ import sys
 import json
 import pandas as pd
 import requests
-
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from graphdb_pipeline import graphdb_interface
 from API import Aggregator, AGAPI, CHeCloudAPI
 from API.monitoring_requests import MonitoringRequests
 import utils
@@ -76,6 +76,23 @@ for kg_id in toAnalyze:
     elif not utils.is_url(file_void_url) and not utils.is_url(website_url):
         file_void_url = False
 
+
+    if utils.is_url(sparql_endpoint_url):
+        available_sparql = bool(query.check_if_up(sparql_endpoint_url))
+    elif sparql_endpoint_url == False:
+        print(f"SPARQL endpoint {sparql_endpoint_url} is not available.")
+        resourcesDH = utils.insertAvailability(resourcesDH)
+        for resource in resourcesDH:
+            if resource.get("status") == "active" and resource.get("type") == "full_download" and (utils.check_common_acceppted_format(resource.get("format")) or utils.check_if_zipped_dump(resource.get("format")) or utils.url_points_to_graph_file(resource.get("path"))):
+                print(f"Found active full download resource with accepted format: {resource.get('format')}")
+                rdf_file, archive_file = graphdb_interface.download_rdf(resource.get("path"))
+                graphdb_interface.create_repository()
+                graphdb_interface.load_rdf_dump(rdf_file)
+                sparql_endpoint_url = graphdb_interface.get_sparql_endpoint()
+                print(f"Started local GraphDB SPARQL endpoint at {sparql_endpoint_url}") 
+
+
+
     accessibility4all = Accessibility4All()
 
     # Metadata license
@@ -139,6 +156,9 @@ for kg_id in toAnalyze:
     df.index.name = 'KG_ID'
     df.reset_index(inplace=True)
     df.to_csv('HumanAccessibility_results_verbose.csv', index=False)
+
+    if isinstance(sparql_endpoint_url, str) and ('host.docker.internal' in sparql_endpoint_url or 'localhost' in sparql_endpoint_url):
+        graphdb_interface.cleanup_all()
 
 # Compute final score summary
 score_rows = []

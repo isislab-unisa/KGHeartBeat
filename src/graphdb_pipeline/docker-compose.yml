@@ -1,0 +1,12 @@
+version: "3.9"
+services:
+  graphdb:
+    image: ontotext/graphdb:10.3.3
+    container_name: graphdb
+    ports:
+      - "7200:7200"
+    volumes:
+      - ./graphdb-data:/opt/graphdb/home
+      - ./data:/data
+    environment:
+      GDB_HEAP_SIZE: 4g
