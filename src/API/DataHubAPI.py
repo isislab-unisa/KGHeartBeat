@@ -15,7 +15,7 @@ def getDataPackage(idDataset, pages=12, rows=1000, snapshot='./datahub.json'):
     for i in range(pages):
         params = {"rows": rows, "start": start}
         try:
-            response = requests.get(base_url, params=params, timeout=15)
+            response = requests.get(base_url, params=params, timeout=15, verify=False)
             if response.status_code == 200:
                 print(f"Request {i+1}/{pages} successful — start={start}")
                 data = response.json()
