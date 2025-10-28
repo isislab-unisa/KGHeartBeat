@@ -39,12 +39,12 @@ class Accessibility4All:
                 if any(normalize(license) in okfn_urls for license in kg_license):
                     self.open_license_value = (1, kg_license)
                 else:
-                    self.open_license_value = (0.5, kg_license)
+                    self.open_license_value = (-1, kg_license)
             else:
                 if normalize(kg_license) in okfn_urls:
                     self.open_license_value = (1, kg_license)
                 else:
-                    self.open_license_value = (0.5, kg_license)
+                    self.open_license_value = (-1, kg_license)
 
             return self.open_license_value
         else:
@@ -57,24 +57,53 @@ class Accessibility4All:
             if response.status_code == 200:
                 return (1, website_url)
             else:
-                return (0, website_url)
+                return (-1, website_url)
         except Exception as e:
-            return (0, e)
+            return (-1, e)
+        
+        try:
+            response = requests.get(url, allow_redirects=True, timeout=10)
+            # Basic validity check
+            if response.status_code != 200:
+                return False
+
+            # Lowercase content for keyword search
+            content = response.text.lower()
+
+            # Detect common "not found" indicators
+            error_indicators = [
+                "not found",
+                "error",
+                "404",
+                "page not found",
+                "content not found",
+                "does not exist",
+                "no encontrado",
+                "no se encuentra",
+            ]
+
+            # If any error indicator appears in the content → treat as broken
+            if any(indicator in content for indicator in error_indicators):
+                return (-1, website_url)
+
+            return (1, website_url)
+        except requests.RequestException:
+            return (-1, website_url)
         
     def check_authentication(self, sparql_endpoint):
         if utils.is_url(sparql_endpoint):
             try:
                 response = requests.get(sparql_endpoint)
                 if response.status_code == 200:
-                    return (1, sparql_endpoint)
-                elif response.status_code == 401:
                     return (0, sparql_endpoint)
+                elif response.status_code == 401:
+                    return (-1, sparql_endpoint)
                 else:
-                    return (0, f"{sparql_endpoint} (status: {response.status_code})")
+                    return (-1, f"{sparql_endpoint} (status: {response.status_code})")
             except Exception as e:
-                return (0, str(e))
+                return (-1, str(e))
         else:
-            return (0, "No SPARQL endpoint provided")
+            return (-1, "No SPARQL endpoint provided")
 
 
     def metadata_broken_links_rate(self, search_engine_metadata, sparql_endpoint, void_file_url, kg_id):
@@ -161,9 +190,9 @@ class Accessibility4All:
                 version = version_in_void
 
         if version != False:
-            return (1, version)
+            return (0, version)
         else:
-            return (0, "No version found")
+            return (-1, "No version found")
 
     def assistive_technologies(self, sparql_endpoint, void_file_url):
         ass_tech = []
@@ -230,6 +259,8 @@ class Accessibility4All:
         resourcesDH = Aggregator.getOtherResources(idKG)
         resourcesDH = utils.insertAvailability(resourcesDH)
         small_dump = False
+        medium_dump = False
+        large_dump = False
         dumps = []
         for resources in resourcesDH:
             if resources.get("status") == "active" and resources.get("type") == "full_download" and (utils.check_common_acceppted_format(resources.get("format")) or utils.check_if_zipped_dump(resources.get("format"))):
@@ -238,18 +269,25 @@ class Accessibility4All:
                     size = utils.estimate_file_size_gb(resources['path'])
                 except Exception as e:
                     size = False
-                if isinstance(size, float) and size < 4:
+                if isinstance(size, float) and size < 0.500:
                     small_dump = True
-                    break
+                elif isinstance(size, float) and 0.500 <= size < 4:
+                    medium_dump = True
+                elif isinstance(size, float) and size >= 4:
+                    large_dump = True
         
         if utils.is_url(void_file_url):
             void_file = VoIDAnalyses.parseVoID(void_file_url)
             dump = VoIDAnalyses.getDataDump(void_file)
             if utils.is_url(dump):
                 dumps.append(dump)
-                if isinstance(size, float) and size < 4:
+                if isinstance(size, float) and size < 0.500:
                     small_dump = True
-    
+                elif isinstance(size, float) and 0.500 <= size < 4:
+                    medium_dump = True
+                elif isinstance(size, float) and size >= 4:
+                    large_dump = True
+
         if utils.is_url(sparql_endpoint):
             sparql_dumps = query.get_download_link(sparql_endpoint)
             if isinstance(sparql_dumps, list):
@@ -257,16 +295,21 @@ class Accessibility4All:
                     if utils.is_url(dump_link):
                         dumps.append(dump_link)
                         size = utils.estimate_file_size_gb(dump_link)
-                        if isinstance(size, float) and size < 4:
+                        if isinstance(size, float) and size < 0.500:
                             small_dump = True
-                            break
-        
+                        elif isinstance(size, float) and 0.500 <= size < 4:
+                            medium_dump = True
+                        elif isinstance(size, float) and size >= 4:
+                            large_dump = True
+
         if small_dump:
-            return (1, f"At least one dump is smaller than 4GB: {dumps}")
-        elif len(dumps) > 0:
-            return (0, f"No dump smaller than 4GB found. Dumps found: {dumps}")
-        else:
-            return (0, f"No dumps found: {dumps}")
+            return (1, dumps)
+        elif medium_dump:
+            return (0, dumps)
+        elif large_dump:
+            return (0, dumps)
+        elif size == False:
+            return (0, "Unable to determine dump size")
         
     
     def image(self, sparql_endpoint):
@@ -342,9 +385,9 @@ class Accessibility4All:
         metadata_media_type = utils.extract_media_type(available_download)
         common_formats_availability = utils.check_common_acceppted_format(metadata_media_type)
         if common_formats_availability:
-            return (1, metadata_media_type)
-        else:    
             return (0, metadata_media_type)
+        else:    
+            return (-1, metadata_media_type)
 
     def examples(self, void_file_url, sparql_endpoint_url, search_engine_metadata):
         
@@ -435,7 +478,10 @@ class Accessibility4All:
         if isinstance(description_metadata, str) and description_metadata != 'absent' and description_metadata != '':
             description = description_metadata
             readability_score = utils.flesch_reading_ease(description)
-            return (round(readability_score / 100, 2), f"Description from search engine metadata: {description}")
+            if readability_score >= 100:
+                return 1 , f"Description from search engine metadata: {description}"
+            else:
+                return (round((readability_score / 50) - 1, 2), f"Description from search engine metadata: {description}")
 
         if utils.is_url(sparql_endpoint_url):
             description_sparql = query.getDescription(sparql_endpoint_url)
