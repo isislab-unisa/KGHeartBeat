@@ -383,26 +383,32 @@ class Accessibility4All:
 
             if available_sparql:
                 # Check API links
-                for link in query.get_apis_url(sparql_endpoint_url):
-                    if utils.checkAvailabilityResource(link):
-                        available_api = True
-                        break
+                api_links = query.get_apis_url(sparql_endpoint_url)
+                if isinstance(api_links, list):
+                    for link in api_links:
+                        if utils.checkAvailabilityResource(link):
+                            available_api = True
+                            break
 
                 # Check dump links
-                for link in query.get_download_link(sparql_endpoint_url):
-                    if utils.checkAvailabilityResource(link):
-                        available_download = True
-                        break
-        
+                dump_links = query.get_download_link(sparql_endpoint_url)
+                if isinstance(dump_links, list):
+                    for link in dump_links:
+                        if utils.checkAvailabilityResource(link):
+                            available_download = True
+                            break
+
         # Check links availability from the VoID file if provided
         if utils.is_url(void_file_url):
             void_file = VoIDAnalyses.parseVoID(void_file_url)
 
             # Data dumps
-            for link in VoIDAnalyses.getDataDump(void_file):
-                if utils.checkAvailabilityResource(link):
-                    available_download = True
-                    break
+            dump_links_void = VoIDAnalyses.getDataDump(void_file)
+            if isinstance(dump_links_void, list):
+                for link in dump_links_void:
+                    if utils.checkAvailabilityResource(link):
+                        available_download = True
+                        break
 
             # SPARQL endpoint
             sparql_endpoint = VoIDAnalyses.getSparqlEndpoint(void_file)
