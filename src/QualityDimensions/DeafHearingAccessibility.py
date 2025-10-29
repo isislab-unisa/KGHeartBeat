@@ -29,7 +29,7 @@ class DeafHearingAccessibility:
                 video_bool, videos_num = query.check_video_presence(sparql_endpoint)
                 total_resources_in_kg = query.count_res(sparql_endpoint)
                 if isinstance(videos_num,list) and isinstance(total_resources_in_kg,int) and total_resources_in_kg > 0:
-                    return 1, f"Number of videos: {videos_num}"
+                    return (videos_num / total_resources_in_kg), f"Number of videos: {videos_num}"
                 else:
                     return 0, f"Error counting video resources: {videos_num}"
 

@@ -1,4 +1,7 @@
 import requests
+import os
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import query
 import VoIDAnalyses
 import utils
@@ -307,15 +310,17 @@ class Accessibility4All:
         elif medium_dump:
             return (0, dumps)
         elif large_dump:
-            return (0, dumps)
-        elif size == False:
-            return (0, "Unable to determine dump size")
-        
-    
+            return (-1, dumps)
+        elif len(dumps) == 0:
+            return (0, "No data dumps found")
+        elif len(dumps) > 0 and not small_dump and not medium_dump and not large_dump:
+            return (0, f"Unknown dump size for: {dumps}")
+
+    # TODO: move to extension format
     def image(self, sparql_endpoint):
         if utils.is_url(sparql_endpoint):
             image_in_kg = query.getImageIri(sparql_endpoint)
-            total_resources_in_kg = query.count_res(sparql_endpoint)
+            total_resources_in_kg = query.fetch_subjects(sparql_endpoint)
             if isinstance(image_in_kg, list) and isinstance(total_resources_in_kg, int) and total_resources_in_kg > 0:
                 image_ratio = len(image_in_kg) / total_resources_in_kg
                 return (image_ratio, image_in_kg)
@@ -522,3 +527,6 @@ class Accessibility4All:
             dump_query = query.get_download_link(sparql_endpoint)
             serialzation_formats_query = query.checkSerialisationFormats(sparql_endpoint)
 '''
+
+aa = Accessibility4All()
+print(aa.image("https://dbpedia.org/sparql"))

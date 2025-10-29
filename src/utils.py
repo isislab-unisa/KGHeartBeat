@@ -1491,30 +1491,37 @@ def estimate_file_size_gb(url, sample_bytes=5_000_000):
     - Otherwise streams up to `sample_bytes` to estimate.
     """
     #Try HEAD first
-    response = requests.head(url, allow_redirects=True)
-    size = response.headers.get('Content-Length')
-    if size:
-        return int(size) / (1024 ** 3)
-    
+
+    try:
+        response = requests.head(url, allow_redirects=True)
+        size = response.headers.get('Content-Length')
+        if size:
+            return int(size) / (1024 ** 3)
+    except:
+        pass
+
     # Fallback: estimate via streaming
-    response = requests.get(url, stream=True)
-    total = 0
-    start = time.time()
-    chunk_size = 8192  # 8 KB
+    try: 
+        response = requests.get(url, stream=True)
+        total = 0
+        start = time.time()
+        chunk_size = 8192  # 8 KB
 
-    for chunk in response.iter_content(chunk_size=chunk_size):
-        total += len(chunk)
-        if total >= sample_bytes:
-            break
+        for chunk in response.iter_content(chunk_size=chunk_size):
+            total += len(chunk)
+            if total >= sample_bytes:
+                break
 
-    elapsed = time.time() - start
-    if elapsed == 0:
+        elapsed = time.time() - start
+        if elapsed == 0:
+            return None
+
+        # Estimate total size from transfer rate (approximation)
+        rate = total / elapsed  
+        estimated_total = rate * 10  
+        return estimated_total / (1024 ** 3)
+    except:
         return None
-
-    # Estimate total size from transfer rate (approximation)
-    rate = total / elapsed  
-    estimated_total = rate * 10  
-    return estimated_total / (1024 ** 3)
 
 def count_syllables(word):
     word = word.lower()

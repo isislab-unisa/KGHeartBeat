@@ -2191,21 +2191,12 @@ def getImagesTriples(endpoint_url):
     sparql = SPARQLWrapper(endpoint_url)
     sparql.setQuery('''
     PREFIX foaf: <http://xmlns.com/foaf/0.1/>
-    PREFIX schema: <http://schema.org/>
-    PREFIX dbo: <http://dbpedia.org/ontology/>
-    PREFIX wdt: <http://www.wikidata.org/prop/direct/>
-    PREFIX dcterms: <http://purl.org/dc/terms/>
-    PREFIX sioc: <http://rdfs.org/sioc/ns#>
-    PREFIX edm: <http://www.europeana.eu/schemas/edm/>
-    PREFIX oa: <http://www.w3.org/ns/oa#>
-    PREFIX exif: <http://www.w3.org/2003/12/exif/ns#>
-    PREFIX dcmitype: <http://purl.org/dc/dcmitype/>
-    SELECT (COUNT(DISTINCT ?resource) AS ?triples)
+    PREFIX schema: <https://schema.org/>
+
+    SELECT ?o
     WHERE {
-    VALUES ?prop { foaf:depiction dcterms:thumbnail foaf:img foaf:thumbnail schema:image schema:photo 
-                    schema:logo schema:thumbnail schema:thumbnailUrl foaf:image schema:contentUrl dbo:thumbnail dbo:image
-                    sioc:avatar wdt:P18 <http://example.org/hasImage> exif:image dcmitype:Image}
-    ?resource ?prop ?image .
+    ?subject ?predicate ?image .
+    FILTER (REGEX(STR(?image), "(?i)\\.(jpg|jpeg|png|gif|svg)$"))
     }
     ''')
     try:
@@ -2259,7 +2250,6 @@ def getImageIri(endpoint_url):
         else:
             return False
     except Exception as e:
-        print(e)
         return False
 
 @log_in_out
@@ -2334,10 +2324,47 @@ def fetch_objects(endpoint_url, limit=1000, condition = ()):
                 if o.endswith(condition):
                     count += 1
             offset += limit
-            
-            return count
+        
         except Exception as e:
-            return e
+            return count
+    return count
+
+@log_in_out
+def fetch_subjects(endpoint_url, limit=1000, condition = ()):
+    sparql = SPARQLWrapper(endpoint_url)
+    offset = 0
+    count = 0
+
+    while True:
+        query = f"""
+        SELECT DISTINCT ?s
+        WHERE {{
+            ?s ?p ?s .
+            FILTER(isIRI(?s))
+        }}
+        ORDER BY ?s
+        LIMIT {limit}
+        OFFSET {offset}
+        """
+        try:
+            sparql.setQuery(query)
+            sparql.setReturnFormat(JSON)
+            results = sparql.query().convert()
+            bindings = results.get("results", {}).get("bindings", [])
+
+            if not bindings:
+                break  # no more results
+
+            for result in bindings:
+                o = result["s"]["value"].lower()
+                if len(condition) > 0 and o.endswith(condition):
+                    count += 1
+                elif len(condition) == 0:
+                    count += 1
+            offset += limit
+        except Exception as e:
+            return count
+    return count
 
 @log_in_out
 def fetch_objects_value(endpoint_url, limit=1000, condition = ()):
