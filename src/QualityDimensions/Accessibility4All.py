@@ -126,7 +126,7 @@ class Accessibility4All:
             for obj in all_obj_void:
                 if utils.is_url(obj):
                     try:
-                        response = requests.get(obj, timeout=10)
+                        response = requests.head(obj, timeout=5)
                         if response.status_code != 200:
                             broken_links += 1
                         elif response.status_code == 200:
@@ -141,7 +141,7 @@ class Accessibility4All:
             for obj in all_obj_sparql:
                 if utils.is_url(obj):
                     try:
-                        response = requests.get(obj)
+                        response = requests.head(obj, timeout=5)
                         if response.status_code != 200:
                             broken_links += 1
                         elif response.status_code == 200:
@@ -158,7 +158,7 @@ class Accessibility4All:
             website_links = search_engine_metadata.get('website', [])
             if utils.is_url(website_links):
                 try:
-                    response = requests.get(website_links)
+                    response = requests.head(website_links, timeout=5)
                     if response.status_code == 200:
                         available_resources_count += 1
                     else:
@@ -506,27 +506,39 @@ class Accessibility4All:
         if description == False or description == '':
             return (0, "No description found")
 
-'''
-    def data_lang_and_encode(self, sparql_endpoint, void_file_url, idKG):
-        total_string, lang_string = query.get_string_literals(sparql_endpoint)
+    def data_lang(self, sparql_endpoint_url):
+        if utils.is_url(sparql_endpoint_url):
+            languages_list = query.getLangugeSupported(sparql_endpoint_url)
+            query_results = query.get_string_literals(sparql_endpoint_url)
+            if isinstance(query_results, tuple) and query_results[0] != 0:
+                total_triple_count, lang_count = query_results
 
-        # Encode on resources indexed in the search engine metadata
-        resourcesDH = Aggregator.getOtherResources(idKG)
-        if len(resourcesDH) > 0:
-            resourcesDH = utils.insertAvailability(resourcesDH)
-            metadata_media_type = utils.extract_media_type(resourcesDH)
+                return round(lang_count / total_triple_count, 2), f"Languages available: {languages_list}"
+            
+            elif isinstance(languages_list, list):
+                return 0, f"Languages available: {languages_list}"
+            
+            else:
+                return 0, f"Error querying SPARQL endpoint: {languages_list} - {query_results}"
+        else:
+            return 0, "No SPARQL endpoint provided"
 
-        # Encode of the link in the VoID file
-        if utils.is_url(void_file_url):
-            void_file = VoIDAnalyses.parseVoID(void_file_url)
-            serialzation_formats = VoIDAnalyses.getSerializationFormats(void_file)
-            total_dump = VoIDAnalyses.getDataDump(void_file)
-
-        # Encode of the link in the SPARQL endpoint
-        if utils.is_url(sparql_endpoint):
-            dump_query = query.get_download_link(sparql_endpoint)
-            serialzation_formats_query = query.checkSerialisationFormats(sparql_endpoint)
-'''
-
-aa = Accessibility4All()
-print(aa.image("https://dbpedia.org/sparql"))
+    def metadata_lang(self, sparql_endpoint_url, void_file):
+        if utils.is_url(sparql_endpoint_url):
+            query_results = query.get_metadata_languages(sparql_endpoint_url)
+            if isinstance(query_results, list):
+                return f"Number of languages found: {len(query_results)}", f"Languages found: {query_results}"
+            else:
+                return 0, f"Error querying SPARQL endpoint: {query_results}"
+        elif utils.is_url(void_file):
+            void_file_parsed = VoIDAnalyses.parseVoID(void_file)
+            void_languages = VoIDAnalyses.getLanguage(void_file_parsed)
+            if isinstance(void_file_parsed, list):
+                return f"Number of languages found: {len(void_languages)}", f"Languages found: {void_languages}"
+            elif void_languages == 'absent':
+                return 0, "No languages found in VoID file"
+        else:
+            return 0, "No SPARQL endpoint or VoID file provided to check languages in the metadata"
+        
+#aa = Accessibility4All()
+#print(aa.metadata_lang("https://dbpedia.org/sparql"))

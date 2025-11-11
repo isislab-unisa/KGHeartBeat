@@ -33,7 +33,7 @@ class Accessibility4VisuallyImpaired:
                 return 0, f"Error fetching images: {images}"
     
     def audio_meta(self, sparql_endpoint, void_file_url, resources):
-        return utils.check_metadata_media_type(sparql_endpoint, void_file_url, resources, "audio/")
+        return utils.run_with_timeout(utils.check_metadata_media_type,args=(sparql_endpoint, void_file_url, resources, "audio/",), timeout_duration=15)
     
     def audio(self, sparql_endpoint):
         if not utils.is_url(sparql_endpoint):

@@ -143,14 +143,17 @@ def getLangugeSupported(url):
     """)
     sparql.setReturnFormat(JSON)
     sparql.setTimeout(300) #5 minutes
-    results = sparql.query().convert()
-    if isinstance(results,dict):
-        languages = utils.getResultsFromJSONCount(results)
-        return languages
-    elif isinstance(results,Document): #IF RESULT IS IN XML 
-        languages = utils.getResultsFromXML(results)
-        return languages
-    else:
+    try:
+        results = sparql.query().convert()
+        if isinstance(results,dict):
+            languages = utils.getResultsFromJSONCount(results)
+            return languages
+        elif isinstance(results,Document): #IF RESULT IS IN XML 
+            languages = utils.getResultsFromXML(results)
+            return languages
+        else:
+            return False
+    except Exception as e:
         return False
 
 @log_in_out
@@ -2016,7 +2019,7 @@ def get_string_literals(endpoint_url):
     #?lang is empty if no lang tag is present or is xsd:string
     query = """
     PREFIX foaf: <http://xmlns.com/foaf/0.1/>
-    PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>a
+    PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
     SELECT ?o (lang(?o) AS ?lang)
     WHERE { 
         ?s ?p ?o .
@@ -2590,6 +2593,35 @@ def getDescription(endpoint_url):
         sparql.setQuery(query)
         sparql.setTimeout(300)
         sparql.setReturnFormat(JSON)
+        results = sparql.query().convert()
+        if isinstance(results,dict):
+            triples = utils.getResultsFromJSON(results)
+            return triples
+        elif isinstance(results,Document):
+            triples = utils.getResultsFromXML(results)
+            return triples
+        else:
+            return False
+    except Exception as e:
+        return e
+    
+def get_metadata_languages(endpoint_url):
+    sparql = SPARQLWrapper(endpoint_url)
+    sparql.setQuery('''
+    PREFIX void: <http://rdfs.org/ns/void#>
+    PREFIX dcat: <http://www.w3.org/ns/dcat#>
+    PREFIX dcterms: <http://purl.org/dc/terms/>
+
+    SELECT DISTINCT ?o
+    WHERE {
+        ?dataset a ?type ;
+                ?p ?o .
+        VALUES ?type { void:Dataset dcat:Dataset dcat:Distribution }
+        VALUES ?p { dcterms:language schema:inLanguage }
+    }''')
+    sparql.setReturnFormat(JSON)
+    sparql.setTimeout(300)
+    try:
         results = sparql.query().convert()
         if isinstance(results,dict):
             triples = utils.getResultsFromJSON(results)
