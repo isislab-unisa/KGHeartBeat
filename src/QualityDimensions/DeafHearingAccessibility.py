@@ -11,10 +11,10 @@ class DeafHearingAccessibility:
         return
     
     def image_metadata(self, sparql_endpoint, void_file_url, resources):
-        utils.run_with_timeout(utils.check_metadata_media_type,args=(sparql_endpoint, void_file_url, resources, "image/",), timeout=15)
+        utils.run_with_timeout(utils.check_metadata_media_type,args=(sparql_endpoint, void_file_url, resources, "image/",), timeout=3600)
 
     def video_meta(self, sparql_endpoint, void_file_url, resources):
-        utils.run_with_timeout(utils.check_metadata_media_type,args=(sparql_endpoint, void_file_url, resources, "video/",), timeout=15)
+        utils.run_with_timeout(utils.check_metadata_media_type,args=(sparql_endpoint, void_file_url, resources, "video/",), timeout=3600)
     
     def video(self, sparql_endpoint):
         if not utils.is_url(sparql_endpoint):
