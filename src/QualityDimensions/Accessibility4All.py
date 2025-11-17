@@ -335,7 +335,7 @@ class Accessibility4All:
         if utils.is_url(sparql_endpoint):
             num_labels = query.count_res_with_label(sparql_endpoint)
             num_res = query.count_res(sparql_endpoint)
-            if num_res > 0:
+            if isinstance(num_res, int) and num_res > 0:
                 ratio = num_labels / num_res
                 return (ratio, f"Number of resources in the KG:{num_res}")
             return (0, "No resources found")
