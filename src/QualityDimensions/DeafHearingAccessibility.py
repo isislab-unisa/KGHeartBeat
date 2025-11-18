@@ -16,20 +16,22 @@ class DeafHearingAccessibility:
     def video_meta(self, sparql_endpoint, void_file_url, resources):
         utils.run_with_timeout(utils.check_metadata_media_type,args=(sparql_endpoint, void_file_url, resources, "video/",), timeout=3600)
     
-    def video(self, sparql_endpoint):
+    def video(self, sparql_endpoint, total_resources_in_kg):
         if not utils.is_url(sparql_endpoint):
             return (0, "No SPARQL endpoint provided")
         else:
             video_exts = ('.mp4', '.avi', '.mov', '.wmv', '.flv', '.mkv', '.webm','.mpeg', '.mpg')
             video_count = query.fetch_objects(sparql_endpoint,condition=video_exts)
-            total_resources_in_kg = query.count_res(sparql_endpoint)
             if isinstance(video_count,int) and isinstance(total_resources_in_kg,int) and total_resources_in_kg > 0:
-                    return 1, f"Number of videos: {video_count}"
+                    return (video_count / total_resources_in_kg), f"Number of videos: {video_count}"
+            elif isinstance(video_count,int):
+                return 0, f"Total video resources found: {video_count}"
             else:
                 video_bool, videos_num = query.check_video_presence(sparql_endpoint)
-                total_resources_in_kg = query.count_res(sparql_endpoint)
                 if isinstance(videos_num,list) and isinstance(total_resources_in_kg,int) and total_resources_in_kg > 0:
                     return (videos_num / total_resources_in_kg), f"Number of videos: {videos_num}"
+                elif isinstance(videos_num,int):
+                    return 0, f"Total video resources found: {videos_num}"
                 else:
                     return 0, f"Error counting video resources: {videos_num}"
 

@@ -317,13 +317,14 @@ class Accessibility4All:
             return (0, f"Unknown dump size for: {dumps}")
 
     # TODO: move to extension format
-    def image(self, sparql_endpoint):
+    def image(self, sparql_endpoint, total_resources_in_kg):
         if utils.is_url(sparql_endpoint):
             image_in_kg = query.getImageIri(sparql_endpoint)
-            total_resources_in_kg = query.fetch_subjects(sparql_endpoint)
             if isinstance(image_in_kg, list) and isinstance(total_resources_in_kg, int) and total_resources_in_kg > 0:
                 image_ratio = len(image_in_kg) / total_resources_in_kg
                 return (image_ratio, image_in_kg)
+            elif isinstance(image_in_kg, list):
+                return (0, "Number of images in the KG: " + str(len(image_in_kg)))
             elif image_in_kg == False or total_resources_in_kg == False:
                 return (0, 'Error querying SPARQL endpoint')
             else:

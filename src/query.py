@@ -2366,7 +2366,7 @@ def fetch_subjects(endpoint_url, limit=1000, condition = ()):
                     count += 1
             offset += limit
         except Exception as e:
-            return count
+            return e
     return count
 
 @log_in_out

@@ -35,22 +35,24 @@ class Accessibility4VisuallyImpaired:
     def audio_meta(self, sparql_endpoint, void_file_url, resources):
         return utils.run_with_timeout(utils.check_metadata_media_type,args=(sparql_endpoint, void_file_url, resources, "audio/",), timeout=3600)
     
-    def audio(self, sparql_endpoint):
+    def audio(self, sparql_endpoint, count_all_res):
         if not utils.is_url(sparql_endpoint):
             return (0, "No SPARQL endpoint provided")
         else:
             audio_exts = ('.mp3', '.wav', '.flac', '.ogg', '.m4a', '.aac', '.wma', '.aiff')
             audio_count = query.fetch_objects(sparql_endpoint,condition=audio_exts)
-            count_all_res = query.count_res(sparql_endpoint)
             if isinstance(audio_count,int) and isinstance(count_all_res,int) and count_all_res > 0:
                 ratio = audio_count / count_all_res
                 return ratio, audio_count
+            elif isinstance(audio_count,int):
+                return 0, f"Total audio resources found: {audio_count}"
             else:
                 audio_count = query.count_audio_objects_sparql(sparql_endpoint)
-                count_all_res = query.count_res(sparql_endpoint)
                 if isinstance(audio_count,int) and isinstance(count_all_res,int) and count_all_res > 0:
                     ratio = audio_count / count_all_res
                     return ratio, audio_count
+                elif isinstance(audio_count,int):
+                    return 0, f"Total audio resources found: {audio_count}"
                 else:
                     return 0, f"Error counting audio resources: {audio_count}"
 
