@@ -112,7 +112,9 @@ for kg_id in toAnalyze:
             license = False
 
     total_resources_in_kg = utils.run_with_timeout(query.fetch_subjects,args=(sparql_endpoint_url,), timeout=1800)
-    if not isinstance(total_resources_in_kg, int) and not total_resources_in_kg > 0:
+    if not isinstance(total_resources_in_kg, int):
+        total_resources_in_kg = utils.run_with_timeout(query.count_res,args=(sparql_endpoint_url,), timeout=600)
+    elif isinstance(total_resources_in_kg, int) and total_resources_in_kg > 0:
         total_resources_in_kg = utils.run_with_timeout(query.count_res,args=(sparql_endpoint_url,), timeout=600)
     print(f"Total resources in KG: {total_resources_in_kg}")
 
