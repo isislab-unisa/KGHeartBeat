@@ -322,7 +322,7 @@ class Accessibility4All:
             image_in_kg = query.getImageIri(sparql_endpoint)
             if isinstance(image_in_kg, list) and isinstance(total_resources_in_kg, int) and total_resources_in_kg > 0:
                 image_ratio = len(image_in_kg) / total_resources_in_kg
-                return (image_ratio, len(image_in_kg))
+                return (image_ratio, "Number of images in the KG: " + str(len(image_in_kg)))
             elif isinstance(image_in_kg, list):
                 return (0, "Number of images in the KG: " + str(len(image_in_kg)))
             elif image_in_kg == False or total_resources_in_kg == False:
