@@ -2611,6 +2611,7 @@ def get_metadata_languages(endpoint_url):
     PREFIX void: <http://rdfs.org/ns/void#>
     PREFIX dcat: <http://www.w3.org/ns/dcat#>
     PREFIX dcterms: <http://purl.org/dc/terms/>
+    PREFIX schema: <https://schema.org/>
 
     SELECT DISTINCT ?o
     WHERE {
