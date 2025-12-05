@@ -282,6 +282,7 @@ class Accessibility4All:
         if utils.is_url(void_file_url):
             void_file = VoIDAnalyses.parseVoID(void_file_url)
             dump = VoIDAnalyses.getDataDump(void_file)
+            dumps.append(dump)
             if utils.is_url(dump):
                 size = utils.estimate_file_size_gb(dump)
                 if isinstance(size, float) and size < 0.500:
@@ -294,7 +295,8 @@ class Accessibility4All:
         if utils.is_url(sparql_endpoint):
             sparql_dumps = query.get_download_link(sparql_endpoint)
             if isinstance(sparql_dumps, list):
-                for dump_link in sparql_dumps:
+                for dump_link in sparql_dumps[0:100]:
+                    print(f"Processing link {dump_link}")
                     if utils.is_url(dump_link):
                         dumps.append(dump_link)
                         size = utils.estimate_file_size_gb(dump_link)
