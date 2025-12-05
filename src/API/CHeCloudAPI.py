@@ -5,7 +5,7 @@ abs_path = os.path.dirname(os.path.abspath(__file__))
 
 def getAllDatasetIDs(snapshot_path=f'{abs_path}/CHeCLOUD.json'):
     dataset_ids = []
-    url = 'http://isislab.it:12280/che-cloud/api/CHe_cloud_data/get_all'
+    url = 'https://checloud.di.unisa.it/checloud-api/CHe_cloud_data/get_all'
 
     try:
         response = requests.get(url, verify=False, timeout=10)
@@ -33,7 +33,7 @@ def getAllDatasetIDs(snapshot_path=f'{abs_path}/CHeCLOUD.json'):
         return []
 
 def getDatasetMetadata(idKG, snapshot=f'{abs_path}/CHeCLOUD.json'):
-    url = f'http://isislab.it:12280/che-cloud/api/CHe_cloud_data/dataset_metadata/{str(idKG)}'
+    url = f'https://checloud.di.unisa.it/checloud-api/CHe_cloud_data/dataset_metadata/{str(idKG)}'
     try:
         response = requests.get(url,verify=False)    
         if response.status_code == 200:

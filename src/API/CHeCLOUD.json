@@ -10174,18 +10174,30 @@
   {
     "_id": "viaf",
     "identifier": "viaf",
+    "title": "VIAF: The Virtual International Authority File",
     "doi": "",
-    "image": "",
-    "links": [
+    "license": "http://www.opendefinition.org/licenses/odc-by",
+    "description": {
+      "en": "VIAF (Virtual International Autority File) is an OCLC dataset and service -- built in cooperation with national libraries and other partners -- that virtually combines multiple LAM (Library Archives Museum) name authority files into a single name authority service. Put simply it is a large database of people and organizations that occur in library catalogs.\n\n\nVIAF is a joint project of 20 national libraries, implemented and hosted by OCLC. The project's goal is to lower the cost and increase the utility of library authority files by matching and linking the authority files of national libraries, and then making that information available on the Web.\n\n### Openness\n\nThe data is released under Open Data Commons Attribution license. Attribution is requested as follows:\n\n> Adherence to ODC Attribution instructions for the correct assertion of attribution is encouraged. The preferred form of attribution for VIAF is:\n>\n> \"This [title of report or article or dataset] contains information from VIAF (Virtual International Authority File) which is made available under the ODC Attribution License.\"\n> \n> Special cases: In circumstances where providing the full attribution statement above is not technically feasible, the use of canonical VIAF URIs is adequate to satisfy Section 4.3 of the ODC Attribution License.\n\n#### Older information preserved for archival purposes\n\nOCLC is currently in discussion with partners about how to license material. [Message from Thom Hickey, OCLC Chief Scientist](http://groups.google.com/group/nyt_linked_open_data/browse_thread/thread/46ea00276e3d5a2e#) on public Google Groups mailing list in January 2010 states:\n\n> VIAF is a joint project with the contributing institutions and OCLC doesn?t claim any rights to the data beyond what the group has.  Unfortunately the group as a whole has problems coming up with a statement of exactly what is permitted.  In lieu of that, our position is that the data on the site is freely available for use through the APIs, although if someone wants a copy of the whole thing they would have to apply to the VIAF consortium (they could do that through me or Barbara Tillett at LC).  Along those same lines, if someone is going to have substantial activity against VIAF (multiple queries/second) we?d like to know about it ahead of time. \n\n> Over the next few months we will be working on a better statement of what?s permitted, but our intention is to make the data as freely available as possible (even to the NYT). \n\n\nFurther update from Thom Hickey:\n(http://outgoing.typepad.com/outgoing/2011/03/use-of-viaf.html)\n\n> I responded to a recent blog post on LibraryThing which mentioned restrictions on the use of VIAF and its relationship to the LC authority file.\n\n> In fact, VIAF is open for use by anyone.  Here's what I said about the use of VIAF:\n\n> VIAF is a project led by LC, the French and German national libraries and OCLC. There are no restrictions on its use. Dumps of the complete file are available, but need the approval of the project leaders.\n\n> VIAF is not designed to replace the LC/NACO authority file, but rather is built from it and a number of similar files.\n\n> I hope that is clear.  We really do want people to use VIAF!\n\nGood news, but no explicit license or complete dumps freely available without asking, so not (yet) OKD compliant \n\n---- 2025 update ----\nSince January 2025, the API is rate-limited to 1 thousand connections per day and 10 thousand connections per month. Dumps are not available since August 2024; old dumps are not available anymore."
+    },
+    "sparql": [
       {
-        "target": "dbpedia",
-        "value": "10000"
-      },
-      {
-        "target": "dnb-gemeinsame-normdatei",
-        "value": "4000000"
+        "access_url": "",
+        "title": "",
+        "description": ""
       }
     ],
+    "full_download": [],
+    "website": "http://viaf.org/viaf/data/",
+    "domain": "cultural-heritage",
+    "contact_point": {
+      "name": "OCLC Online Computer Library Center, Inc.",
+      "email": "oclc@oclc.org"
+    },
+    "owner": {
+      "name": "",
+      "email": ""
+    },
     "keywords": [
       "bibliographic",
       "format-owl",
@@ -10205,88 +10217,36 @@
       "cultural-heritage",
       "ch-tangible"
     ],
-    "license": "http://www.opendefinition.org/licenses/odc-by",
-    "title": "VIAF: The Virtual International Authority File",
-    "full_download": [],
+    "newKeyword": "",
+    "Image": "",
     "example": [
       {
         "title": "",
-        "media_type": "example/rdf+xml",
-        "description": "Example (RDF/XML)",
         "access_url": "http://viaf.org/viaf/40280446/",
-        "status": "FAIL (301)"
+        "description": "Example (RDF/XML)"
       },
       {
         "title": "",
-        "media_type": "example/rdf+xml",
-        "description": "Example (RDF/XML)",
         "access_url": "http://viaf.org/viaf/86518157",
-        "status": "FAIL (301)"
+        "description": "Example (RDF/XML)"
       }
     ],
-    "sparql": [],
-    "other_download": [
-      {
-        "media_type": "gz:txt",
-        "description": "This is a text file showing the correspondence between source IDs in clusters, including external links such as Wikipedia\r\n",
-        "status": "FAIL (HTTP error fetching URL. Status=404, URL=[https://viaf.org/viaf/data/viaf-20130615-links.txt.gz])",
-        "title": "VIAF Links (txt)",
-        "mirror": [],
-        "access_url": "http://viaf.org/viaf/data/viaf-20130615-links.txt.gz"
-      },
-      {
-        "media_type": "",
-        "description": "This file contains one 'native' XML record per line for each VIAF cluster\r\n",
-        "status": "FAIL (HTTP error fetching URL. Status=404, URL=[https://viaf.org/viaf/data/viaf-20130615-clusters.xml.gz])",
-        "title": "VIAF Clusters (XML)",
-        "mirror": [],
-        "access_url": "http://viaf.org/viaf/data/viaf-20130615-clusters.xml.gz"
-      },
-      {
-        "media_type": "",
-        "description": "This file contains one RDF record per line for each VIAF cluster\r\n",
-        "status": "FAIL (HTTP error fetching URL. Status=404, URL=[https://viaf.org/viaf/data/viaf-20130615-clusters-rdf.xml.gz])",
-        "title": "VIAF Clusters (RDF)",
-        "mirror": [],
-        "access_url": "http://viaf.org/viaf/data/viaf-20130615-clusters-rdf.xml.gz"
-      },
-      {
-        "media_type": "",
-        "description": "This file contains one MARC-21 XML record per line for each VIAF cluster\r\n",
-        "status": "FAIL (HTTP error fetching URL. Status=404, URL=[https://viaf.org/viaf/data/viaf-20130615-clusters-marc21.xml.gz])",
-        "title": "VIAF Clusters (MARC 21)",
-        "mirror": [],
-        "access_url": "http://viaf.org/viaf/data/viaf-20130615-clusters-marc21.xml.gz"
-      },
-      {
-        "media_type": "",
-        "description": "This file contains one ISO-2709 MARC-21 record per line for each VIAF cluster\r\n",
-        "status": "FAIL (HTTP error fetching URL. Status=404, URL=[https://viaf.org/viaf/data/viaf-20130615-clusters-marc21.iso.gz])",
-        "title": "VIAF clusters (MARC 21 - ISO-2709)",
-        "mirror": [],
-        "access_url": "http://viaf.org/viaf/data/viaf-20130615-clusters-marc21.iso.gz"
-      },
-      {
-        "media_type": "",
-        "description": "This file shows redirections within the VIAF dataset (in RDF)\r\n",
-        "status": "FAIL (HTTP error fetching URL. Status=404, URL=[https://viaf.org/viaf/data/viaf-20130615-persist-rdf.xml.gz])",
-        "title": "VIAF redirections (RDF)",
-        "mirror": [],
-        "access_url": "http://viaf.org/viaf/data/viaf-20130615-persist-rdf.xml.gz"
-      }
-    ],
-    "description": {
-      "en": "VIAF (Virtual International Autority File) is an OCLC dataset and service -- built in cooperation with national libraries and other partners -- that virtually combines multiple LAM (Library Archives Museum) name authority files into a single name authority service. Put simply it is a large database of people and organizations that occur in library catalogs.\r\n\r\n\r\nVIAF is a joint project of 20  national libraries, implemented and hosted by OCLC. The project's goal is to lower the cost and increase the utility of library authority files by matching and linking the authority files of national libraries, and then making that information available on the Web.\r\n\r\n### Openness\r\n\r\nThe data is released under Open Data Commons Attribution license. Attribution is requested as follows:\r\n\r\n> Adherence to ODC Attribution instructions for the correct assertion of attribution is encouraged. The preferred form of attribution for VIAF is:\r\n>\r\n> \"This [title of report or article or dataset] contains information from VIAF (Virtual International Authority File) which is made available under the ODC Attribution License.\"\r\n> \r\n> Special cases: In circumstances where providing the full attribution statement above is not technically feasible, the use of canonical VIAF URIs is adequate to satisfy Section 4.3 of the ODC Attribution License.\r\n\r\n#### Older information preserved for archival purposes\r\n\r\nOCLC is currently in discussion with partners about how to license material. [Message from Thom Hickey, OCLC Chief Scientist](http://groups.google.com/group/nyt_linked_open_data/browse_thread/thread/46ea00276e3d5a2e#) on public Google Groups mailing list in January 2010 states:\r\n\r\n> VIAF is a joint project with the contributing institutions and OCLC doesn?t claim any rights to the data beyond what the group has.  Unfortunately the group as a whole has problems coming up with a statement of exactly what is permitted.  In lieu of that, our position is that the data on the site is freely available for use through the APIs, although if someone wants a copy of the whole thing they would have to apply to the VIAF consortium (they could do that through me or Barbara Tillett at LC).  Along those same lines, if someone is going to have substantial activity against VIAF (multiple queries/second) we?d like to know about it ahead of time. \r\n\r\n> Over the next few months we will be working on a better statement of what?s permitted, but our intention is to make the data as freely available as possible (even to the NYT). \r\n\r\n\r\nFurther update from Thom Hickey:\r\n(http://outgoing.typepad.com/outgoing/2011/03/use-of-viaf.html)\r\n\r\n> I responded to a recent blog post on LibraryThing which mentioned restrictions on the use of VIAF and its relationship to the LC authority file.\r\n\r\n> In fact, VIAF is open for use by anyone.  Here's what I said about the use of VIAF:\r\n\r\n> VIAF is a project led by LC, the French and German national libraries and OCLC. There are no restrictions on its use. Dumps of the complete file are available, but need the approval of the project leaders.\r\n\r\n> VIAF is not designed to replace the LC/NACO authority file, but rather is built from it and a number of similar files.\r\n\r\n> I hope that is clear.  We really do want people to use VIAF!\r\n\r\nGood news, but no explicit license or complete dumps freely available without asking, so not (yet) OKD compliant "
-    },
-    "owner": "",
-    "website": "http://viaf.org/viaf/data/",
-    "triples": "200000000",
-    "domain": "cultural-heritage",
+    "other_download": [],
     "namespace": "http://viaf.org/viaf/",
-    "contact_point": {
-      "name": "OCLC Online Computer Library Center, Inc.",
-      "email": "oclc@oclc.org"
-    }
+    "links": [
+      {
+        "target": "dbpedia",
+        "value": "10000"
+      },
+      {
+        "target": "dnb-gemeinsame-normdatei",
+        "value": "4000000"
+      }
+    ],
+    "time": "",
+    "triples": "200000000",
+    "category": "ch-tangible",
+    "image": ""
   },
   {
     "_id": "warsampo",
@@ -16861,6 +16821,54 @@
       "name": "",
       "email": "https://portal.ariadne-infrastructure.eu/contact"
     }
+  },
+  {
+    "_id": "mappingch",
+    "identifier": "mappingch",
+    "title": "MappingChange",
+    "doi": "10.5281/zenodo.15393936",
+    "license": "https://creativecommons.org/licenses/by/4.0/",
+    "description": {
+      "en": "MappingChange is a temporal and semantically enriched knowledge graph (KG) constructed from the Gazetteers of Scotland (1803–1901). This KG describes over 50,000 article-level place descriptions. The resulting entries are represented using the Heritage Textual Ontology (HTO) and transformed into an RDF KG capturing both bibliographic metadata and textual content. This KG is further enriched by 1) connecting semantically related entries across editions and aligning them with Wikidata and DBpedia, and 2) identifying referenced places within articles and assigning modern coordinates to support spatial analysis."
+    },
+    "sparql": [
+      {
+        "access_url": "http://query.frances-ai.com/hto_gaz/sparql",
+        "title": "MappingChange's SPARQL Endpoint",
+        "description": "SPARQL Endpoint for MappingChange"
+      }
+    ],
+    "full_download": [],
+    "website": "https://github.com/francesNLP/MappingChange",
+    "domain": "cultural-heritage",
+    "contact_point": {
+      "name": "Lilin Yu",
+      "email": "l.yu-40@sms.ed.ac.uk"
+    },
+    "owner": {
+      "name": "Lilin Yu",
+      "email": "l.yu-40@sms.ed.ac.uk"
+    },
+    "keywords": [
+      "ch-tangible",
+      "Gazetteers",
+      "KnoweldgeGraph",
+      "SemanticWeb",
+      "HistoricalText",
+      "Ontology",
+      "LinkedData",
+      "CulturalHeritage",
+      "Geolocation"
+    ],
+    "newKeyword": "",
+    "Image": "",
+    "example": [],
+    "other_download": [],
+    "namespace": "https://w3id.org/hto/",
+    "links": [],
+    "time": "",
+    "triples": "8242877",
+    "category": "ch-tangible"
   },
   {
     "_id": "Odeuropa",
