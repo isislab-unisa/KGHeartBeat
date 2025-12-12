@@ -26,7 +26,7 @@ class Accessibility4VisuallyImpaired:
                             print(f"Processed {i}/{len(images)} images...")
                     else:
                         continue
-                return (count_with_alt / len(images), "Total number of images recovered: " + str(len(images)))
+                return (-1 + (count_with_alt / len(images)), "Total number of images recovered: " + str(len(images)))
             if isinstance(images, list) and len(images) == 0:
                 return (0, "No images found in the KG")
             else:

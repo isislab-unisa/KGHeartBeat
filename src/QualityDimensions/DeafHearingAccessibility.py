@@ -11,10 +11,10 @@ class DeafHearingAccessibility:
         return
     
     def image_metadata(self, sparql_endpoint, void_file_url, resources):
-        utils.run_with_timeout(utils.check_metadata_media_type,args=(sparql_endpoint, void_file_url, resources, "image/",), timeout=3600)
+        return utils.run_with_timeout(utils.check_metadata_media_type,args=(sparql_endpoint, void_file_url, resources, "image/",), timeout=3600)
 
     def video_meta(self, sparql_endpoint, void_file_url, resources):
-        utils.run_with_timeout(utils.check_metadata_media_type,args=(sparql_endpoint, void_file_url, resources, "video/",), timeout=3600)
+        return utils.run_with_timeout(utils.check_metadata_media_type,args=(sparql_endpoint, void_file_url, resources, "video/",), timeout=3600)
     
     def video(self, sparql_endpoint, total_resources_in_kg):
         if not utils.is_url(sparql_endpoint):
@@ -38,9 +38,9 @@ class DeafHearingAccessibility:
     def check_video_description_subtitles(self, sparql_endpoint):
         if not utils.is_url(sparql_endpoint):
             return {
-                "description_ratio": (0, "No SPARQL endpoint provided"),
-                "subtitle_ratio": (0, "No SPARQL endpoint provided"),
-                "sign_language_ratio": (0, "No SPARQL endpoint provided"),
+                "description_ratio": (-1, "No SPARQL endpoint provided"),
+                "subtitle_ratio": (-1, "No SPARQL endpoint provided"),
+                "sign_language_ratio": (-1, "No SPARQL endpoint provided"),
             }
         else:
             count_desc = 0
@@ -71,9 +71,9 @@ class DeafHearingAccessibility:
                             count_desc += 1
                         if sign_lang:
                             count_sign += 1
-                description_ratio = count_desc / len(videos) if len(videos) > 0 else 0
-                subtitle_ratio = count_sub / len(videos) if len(videos) > 0 else 0
-                sign_language_ratio = count_sign / len(videos) if len(videos) > 0 else 0
+                description_ratio = 0 if len(videos) > 0 else -1
+                subtitle_ratio = count_sub / len(videos) if len(videos) > 0 else -1
+                sign_language_ratio = count_sign / len(videos) if len(videos) > 0 else -1
                 return {
                     "description_ratio": (description_ratio, f"Number of videos: {len(videos)}"),
                     "subtitle_ratio": (subtitle_ratio, f"Number of videos: {len(videos)}"),
@@ -81,17 +81,17 @@ class DeafHearingAccessibility:
                 }
             else:
                 return {
-                    "description_ratio": (0, f"No video resources found in the KG: {videos}"),
-                    "subtitle_ratio": (0, f"No video resources found in the KG: {videos}"),
-                    "sign_language_ratio": (0, f"No video resources found in the KG: {videos}"),
+                    "description_ratio": (-1, f"No video resources found in the KG: {videos}"),
+                    "subtitle_ratio": (-1, f"No video resources found in the KG: {videos}"),
+                    "sign_language_ratio": (-1, f"No video resources found in the KG: {videos}"),
                 }
 
     def check_audio_description_subtitles(self, sparql_endpoint):
         if not utils.is_url(sparql_endpoint):
             return {
-                "description_ratio": (0, "No SPARQL endpoint provided"),
-                "subtitle_ratio": (0, "No SPARQL endpoint provided"),
-                "sign_language_ratio": (0, "No SPARQL endpoint provided"),
+                "description_ratio": (-1, "No SPARQL endpoint provided"),
+                "subtitle_ratio": (-1, "No SPARQL endpoint provided"),
+                "sign_language_ratio": (-1, "No SPARQL endpoint provided"),
             }
         else:
             count_desc = 0
@@ -122,9 +122,9 @@ class DeafHearingAccessibility:
                             count_desc += 1
                         if sign_lang:
                             count_sign += 1
-                description_ratio = count_desc / len(audios) if len(audios) > 0 else 0
-                subtitle_ratio = count_sub / len(audios) if len(audios) > 0 else 0
-                sign_language_ratio = count_sign / len(audios) if len(audios) > 0 else 0
+                description_ratio = -1 + (count_desc / len(audios)) if len(audios) > 0 else -1
+                subtitle_ratio = -1 + (count_sub / len(audios)) if len(audios) > 0 else -1
+                sign_language_ratio = -1 + (count_sign / len(audios)) if len(audios) > 0 else -1
                 return {
                     "description_ratio": (description_ratio, f"Number of audios: {len(audios)}"),
                     "subtitle_ratio": (subtitle_ratio, f"Number of audios: {len(audios)}"),
@@ -132,9 +132,9 @@ class DeafHearingAccessibility:
                 }
             else:
                 return {
-                    "description_ratio": (0, f"No audio resources found in the KG: {audios}"),
-                    "subtitle_ratio": (0, f"No audio resources found in the KG: {audios}"),
-                    "sign_language_ratio": (0, f"No audio resources found in the KG: {audios}"),
+                    "description_ratio": (-1, f"No audio resources found in the KG: {audios}"),
+                    "subtitle_ratio": (-1, f"No audio resources found in the KG: {audios}"),
+                    "sign_language_ratio": (-1, f"No audio resources found in the KG: {audios}"),
                 }
 
 # Test

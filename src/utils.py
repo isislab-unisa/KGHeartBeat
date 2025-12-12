@@ -1436,47 +1436,74 @@ def is_subtitle(text):
     return False
 
 def check_metadata_media_type(sparql_endpoint, void_file_url, resources, media_type):
+    checked_objects = []
+    
     # Check Search Engine Metadata resources
-    objects = []
     if isinstance(resources, list) and len(resources) > 0:
-        objects = resources
         for res in resources:
-            path = res.get('path', '')
+            # Verifica che res abbia l'attributo url
+            if not hasattr(res, 'url'):
+                continue
+                
+            path = res.url
             if path and is_url(path):
+                checked_objects.append(path)
                 try:
                     response = requests.head(path, timeout=10, allow_redirects=True)
-                    if media_type in response.headers.get('Content-Type', ''):
+                    content_type = response.headers.get('Content-Type', '')
+                    if media_type in content_type:
                         return 1, path
-                except requests.RequestException:
+                except requests.RequestException as e:
+                    continue
+                except Exception as e:
                     continue
 
     # Check VoID file
     if is_url(void_file_url):
-        void_file = VoIDAnalyses.parseVoID(void_file_url)
-        objects = VoIDAnalyses.get_all_obj(void_file)
-        for obj in objects:
-            if is_url(obj):
-                try:
-                    response = requests.head(obj, timeout=10, allow_redirects=True)
-                    if media_type in response.headers.get('Content-Type', ''):
-                        return 1, obj
-                except requests.RequestException:
-                    continue
-
-    # Check SPARQL endpoint
-    if is_url(sparql_endpoint):
-        objects = query.get_all_obj_in_meta(sparql_endpoint)
-        if isinstance(objects, list):
+        try:
+            void_file = VoIDAnalyses.parseVoID(void_file_url)
+            objects = VoIDAnalyses.get_all_obj(void_file)
+            
+            if not isinstance(objects, (list, tuple)):
+                objects = []
+                
             for obj in objects:
                 if is_url(obj):
+                    checked_objects.append(obj)
                     try:
                         response = requests.head(obj, timeout=10, allow_redirects=True)
-                        if media_type in response.headers.get('Content-Type', ''):
+                        content_type = response.headers.get('Content-Type', '')
+                        if media_type in content_type:
                             return 1, obj
                     except requests.RequestException:
                         continue
+                    except Exception:
+                        continue
+        except Exception as e:
+            pass
 
-    return 0, f"No media_type metadata found: {objects}"
+    # Check SPARQL endpoint
+    if is_url(sparql_endpoint):
+        try:
+            objects = query.get_all_obj_in_meta(sparql_endpoint)
+
+            if isinstance(objects, list):
+                for obj in objects:
+                    if is_url(obj):
+                        checked_objects.append(obj)
+                        try:
+                            response = requests.head(obj, timeout=10, allow_redirects=True)
+                            content_type = response.headers.get('Content-Type', '')
+                            if media_type in content_type:
+                                return 1, obj
+                        except requests.RequestException:
+                            continue
+                        except Exception:
+                            continue
+        except Exception as e:
+            pass
+
+    return 0, f"No {media_type} metadata found. Checked {len(checked_objects)} objects: {checked_objects[:5]}"
 
 def check_sign_lang_string(string):
     sign_pattern = re.compile(r"signlanguage|sgn|ase|bfi|fsl|libras|lsf", re.IGNORECASE)

@@ -48,6 +48,9 @@ class Accessibility4All:
                     self.open_license_value = (1, kg_license)
                 else:
                     self.open_license_value = (-1, kg_license)
+            
+            if isinstance(kg_license, list) and len(kg_license) == 0:
+                self.open_license_value = (0, kg_license)  
 
             return self.open_license_value
         else:
@@ -57,8 +60,8 @@ class Accessibility4All:
     def webpage_status(self, website_url):
         try:
             response = requests.get(website_url)
-            if response.status_code == 200:
-                return (1, website_url)
+            if response.status_code > 199 and response.status_code < 400:
+                return (0, website_url)
             else:
                 return (-1, website_url)
         except Exception as e:
@@ -488,6 +491,8 @@ class Accessibility4All:
             readability_score = utils.flesch_reading_ease(description)
             if readability_score >= 100:
                 return 1 , f"Description from search engine metadata: {description}"
+            elif readability_score < -1:
+                return -1, f"Description from search engine metadata: {description}"
             else:
                 return (round((readability_score / 50) - 1, 2), f"Description from search engine metadata: {description}")
 
@@ -496,7 +501,13 @@ class Accessibility4All:
             if isinstance(description_sparql, list) and len(description_sparql) > 0:
                 description = description_sparql[0]
                 if isinstance(description, str):
-                    return (round(readability_score / 100, 2), f"Description from SPARQL endpoint: {description}")
+                    readability_score = utils.flesch_reading_ease(description)
+                    if readability_score >= 100:
+                        return (1, f"Description from SPARQL endpoint: {description}")
+                    elif readability_score < -1:
+                        return (-1, f"Description from SPARQL endpoint: {description}")
+                    else:
+                        return (round((readability_score / 50) - 1, 2), f"Description from SPARQL metadata: {description}")
 
         if utils.is_url(void_file_url):
             void_file = VoIDAnalyses.parseVoID(void_file_url)
@@ -504,7 +515,12 @@ class Accessibility4All:
             if isinstance(description_void, list) and len(description_void) > 0:
                 description = description_void[0]
                 readability_score = utils.flesch_reading_ease(description)
-                return (round(readability_score / 100, 2), f"Description from VoID file: {description}")
+                if readability_score >= 100:
+                    return (1, f"Description from VoID file: {description}")
+                elif readability_score < -1:
+                    return (-1, f"Description from VoID file: {description}")
+                else:
+                    return (round((readability_score / 50) - 1, 2), f"Description from VoID file: {description}")
 
         if description == False or description == '':
             return (0, "No description found")
@@ -530,18 +546,18 @@ class Accessibility4All:
         if utils.is_url(sparql_endpoint_url):
             query_results = query.get_metadata_languages(sparql_endpoint_url)
             if isinstance(query_results, list):
-                return f"Number of languages found: {len(query_results)}", f"Languages found: {query_results}"
+                return 0, f"Languages found: {query_results}"
             else:
-                return 0, f"Error querying SPARQL endpoint: {query_results}"
+                return -1, f"Error querying SPARQL endpoint: {query_results}"
         elif utils.is_url(void_file):
             void_file_parsed = VoIDAnalyses.parseVoID(void_file)
             void_languages = VoIDAnalyses.getLanguage(void_file_parsed)
             if isinstance(void_file_parsed, list):
-                return f"Number of languages found: {len(void_languages)}", f"Languages found: {void_languages}"
+                return 0, f"Languages found: {void_languages}"
             elif void_languages == 'absent':
-                return 0, "No languages found in VoID file"
+                return -1, "No languages found in VoID file"
         else:
-            return 0, "No SPARQL endpoint or VoID file provided to check languages in the metadata"
+            return -1, "No SPARQL endpoint or VoID file provided to check languages in the metadata"
         
 #aa = Accessibility4All()
 #print(aa.metadata_lang("https://dbpedia.org/sparql"))
