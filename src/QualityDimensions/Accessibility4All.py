@@ -127,11 +127,13 @@ class Accessibility4All:
         else:
             all_obj_void = "Can't query metadata from VoID file"
 
+        links = []
         if isinstance(all_obj_void, list) and len(all_obj_void) > 0:
             broken_links = 0
             no_broken_links = 0
             for obj in all_obj_void:
                 if utils.is_url(obj):
+                    links.append(obj)
                     try:
                         response = requests.head(obj, timeout=5)
                         if response.status_code != 200:
@@ -141,12 +143,13 @@ class Accessibility4All:
                     except:
                         broken_links += 1
             broken_links_ratio =  0 - (broken_links / (no_broken_links + broken_links)) if (no_broken_links + broken_links) > 0 else 0
-            return (broken_links_ratio, f"Metadata from VoID file: {all_obj_void}")
+            return (broken_links_ratio, f"Links from VoID file: {links}")
         elif isinstance(all_obj_sparql, list) and len(all_obj_sparql) > 0:
             broken_links = 0
             no_broken_links = 0
             for obj in all_obj_sparql:
                 if utils.is_url(obj):
+                    links.append(obj)
                     try:
                         response = requests.head(obj, timeout=5)
                         if response.status_code != 200:
@@ -156,7 +159,7 @@ class Accessibility4All:
                     except:
                         broken_links += 1
             broken_links_ratio =  0 - (broken_links / (no_broken_links + broken_links)) if (no_broken_links + broken_links) > 0 else 0
-            return (broken_links_ratio, f"Metadata from SPARQL endpoint: {all_obj_sparql}")
+            return (broken_links_ratio, f"Links from SPARQL endpoint: {links}")
         elif isinstance(search_engine_metadata, dict):
             available_resources_count = 0
             unavailable_resources_count = 0
@@ -180,9 +183,9 @@ class Accessibility4All:
             unavailable_resources = [res for res in resources if res.get("status") == "offline"]
             available_resources_count += len(available_resources)
             unavailable_resources_count += len(unavailable_resources)
-
+            links = [res.get("path") for res in resources]
             broken_links_ratio = 0 - (unavailable_resources_count / (available_resources_count + unavailable_resources_count)) if (available_resources_count + unavailable_resources_count) > 0 else 0
-            return (broken_links_ratio, f"Metadata from Search engine file: {resources}")
+            return (broken_links_ratio, f"Links from search engine metadata: {links}")
 
         return (-1, "No metadata found in SPARQL endpoint, VoID file or search engine metadata")
 
