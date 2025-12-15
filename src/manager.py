@@ -133,8 +133,11 @@ for i in range(len(toAnalyze)):
     del csv
     del kg
     gc.collect()
+
+sparql_urls = []
+if (len(id) == 1 and 'all' in id) or (len(name) == 1 and 'all' in name) or (len(input.get('sparql_url')) == 1 and 'all' in input.get('sparql_url')):
+    sparql_urls = YummyDataAPI.getSPARQLEndpointURLs()
     
-sparql_urls = YummyDataAPI.getSPARQLEndpointURLs()
 if len(input.get('sparql_url')) > 0 and not 'all' in input.get('sparql_url') or len(sparql_urls) > 0:
     sparql_urls.extend(input.get('sparql_url'))
     for sparql_url in sparql_urls:
