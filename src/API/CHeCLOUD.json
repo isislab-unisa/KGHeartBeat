@@ -16858,7 +16858,8 @@
       "Ontology",
       "LinkedData",
       "CulturalHeritage",
-      "Geolocation"
+      "Geolocation",
+      "CHeCLOUD"
     ],
     "newKeyword": "",
     "Image": "",
@@ -16900,7 +16901,8 @@
       "email": ""
     },
     "keywords": [
-      "ontology"
+      "ontology",
+      "CHeCLOUD"
     ],
     "newKeyword": "",
     "Image": "",
