@@ -57,15 +57,19 @@ class Accessibility4All:
             # Request failed
             return (0, "Failed to retrieve open license list")
         
-    def webpage_status(self, website_url):
-        try:
-            response = requests.get(website_url)
-            if response.status_code > 199 and response.status_code < 400:
-                return (0, website_url)
-            else:
-                return (-1, website_url)
-        except Exception as e:
-            return (-1, e)
+    def webpage_status(self, search_engine_metadata):
+        if isinstance(search_engine_metadata, dict):
+            website_url = search_engine_metadata.get('website', None)
+            try:
+                response = requests.get(website_url)
+                if response.status_code > 199 and response.status_code < 400:
+                    return (0, website_url)
+                else:
+                    return (-1, website_url)
+            except Exception as e:
+                return (-1, e)
+        else:
+            return (-1, "No search engine metadata available")
         
         try:
             response = requests.get(url, allow_redirects=True, timeout=10)
@@ -403,10 +407,10 @@ class Accessibility4All:
             return (-1, metadata_media_type)
 
     def examples(self, void_file_url, sparql_endpoint_url, search_engine_metadata):
-        
-        examples = search_engine_metadata.get("example", [])
-        if len(examples) > 0:
-            return (1, examples)
+        if isinstance(search_engine_metadata, dict):
+            examples = search_engine_metadata.get("example", [])
+            if len(examples) > 0:
+                return (1, examples)
 
         if utils.is_url(void_file_url):
             void_file = VoIDAnalyses.parseVoID(void_file_url)

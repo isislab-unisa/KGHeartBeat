@@ -191,7 +191,7 @@ class EvaluateHumanCenteredAcc:
     def evaluate_robust(self):
         versioning = self.accessibility4all.version(self.kg_quality.extra.urlVoid, self.kg_quality.extra.endpointUrl)
         robots_txt = self.accessibility4all.robots_txt(self.kg_quality.extra.other_resources, self.kg_quality.extra.endpointUrl, self.kg_quality.verifiability.sources.web)
-        webpage_broken_links = self.accessibility4all.webpage_status(self.search_engine_metadata['website'])
+        webpage_broken_links = self.accessibility4all.webpage_status(self.search_engine_metadata)
         metadata_broken_links_rate = self.accessibility4all.metadata_broken_links_rate(self.search_engine_metadata, self.kg_quality.extra.endpointUrl, self.kg_quality.extra.urlVoid, self.kg_quality.extra.KGid)
         canonical_id = self.accessibility4all.canonical_citation(self.kg_quality.extra.urlVoid, self.kg_quality.extra.endpointUrl, self.search_engine_metadata)
 
