@@ -241,6 +241,8 @@ class Accessibility4All:
             return (0, "No citation found")
 
     def contact_point(self, search_engine_metadata, sparql_endpoint, void_file_url):
+        if search_engine_metadata is None or not isinstance(search_engine_metadata, dict):
+            return (0, "No search engine metadata available")
         contact_in_metadata = search_engine_metadata.get('contact_point', False)
         if contact_in_metadata != False and isinstance(contact_in_metadata, dict):
             name = contact_in_metadata.get('name', False)
@@ -377,7 +379,7 @@ class Accessibility4All:
                 return result
 
         for link in resources or []:
-            path = link.get('path', '')
+            path = link.url
             if 'robots.txt' in path and utils.is_url(path):
                 result = check_robots(path)
                 if result[0] == 1:

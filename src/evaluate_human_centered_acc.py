@@ -89,7 +89,7 @@ class EvaluateHumanCenteredAcc:
         metadata_lang = self.accessibility4all.metadata_lang(self.kg_quality.extra.endpointUrl, self.kg_quality.extra.urlVoid)
 
         if status_sparql_endpoint == 'Available':
-            triples = self.kg_quality.amount.triplesQuery
+            triples = self.kg_quality.amountOfData.numTriplesQ
             labels = self.kg_quality.understendability.numLabel
             if isinstance(labels, int) and labels > 0 and isinstance(triples, int) and triples > 0:
                 human_readable_labels_score = (-1 + (labels / triples), f"Number of human-readable labels: {labels}")
@@ -113,12 +113,12 @@ class EvaluateHumanCenteredAcc:
             understandable_score = understandable_sum / 3
 
         return {
-            "data_language": {
-                "score": data_lang_score[0],
-                "details": data_lang_score[1]},
             "metadata_language": {
                 "score": metadata_lang[0],
                 "details": metadata_lang[1]},
+            "data_language": {
+                "score": data_lang_score[0],
+                "details": data_lang_score[1]},
             "human_readable_labels": {
                 "score": human_readable_labels_score[0],
                 "details": human_readable_labels_score[1]},
@@ -149,6 +149,8 @@ class EvaluateHumanCenteredAcc:
         if dump_format == True:
             dump_format_score = (0, "Common formats available")
         elif dump_format == False:
+            dump_format_score = (-1, "Dump available but no common formats found")
+        else:
             dump_format_score = (-1, "No dump provided for the KG")
         
         opens_license = self.accessibility4all.open_license(Aggregator.getLicense(self.search_engine_metadata))
@@ -292,8 +294,9 @@ class EvaluateHumanCenteredAcc:
         access_4_visually_impaired = self.evaluate_access_4_visually_impaired()
         access_4_deaf_hearing = self.evaluate_access_4_deaf_hearing()
 
-        sum_overall_score = (perceivable['perceivable_score'] + operable['operable_score'] + understandable['understandable_score'] + robust['robust_score'] + access_4_visually_impaired['accessibility_for_visually_impaired_score'] + access_4_deaf_hearing['accessibility_for_deaf_hearing_score'])
-
+        sum_overall_no_special = (perceivable['perceivable_score'] + operable['operable_score'] + understandable['understandable_score'] + robust['robust_score'] )
+        sum_overall_with_special = (perceivable['perceivable_score'] + operable['operable_score'] + understandable['understandable_score'] + robust['robust_score'] + access_4_visually_impaired['accessibility_for_visually_impaired_score'] + access_4_deaf_hearing['accessibility_for_deaf_hearing_score'])
+        sum_overall_only_special = (access_4_visually_impaired['accessibility_for_visually_impaired_score'] + access_4_deaf_hearing['accessibility_for_deaf_hearing_score'])
 
         return {
             "perceivable": perceivable,
@@ -302,5 +305,7 @@ class EvaluateHumanCenteredAcc:
             "robust": robust,
             "accessibility_for_visually_impaired": access_4_visually_impaired,
             "accessibility_for_deaf_hearing": access_4_deaf_hearing,
-            "overall_human_centered_accessibility_score": sum_overall_score
+            "overall_score_no_special": sum_overall_no_special,
+            "overall_score_with_special": sum_overall_with_special,
+            "overall_score_only_special": sum_overall_only_special
         }

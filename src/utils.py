@@ -1598,3 +1598,8 @@ def run_with_timeout(func, args=(), timeout=300):
         print(f"Terminated due to timeout after {timeout}s")
         return False
     return q.get() if not q.empty() else False
+
+def format_field(field):
+    if isinstance(field, dict) and 'score' in field and 'details' in field:
+        return f"score: {field['score']} | details: {field['details']}"
+    return field

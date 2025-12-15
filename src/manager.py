@@ -93,7 +93,7 @@ filename = date.today()
 filename = str(filename)
 OutputCSV.writeHeader(filename)
 OutputCSV.writeHeader(filename,include_dimensions=True)
-toAnalyze = [('viaf','viaf')]
+
 for i in range(len(toAnalyze)):
     start_analysis = time.time()
     kg = analyses.analyses(idKG=toAnalyze[i][0],analysis_date=filename,nameKG=toAnalyze[i][1])
@@ -115,12 +115,10 @@ for i in range(len(toAnalyze)):
     evaluation.calculate_FAIR_score()
     kg.fairness = evaluation.fairness
     
-    print(kg.extra)
     human_accessibility_evaluation = EvaluateHumanCenteredAcc(kg)
     human_accessibility_evaluation_results = human_accessibility_evaluation.evaluate_all()
     kg.human_accessibility = human_accessibility_evaluation_results
 
-    print(human_accessibility_evaluation_results)
 
     end_analysis = time.time()
     utils.write_time(toAnalyze[i][0],end_analysis-start_analysis,'--- Analysis','INFO',filename)
@@ -135,7 +133,6 @@ for i in range(len(toAnalyze)):
     del csv
     del kg
     gc.collect()
-    print(kg.getQualityKG()) #PRINT THE KG QUALITY ON THE COMAND LINE
     
 sparql_urls = YummyDataAPI.getSPARQLEndpointURLs()
 if len(input.get('sparql_url')) > 0 and not 'all' in input.get('sparql_url') or len(sparql_urls) > 0:
