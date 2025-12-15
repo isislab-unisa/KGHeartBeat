@@ -33,6 +33,8 @@ import VoIDAnalyses
 import re
 _NETLOC_PATTERN = re.compile(r'^[\w\-\.]+(?:\:\d+)?$')
 from multiprocessing import Process, Queue
+import pandas as pd
+
 
 #PRINT THE METADATI OF A KG
 def printMetadatiKG(metadct):
@@ -1603,3 +1605,17 @@ def format_field(field):
     if isinstance(field, dict) and 'score' in field and 'details' in field:
         return f"score: {field['score']} | details: {field['details']}"
     return field
+
+def parse_score_details(text):
+    """Parse 'score: X | details: Y' format into dict"""
+    if not text or pd.isna(text):
+        return {'score': '', 'details': ''}
+    
+    # Extract score and details using regex
+    score_match = re.search(r'score:\s*(-?\d+)', text)
+    details_match = re.search(r'details:\s*(.+?)$', text)
+    
+    return {
+        'score': score_match.group(1) if score_match else '',
+        'details': details_match.group(1).strip() if details_match else ''
+    }
