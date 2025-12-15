@@ -194,7 +194,7 @@ def full_csv():
                                     'i_score' : rows.get('I score', ''),
                                     'fair_score' : rows.get('FAIR score', ''),
                         },
-                        'Human accessibility': {
+                        'Human_accessibility': {
                             'image_metadata': rows.get('Image Metadata', ''),
                             'image' :  rows.get('Image', ''),
                             'audio_metadata' : rows.get('Audio metadata', ''),
