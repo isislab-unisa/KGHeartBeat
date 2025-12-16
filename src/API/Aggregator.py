@@ -34,6 +34,9 @@ def check_if_on_lodc_dh(idKG):
 def getNameKG(metadata):
     nameDH = DataHubAPI.getNameKG(metadata)
     nameLODC = LODCloudAPI.getNameKG(metadata)
+    nameCHeCloud = CHeCloudAPI.getNameKG(metadata)
+    if nameCHeCloud != False:
+        return nameCHeCloud
     if nameLODC != False:
         return nameLODC
     elif nameDH != False:
@@ -44,6 +47,9 @@ def getNameKG(metadata):
 def getLicense(metadata):
     licenseDH = DataHubAPI.getLicense(metadata)
     licenseLODC = LODCloudAPI.getLicense(metadata)
+    licenseCHeCloud = CHeCloudAPI.getLicense(metadata)
+    if licenseCHeCloud != False:
+        return licenseCHeCloud
     if licenseLODC != False:
         return licenseLODC
     elif licenseDH != False:
@@ -54,6 +60,9 @@ def getLicense(metadata):
 def getAuthor(metadata):
     authorDH = DataHubAPI.getAuthor(metadata)
     authorLODC = LODCloudAPI.getAuthor(metadata)
+    authorCHeCloud = CHeCloudAPI.getAuthor(metadata)
+    if authorCHeCloud != False:
+        return authorCHeCloud
     if authorLODC != False:
         return authorLODC
     elif authorDH != False:
@@ -64,6 +73,9 @@ def getAuthor(metadata):
 def getSource(metadata):
     sourcesDH = DataHubAPI.getSources(metadata)
     sourcesLODC = LODCloudAPI.getSourceDict(metadata)
+    sourcesCHeCloud = CHeCloudAPI.getSourceDict(metadata)
+    if sourcesCHeCloud != False:
+        return sourcesCHeCloud
     if sourcesLODC != False:
         return sourcesLODC
     elif sourcesDH != False:
@@ -74,6 +86,9 @@ def getSource(metadata):
 def getTriples(metadata):
     numTriplesDH = DataHubAPI.getTriples(metadata)
     numTriplesLODC = LODCloudAPI.getTriples(metadata)
+    numTriplesCHeCloud = CHeCloudAPI.getTriples(metadata)
+    if numTriplesCHeCloud != False:
+        return numTriplesCHeCloud
     if numTriplesLODC != False:
         return numTriplesLODC
     elif numTriplesDH != False:
@@ -170,6 +185,9 @@ def getExternalLinks(idKG):
 def getDescription(metadata):
     descriptionDH = DataHubAPI.getDescription(metadata)
     descriptionLODC = LODCloudAPI.getDescription(metadata)
+    descriptionCHeCloud = CHeCloudAPI.getDescription(metadata)
+    if descriptionCHeCloud != False:
+        return descriptionCHeCloud
     if descriptionLODC != False:
         return descriptionLODC
     elif descriptionDH != False and not isinstance(descriptionDH,dict):

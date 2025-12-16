@@ -32,6 +32,92 @@ def getAllDatasetIDs(snapshot_path=f'{abs_path}/CHeCLOUD.json'):
         print("No local snapshot available.")
         return []
 
+def getNameKG(metadata):
+    if isinstance(metadata,dict):
+        title = metadata.get('title')
+        return title
+    else:
+        return False
+
+def getLicense(jsonFile):
+    if isinstance(jsonFile,dict):
+        license = jsonFile.get('license')
+        if (not license):
+            return False
+        else:
+            return license
+    else:
+        return False
+
+def getAuthor(jsonFile):
+    if isinstance(jsonFile,dict):
+        owner = jsonFile.get('owner')
+        if isinstance(owner,dict):
+            name = owner.get('name')
+            if (not name):
+                name = 'absent'    
+            email = owner.get('email')
+            if (not email):
+                email = 'absent'
+            ownerStr = 'Name: %s, email: %s'%(name,email)
+            return ownerStr
+        else:
+            return False
+    else:
+        return False
+
+def getSource(jsonFile):
+    if isinstance(jsonFile,dict):
+        website = jsonFile.get('website')
+        if(not website):
+            website = 'absent'
+        contactPoint = jsonFile.get('contact_point')
+        if isinstance(contactPoint,dict):
+            contactPoint["web"] = website 
+            name = contactPoint.get('name')
+            email = contactPoint.get('email')
+            if(not name):
+                name = 'absent'
+            if(not email):
+                email = 'absent'
+            return contactPoint
+        else:
+            return False
+    else:
+        return False
+
+def getSourceDict(jsonFile):
+    if isinstance(jsonFile,dict):
+        website = jsonFile.get('website')
+        if(not website):
+            website = 'absent'
+        contactPoint = jsonFile.get('contact_point')
+        if isinstance(contactPoint,dict):
+            contactPoint["web"] = website 
+            return contactPoint
+        else:
+            return False
+    else:
+        return False
+
+def getTriples(jsonFile):
+    if isinstance(jsonFile,dict):
+        triples = jsonFile.get('triples',0)
+        return triples
+    else:
+        return False
+
+def getDescription(jsonFile):
+    if isinstance(jsonFile,dict):
+        en = jsonFile.get('description','absent')
+        if isinstance(en,dict):
+            description = en.get('en','absent')
+            return description
+        else:
+            return 'absent'
+    else:
+        return False
+    
 def getDatasetMetadata(idKG, snapshot=f'{abs_path}/CHeCLOUD.json'):
     url = f'https://checloud.di.unisa.it/checloud-api/CHe_cloud_data/dataset_metadata/{str(idKG)}'
     try:
