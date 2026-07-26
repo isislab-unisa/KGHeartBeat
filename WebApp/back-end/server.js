@@ -19,10 +19,24 @@ const port = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
-app.use(upload());
+const uploadMiddleware = upload();
+app.use((req, res, next) => {
+    if (req.path === '/knowledge_graph/evaluate-turtle') {
+        return next();
+    }
+    return uploadMiddleware(req, res, next);
+});
+
+app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'ok' });
+});
 
 //TODO: is possible to limitate the use of a middleware only for a specific path request
 app.use(async (req, res, next) => {
+    // Turtle evaluation is self-contained and does not require MongoDB.
+    if (req.path === '/knowledge_graph/evaluate-turtle') {
+        return next();
+    }
     try {
         req.db = await connectToMongoDB(); // Ottieni la connessione dal pool
         next();

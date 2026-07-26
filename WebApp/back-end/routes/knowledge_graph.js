@@ -7,6 +7,7 @@ const { flat_data, filterUniqueObjects,readFileContent, csv_to_json } = require(
 const archiver = require('archiver');
 const csvParser = require('csv-parser');
 const mime = require('mime-types');
+const { spawn } = require('child_process');
 
 
 router.route('/').get((req, res) => {
@@ -217,5 +218,63 @@ router.route('/upload').post((req, res) =>{
             res.status(500).send('Error during CSV parsing.');
         });
 })
+
+// Evaluate the quality signals that are observable in a Turtle document itself.
+// Content-Type: text/turtle; body: raw Turtle text (maximum 10 MiB).
+router.post('/evaluate-turtle', expressTextTurtle(), (req, res) => {
+    if (typeof req.body !== 'string' || req.body.trim().length === 0) {
+        return res.status(400).json({ error: 'The RDF/Turtle payload is empty.' });
+    }
+
+    const evaluator = path.resolve(__dirname, '../../../src/evaluate_turtle.py');
+    const pythonCommand = process.env.PYTHON_COMMAND || 'python';
+    const child = spawn(pythonCommand, [evaluator], { stdio: ['pipe', 'pipe', 'pipe'] });
+    let stdout = '';
+    let stderr = '';
+    let completed = false;
+
+    const timeout = setTimeout(() => {
+        child.kill();
+        if (!completed) {
+            completed = true;
+            res.status(504).json({ error: 'The RDF/Turtle evaluation timed out.' });
+        }
+    }, 30000);
+
+    child.stdout.setEncoding('utf8');
+    child.stderr.setEncoding('utf8');
+    child.stdout.on('data', chunk => { stdout += chunk; });
+    child.stderr.on('data', chunk => { stderr += chunk; });
+    child.on('error', error => {
+        clearTimeout(timeout);
+        if (!completed) {
+            completed = true;
+            res.status(500).json({ error: `Could not start the evaluator: ${error.message}` });
+        }
+    });
+    child.on('close', code => {
+        clearTimeout(timeout);
+        if (completed) return;
+        completed = true;
+        try {
+            const result = JSON.parse(stdout);
+            if (code !== 0 || result.error) {
+                return res.status(422).json({ error: result.error || stderr || 'Invalid RDF/Turtle.' });
+            }
+            return res.status(200).json(result);
+        } catch (error) {
+            return res.status(500).json({ error: 'Invalid response from the RDF evaluator.', details: stderr });
+        }
+    });
+
+    child.stdin.end(req.body, 'utf8');
+});
+
+function expressTextTurtle() {
+    return require('express').text({
+        type: ['text/turtle', 'application/x-turtle', 'text/plain'],
+        limit: '10mb'
+    });
+}
 
 module.exports = router;

@@ -181,6 +181,20 @@ An analysis of all automatically discoverable Knowledge Graphs is done weekly by
 You can view the quality data of each analysis performed in csv format in the following repository: [https://github.com/isislab-unisa/KGHeartBeat-historical-analysis](https://github.com/isislab-unisa/KGHeartBeat-historical-analysis)
 Or, you can view the computed data through graphs and tables from our web-app: [KGHeartBeat-WebApp](http://www.isislab.it:12280/kgheartbeat/).
 
+## Evaluate an RDF/Turtle payload
+
+The backend exposes `POST /knowledge_graph/evaluate-turtle`. Send a Turtle
+document as the raw request body with `Content-Type: text/turtle` (maximum 10
+MiB). The response contains the total score, per-dimension scores, extracted
+metrics, and the dimensions that cannot be evaluated without a live SPARQL
+endpoint or external metadata.
+
+```bash
+curl -X POST http://localhost:5000/knowledge_graph/evaluate-turtle \
+  -H "Content-Type: text/turtle" \
+  --data-binary @graph.ttl
+```
+
 ## How include a new quality metric?
 If you want to include a new quality metric, you need to include the calculation inside the [analyses.py](analyses.py) module. If this new metric requires the use of a new query on the SPARQL endpoint, you can add a new query in the [query.py](query.py) module and call it from the [analyses.py](analyses.py) module .Then, based on the quality dimension to which it belongs, modify the related class in the [QualityDimensions](/QualityDimensions/) folder, or create a new class if this belongs to a new dimension. If you created a new dimension for the new metric, it must be included in the [KnowledgeGraph.py](KnowledgeGraph.py) class. Then instantiate the classes in the [analyses.py](analyses.py) to assign the value obtained from the new quality metric. If you want also to see this new metric in the csv file given in output, you need to edit the [OutputCSV.py](OutputCSV.py) module appropriately. Essentially you have to include a new header, having as name the name of the new metric and then recall the value of the metric from the [KnowledgeGraph.py](KnowledgeGraph.py) object appropriately constructed in the [analyses.py](analyses.py) module.
 
