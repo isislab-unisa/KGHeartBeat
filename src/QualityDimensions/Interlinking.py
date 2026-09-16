@@ -1,4 +1,7 @@
 from ExternalLink import ExternalLink
+import Graph
+import query
+from QualityDimensions.base import MISSING_VALUE, decimal
 
 
 class Interlinking:
@@ -24,3 +27,44 @@ class Interlinking:
             "External-Links": ExternalLink.getListExLinks(self.externalLinks),
             "Skos-mapping": self.skosMapping
         }
+
+
+def graph_metrics(context, graph, kg_id):
+    degree = context.timed(
+        'Calculation of Degree of Connection',
+        'Interlinking',
+        lambda: Graph.getDegreeOfConnection(graph, kg_id),
+    )
+    centrality = context.timed(
+        'Calculation of Centrality',
+        'Interlinking',
+        lambda: Graph.getCentrality(graph, kg_id),
+    )
+    if isinstance(centrality, float):
+        centrality = decimal(centrality, 3)
+
+    clustering = context.timed(
+        'Calculation of Clustering coefficient',
+        'Interlinking',
+        lambda: Graph.getClusteringCoefficient(graph, kg_id),
+    )
+    if isinstance(clustering, float):
+        clustering = decimal(clustering, 3)
+
+    return degree, centrality, clustering
+
+
+def same_as_chains(context):
+    try:
+        return context.timed('sameAs chians check', 'Interlinking', lambda: query.getSameAsChains(context.access_url))
+    except Exception as error:
+        context.warning(f'Interlinking | sameAs chains | {str(error)}')
+        return MISSING_VALUE
+
+
+def skos_mapping(context):
+    try:
+        return context.timed('skos check', 'Interlinking', lambda: query.getSkosMapping(context.access_url))
+    except Exception as error:
+        context.warning(f'Interlinking | SKOS Mapping properties | {str(error)}')
+        return MISSING_VALUE
