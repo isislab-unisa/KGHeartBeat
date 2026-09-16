@@ -1,4 +1,6 @@
 from ExternalLink import ExternalLink
+import Graph
+from QualityDimensions.base import decimal
 
 
 class Reputation:
@@ -14,3 +16,8 @@ class Reputation:
             "External-Links" : ExternalLink.getListExLinks(self.externalLinks),
             "PageRank" : self.pageRank
         }
+
+
+def page_rank(context, graph, kg_id):
+    value = context.timed('Calculation of the PageRank', 'Reputation', lambda: Graph.getPageRank(graph, kg_id))
+    return decimal(value)
