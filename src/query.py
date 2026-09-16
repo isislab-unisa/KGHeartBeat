@@ -19,6 +19,71 @@ def log_in_out(func):
         return result
 
     return decorated_func
+
+
+def _query(url, query_text, return_format=JSON, timeout=300):
+    sparql = SPARQLWrapper(url)
+    sparql.setQuery(query_text)
+    sparql.setTimeout(timeout)
+    sparql.setReturnFormat(return_format)
+    return sparql.query().convert()
+
+
+def _extract(results, json_reader, xml_reader, default=False):
+    if isinstance(results, dict):
+        return json_reader(results)
+    if isinstance(results, Document):
+        return xml_reader(results)
+    return default
+
+
+def _select_values(url, query_text, json_reader=None, xml_reader=None, timeout=300, default=False):
+    # Resolve readers at call time because utils also imports query.
+    if json_reader is None:
+        json_reader = utils.getResultsFromJSON
+    if xml_reader is None:
+        xml_reader = utils.getResultsFromXML
+    return _extract(_query(url, query_text, timeout=timeout), json_reader, xml_reader, default)
+
+
+def _select_count(url, query_text, timeout=300):
+    return _select_values(url, query_text, utils.getResultsFromJSONCountInt, utils.getResultsFromXMLCount, timeout)
+
+
+def _select_bindings(url, query_text, timeout=300, xml_reader=None):
+    if xml_reader is None:
+        xml_reader = utils.xmlToDictSPO
+    results = _query(url, query_text, timeout=timeout)
+    if isinstance(results, dict):
+        return results.get('results', {}).get('bindings', [])
+    if isinstance(results, Document):
+        return xml_reader(results)
+    return False
+
+
+def _select_exists(url, query_text, timeout=300):
+    bindings = _select_bindings(url, query_text, timeout, utils.xmlToDict)
+    if isinstance(bindings, list):
+        return len(bindings) > 0
+    return False
+
+
+def _first_or_value(value):
+    if isinstance(value, list):
+        if len(value) > 0:
+            return value[0]
+        return False
+    return value
+
+
+def _parse_first_date(values):
+    if not values:
+        return False
+    match = re.search(r'\d{4}-\d{2}-\d{2}', values[0])
+    date = datetime.datetime.strptime(match.group(), '%Y-%m-%d').date()
+    return str(date)
+
+
 @log_in_out
 def checkEndPoint(url): 
     sparql = SPARQLWrapper(url) 
@@ -216,8 +281,7 @@ def checkRDFDataStructures(url):
 
 @log_in_out
 def checkSerialisationFormat(url):
-    sparql = SPARQLWrapper(url)
-    sparql.setQuery('''
+    return _select_values(url, '''
         PREFIX dcterms: <http://purl.org/dc/terms/>
         PREFIX dcat: <http://www.w3.org/ns/dcat#>
         PREFIX void: <http://rdfs.org/ns/void#>
@@ -231,38 +295,15 @@ def checkSerialisationFormat(url):
                 ?prop ?o .
         }
     ''')
-    sparql.setTimeout(300)
-    sparql.setReturnFormat(JSON)
-    results = sparql.query().convert()
-    if isinstance(results,dict):
-        link = utils.getResultsFromJSON(results)
-        return link
-    elif isinstance(results,Document):
-        link = utils.getResultsFromXML(results)
-        return link
-    else:
-        return False
 
 @log_in_out
 def checkDataDump(url):
-    sparql = SPARQLWrapper(url)
-    sparql.setQuery('''
+    return _select_values(url, '''
     PREFIX void: <http://rdfs.org/ns/void#>
     SELECT DISTINCT ?o 
     WHERE 
     {?s void:dataDump ?o}
     ''')
-    sparql.setTimeout(300)
-    sparql.setReturnFormat(JSON)
-    results = sparql.query().convert()
-    if isinstance(results,dict):
-        link = utils.getResultsFromJSON(results)
-        return link
-    elif isinstance(results,Document):
-        link = utils.getResultsFromXML(results)
-        return link
-    else:
-        return False
 
 @log_in_out
 def checkLicenseMR(url): #PROBLEM ON http://lod.b3kat.de/sparql
@@ -298,8 +339,7 @@ def checkLicenseMR(url): #PROBLEM ON http://lod.b3kat.de/sparql
     
 @log_in_out
 def checkLicenseMR2(url):   #USED IN CASE THE QUERY WITH VALUES ISN'T SUPPORTED
-    sparql = SPARQLWrapper(url)
-    sparql.setQuery('''
+    return _select_values(url, '''
     PREFIX cc: <http://creativecommons.org/ns#>
     PREFIX dc: <http://purl.org/dc/elements/1.1/>
     PREFIX dct: <http://purl.org/dc/terms/>
@@ -326,21 +366,9 @@ def checkLicenseMR2(url):   #USED IN CASE THE QUERY WITH VALUES ISN'T SUPPORTED
     }
     LIMIT 1
     ''')
-    sparql.setTimeout(300)
-    sparql.setReturnFormat(JSON)
-    results = sparql.query().convert()
-    if isinstance(results,dict):
-        licenses = utils.getResultsFromJSON(results)
-        return licenses
-    elif isinstance(results,Document):
-        licenses = utils.getResultsFromXML(results)
-        return licenses
-    else:
-        return False
 @log_in_out
 def checkLicenseHR(url):
-    sparql = SPARQLWrapper(url)
-    sparql.setQuery('''
+    return _select_exists(url, '''
     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
     PREFIX dct: <http://purl.org/dc/terms/>
     PREFIX schema: <http://schema.org/>
@@ -358,31 +386,9 @@ def checkLicenseHR(url):
     FILTER regex(?o,".*(licensed?|copyrighte?d?).*(under|grante?d?|rights?).*")
     } 
     ''')
-    sparql.setTimeout(300)
-    sparql.setReturnFormat(JSON)
-    results = sparql.query().convert()
-    if isinstance(results,dict):
-        result = results.get('results')
-        bindings = result.get('bindings')
-        if isinstance(bindings,list):
-            if len(bindings) > 0:
-                return True
-            else:
-                return False
-        else:
-            return False
-    elif isinstance(results,Document):
-        numTags = results.getElementsByTagName("binding").length
-        if numTags > 0:
-            return True
-        else:
-            return False
-    else:
-        return False
 @log_in_out
 def numberOfProperty(url):
-    sparql = SPARQLWrapper(url)
-    sparql.setQuery('''
+    return _select_count(url, '''
     PREFIX owl: <http://www.w3.org/2002/07/owl#>
     PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
     PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -405,21 +411,9 @@ def numberOfProperty(url):
   	{?o a rdfs:Property}
     }
     ''') 
-    sparql.setTimeout(300)
-    sparql.setReturnFormat(JSON)
-    results = sparql.query().convert()
-    if isinstance(results,dict):
-        value = utils.getResultsFromJSONCountInt(results)
-        return value
-    elif isinstance(results,Document):
-        value = utils.getResultsFromXMLCount(results)
-        return value
-    else:
-        return False
 @log_in_out
 def getNumLabel(url):
-    sparql = SPARQLWrapper(url)
-    sparql.setQuery('''
+    return _select_count(url, '''
     PREFIX skosxl:<http://www.w3.org/2008/05/skos-xl#>
     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
     PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
@@ -467,21 +461,9 @@ def getNumLabel(url):
     {?s schema:alternateName ?o}
     }
     ''')
-    sparql.setTimeout(300)
-    sparql.setReturnFormat(JSON)
-    results = sparql.query().convert()
-    if isinstance(results,dict):
-        value = utils.getResultsFromJSONCountInt(results)
-        return value
-    elif isinstance(results,Document):
-        value = utils.getResultsFromXMLCount(results)
-        return value
-    else:
-        return False
 @log_in_out
 def checkUriRegex(url):
-    sparql = SPARQLWrapper(url)
-    sparql.setQuery('''
+    return _select_values(url, '''
     PREFIX void: <http://rdfs.org/ns/void#>
     SELECT DISTINCT ?o 
     WHERE{
@@ -490,41 +472,17 @@ def checkUriRegex(url):
     {?s void:uriPattern ?o}
     }
     ''')
-    sparql.setTimeout(300)
-    sparql.setReturnFormat(JSON)
-    results = sparql.query().convert()
-    if isinstance(results,dict):
-        regex = utils.getResultsFromJSON(results)
-        return regex
-    elif isinstance(results,Document):
-        regex = utils.getResultsFromXML(results)
-        return regex
-    else:
-        return False
 @log_in_out
 def checkUriPattern(url):
-    sparql = SPARQLWrapper(url)
-    sparql.setQuery('''
+    return _select_values(url, '''
     PREFIX void: <http://rdfs.org/ns/void#>
     SELECT DISTINCT ?o 
     WHERE
     {?s void:uriSpace ?o}
     ''')
-    sparql.setTimeout(300)
-    sparql.setReturnFormat(JSON)
-    results = sparql.query().convert()
-    if isinstance(results,dict):
-        regex = utils.getResultsFromJSON(results)
-        return regex
-    elif isinstance(results,Document):
-        regex = utils.getResultsFromXML(results)
-        return regex
-    else:
-        return False
 @log_in_out
 def getVocabularies(url):
-    sparql = SPARQLWrapper(url)
-    sparql.setQuery('''
+    return _select_values(url, '''
     PREFIX dcterms: <http://purl.org/dc/terms/>
     PREFIX dcat: <http://www.w3.org/ns/dcat#>
     PREFIX void: <http://rdfs.org/ns/void#>
@@ -538,21 +496,9 @@ def getVocabularies(url):
     { ?dataset a void:Dataset ; void:vocabulary ?o . }
     }
     ''')
-    sparql.setTimeout(300)
-    sparql.setReturnFormat(JSON)
-    results = sparql.query().convert()
-    if isinstance(results,dict):
-        vocabularies = utils.getResultsFromJSON(results)
-        return vocabularies
-    elif isinstance(results,Document):
-        vocabularies = utils.getResultsFromXMLUri(results)
-        return vocabularies
-    else:
-        return False
 @log_in_out
 def getCreator(url):
-    sparql = SPARQLWrapper(url)
-    sparql.setQuery('''
+    return _select_values(url, '''
     PREFIX dcterms: <http://purl.org/dc/terms/>
     PREFIX dcat: <http://www.w3.org/ns/dcat#>
     PREFIX void: <http://rdfs.org/ns/void#>
@@ -573,21 +519,9 @@ def getCreator(url):
     { ?dataset a dcat:Distribution ; foaf:maker ?o . }
     }
     ''')
-    sparql.setTimeout(300)
-    sparql.setReturnFormat(JSON)
-    results = sparql.query().convert()
-    if isinstance(results,dict):
-        creators = utils.getResultsFromJSON(results)
-        return creators
-    elif isinstance(results,Document):
-        creators = utils.getResultsFromXML(results)
-        return creators
-    else:
-        return False
 @log_in_out
 def getPublisher(url):
-    sparql = SPARQLWrapper(url)
-    sparql.setQuery('''                    
+    return _select_values(url, '''
     PREFIX dcterms: <http://purl.org/dc/terms/>
     PREFIX dcat: <http://www.w3.org/ns/dcat#>
     PREFIX void: <http://rdfs.org/ns/void#>
@@ -601,22 +535,11 @@ def getPublisher(url):
     { ?dataset a void:Dataset ; dcterms:publisher ?o . }
     }
     ''')
-    sparql.setTimeout(300)
-    sparql.setReturnFormat(JSON)
-    results = sparql.query().convert()
-    if isinstance(results,dict):
-        creators = utils.getResultsFromJSON(results)
-        return creators
-    elif isinstance(results,Document):
-        creators = utils.getResultsFromXML(results)
-        return creators
-    else:
-        return False
 @log_in_out
 def getNumEntities(url):
-    sparql = SPARQLWrapper(url)
-    sparql.setQuery('''
+    entities = _select_values(url, '''
     PREFIX void: <http://rdfs.org/ns/void#>
+    PREFIX dcat: <http://www.w3.org/ns/dcat#>
     SELECT DISTINCT ?o
     WHERE {
     { ?dataset a void:Dataset ; void:entities ?o . }
@@ -626,43 +549,20 @@ def getNumEntities(url):
     { ?dataset a dcat:Distribution ; void:entities ?o . }
     }
     ''')
-    sparql.setTimeout(300)
-    sparql.setReturnFormat(JSON)
-    results = sparql.query().convert()
-    if isinstance(results,dict):
-        entities = utils.getResultsFromJSON(results)
-        return int(entities)
-    elif isinstance(results,Document):
-        entities = utils.getResultsFromXML(results)
-        return int(entities)
-    else:
-        return False
+    return int(_first_or_value(entities))
     
 @log_in_out
 def getNumEntitiesRegex(url,entityRe):
-    sparql = SPARQLWrapper(url)
-    sparql.setQuery('''
+    return _select_count(url, '''
    SELECT (COUNT(?s) as ?triples)
    WHERE{
    {?s ?p ?o}
    FILTER(regex(?s,"%s"))
    }
-    '''%entityRe)
-    sparql.setTimeout(200)
-    sparql.setReturnFormat(JSON)
-    results = sparql.query().convert()
-    if isinstance(results,dict):
-        entities = utils.getResultsFromJSONCountInt(results)
-        return entities
-    elif isinstance(results,Document):
-        entities = utils.getResultsFromXMLCount(results)
-        return entities
-    else:
-        return False        
+    '''%entityRe, timeout=200)
 @log_in_out
 def getContributors(url):
-    sparql = SPARQLWrapper(url)
-    sparql.setQuery('''
+    return _select_values(url, '''
     PREFIX dcterms: <http://purl.org/dc/terms/>
     PREFIX dcat: <http://www.w3.org/ns/dcat#>
     PREFIX void: <http://rdfs.org/ns/void#>
@@ -676,21 +576,9 @@ def getContributors(url):
         { ?dataset a void:Dataset ; dcterms:contributor ?o . }
     }
     ''')
-    sparql.setTimeout(300)
-    sparql.setReturnFormat(JSON)
-    results = sparql.query().convert()
-    if isinstance(results,dict):
-        contributors = utils.getResultsFromJSON(results)
-        return contributors
-    elif isinstance(results,Document):
-        contributors = utils.getResultsFromXML(results)
-        return contributors
-    else:
-        return False
 @log_in_out
 def getSameAsChains(url):
-    sparql = SPARQLWrapper(url)
-    sparql.setQuery('''
+    return _select_count(url, '''
     PREFIX owl: <http://www.w3.org/2002/07/owl#>
     PREFIX schema: <http://schema.org/>
     SELECT (COUNT(?o) AS ?triples)
@@ -700,21 +588,9 @@ def getSameAsChains(url):
         {?s schema:sameAs ?o}
     }
     ''')
-    sparql.setTimeout(300)
-    sparql.setReturnFormat(JSON)
-    results = sparql.query().convert()
-    if isinstance(results,dict):
-        value = utils.getResultsFromJSONCountInt(results)
-        return value
-    elif isinstance(results,Document):
-        value = utils.getResultsFromXMLCount(results)
-        return value
-    else:
-        return False
 @log_in_out
 def getFrequency(url):
-    sparql = SPARQLWrapper(url)
-    sparql.setQuery('''
+    return _select_values(url, '''
     PREFIX dcterms: <http://purl.org/dc/terms/>
     PREFIX dcat: <http://www.w3.org/ns/dcat#>
     PREFIX void: <http://rdfs.org/ns/void#>
@@ -734,21 +610,9 @@ def getFrequency(url):
     { ?dataset a dcat:Distribution ; dcterms:Frequency ?o . }
     }
     ''')
-    sparql.setTimeout(300)
-    sparql.setReturnFormat(JSON)
-    results = sparql.query().convert()
-    if isinstance(results,dict):
-        frequency = utils.getResultsFromJSON(results)
-        return frequency
-    elif isinstance(results,Document):
-        frequency = utils.getResultsFromXML(results)
-        return frequency
-    else:
-        return False
 @log_in_out
 def getCreationDate(url):
-    sparql = SPARQLWrapper(url)
-    sparql.setQuery('''
+    return _parse_first_date(_select_values(url, '''
     PREFIX dcterms: <http://purl.org/dc/terms/>
     PREFIX dcat: <http://www.w3.org/ns/dcat#>
     PREFIX void: <http://rdfs.org/ns/void#>
@@ -767,27 +631,10 @@ def getCreationDate(url):
         { ?dataset a dcat:Dataset ; dcterms:issued ?o . }
     }
     ''')
-    sparql.setTimeout(300)
-    sparql.setReturnFormat(JSON)
-    results = sparql.query().convert()
-    if isinstance(results,dict):
-        creation = utils.getResultsFromJSON(results)
-        match = re.search(r'\d{4}-\d{2}-\d{2}', creation[0])
-        date = datetime.datetime.strptime(match.group(), '%Y-%m-%d').date()
-        date = str(date)
-        return date
-    elif isinstance(results,Document):
-        creation = utils.getResultsFromXML(results)
-        match = re.search(r'\d{4}-\d{2}-\d{2}', creation[0])
-        date = datetime.datetime.strptime(match.group(), '%Y-%m-%d').date()
-        date = str(date)
-        return date
-    else:
-        return False
+    )
 @log_in_out
 def getCreationDateMin(url):
-    sparql = SPARQLWrapper(url)
-    sparql.setQuery('''
+    return _parse_first_date(_select_values(url, '''
     PREFIX dcterms: <http://purl.org/dc/terms/>
     PREFIX void: <http://rdfs.org/ns/void#>
     PREFIX dcat: <http://www.w3.org/ns/dcat#>
@@ -804,28 +651,11 @@ def getCreationDateMin(url):
         { ?dataset a dcat:Distribution ; dcterms:issued ?created . }
         UNION
         { ?dataset a dcat:Dataset ; dcterms:issued ?created . }
-    ''')
-    sparql.setTimeout(300)
-    sparql.setReturnFormat(JSON)
-    results = sparql.query().convert()
-    if isinstance(results,dict):
-        creation = utils.getResultsFromJSONMin(results)
-        match = re.search(r'\d{4}-\d{2}-\d{2}', creation[0])
-        date = datetime.datetime.strptime(match.group(), '%Y-%m-%d').date()
-        date = str(date)
-        return date
-    elif isinstance(results,Document):
-        creation = utils.getResultsFromXML(results)
-        match = re.search(r'\d{4}-\d{2}-\d{2}', creation[0])
-        date = datetime.datetime.strptime(match.group(), '%Y-%m-%d').date()
-        date = str(date)
-        return date
-    else:
-        return False
+    }
+    ''', utils.getResultsFromJSONMin, utils.getResultsFromXML))
 @log_in_out
 def getModificationDate(url):
-    sparql = SPARQLWrapper(url)
-    sparql.setQuery('''
+    return _parse_first_date(_select_values(url, '''
     PREFIX dcterms: <http://purl.org/dc/terms/>
     PREFIX dcat: <http://www.w3.org/ns/dcat#>
     PREFIX void: <http://rdfs.org/ns/void#>
@@ -840,33 +670,10 @@ def getModificationDate(url):
     ORDER BY ASC(?o)
     LIMIT 1
     ''')
-    sparql.setTimeout(300)
-    sparql.setReturnFormat(JSON)
-    results = sparql.query().convert()
-    if isinstance(results,dict):
-        modification = utils.getResultsFromJSON(results)
-        if len(modification) > 0:
-            match = re.search(r'\d{4}-\d{2}-\d{2}', modification[0])
-            date = datetime.datetime.strptime(match.group(), '%Y-%m-%d').date()
-            date = str(date)
-            return date
-        else:
-            return False
-    elif isinstance(results,Document):
-        modification = utils.getResultsFromXML(results)
-        if len(modification) > 0:
-            match = re.search(r'\d{4}-\d{2}-\d{2}', modification[0])
-            date = datetime.datetime.strptime(match.group(), '%Y-%m-%d').date()
-            date = str(date)
-            return date
-        else:
-            return False
-    else:
-        return False
+    )
 @log_in_out
 def getModificationDateMax(url):
-    sparql = SPARQLWrapper(url)
-    sparql.setQuery('''
+    return _parse_first_date(_select_values(url, '''
     PREFIX dcterms: <http://purl.org/dc/terms/>
     PREFIX dcat: <http://www.w3.org/ns/dcat#>
     PREFIX void: <http://rdfs.org/ns/void#>
@@ -878,30 +685,7 @@ def getModificationDateMax(url):
         UNION
         { ?dataset a void:Dataset ; dcterms:modified ?modified . }
     }
-    ''')
-    sparql.setTimeout(300)
-    sparql.setReturnFormat(JSON)
-    results = sparql.query().convert()
-    if isinstance(results,dict):
-        modification = utils.getResultsFromJSONMax(results)
-        if len(modification) > 0:
-            match = re.search(r'\d{4}-\d{2}-\d{2}', modification[0])
-            date = datetime.datetime.strptime(match.group(), '%Y-%m-%d').date()
-            date = str(date)
-            return date
-        else:
-            return False
-    elif isinstance(results,Document):
-        modification = utils.getResultsFromXML(results)
-        if len(modification) > 0:
-            match = re.search(r'\d{4}-\d{2}-\d{2}', modification[0])
-            date = datetime.datetime.strptime(match.group(), '%Y-%m-%d').date()
-            date = str(date)
-            return date
-        else:
-            return False
-    else:
-        return False
+    ''', utils.getResultsFromJSONMax, utils.getResultsFromXML))
 
 @log_in_out
 def getDateUpdates(url):
@@ -973,8 +757,7 @@ def getNumUpdatedData(url,date):
 
 @log_in_out
 def getDeprecated(url):
-    sparql = SPARQLWrapper(url)
-    sparql.setQuery('''
+    return _select_values(url, '''
     PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
     PREFIX owl: <http://www.w3.org/2002/07/owl#>
     SELECT DISTINCT ?s
@@ -983,18 +766,7 @@ def getDeprecated(url):
     UNION
     {?s rdf:type owl:DeprecatedProperty}
     }
-    ''')
-    sparql.setTimeout(300)
-    sparql.setReturnFormat(JSON)
-    results = sparql.query().convert()
-    if isinstance(results,dict):
-        deprecated = utils.getResultsFromJSONs(results)
-        return deprecated
-    elif isinstance(results,Document):
-         deprecated = utils.getResultsFromXML(results)
-         return deprecated
-    else:
-        return False
+    ''', utils.getResultsFromJSONs, utils.getResultsFromXML)
 @log_in_out
 def getLabel(url):
     sparql = SPARQLWrapper(url)
@@ -1059,49 +831,24 @@ def getLabel(url):
         return False
 @log_in_out
 def getDisjoint(url):
-    sparql = SPARQLWrapper(url)
-    sparql.setQuery('''
+    return _select_count(url, '''
     PREFIX owl: <http://www.w3.org/2002/07/owl#>
     SELECT DISTINCT (COUNT(?s) AS ?triples) 
     WHERE 
     {?s owl:disjointWith ?o.}
     ''')
-    sparql.setTimeout(300)
-    sparql.setReturnFormat(JSON)
-    results = sparql.query().convert()
-    if isinstance(results,dict):
-        value = utils.getResultsFromJSONCountInt(results)
-        return value
-    elif isinstance(results,Document):
-        value = utils.getResultsFromXMLCount(results)
-        return value
-    else:
-        return False
 
 @log_in_out
 def getAllClasses(url):
-    sparql = SPARQLWrapper(url)
-    sparql.setQuery("""
+    return _select_values(url, """
     PREFIX owl: <http://www.w3.org/2002/07/owl#>
     PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
     SELECT DISTINCT ?s
     WHERE {?s rdf:type owl:Class}
-    """)
-    sparql.setTimeout(300) #5 minutes
-    sparql.setReturnFormat(JSON)
-    results = sparql.query().convert()
-    if isinstance(results,dict):
-        value = utils.getResultsFromJSONs(results)
-        return value
-    elif isinstance(results,Document):
-        value = utils.getResultsFromXML(results)
-        return value
-    else:
-        return False
+    """, utils.getResultsFromJSONs, utils.getResultsFromXML)
 @log_in_out
 def getAllProperty(url):
-    sparql = SPARQLWrapper(url)
-    sparql.setQuery('''
+    return _select_values(url, '''
     PREFIX owl: <http://www.w3.org/2002/07/owl#>
     PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
     PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -1123,65 +870,29 @@ def getAllProperty(url):
   	UNION
   	{?o a rdfs:Property}
     }
-    ''') 
-    sparql.setTimeout(300)
-    sparql.setReturnFormat(JSON)
-    results = sparql.query().convert()
-    if isinstance(results,dict):
-        properties = utils.getResultsFromJSONp(results)
-        return properties
-    elif isinstance(results,Document):
-        properties = utils.getResultsFromXML(results)
-        return properties
-    else:
-        return False
+    ''', utils.getResultsFromJSONp, utils.getResultsFromXML)
 
 @log_in_out
 def getAllType(url):
-    sparql = SPARQLWrapper(url)
-    sparql.setQuery('''
-    PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-    SELECT DISTINCT ?s
-    WHERE {?s rdf:type ?o}
-    ''')
-    sparql.setTimeout(300) #5 minutes
-    sparql.setReturnFormat(JSON)
     try:
-        results = sparql.query().convert()
-        if isinstance(results,dict):
-            properties = utils.getResultsFromJSONs(results)
-            return properties
-        elif isinstance(results,Document):
-            properties = utils.getResultsFromXML(results)
-            return properties
-        else:
-            return False
+        return _select_values(url, '''
+        PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        SELECT DISTINCT ?s
+        WHERE {?s rdf:type ?o}
+        ''', utils.getResultsFromJSONs, utils.getResultsFromXML)
     except Exception as e :
         return e
 @log_in_out
 def getAllTypeO(url):
-    sparql = SPARQLWrapper(url)
-    sparql.setQuery('''
+    return _select_values(url, '''
     PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
     SELECT DISTINCT ?o
     WHERE {?s rdf:type ?o}
-    ''')
-    sparql.setTimeout(300) #5 minutes
-    sparql.setReturnFormat(JSON)
-    results = sparql.query().convert()
-    if isinstance(results,dict):
-        properties = utils.getResultsFromJSONo(results)
-        return properties
-    elif isinstance(results,Document):
-        properties = utils.getResultsFromXML(results)
-        return properties
-    else:
-        return False
+    ''', utils.getResultsFromJSONo, utils.getResultsFromXML)
 
 @log_in_out
 def getSkosMapping(url):
-    sparql = SPARQLWrapper(url)
-    sparql.setQuery('''
+    return _select_count(url, '''
     PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
     SELECT (COUNT(?o) AS ?triples)
     WHERE {
@@ -1196,47 +907,6 @@ def getSkosMapping(url):
         {?s skos:relatedMatch ?o}
     }
     ''')
-    sparql.setTimeout(300)
-    sparql.setReturnFormat(JSON)
-    results = sparql.query().convert()
-    if isinstance(results,dict):
-        value = utils.getResultsFromJSONCountInt(results)
-        return value
-    elif isinstance(results,Document):
-        value = utils.getResultsFromXMLCount(results)
-        return value
-    else:
-        return False
-
-@log_in_out
-def getSkosMapping(url):
-    sparql = SPARQLWrapper(url)
-    sparql.setQuery('''
-    PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
-    SELECT (COUNT(?o) AS ?triples)
-    WHERE {
-        {?s skos:closeMatch ?o}
-        UNION   
-        {?s skos:exactMatch ?o}
-        UNION   
-        {?s skos:broadMatch ?o}
-        UNION   
-        {?s skos:narrowMatch ?o}
-        UNION   
-        {?s skos:relatedMatch ?o}
-    }
-    ''')
-    sparql.setTimeout(300)
-    sparql.setReturnFormat(JSON)
-    results = sparql.query().convert()
-    if isinstance(results,dict):
-        value = utils.getResultsFromJSONCountInt(results)
-        return value
-    elif isinstance(results,Document):
-        value = utils.getResultsFromXMLCount(results)
-        return value
-    else:
-        return False
 
 @log_in_out
 def getAllPropertySP(url):
