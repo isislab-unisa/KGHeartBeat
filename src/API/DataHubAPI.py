@@ -21,8 +21,12 @@ def getDataPackage(idDataset, pages=12, rows=1000, snapshot='./datahub.json'):
                 data = response.json()
                 currentDS = data.get("result", {}).get("results", [])
                 datasets.extend(currentDS)
+            else:
+                print(f"DataHub responded with status {response.status_code}; stopping pagination.")
+                break
         except Exception as e:
             print(f"DataHub Request {i+1} failed: {e}")
+            break
         start += rows
 
     if os.path.exists(snapshot) and len(datasets) == 0:
