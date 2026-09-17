@@ -4,7 +4,7 @@ import os
 import socket
 import time
 import urllib
-from dataclasses import dataclass
+from dataclasses import dataclass, field, replace
 from xml.dom.minidom import Document
 from xml.parsers import expat
 
@@ -13,6 +13,7 @@ from SPARQLWrapper import SPARQLExceptions
 from urllib.error import HTTPError, URLError
 
 import query
+from local_dump import try_local_dump
 import utils
 import VoIDAnalyses
 from API import Aggregator
@@ -26,6 +27,19 @@ class Target:
     name: str
     metadata: dict
     access_url: str
+    resources: list = field(default_factory=list)
+    rdf_dumps: list = field(default_factory=list)
+
+
+@dataclass
+class QueryTarget:
+    access_url: str
+    endpoint_check: "EndpointCheck"
+    rdf_dump_source: str = None
+
+    @property
+    def is_local(self):
+        return self.rdf_dump_source is not None
 
 
 @dataclass
@@ -68,7 +82,7 @@ class MetadataFallback:
     languages: object
 
 
-def resolve_target(kg_id=None, name=None, sparql_endpoint=None):
+def resolve_target(kg_id=None, name=None, sparql_endpoint=None, rdf_dump=None):
     if kg_id:
         metadata = Aggregator.getDataPackage(kg_id)
         if name == '':
@@ -89,7 +103,18 @@ def resolve_target(kg_id=None, name=None, sparql_endpoint=None):
     if name == '' or name is False:
         name = sparql_endpoint
 
-    return Target(kg_id, name, metadata, access_url)
+    resources = Aggregator.getOtherResources(kg_id) if kg_id else []
+    dumps = [(str(rdf_dump), None)] if rdf_dump else Aggregator.getRDFDumps(kg_id, resources=resources)
+    return Target(kg_id, name, metadata, access_url, resources, dumps)
+
+
+def resolve_query_target(target, endpoint_check, context, stack):
+    """Resolve the effective SPARQL URL within the caller's resource lifetime."""
+    if not endpoint_check.available:
+        local = try_local_dump(stack, context, target.rdf_dumps)
+        if local is not None:
+            return QueryTarget(local.url, replace(endpoint_check, available=True), local.source)
+    return QueryTarget(endpoint_check.access_url, endpoint_check)
 
 
 def configure_logger(analysis_date, kg_id, kg_name):
@@ -128,7 +153,7 @@ def check_endpoint(access_url, context, sources=None):
     endpoint = ''
     available = False
 
-    if access_url is False:
+    if not access_url:
         endpoint = '-'
         context.warning('SPARQL endpoint missing in the metadata')
         absent = True
@@ -163,8 +188,9 @@ def load_sources(metadata, access_url):
     return sources, sources_obj
 
 
-def load_resources(kg_id):
-    resources = Aggregator.getOtherResources(kg_id)
+def load_resources(kg_id, resources=None):
+    if resources is None:
+        resources = Aggregator.getOtherResources(kg_id)
     resources = utils.insertAvailability(resources)
     available_download = utils.checkAvailabilityForDownload(resources)
     download_urls = utils.getLinkDownload(resources)
