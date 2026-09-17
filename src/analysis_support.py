@@ -83,6 +83,11 @@ class MetadataFallback:
 
 
 def resolve_target(kg_id=None, name=None, sparql_endpoint=None, rdf_dump=None):
+    if rdf_dump and not kg_id and not sparql_endpoint:
+        source = str(rdf_dump)
+        resources = [{'path': source, 'type': 'full_download'}]
+        return Target(source, name or source, None, False, resources, [(source, None)])
+
     if kg_id:
         metadata = Aggregator.getDataPackage(kg_id)
         if name == '':

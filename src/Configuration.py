@@ -11,4 +11,5 @@ def createConfiguration():
         data["name"] = name
         data["id"] = id
         data["sparql_url"] = sparql_url
+        data["rdf_dump_url"] = []
         json.dump(data,f)

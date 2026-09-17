@@ -30,6 +30,10 @@ class JsonValidator(InputValidator):
             }
           ]
         },
+        "rdf_dump_url": {
+          "type": "array",
+          "items": {"type": "string", "pattern": r"^https?://[^/\\s]+"}
+        },
         "sparql_url": {
           "type": "array",
           "items": [

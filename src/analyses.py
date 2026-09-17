@@ -1,3 +1,5 @@
+from contextlib import ExitStack, contextmanager
+
 from KnowledgeGraph import KnowledgeGraph
 
 import QualityDimensions.AmountOfData as AmountOfData
@@ -49,14 +51,31 @@ from analysis_support import (
     parse_void_fallback,
     recover_all_triples,
     resolve_target,
+    resolve_query_target,
     type_objects,
 )
 
 
-def analyses(analysis_date, idKG=None, nameKG=None, sparql_endpoint=None):
+def analyses(analysis_date, idKG=None, nameKG=None, sparql_endpoint=None, rdf_dump=None):
+    with analysis_session(analysis_date, idKG, nameKG, sparql_endpoint, rdf_dump) as kg:
+        return kg
+
+
+@contextmanager
+def analysis_session(analysis_date, idKG=None, nameKG=None, sparql_endpoint=None, rdf_dump=None):
+    """Keep local queries available through downstream evaluations; always clean up."""
+    with ExitStack() as stack:
+        kg = _analyses(analysis_date, idKG, nameKG, sparql_endpoint, rdf_dump, stack)
+        try:
+            yield kg
+        finally:
+            kg.extra.queryEndpointUrl = kg.extra.endpointUrl
+
+
+def _analyses(analysis_date, idKG, nameKG, sparql_endpoint, rdf_dump, stack):
     utils.skipCheckSSL()
 
-    target = resolve_target(idKG, nameKG, sparql_endpoint)
+    target = resolve_target(idKG, nameKG, sparql_endpoint, rdf_dump)
     logger, kg_info = configure_logger(analysis_date, target.kg_id, target.name)
     logger.info('Analysis started...', extra=kg_info)
     logger.info(f"SPARQL endpoint link: {target.access_url}", extra=kg_info)
@@ -70,8 +89,14 @@ def analyses(analysis_date, idKG=None, nameKG=None, sparql_endpoint=None):
     logger.info(f"SPARQL endpoint availability: {endpoint_check.available}", extra=kg_info)
 
     triples_metadata = metadata_triples(target.metadata)
-    resource_info = load_resources(target.kg_id)
+    resource_info = load_resources(target.kg_id, resources=target.resources)
     void_info = check_void(context, resource_info.objects, sources_obj)
+
+    public_access_url = access_url
+    query_target = resolve_query_target(target, endpoint_check, context, stack)
+    access_url = query_target.access_url
+    endpoint_check = query_target.endpoint_check
+    context = AnalysisContext(access_url, target.name, analysis_date, logger, kg_info)
 
     metadata_license = Aggregator.getLicense(target.metadata)
     author_metadata = Aggregator.getAuthor(target.metadata)
@@ -100,6 +125,7 @@ def analyses(analysis_date, idKG=None, nameKG=None, sparql_endpoint=None):
         triples_metadata,
         resource_info.download_urls,
         resource_info.offline_dumps,
+        local_dump=query_target.is_local,
     ) if endpoint_check.available else None
     void_available, void_values = (False, None)
     if not endpoint_check.available:
@@ -112,7 +138,8 @@ def analyses(analysis_date, idKG=None, nameKG=None, sparql_endpoint=None):
         values = _unavailable_values(error_message)
 
     normalized_id = '' if target.kg_id is False else target.kg_id
-    normalized_access_url = '' if access_url is False else access_url
+    reported_access_url = public_access_url if query_target.is_local else access_url
+    normalized_access_url = reported_access_url or ''
     normalized_name = '' if target.name is False else target.name
 
     trust = trust_value(context, normalized_name, description, sources_obj.web, believable)
@@ -163,6 +190,10 @@ def analyses(analysis_date, idKG=None, nameKG=None, sparql_endpoint=None):
         error_message=error_message,
     )
 
+    extra.analysisSource = "rdf_dump" if query_target.is_local else "sparql" if endpoint_check.available else "metadata"
+    extra.rdfDumpSource = query_target.rdf_dump_source
+    extra.queryEndpointUrl = access_url
+
     return KnowledgeGraph(
         dimensions["availability"],
         dimensions["currency"],
@@ -188,9 +219,14 @@ def analyses(analysis_date, idKG=None, nameKG=None, sparql_endpoint=None):
     )
 
 
-def _endpoint_values(context, triples_metadata, download_urls, offline_dumps):
+def _endpoint_values(context, triples_metadata, download_urls, offline_dumps, local_dump=False):
     all_triples = recover_all_triples(context)
-    performance, throughput_no_offset = Performance.calculate(context)
+    if local_dump:
+        from QualityDimensions.Performance import unavailable
+        performance = unavailable()
+        throughput_no_offset = dict.fromkeys(("min", "average", "max", "standard_deviation"), MISSING_VALUE)
+    else:
+        performance, throughput_no_offset = Performance.calculate(context)
     triples_query = AmountOfData.count_triples(context)
     limited = endpoint_limited(context, all_triples, triples_query)
     triples_o = type_objects(context)
@@ -215,11 +251,11 @@ def _endpoint_values(context, triples_metadata, download_urls, offline_dumps):
         "new_terms": new_terms(context, triples_o),
         "languages": languages_from_endpoint(context),
         "num_blank_nodes": blank_nodes(context),
-        "is_secure": https_available(context),
+        "is_secure": MISSING_VALUE if local_dump else https_available(context),
         "rdf_structures": rdf_structure_value,
         "formats": serialization_formats_from_endpoint(context),
         "dcat_links": dcat_download_links(context),
-        "available_dump": rdf_dump_from_endpoint(context, download_urls, offline_dumps),
+        "available_dump": True if local_dump else rdf_dump_from_endpoint(context, download_urls, offline_dumps),
         "license_mr": machine_readable_from_endpoint(context),
         "license_hr": human_readable_from_endpoint(context),
         "num_property": AmountOfData.count_properties(context),
@@ -310,7 +346,7 @@ def _build_dimensions(
             "availability": Availability(endpoint, available_download, values["available_dump"], inactive_link, values["def_value"]),
             "currency": build_currency(context, creation_date, modification_date, updated_triples, values["triples_query"], triples_metadata, historical_updates),
             "versatility": Versatility(values["languages"], language_metadata, values["formats"], endpoint, values["available_dump"], available_download),
-            "security": Security(values["is_secure"], endpoint_check.restricted),
+            "security": Security(values["is_secure"], MISSING_VALUE if endpoint_check.absent else endpoint_check.restricted),
             "representational_conciseness": values["representational_conciseness"],
             "licensing": Licensing(metadata_license, values["license_mr"], values["license_hr"]),
             "performance": values["performance"],
