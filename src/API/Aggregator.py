@@ -1,3 +1,8 @@
+from copy import deepcopy
+import logging
+from urllib.parse import urlsplit
+
+from rdf_formats import rdf_media_type
 from API import DataHubAPI
 from API import LODCloudAPI
 from API.monitoring_requests import MonitoringRequests
@@ -108,29 +113,76 @@ def getSPARQLEndpoint(idKG):
         return endpointDH
 
 def getOtherResources(idKG):
-    metadataDH = DataHubAPI.getDataPackage(idKG)
-    metadataLODC = LODCloudAPI.getJSONMetadata(idKG)
-    otResourcesDH = DataHubAPI.getOtherResources(metadataDH)
-    otResourcesLODC = LODCloudAPI.getOtherResources(metadataLODC)
-    otResourcesCHeCloud = CHeCloudAPI.getOtherResources(idKG)
-    monitoring_resources = MonitoringRequests()
-    otResourcesMR = monitoring_resources.getOtherResources(idKG)
-    manual_refined_resources = utils.return_updated_rdf_dump(idKG)
-    if otResourcesDH == False:
-        otResourcesDH = []
-    if otResourcesLODC == False:
-        otResourcesLODC = []
-    if otResourcesLODC == False and otResourcesCHeCloud != False:
-        otResourcesLODC = otResourcesCHeCloud
-    else:
-        otResourcesCHeCloud = []
-    otherResources = utils.mergeResources(otResourcesDH,otResourcesLODC)
-    if manual_refined_resources != False:
-        otherResources = otherResources + manual_refined_resources
-    if otResourcesMR != False:
-        otherResources = otherResources + otResourcesMR
+    """Combine resources from every catalog, tolerating individual failures."""
+    providers = [
+        ('manual', lambda: utils.return_updated_rdf_dump(idKG)),
+        ('monitoring_requests', lambda: MonitoringRequests().getOtherResources(idKG)),
+        ('CHeCloud', lambda: CHeCloudAPI.getOtherResources(idKG)),
+        ('LODCloud', lambda: LODCloudAPI.getOtherResources(deepcopy(LODCloudAPI.getJSONMetadata(idKG)))),
+        ('DataHub', lambda: DataHubAPI.getOtherResources(deepcopy(DataHubAPI.getDataPackage(idKG)))),
+    ]
+    resources = {}
+    for catalog, fetch in providers:
+        try:
+            entries = fetch()
+        except Exception as error:
+            logging.getLogger(__name__).warning('Could not recover %s resources for %s: %s', catalog, idKG, error)
+            continue
+        if not isinstance(entries, list):
+            continue
+        for entry in entries:
+            if not isinstance(entry, dict):
+                continue
+            resource = deepcopy(entry)
+            url = (resource.get('path') or resource.get('url')
+                   or resource.get('download_url') or resource.get('access_url'))
+            if not isinstance(url, str) or not url.strip():
+                continue
+            url = url.strip()
+            resource['path'] = url
+            resource['format'] = (resource.get('format') or resource.get('media_type')
+                                  or resource.get('mimetype'))
+            resource['catalogs'] = [catalog]
+            if url not in resources:
+                resources[url] = resource
+            else:
+                previous = resources[url]
+                previous['catalogs'].append(catalog)
+                if resource.get('type') == 'full_download':
+                    previous['type'] = 'full_download'
+                if not rdf_media_type(url, previous.get('format')) and rdf_media_type(url, resource.get('format')):
+                    previous['format'] = resource['format']
+    return list(resources.values())
 
-    return otherResources
+
+def getRDFDumps(idKG, resources=None):
+    """Return ordered (URL, RDF media type) candidates across supported catalogs.
+
+    Discovery does not download files, probe availability, or require Oxigraph.
+    Pass previously fetched resources to avoid repeating catalog requests.
+    """
+    if resources is None:
+        resources = getOtherResources(idKG)
+    candidates = []
+    for resource in resources:
+        url = resource.get('path')
+        if not isinstance(url, str) or urlsplit(url).scheme not in ('http', 'https'):
+            continue
+        kind = resource.get('type')
+        if kind in ('sparql', 'example'):
+            continue
+        media_type = rdf_media_type(url, resource.get('format'))
+        if kind == 'full_download' or media_type:
+            candidates.append((url, media_type, kind == 'full_download'))
+    candidates.sort(key=lambda item: not item[2])
+    seen = set()
+    result = []
+    for url, media_type, _ in candidates:
+        if url not in seen:
+            seen.add(url)
+            result.append((url, media_type))
+    return result
+
 
 def getExternalLinks(idKG):
     metadataDH = DataHubAPI.getDataPackage(idKG)
