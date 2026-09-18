@@ -305,21 +305,56 @@ def metadata_triples(metadata):
         return 0
 
 
-def recover_all_triples(context):
+def recover_triples(context):
     try:
-        return context.timed('Recovery of all triples', 'Extra', lambda: query.getAllTriplesSPO(context.access_url))
+        label = 'Recovery of all triples' if context.triple_limit is None else 'Recovery of bounded triple sample'
+        return context.timed(label, 'Extra', lambda: query.getAllTriplesSPO(context.access_url, limit=context.triple_limit))
     except Exception as error:
-        context.warning(f'Impossible to recover all the triples in the KG: {error}')
+        context.warning(f'Unable to retrieve triples: {error}')
         return '-'
 
 
 def endpoint_limited(context, all_triples, triples_query):
     if isinstance(all_triples, list) and isinstance(triples_query, int):
+        if context.triple_limit is not None and len(all_triples) >= context.triple_limit and len(all_triples) < triples_query:
+            return 'not checked (sample limit reached)'
         if len(all_triples) < triples_query:
             context.warning('The number of triples that can be retrieved from the sparql endpoint is limited')
             return True
         return False
     return 'impossible to verify'
+
+
+def triple_retrieval_info(context, all_triples, triples_query):
+    """Describe coverage without treating endpoint-order rows as a random sample."""
+    retrieved = len(all_triples) if isinstance(all_triples, list) else 0
+    basis = 'unavailable'
+    if isinstance(all_triples, list):
+        basis = 'measured' if type(triples_query) is int and retrieved == triples_query else 'sampled'
+    triple_retrieval = {
+        'basis': basis,
+        'method': 'endpoint order; not a random sample' if context.triple_limit is not None else 'full retrieval requested',
+        'limit': context.triple_limit,
+        'retrieved': retrieved,
+        'total': triples_query,
+        'checked_at': context.analysis_date,
+        'metrics': ['accuracy.malformedDataType', 'conciseness.exC',
+                    'rConciseness (URI lengths)', 'amountOfData.entitiesRe (fallback only)'],
+        'endpoint_metrics': [metric for metric in (
+            'consistency.triplesMC', 'consistency.undefinedClass',
+            'accuracy.emptyAnn', 'accuracy.wSA') if metric not in context.query_fallbacks],
+        'query_fallbacks': dict(context.query_fallbacks),
+    }
+    triple_retrieval['metrics'].extend(context.query_fallbacks)
+    if context.triple_limit is not None:
+        subjects = set()
+        if isinstance(all_triples, list):
+            subjects = {row['s']['value'] for row in all_triples if row['s']['type'] == 'uri'}
+        triple_retrieval['uri_checks'] = {
+            'basis': 'sampled' if subjects else 'unavailable',
+            'limit': 10, 'considered': min(10, len(subjects)),
+        }
+    return triple_retrieval
 
 
 def type_objects(context):

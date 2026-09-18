@@ -1,5 +1,5 @@
 import time
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import utils
 
@@ -14,6 +14,15 @@ class AnalysisContext:
     analysis_date: str
     logger: object
     kg_info: dict
+    triple_limit: int | None = 10000
+    query_fallbacks: dict = field(default_factory=dict)
+
+    def record_fallback(self, metric, triples, considered=None):
+        """Record the coverage of a check evaluated locally after a query failed."""
+        self.query_fallbacks[metric] = {
+            'triples': len(triples),
+            'considered': len(triples) if considered is None else considered,
+        }
 
     def warning(self, message):
         self.logger.warning(message, extra=self.kg_info)

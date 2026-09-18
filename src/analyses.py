@@ -49,30 +49,33 @@ from analysis_support import (
     metadata_language,
     metadata_triples,
     parse_void_fallback,
-    recover_all_triples,
+    recover_triples,
     resolve_target,
     resolve_query_target,
     type_objects,
+    triple_retrieval_info,
 )
 
 
-def analyses(analysis_date, idKG=None, nameKG=None, sparql_endpoint=None, rdf_dump=None):
-    with analysis_session(analysis_date, idKG, nameKG, sparql_endpoint, rdf_dump) as kg:
+def analyses(analysis_date, idKG=None, nameKG=None, sparql_endpoint=None, rdf_dump=None, triple_limit=10000):
+    with analysis_session(analysis_date, idKG, nameKG, sparql_endpoint, rdf_dump, triple_limit) as kg:
         return kg
 
 
 @contextmanager
-def analysis_session(analysis_date, idKG=None, nameKG=None, sparql_endpoint=None, rdf_dump=None):
+def analysis_session(analysis_date, idKG=None, nameKG=None, sparql_endpoint=None, rdf_dump=None, triple_limit=10000):
     """Keep local queries available through downstream evaluations; always clean up."""
+    if triple_limit is not None and (type(triple_limit) is not int or triple_limit <= 0):
+        raise ValueError('triple_limit must be a positive integer or None for full retrieval')
     with ExitStack() as stack:
-        kg = _analyses(analysis_date, idKG, nameKG, sparql_endpoint, rdf_dump, stack)
+        kg = _analyses(analysis_date, idKG, nameKG, sparql_endpoint, rdf_dump, stack, triple_limit)
         try:
             yield kg
         finally:
             kg.extra.queryEndpointUrl = kg.extra.endpointUrl
 
 
-def _analyses(analysis_date, idKG, nameKG, sparql_endpoint, rdf_dump, stack):
+def _analyses(analysis_date, idKG, nameKG, sparql_endpoint, rdf_dump, stack, triple_limit=10000):
     utils.skipCheckSSL()
 
     target = resolve_target(idKG, nameKG, sparql_endpoint, rdf_dump)
@@ -80,12 +83,12 @@ def _analyses(analysis_date, idKG, nameKG, sparql_endpoint, rdf_dump, stack):
     logger.info('Analysis started...', extra=kg_info)
     logger.info(f"SPARQL endpoint link: {target.access_url}", extra=kg_info)
 
-    context = AnalysisContext(target.access_url, target.name, analysis_date, logger, kg_info)
+    context = AnalysisContext(target.access_url, target.name, analysis_date, logger, kg_info, triple_limit)
     sources, sources_obj = load_sources(target.metadata, target.access_url)
     endpoint_check = check_endpoint(target.access_url, context, sources_obj)
 
     access_url = endpoint_check.access_url
-    context = AnalysisContext(access_url, target.name, analysis_date, logger, kg_info)
+    context = AnalysisContext(access_url, target.name, analysis_date, logger, kg_info, triple_limit)
     logger.info(f"SPARQL endpoint availability: {endpoint_check.available}", extra=kg_info)
 
     triples_metadata = metadata_triples(target.metadata)
@@ -96,7 +99,7 @@ def _analyses(analysis_date, idKG, nameKG, sparql_endpoint, rdf_dump, stack):
     query_target = resolve_query_target(target, endpoint_check, context, stack)
     access_url = query_target.access_url
     endpoint_check = query_target.endpoint_check
-    context = AnalysisContext(access_url, target.name, analysis_date, logger, kg_info)
+    context = AnalysisContext(access_url, target.name, analysis_date, logger, kg_info, triple_limit)
 
     metadata_license = Aggregator.getLicense(target.metadata)
     author_metadata = Aggregator.getAuthor(target.metadata)
@@ -118,7 +121,7 @@ def _analyses(analysis_date, idKG, nameKG, sparql_endpoint, rdf_dump, stack):
         )
         if access_override is not None:
             access_url = access_override
-            context = AnalysisContext(access_url, target.name, analysis_date, logger, kg_info)
+            context = AnalysisContext(access_url, target.name, analysis_date, logger, kg_info, triple_limit)
 
     values = _endpoint_values(
         context,
@@ -193,6 +196,10 @@ def _analyses(analysis_date, idKG, nameKG, sparql_endpoint, rdf_dump, stack):
     extra.analysisSource = "rdf_dump" if query_target.is_local else "sparql" if endpoint_check.available else "metadata"
     extra.rdfDumpSource = query_target.rdf_dump_source
     extra.queryEndpointUrl = access_url
+    extra.tripleRetrieval = values.get('triple_retrieval', {
+        'basis': 'unavailable', 'limit': triple_limit, 'retrieved': 0,
+        'checked_at': analysis_date,
+    })
 
     return KnowledgeGraph(
         dimensions["availability"],
@@ -220,7 +227,7 @@ def _analyses(analysis_date, idKG, nameKG, sparql_endpoint, rdf_dump, stack):
 
 
 def _endpoint_values(context, triples_metadata, download_urls, offline_dumps, local_dump=False):
-    all_triples = recover_all_triples(context)
+    all_triples = recover_triples(context)
     if local_dump:
         from QualityDimensions.Performance import unavailable
         performance = unavailable()
@@ -241,7 +248,7 @@ def _endpoint_values(context, triples_metadata, download_urls, offline_dumps, lo
     num_entities, entities_regex = AmountOfData.count_entities(context, regex, all_triples)
     consistency_metrics = collect_consistency_metrics(context, all_triples)
 
-    return {
+    values = {
         "all_triples": all_triples,
         "performance": performance,
         "throughput_no_offset": throughput_no_offset,
@@ -282,6 +289,8 @@ def _endpoint_values(context, triples_metadata, download_urls, offline_dumps, lo
         "signed_kg": signed_kg(context),
         "def_value": uri_dereferenceability(context, all_triples),
     }
+    values['triple_retrieval'] = triple_retrieval_info(context, all_triples, triples_query)
+    return values
 
 
 def _void_values(error_message, void_values):

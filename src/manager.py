@@ -3,6 +3,7 @@ import json
 import os
 import Configuration
 from API import AGAPI
+from API import LODCloudAPI
 import analyses as analyses
 from JsonValidator import JsonValidator
 from OutputCSV import OutputCSV
@@ -10,7 +11,7 @@ from score import Score
 import utils
 import gc
 import time
-import fromCSV_to_KG 
+import fromCSV_to_KG
 import Graph
 from API.monitoring_requests import MonitoringRequests
 from evaluate_fairness import EvaluateFAIRness
@@ -18,11 +19,11 @@ from evaluate_human_centered_acc import EvaluateHumanCenteredAcc
 from API import CHeCloudAPI
 from API import YummyDataAPI
 useDB = False
-# try : 
+# try :
 #     import pymongo
 #     from db_interface import DBinterface
 #     useDB = True
-# except: 
+# except:
 #     useDB = False
 
 try: #GET THE CONFIGURATION FILE AND CHEK IF IT IS VALID
@@ -38,9 +39,9 @@ try: #GET THE CONFIGURATION FILE AND CHEK IF IT IS VALID
         print("Given data JSON is Valid")
     else:
         print(input)
-        print("Given JSON data is invalid")
+        raise SystemExit("Given JSON data is invalid")
 except  FileNotFoundError:
-    Configuration.createConfiguration()   #IF THE FILE DOESN'T EXISTS, WE CREATING IT 
+    Configuration.createConfiguration()   #IF THE FILE DOESN'T EXISTS, WE CREATING IT
     try:
         with open('configuration.json','r') as f:
             input = json.load(f)
@@ -48,10 +49,13 @@ except  FileNotFoundError:
         print('Error')
         quit()
 
-if len(input.get('id')) == 0 and len(input.get('name')) == 0 and len(input.get('sparql_url')) == 0:
+rdf_dump_urls = input.get('rdf_dump_url', [])
+analysis_options = {'triple_limit': input['triple_limit']} if 'triple_limit' in input else {}
+if len(input.get('id')) == 0 and len(input.get('name')) == 0 and len(input.get('sparql_url')) == 0 and not rdf_dump_urls:
     print('You have not entered any KGs for analysis')
- 
+
 start = time.time()
+LODCloudAPI.clear_metadata_cache()
 
 toAnalyze = []
 id = input.get('id')
@@ -72,7 +76,7 @@ if (len(id) == 1 and 'all' in id) or (len(name) == 1 and 'all' in name) or (len(
     kgFound = AGAPI.getIdByName('')
     CHe_Cloud = CHeCloudAPI.getAllDatasetIDs()
     monitoring_requests = MonitoringRequests()
-    kg_added_by_users = monitoring_requests.getIDs() 
+    kg_added_by_users = monitoring_requests.getIDs()
     print(f"Number of KG found from AGAPI: {len(kgFound)}")
     print(f"Number of KGs from monitoring requests: {len(kg_added_by_users)}")
     print(f"Number of KGs from CHe Cloud: {len(CHe_Cloud)}")
@@ -96,53 +100,7 @@ OutputCSV.writeHeader(filename,include_dimensions=True)
 
 for i in range(len(toAnalyze)):
     start_analysis = time.time()
-    kg = analyses.analyses(idKG=toAnalyze[i][0],analysis_date=filename,nameKG=toAnalyze[i][1])
-    score = Score(kg,20)
-    totalScore,normalizedScore = score.getWeightedDimensionScore(1)
-    totalScore = "%.3f"%totalScore
-    normalizedScore = "%.3f"%normalizedScore
-    totalScore = float(totalScore)
-    normalizedScore = float(normalizedScore)
-    kg.extra.score = totalScore
-    kg.extra.normalizedScore = normalizedScore
-    kg.extra.scoreObj = score
-
-    evaluation = EvaluateFAIRness(kg)
-    evaluation.evaluate_findability()
-    evaluation.evaluate_availability()
-    evaluation.evaluate_interoperability()
-    evaluation.evaluate_reusability()
-    evaluation.calculate_FAIR_score()
-    kg.fairness = evaluation.fairness
-    
-    human_accessibility_evaluation = EvaluateHumanCenteredAcc(kg)
-    human_accessibility_evaluation_results = human_accessibility_evaluation.evaluate_all()
-    kg.human_accessibility = human_accessibility_evaluation_results
-
-
-    end_analysis = time.time()
-    utils.write_time(toAnalyze[i][0],end_analysis-start_analysis,'--- Analysis','INFO',filename)
-    csv = OutputCSV(kg,toAnalyze)
-    csv_with_dim = OutputCSV(kg,toAnalyze)
-    csv.writeRow(filename)
-    csv_with_dim.writeRow(filename,include_dimensions=True)
-    print(f"KG score: {kg.extra.score}")
-    if(useDB == True):
-         mongo_interface = DBinterface()
-         mongo_interface.insert_quality_data(kg,score)
-    del csv
-    del kg
-    gc.collect()
-
-sparql_urls = []
-if (len(id) == 1 and 'all' in id) or (len(name) == 1 and 'all' in name) or (len(input.get('sparql_url')) == 1 and 'all' in input.get('sparql_url')):
-    sparql_urls = YummyDataAPI.getSPARQLEndpointURLs()
-    
-if len(input.get('sparql_url')) > 0 and not 'all' in input.get('sparql_url') or len(sparql_urls) > 0:
-    sparql_urls.extend(input.get('sparql_url'))
-    for sparql_url in sparql_urls:
-        start_analysis = time.time()
-        kg = analyses.analyses(filename,sparql_endpoint=sparql_url)
+    with analyses.analysis_session(idKG=toAnalyze[i][0],analysis_date=filename,nameKG=toAnalyze[i][1], **analysis_options) as kg:
         score = Score(kg,20)
         totalScore,normalizedScore = score.getWeightedDimensionScore(1)
         totalScore = "%.3f"%totalScore
@@ -152,7 +110,7 @@ if len(input.get('sparql_url')) > 0 and not 'all' in input.get('sparql_url') or 
         kg.extra.score = totalScore
         kg.extra.normalizedScore = normalizedScore
         kg.extra.scoreObj = score
-        
+
         evaluation = EvaluateFAIRness(kg)
         evaluation.evaluate_findability()
         evaluation.evaluate_availability()
@@ -165,19 +123,69 @@ if len(input.get('sparql_url')) > 0 and not 'all' in input.get('sparql_url') or 
         human_accessibility_evaluation_results = human_accessibility_evaluation.evaluate_all()
         kg.human_accessibility = human_accessibility_evaluation_results
 
+
         end_analysis = time.time()
-        utils.write_time(sparql_url,end_analysis-start_analysis,'--- Analysis','INFO',filename)
-        csv = OutputCSV(kg,sparql_urls)
-        csv_with_dim = OutputCSV(kg,sparql_urls)
+        utils.write_time(toAnalyze[i][0],end_analysis-start_analysis,'--- Analysis','INFO',filename)
+        csv = OutputCSV(kg,toAnalyze)
+        csv_with_dim = OutputCSV(kg,toAnalyze)
         csv.writeRow(filename)
         csv_with_dim.writeRow(filename,include_dimensions=True)
         print(f"KG score: {kg.extra.score}")
         if(useDB == True):
-            mongo_interface = DBinterface()
-            mongo_interface.insert_quality_data(kg,score)
+             mongo_interface = DBinterface()
+             mongo_interface.insert_quality_data(kg,score)
         del csv
         del kg
         gc.collect()
+
+sparql_urls = []
+if (len(id) == 1 and 'all' in id) or (len(name) == 1 and 'all' in name) or (len(input.get('sparql_url')) == 1 and 'all' in input.get('sparql_url')):
+    sparql_urls = YummyDataAPI.getSPARQLEndpointURLs()
+
+sparql_urls.extend(url for url in input.get('sparql_url') if url != 'all')
+direct_targets = [(url, {'sparql_endpoint': url}) for url in dict.fromkeys(sparql_urls)]
+direct_targets.extend((url, {'rdf_dump': url}) for url in dict.fromkeys(rdf_dump_urls))
+
+if direct_targets:
+    for source_url, target_options in direct_targets:
+        start_analysis = time.time()
+        with analyses.analysis_session(filename, **target_options, **analysis_options) as kg:
+            score = Score(kg,20)
+            totalScore,normalizedScore = score.getWeightedDimensionScore(1)
+            totalScore = "%.3f"%totalScore
+            normalizedScore = "%.3f"%normalizedScore
+            totalScore = float(totalScore)
+            normalizedScore = float(normalizedScore)
+            kg.extra.score = totalScore
+            kg.extra.normalizedScore = normalizedScore
+            kg.extra.scoreObj = score
+
+            evaluation = EvaluateFAIRness(kg)
+            evaluation.evaluate_findability()
+            evaluation.evaluate_availability()
+            evaluation.evaluate_interoperability()
+            evaluation.evaluate_reusability()
+            evaluation.calculate_FAIR_score()
+            kg.fairness = evaluation.fairness
+
+            human_accessibility_evaluation = EvaluateHumanCenteredAcc(kg)
+            human_accessibility_evaluation_results = human_accessibility_evaluation.evaluate_all()
+            kg.human_accessibility = human_accessibility_evaluation_results
+
+            end_analysis = time.time()
+            utils.write_time(source_url,end_analysis-start_analysis,'--- Analysis','INFO',filename)
+            source_urls = [url for url, _ in direct_targets]
+            csv = OutputCSV(kg,source_urls)
+            csv_with_dim = OutputCSV(kg,source_urls)
+            csv.writeRow(filename)
+            csv_with_dim.writeRow(filename,include_dimensions=True)
+            print(f"KG score: {kg.extra.score}")
+            if(useDB == True):
+                mongo_interface = DBinterface()
+                mongo_interface.insert_quality_data(kg,score)
+            del csv
+            del kg
+            gc.collect()
 
 end = time.time()
 save_path = os.path.join(here,'../Analysis results')
