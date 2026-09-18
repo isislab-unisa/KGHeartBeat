@@ -1,6 +1,8 @@
 from contextlib import ExitStack, contextmanager
+from concurrent.futures import ThreadPoolExecutor
 
 from KnowledgeGraph import KnowledgeGraph
+from kg_profile import create_profile
 
 import QualityDimensions.AmountOfData as AmountOfData
 import utils
@@ -63,19 +65,20 @@ def analyses(analysis_date, idKG=None, nameKG=None, sparql_endpoint=None, rdf_du
 
 
 @contextmanager
-def analysis_session(analysis_date, idKG=None, nameKG=None, sparql_endpoint=None, rdf_dump=None, triple_limit=10000):
-    """Keep local queries available through downstream evaluations; always clean up."""
+def analysis_session(analysis_date, idKG=None, nameKG=None, sparql_endpoint=None, rdf_dump=None, triple_limit=10000, include_profile=False):
+    """Keep local queries alive; optionally profile in parallel and wait on exit."""
     if triple_limit is not None and (type(triple_limit) is not int or triple_limit <= 0):
         raise ValueError('triple_limit must be a positive integer or None for full retrieval')
     with ExitStack() as stack:
-        kg = _analyses(analysis_date, idKG, nameKG, sparql_endpoint, rdf_dump, stack, triple_limit)
+        profile_worker = stack.enter_context(ThreadPoolExecutor(max_workers=1)) if include_profile else None
+        kg = _analyses(analysis_date, idKG, nameKG, sparql_endpoint, rdf_dump, stack, triple_limit, profile_worker)
         try:
             yield kg
         finally:
             kg.extra.queryEndpointUrl = kg.extra.endpointUrl
 
 
-def _analyses(analysis_date, idKG, nameKG, sparql_endpoint, rdf_dump, stack, triple_limit=10000):
+def _analyses(analysis_date, idKG, nameKG, sparql_endpoint, rdf_dump, stack, triple_limit=10000, profile_worker=None):
     utils.skipCheckSSL()
 
     target = resolve_target(idKG, nameKG, sparql_endpoint, rdf_dump)
@@ -97,6 +100,13 @@ def _analyses(analysis_date, idKG, nameKG, sparql_endpoint, rdf_dump, stack, tri
 
     public_access_url = access_url
     query_target = resolve_query_target(target, endpoint_check, context, stack)
+    if profile_worker is not None:
+        # Explicit input wins; catalog targets use the resolved public source.
+        profile_dump = rdf_dump
+        if not profile_dump and not sparql_endpoint:
+            profile_dump = query_target.rdf_dump_source
+        profile_endpoint = None if profile_dump else sparql_endpoint or public_access_url
+        profile_worker.submit(create_profile, target.kg_id, analysis_date, profile_endpoint, profile_dump)
     access_url = query_target.access_url
     endpoint_check = query_target.endpoint_check
     context = AnalysisContext(access_url, target.name, analysis_date, logger, kg_info, triple_limit)
@@ -194,6 +204,7 @@ def _analyses(analysis_date, idKG, nameKG, sparql_endpoint, rdf_dump, stack, tri
     )
 
     extra.analysisSource = "rdf_dump" if query_target.is_local else "sparql" if endpoint_check.available else "metadata"
+    extra.datasetSource = target.dataset_source
     extra.rdfDumpSource = query_target.rdf_dump_source
     extra.queryEndpointUrl = access_url
     extra.tripleRetrieval = values.get('triple_retrieval', {

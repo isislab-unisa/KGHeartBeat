@@ -50,7 +50,9 @@ except  FileNotFoundError:
         quit()
 
 rdf_dump_urls = input.get('rdf_dump_url', [])
-analysis_options = {'triple_limit': input['triple_limit']} if 'triple_limit' in input else {}
+analysis_options = {'include_profile': True}
+if 'triple_limit' in input:
+    analysis_options['triple_limit'] = input['triple_limit']
 if len(input.get('id')) == 0 and len(input.get('name')) == 0 and len(input.get('sparql_url')) == 0 and not rdf_dump_urls:
     print('You have not entered any KGs for analysis')
 

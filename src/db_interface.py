@@ -74,6 +74,7 @@ class DBinterface():
         obj_to_store = {
             "kg_id" : kg_quality.extra.KGid,
             "kg_name": kg_quality.believability.title,
+            "dataset_source": getattr(kg_quality.extra, 'datasetSource', 'unknown'),
             "analysis_date" : today_date_str,
             "Accessibility": [{"Availability" : availability_dict},{"Licensing" : kg_quality.licensing.__dict__}, {"Interlinking" :kg_quality.interlinking.to_dict()}, 
                               {"Security" : kg_quality.security.__dict__}, {"Performance" : kg_quality.performance.__dict__}],

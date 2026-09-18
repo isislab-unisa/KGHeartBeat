@@ -29,6 +29,7 @@ class Target:
     access_url: str
     resources: list = field(default_factory=list)
     rdf_dumps: list = field(default_factory=list)
+    dataset_source: str = 'unknown'
 
 
 @dataclass
@@ -86,14 +87,16 @@ def resolve_target(kg_id=None, name=None, sparql_endpoint=None, rdf_dump=None):
     if rdf_dump and not kg_id and not sparql_endpoint:
         source = str(rdf_dump)
         resources = [{'path': source, 'type': 'full_download'}]
-        return Target(source, name or source, None, False, resources, [(source, None)])
+        return Target(source, name or source, None, False, resources, [(source, None)], 'direct input')
 
     if kg_id:
         metadata = Aggregator.getDataPackage(kg_id)
+        dataset_source = metadata.get('_dataset_source', 'unknown') if isinstance(metadata, dict) else 'unknown'
         if name == '':
             name = Aggregator.getNameKG(metadata)
         access_url = Aggregator.getSPARQLEndpoint(kg_id)
     elif sparql_endpoint:
+        dataset_source = 'direct input'
         access_url = sparql_endpoint
         kg_id = sparql_endpoint
         try:
@@ -102,6 +105,7 @@ def resolve_target(kg_id=None, name=None, sparql_endpoint=None, rdf_dump=None):
             name = ''
         metadata = None
     else:
+        dataset_source = 'unknown'
         metadata = None
         access_url = False
 
@@ -110,7 +114,7 @@ def resolve_target(kg_id=None, name=None, sparql_endpoint=None, rdf_dump=None):
 
     resources = Aggregator.getOtherResources(kg_id) if kg_id else []
     dumps = [(str(rdf_dump), None)] if rdf_dump else Aggregator.getRDFDumps(kg_id, resources=resources)
-    return Target(kg_id, name, metadata, access_url, resources, dumps)
+    return Target(kg_id, name, metadata, access_url, resources, dumps, dataset_source)
 
 
 def resolve_query_target(target, endpoint_check, context, stack):
