@@ -93,7 +93,7 @@ class EvaluateFAIRness:
         self.fairness.r1_3D = 1 if common_media_type or known_semantic_format else 0
 
         has_void = self.kg_quality.extra.urlVoid != ''
-        has_void_from_endpoint = query.check_void_dcat(self.kg_quality.extra.endpointUrl) != False
+        has_void_from_endpoint = query.check_void_dcat(getattr(self.kg_quality.extra, "queryEndpointUrl", self.kg_quality.extra.endpointUrl)) != False
         lic_in_meta = 1 if self.kg_quality.licensing.licenseQuery not in ['-', '', '[]', False, 'False'] and len(self.kg_quality.licensing.licenseQuery) > 0 else 0
         self.fairness.r1_3M = 1 if has_void or has_void_from_endpoint or lic_in_meta else 0
 
@@ -109,7 +109,7 @@ class EvaluateFAIRness:
         self.fairness.i1D = 1 if common_media_type or known_semantic_format else 0
 
         has_void = self.kg_quality.extra.urlVoid != ''
-        has_void_from_endpoint = query.check_void_dcat(self.kg_quality.extra.endpointUrl) != False
+        has_void_from_endpoint = query.check_void_dcat(getattr(self.kg_quality.extra, "queryEndpointUrl", self.kg_quality.extra.endpointUrl)) != False
         self.fairness.i1M = 1 if has_void or has_void_from_endpoint else 0
 
         has_vocab = self.kg_quality.verifiability.vocabularies not in ['-', '', '[]', False, 'False'] and len(self.kg_quality.verifiability.vocabularies) > 0
