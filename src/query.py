@@ -10,6 +10,48 @@ import xml.etree.ElementTree as ET
 import rdflib
 from urllib.parse import quote
 
+
+PROPERTY_TYPES = (
+    'http://www.w3.org/1999/02/22-rdf-syntax-ns#Property',
+    'http://www.w3.org/2002/07/owl#DatatypeProperty',
+    'http://www.w3.org/2004/02/skos/core#Property',
+    'http://www.w3.org/2002/07/owl#AnnotationProperty',
+    'http://www.w3.org/2002/07/owl#OntologyProperty',
+    'http://www.w3.org/2000/01/rdf-schema#subPropertyOf',
+    'http://www.w3.org/2000/01/rdf-schema#Property',
+)
+_PROPERTY_TYPES = ' '.join('<' + iri + '>' for iri in PROPERTY_TYPES)
+
+_SCHEMA_PREFIXES = '''
+    PREFIX owl: <http://www.w3.org/2002/07/owl#>
+    PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+'''
+
+# Shared by the aggregate query and its local fallback.
+LABEL_PREDICATES = (
+    'http://www.w3.org/2000/01/rdf-schema#label',
+    'http://xmlns.com/foaf/0.1/name',
+    'http://www.w3.org/2004/02/skos/core#prefLabel',
+    'http://purl.org/dc/terms/title',
+    'http://purl.org/dc/terms/decription',
+    'http://www.w3.org/2000/01/rdf-schema#comment',
+    'http://bblfish.net/work/atom-owl/2006-06-06/#label',
+    'http://purl.org/dc/terms/alternative',
+    'http://www.w3.org/2004/02/skos/core#altLabel',
+    'http://www.w3.org/2004/02/skos/core#note',
+    'http://www.w3.org/2007/05/powder-s#text',
+    'http://www.w3.org/2008/05/skos-xl#altLabel',
+    'http://www.w3.org/2008/05/skos-xl#hiddenLabel',
+    'http://www.w3.org/2008/05/skos-xl#prefLabel',
+    'http://www.w3.org/2008/05/skos-xl#literalForm',
+    'http://schema.org/name',
+    'http://schema.org/description',
+    'http://schema.org/alternateName',
+)
+
+
 def log_in_out(func):
 
     def decorated_func(*args, **kwargs):
@@ -23,6 +65,8 @@ def log_in_out(func):
 
 def _query(url, query_text, return_format=JSON, timeout=300):
     sparql = SPARQLWrapper(url)
+    if len(query_text) > 2000:
+        sparql.setMethod(POST)
     sparql.setQuery(query_text)
     sparql.setTimeout(timeout)
     sparql.setReturnFormat(return_format)
@@ -830,6 +874,22 @@ def getLabel(url):
     else:
         return False
 @log_in_out
+def getLabelQualityCounts(url):
+    """Return only aggregate counts for the annotation predicates we check."""
+    predicates = ' '.join('<' + iri + '>' for iri in LABEL_PREDICATES)
+    rows = _select_bindings(url, r'''
+    SELECT (COUNT(*) AS ?total)
+           (SUM(IF(isLiteral(?o) && STR(?o) = "", 1, 0)) AS ?empty)
+           (SUM(IF(isLiteral(?o) && REGEX(STR(?o), "^\\s|\\s$"), 1, 0)) AS ?whitespace)
+    WHERE {
+        VALUES ?p {''' + predicates + r'''}
+        ?s ?p ?o
+    }
+    ''', timeout=30)
+    return {key: int(rows[0][key]['value']) for key in ('total', 'empty', 'whitespace')}
+
+
+@log_in_out
 def getDisjoint(url):
     return _select_count(url, '''
     PREFIX owl: <http://www.w3.org/2002/07/owl#>
@@ -848,38 +908,65 @@ def getAllClasses(url):
     """, utils.getResultsFromJSONs, utils.getResultsFromXML)
 @log_in_out
 def getAllProperty(url):
-    return _select_values(url, '''
-    PREFIX owl: <http://www.w3.org/2002/07/owl#>
-    PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
-    PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+    conditions = ' || '.join('?type = <' + iri + '>' for iri in PROPERTY_TYPES)
+    return _select_values(url, _SCHEMA_PREFIXES + '''
     SELECT DISTINCT ?o
     WHERE {
-    { ?o a rdf:Property}
-    UNION
-    {?o a owl:DatatypeProperty}
-    UNION
-    {?o a skos:Property}
-    UNION
-    {?o a owl:DatatypeProperty}
-    UNION
-    {?o a owl:AnnotationProperty}
-    UNION
-    {?o a owl:OntologyProperty}
-    UNION
-  	{?o a rdfs:subPropertyOf}
-  	UNION
-  	{?o a rdfs:Property}
+        ?o a ?type
+        FILTER (''' + conditions + ''')
     }
-    ''', utils.getResultsFromJSONp, utils.getResultsFromXML)
+    ''', utils.getResultsFromJSONo, utils.getResultsFromXML)
+
 
 @log_in_out
-def getAllType(url):
+def getMisplacedClassCount(url):
+    """Count the existing misplaced-class condition without returning triples."""
+    return _select_count(url, _SCHEMA_PREFIXES + '''
+    SELECT (COUNT(*) AS ?triples)
+    WHERE {
+        ?s ?p ?o
+        FILTER (
+            (isIRI(?s) && EXISTS {
+                VALUES ?type {''' + _PROPERTY_TYPES + '''}
+                ?s a ?type
+            }) ||
+            (isIRI(?o) && EXISTS {
+                VALUES ?type {''' + _PROPERTY_TYPES + '''}
+                ?o a ?type
+            })
+        )
+    }
+    ''', timeout=30)
+
+
+@log_in_out
+def getUntypedSubjectCounts(url):
+    """Group candidates for the existing undefined-class heuristic by subject."""
+    return _select_bindings(url, '''
+    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+    SELECT ?s (COUNT(*) AS ?triples)
+    WHERE {
+        ?s ?p ?o
+        FILTER(isIRI(?s))
+        FILTER NOT EXISTS { ?s rdf:type ?type }
+    }
+    GROUP BY ?s
+    ''', timeout=30)
+
+@log_in_out
+def getAllType(url, subjects=None):
     try:
+        restriction = ''
+        if subjects is not None:
+            subjects = sorted(set(subjects))
+            if not subjects:
+                return []
+            restriction = 'VALUES ?s { ' + ' '.join(rdflib.URIRef(s).n3() for s in subjects) + ' }'
         return _select_values(url, '''
         PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
         SELECT DISTINCT ?s
-        WHERE {?s rdf:type ?o}
-        ''', utils.getResultsFromJSONs, utils.getResultsFromXML)
+        WHERE {''' + restriction + ''' ?s rdf:type ?o}
+        ''', utils.getResultsFromJSONs, utils.getResultsFromXML, timeout=30 if subjects is not None else 300)
     except Exception as e :
         return e
 @log_in_out
@@ -943,32 +1030,14 @@ def getAllPropertySP(url):
         return e
 
 @log_in_out
-def getAllTriplesSPO(url):
-    sparql = SPARQLWrapper(url)
-    sparql.setQuery('''
-    SELECT *
-    WHERE{?s ?p ?o}
-    ''')
-    sparql.setTimeout(300) #10 minutes
-    sparql.setReturnFormat(JSON)
-    format = sparql.query()._get_responseFormat()
-    if format == 'xml': #IF THE RETURN FORMAT IS SETTED TO JSON AND XML WAS RETURNED
-        query = '''
-                SELECT *
-                WHERE{?s ?p ?o}
-                '''
-        results = queryWithSingleAcceptFromat(url,query) #TRY TO GET RESULTS IN JSON BY SETTING A SINGLE ACCEPT HEADER (SOME ENDPOINTS MAY BE NOT SUPPORT MULTIPLE ACCEPT FORMAT)
-    else:
-        results = sparql.query().convert()
-    if isinstance(results,dict):
-        result = results.get('results')
-        bindings = result.get('bindings')
-        return bindings
-    elif isinstance(results,Document): 
-        bindings = utils.xmlToDictSPO(results)
-        return bindings
-    else:
-        return False
+def getAllTriplesSPO(url, limit=None):
+    """Fetch a bounded preview, or request all triples when limit is None."""
+    if limit is not None and (type(limit) is not int or limit <= 0):
+        raise ValueError('limit must be a positive integer or None')
+    query_text = 'SELECT ?s ?p ?o WHERE { ?s ?p ?o }'
+    if limit is not None:
+        query_text += f' LIMIT {limit}'
+    return _select_bindings(url, query_text, timeout=30 if limit is not None else 300)
 
 @log_in_out
 def getAllPredicate(url):
