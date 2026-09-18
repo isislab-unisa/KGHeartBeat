@@ -265,9 +265,10 @@ class Score:
         undefC = self.kg.extra.undefinedClass
         classes = self.kg.extra.classes
         properties = self.kg.extra.properties
-        if isinstance(undefC,list) and isinstance(classes,list) and isinstance(undefP,list) and isinstance(properties,list):
-            if len(classes) + len(properties) > 0 and ((len(classes) + len(properties)) > (len(undefC) + len(undefP))):
-                undefV = 1.0 - (((len(undefC) + len(undefP))/(len(classes) + len(properties))))
+        undefined_classes = len(undefC) if isinstance(undefC, list) else undefC
+        if type(undefined_classes) is int and isinstance(classes,list) and isinstance(undefP,list) and isinstance(properties,list):
+            if len(classes) + len(properties) > 0:
+                undefV = max(0.0, 1.0 - (undefined_classes + len(undefP)) / (len(classes) + len(properties)))
             else:
                 undefV = 0
         else:
@@ -276,9 +277,15 @@ class Score:
         mispC = self.kg.extra.triplesMC
         mispP = self.kg.extra.triplesMP
         triples = self.kg.amountOfData.numTriplesQ
-        if isinstance(mispC,list) and isinstance(mispP,list) and isinstance(triples,int):
-            if triples > 0 and (triples > (len(mispC) + len(mispP))):
-                mispV = 1.0 - ((len(mispC) + len(mispP)) / triples)
+        # New analyses store the endpoint count. Older analyses stored sampled rows.
+        misplaced_classes = len(mispC) if isinstance(mispC, list) else mispC
+        considered = triples if type(mispC) is int else getattr(self.kg.extra, 'tripleRetrieval', {}).get('retrieved', triples)
+        fallback = getattr(self.kg.extra, 'tripleRetrieval', {}).get('query_fallbacks', {}).get('consistency.triplesMC')
+        if fallback is not None:
+            considered = fallback['triples']
+        if type(misplaced_classes) is int and isinstance(mispP,list) and isinstance(triples,int):
+            if triples > 0 and isinstance(considered, int) and considered > 0:
+                mispV = max(0.0, 1.0 - misplaced_classes / considered - len(mispP) / triples)
             else:
                 mispV = 0
         else:
@@ -702,4 +709,3 @@ class Score:
         
     
         
-
