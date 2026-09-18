@@ -15,14 +15,20 @@ def getDataPackage(idKG):
     monitoring_resources = MonitoringRequests()
     metadata_monitoring_resources = monitoring_resources.getMetadata(idKG)
     metadataCHeCloud = CHeCloudAPI.getDatasetMetadata(idKG)
+    # Record catalog provenance separately from the dataset's publisher sources.
+    # Monitoring requests take precedence even when another catalog has the KG.
+    source = ('manually_added' if isinstance(metadata_monitoring_resources, dict)
+              else 'checloud' if isinstance(metadataCHeCloud, dict)
+              else 'lodcloud' if isinstance(metadataLODC, dict)
+              else 'datahub')
     if isinstance(metadataCHeCloud,dict):
-        return metadataCHeCloud
+        return dict(metadataCHeCloud, _dataset_source=source)
     elif isinstance(metadata_monitoring_resources,dict):
-        return metadata_monitoring_resources
+        return dict(metadata_monitoring_resources, _dataset_source=source)
     elif isinstance(metadataLODC,dict):
-        return metadataLODC
+        return dict(metadataLODC, _dataset_source=source)
     elif isinstance(metadataDH,dict):
-        return metadataDH
+        return dict(metadataDH, _dataset_source=source)
     else:
         return False
 
