@@ -794,41 +794,24 @@ def xmlToDictP(results):
     return dictList
 
 def xmlToDictSPO(results):
-    dictList = []
-    literalList = results.getElementsByTagName("result")
-    for node in literalList:
-        alist = node.getElementsByTagName('binding')
-        d = {}
-        for node2 in alist:
-            if node2.getAttribute('name') == 's':
-                uriList = node2.getElementsByTagName('uri')
-                literalList = node2.getElementsByTagName('literal')
-                uriList = uriList+literalList
-                for a in uriList:
-                    ds = {}
-                    uri = a.firstChild.data
-                    ds['value'] = uri
-                d['s'] = ds
-            elif node2.getAttribute('name') == 'p':
-                uriList2 = node2.getElementsByTagName('uri')
-                literalList2 = node2.getElementsByTagName('literal')
-                uriList2 = uriList2 + literalList2
-                for a in uriList2:
-                    do = {}
-                    obj = a.firstChild.data
-                    do['value'] = obj
-                d['p'] = do
-            elif node2.getAttribute('name') == 'o':
-                uriList2 = node2.getElementsByTagName('uri')
-                literalList2 = node2.getElementsByTagName('literal')
-                uriList2 = uriList2 + literalList2
-                for a in uriList2:
-                    do = {}
-                    obj = a.firstChild.data
-                    do['value'] = obj
-                d['o'] = do
-        dictList.append(d)
-    return dictList
+    """Convert XML bindings to the same term dictionaries as SPARQL JSON."""
+    rows = []
+    for result in results.getElementsByTagName('result'):
+        row = {}
+        for binding in result.getElementsByTagName('binding'):
+            for term in binding.childNodes:
+                if term.nodeType != term.ELEMENT_NODE:
+                    continue
+                value = ''.join(node.data for node in term.childNodes
+                                if node.nodeType in (node.TEXT_NODE, node.CDATA_SECTION_NODE))
+                parsed = {'type': term.localName, 'value': value}
+                for attribute in ('datatype', 'xml:lang'):
+                    if term.hasAttribute(attribute):
+                        parsed[attribute] = term.getAttribute(attribute)
+                row[binding.getAttribute('name')] = parsed
+                break
+        rows.append(row)
+    return rows
 
 
 def searchString(stringList,toFind):
