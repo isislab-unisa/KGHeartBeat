@@ -60,6 +60,7 @@ class OutputCSV(MetricsOutput):
                      'Currency-score','Volatility-score','Completeness-score','Amount-of-data-score','Representational-Consistency-score','Representational-Conciseness-score','Understandability-score','Interpretability-score','Versatility-score','Security-score','Interlinking_SKOS-mapping-properties', 'Extra_U1-value','Extra_CS2-value','Extra_IN3-value','Extra_RC1-value','Extra_RC2-value','Extra_IN4-value','Extra_metadata-media-type','Extra_Availability-of-a-common-accepted-Media-Type','Extra_U5-value','Extra_PE2-value','Extra_PE3-value']
 
         header.append('Extra_Triple-retrieval')
+        header.append('Dataset source' if not include_dimensions else 'dataset_source')
         here = os.path.dirname(os.path.abspath(__file__))
         save_path = os.path.join(here,'../Analysis results')
         if include_dimensions == False:
@@ -108,6 +109,7 @@ class OutputCSV(MetricsOutput):
                         self.kgQuality.extra.scoreObj.completenessScoreValue,self.kgQuality.extra.scoreObj.amountScoreValue,self.kgQuality.extra.scoreObj.repConsScoreValue,self.kgQuality.extra.scoreObj.repConcScoreValue,self.kgQuality.extra.scoreObj.understScoreValue,self.kgQuality.extra.scoreObj.interpretabilityScoreValue,self.kgQuality.extra.scoreObj.versatilityScoreValue,self.kgQuality.extra.scoreObj.securityScoreValue,self.kgQuality.interlinking.skosMapping, self.kgQuality.extra.scoreObj.labelValue, self.kgQuality.extra.scoreObj.misplacedValue, self.kgQuality.extra.scoreObj.undefValue, self.kgQuality.extra.scoreObj.uriValue, self.kgQuality.extra.scoreObj.rdfValue, self.kgQuality.extra.scoreObj.blankValue, self.kgQuality.extra.metadataMediaType, self.kgQuality.extra.commonMediaType,self.kgQuality.extra.scoreObj.vocabsValue,self.kgQuality.extra.scoreObj.tpValue,self.kgQuality.extra.scoreObj.latencyValue]
 
             data.append(json.dumps(getattr(self.kgQuality.extra, 'tripleRetrieval', {})))
+            data.append(getattr(self.kgQuality.extra, 'datasetSource', 'unknown'))
             writer.writerow(data)
     
     def normalizeScore(filename):
