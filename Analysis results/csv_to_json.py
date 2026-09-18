@@ -1,15 +1,11 @@
 import csv 
 import json
 from pathlib import Path
-import os
 import sys
-import re
-import string
-import sys
-from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / 'src'))
 import utils
+from kg_profile import RESULTS_DIR, load_profile, normalize_kg_id
 
 
 maxInt = sys.maxsize
@@ -22,14 +18,26 @@ while True:
     except OverflowError:
         maxInt = int(maxInt/10)
 
-def full_csv():
-    here = os.path.dirname(os.path.abspath(__file__))
-    p = Path(here)
+def parse_triple_retrieval(rows):
+    value = rows.get('Extra_Triple-retrieval')
+    if not value or not value.strip():
+        return {}
+    try:
+        return json.loads(value)
+    except (TypeError, ValueError):
+        # Preserve unexpected legacy values without preventing the export.
+        return value
+
+
+def full_csv(results_dir=RESULTS_DIR):
+    p = Path(results_dir)
+    output_dir = p / 'json_files'
+    output_dir.mkdir(parents=True, exist_ok=True)
     files = [file for file in p.glob('*.csv') if '_with_dimensions.csv' not in file.name]
     for file in files:
         file_name = file.stem
         filename = str(file_name)
-        with open(filename + '.csv',encoding='utf-8') as csv_file:
+        with file.open(encoding='utf-8') as csv_file:
             csv_reader = csv.DictReader(csv_file)
             for rows in csv_reader:
 
@@ -43,12 +51,7 @@ def full_csv():
                 kg_id = rows['KG id']
                 if kg_id == 'dbpedia_' or kg_id == 'santillanaguidedataset_':
                     continue
-                kg_id = re.sub(r'[\\/*?:"<>|]',"",kg_id)
-                remove_punctuation_map = dict((ord(char), None) for char in '\/*?:"<>|')
-                kg_id = kg_id.translate(remove_punctuation_map)
-                remove_punctuation_map = dict((ord(char), None) for char in string.punctuation)
-                kg_id = kg_id.translate(remove_punctuation_map)
-                kg_id = kg_id.replace(" ","")
+                kg_id = normalize_kg_id(kg_id)
 
                 if(old_analysis == False):
                     data = {
@@ -244,19 +247,22 @@ def full_csv():
                         }
                     }
 
-                with open('json_files/' + kg_id + ' ' + filename + '.json','w',encoding='utf-8') as jsonFile:
+                data['Extra']['triple_retrieval'] = parse_triple_retrieval(rows)
+                with (output_dir / (kg_id + ' ' + filename + '.json')).open('w',encoding='utf-8') as jsonFile:
                     jsonFile.write(json.dumps(data, indent=4))
 
-def splitted_csv():
-    here = os.path.dirname(os.path.abspath(__file__))
-    here = os.path.join(here,'./splitted')
-    p = Path(here)
+    update_profiles(p)
+
+def splitted_csv(results_dir=RESULTS_DIR):
+    results_dir = Path(results_dir)
+    p = results_dir / 'splitted'
+    output_dir = results_dir / 'json_files'
+    output_dir.mkdir(parents=True, exist_ok=True)
     files = list(p.glob('*.csv'))
     for file in files:
         file_name = file.stem
         filename = str(file_name)
-        path = os.path.join(here,filename)
-        with open(path + '.csv',encoding='utf-8') as csv_file:
+        with file.open(encoding='utf-8') as csv_file:
             csv_reader = csv.DictReader(csv_file)
             for rows in csv_reader:
                 kg_id = filename
@@ -290,10 +296,37 @@ def splitted_csv():
                         "Score": {"totalScore" : rows['Score']},
                         "Extra":{"sparql_link" : rows['Link SPARQL endpoint'],"rdf_dump_link" : rows['Link for download the dataset']}
                     }
-                    with open('json_files/' + kg_id + rows['Date'] + '.json','w',encoding='utf-8') as jsonFile:
+                    data['Extra']['triple_retrieval'] = parse_triple_retrieval(rows)
+                    with (output_dir / (kg_id + rows['Date'] + '.json')).open('w',encoding='utf-8') as jsonFile:
                         jsonFile.write(json.dumps(data, indent=4))
                 except:
                     continue
-            
-splitted_csv()
-full_csv()
+    update_profiles(results_dir)
+
+
+def update_profiles(results_dir=RESULTS_DIR):
+    """Keep the profile on the latest exported analysis per KG, never on history."""
+    results_dir = Path(results_dir)
+    analyses_by_kg = {}
+    for path in sorted((results_dir / 'json_files').glob('*.json')):
+        with path.open(encoding='utf-8') as file:
+            data = json.load(file)
+        kg_id = normalize_kg_id(data['kg_id'])
+        analyses_by_kg.setdefault(kg_id, []).append((data['analysis_date'], path))
+
+    for kg_id, analyses in analyses_by_kg.items():
+        # The filename breaks ties if legacy and full CSVs contain the same date.
+        latest = max(analyses)
+        for analysis_date, path in analyses:
+            with path.open(encoding='utf-8') as file:
+                data = json.load(file)
+            data.pop('profile', None)
+            if (analysis_date, path) == latest:
+                data['profile'] = load_profile(kg_id, analysis_date, results_dir)
+            with path.open('w', encoding='utf-8') as file:
+                json.dump(data, file, indent=4)
+
+
+if __name__ == '__main__':
+    splitted_csv()
+    full_csv()
