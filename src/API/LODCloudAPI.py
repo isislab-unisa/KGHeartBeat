@@ -1,4 +1,6 @@
 import json
+from copy import deepcopy
+from functools import lru_cache
 from urllib import response
 import requests
 import utils
@@ -9,21 +11,32 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 abs_path = os.path.dirname(os.path.abspath(__file__))
 
 def getJSONMetadata(idKG, snapshot= f'{abs_path}/lodcloud.json'):
-    """
-    Retrieve JSON metadata for a given Knowledge Graph (KG) from the LOD Cloud.
-    Falls back to a local snapshot if the online source is unavailable.
-    """
+    """Reuse the catalogue across KGs; callers can safely modify their copy."""
+    return deepcopy(_load_catalogue(snapshot).get(idKG, False))
+
+
+def clear_metadata_cache():
+    """Refresh the catalogue on the next lookup (for a new run in this process)."""
+    _load_catalogue.cache_clear()
+
+
+@lru_cache(maxsize=4)
+def _load_catalogue(snapshot):
+    """Download once per snapshot path, falling back to the saved catalogue."""
     url = f'https://lod-cloud.net/versions/latest/lod-data.json'
 
     try:
         response = requests.get(url, verify=False, timeout=10)
         if response.status_code == 200:
             jsonMetadata = response.json()
-
-            with open(snapshot, 'w', encoding='utf-8') as f:
-                json.dump(jsonMetadata, f, ensure_ascii=False, indent=2)
-
-            return jsonMetadata.get(idKG, False)
+            if not isinstance(jsonMetadata, dict):
+                raise ValueError('LOD Cloud catalogue must be a JSON object')
+            try:
+                with open(snapshot, 'w', encoding='utf-8') as f:
+                    json.dump(jsonMetadata, f, ensure_ascii=False, indent=2)
+            except OSError as error:
+                print(f'Could not save LOD Cloud snapshot: {error}')
+            return jsonMetadata
         else:
             print(f"LOD Cloud responded with status {response.status_code}, loading local snapshot if available.")
     except Exception as e:
@@ -31,13 +44,15 @@ def getJSONMetadata(idKG, snapshot= f'{abs_path}/lodcloud.json'):
 
     # Fallback: load local snapshot
     if os.path.exists(snapshot):
-        print(f"Loading metadata for '{idKG}' from local snapshot...")
-        with open(snapshot, 'r', encoding='utf-8') as f:
-            jsonMetadata = json.load(f)
-            return jsonMetadata.get(idKG, False)
-    else:
-        print(f"No local snapshot found for '{idKG}'.")
-        return False
+        print('Loading LOD Cloud metadata from local snapshot...')
+        try:
+            with open(snapshot, 'r', encoding='utf-8') as f:
+                metadata = json.load(f)
+                if isinstance(metadata, dict):
+                    return metadata
+        except (OSError, ValueError) as error:
+            print(f'Could not load LOD Cloud snapshot: {error}')
+    return {}
 
 def getNameKG(metadata):
     if isinstance(metadata,dict):
