@@ -14,6 +14,7 @@ class JsonValidator(InputValidator):
         "$schema": "http://json-schema.org/draft-04/schema#",
         "type": ["object","null"],
       "properties": {
+        "triple_limit": {"type": ["integer", "null"], "minimum": 1},
         "name": {
           "type": "array",
           "items": [
