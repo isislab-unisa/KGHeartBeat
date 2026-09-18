@@ -36,6 +36,8 @@ def rdf_dump_from_endpoint(context, download_url, offline_dump):
 
 def uri_dereferenceability(context, all_triples):
     try:
+        if context.triple_limit is not None:
+            return context.timed('Check URIs Dereferenciability', 'Availability', lambda: _dereference_from_triples(context, all_triples))
         return context.timed('Check URIs Dereferenciability', 'Availability', lambda: _dereference_from_endpoint(context))
     except Exception:
         try:
@@ -67,14 +69,16 @@ def _dereference_from_endpoint(context):
 def _dereference_from_triples(context, all_triples):
     uri_count = 0
     def_count = 0
-    for i in range(10):
-        value = all_triples[i].get('s').get('value')
+    if not isinstance(all_triples, list):
+        return MISSING_VALUE
+    uris = dict.fromkeys(triple['s']['value'] for triple in all_triples if triple['s']['type'] == 'uri')
+    for value in list(uris)[:10]:
         if utils.validateURI(value):
             uri_count = uri_count + 1
             try:
-                response = requests.get(value, headers={"Accept": "application/rdf+xml"}, stream=True, timeout=2)
-                if response.status_code == 200:
-                    def_count = def_count + 1
+                with requests.get(value, headers={"Accept": "application/rdf+xml"}, stream=True, timeout=2) as response:
+                    if response.status_code == 200:
+                        def_count = def_count + 1
             except Exception:
                 continue
     if uri_count > 0:

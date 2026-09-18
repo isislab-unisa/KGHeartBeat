@@ -1,3 +1,5 @@
+from collections import Counter
+
 import query
 import utils
 from API import LOVAPI
@@ -18,7 +20,8 @@ class Consistency:
         return f"-Consistency\n   Deprecated classes/properties used:{self.deprecated}\n   Entities as member of disjoint class:{self.disjointClasses}\n   Triples with misplaced property problem:{self.triplesMP}\n   Triples with misplaced class problem:{self.triplesMC}\n   Ontology Hijacking problem:{self.oHijacking}\n   Undefined class used without declaration:{self.undefinedClass}\n   Undefined properties used without declaration:{self.undefinedProperties}\n"
 
 
-def collect_metrics(context, all_triples):
+def collect_metrics(context, all_triples=None):
+    """Prefer endpoint queries; reuse retrieved triples when a query fails."""
     metrics = {
         "deprecated": _deprecated(context),
         "num_disjoint": _num_disjoint(context),
@@ -47,8 +50,10 @@ def build(context, metrics, triples_query, num_entities, entities_regex):
     disjoint_value = _disjoint_value(context, num_disjoint, num_entities, entities_regex)
     deprecated_value = _deprecated_value(context, deprecated, classes, properties)
     misplaced_property = _ratio_or_message(context, metrics["misplaced_property"], triples_query, 'Consistecy | Misplaced classes or properties | Unable to retrieve properties from the endpoint')
-    misplaced_class = _ratio_or_message(context, metrics["misplaced_class"], triples_query, 'Consistecy | Misplaced classes or properties | Unable to retrieve classes from the endpoint')
-    undefined_class = _ratio_or_message(context, metrics["undefined_classes"], triples_query, 'Consistecy | Invalid usage of undefined classes and properties | Unable to retrieve classes from the endpoint')
+    misplaced_total = context.query_fallbacks.get('consistency.triplesMC', {}).get('triples', triples_query)
+    undefined_total = context.query_fallbacks.get('consistency.undefinedClass', {}).get('triples', triples_query)
+    misplaced_class = _ratio_or_message(context, metrics["misplaced_class"], misplaced_total, 'Consistecy | Misplaced classes or properties | Unable to retrieve classes from the endpoint')
+    undefined_class = _ratio_or_message(context, metrics["undefined_classes"], undefined_total, 'Consistecy | Invalid usage of undefined classes and properties | Unable to retrieve classes from the endpoint')
     undefined_property = _ratio_or_message(context, metrics["undefined_properties"], triples_query, 'Consistecy | Invalid usage of undefined classes and properties | Unable to retrieve properties from the endpoint')
 
     return Consistency(
@@ -103,37 +108,28 @@ def _misplaced_properties(context):
         return [], MISSING_VALUE
 
 
-def _misplaced_classes(context, all_triples):
+def _misplaced_classes(context, all_triples=None):
+    properties = None
     try:
-        def calculate():
-            misplaced = []
-            properties = query.getAllProperty(context.access_url)
-            found = False
-            if isinstance(all_triples, list) and isinstance(properties, list):
-                properties.sort()
-                for triple in all_triples:
-                    value_o = triple.get('o').get('value')
-                    value_s = triple.get('s').get('value')
-                    if utils.validateURI(value_s):
-                        if utils.binarySearch(properties, 0, len(properties) - 1, value_s) != -1:
-                            found = True
-                    if not found and utils.validateURI(value_o):
-                        if utils.binarySearch(properties, 0, len(properties) - 1, value_o) != -1:
-                            found = True
-                    if found:
-                        misplaced.append(value_s)
-                        found = False
-            else:
-                context.warning('Consistency | Misplaced classes | Impossible to recover all information to calculate this metric')
-                misplaced = MISSING_VALUE
-            return properties, misplaced
-
-        return context.timed('Misplaced classes', 'Consistency', calculate)
-    except TimeoutError as error:
-        context.warning(f'Consistency | Misplaced classes | {str(error)}')
+        properties = query.getAllProperty(context.access_url)
+        if not isinstance(properties, list):
+            raise ValueError('Unable to retrieve declared properties')
+        count = context.timed('Misplaced classes', 'Consistency',
+                              lambda: query.getMisplacedClassCount(context.access_url))
+        if type(count) is not int or count < 0:
+            raise ValueError('Invalid misplaced-class count')
+        return properties, count
     except Exception as error:
-        context.warning(f'Consistency | Misplaced classes | {str(error)}')
-    return [], MISSING_VALUE
+        context.warning(f'Consistency | Misplaced-class query failed; using retrieved triples | {error}')
+        if not isinstance(all_triples, list):
+            return properties if isinstance(properties, list) else [], MISSING_VALUE
+        declared = (set(properties) if isinstance(properties, list)
+                    else _typed_subjects(all_triples, query.PROPERTY_TYPES))
+        count = sum(any(row[position]['type'] == 'uri' and row[position]['value'] in declared
+                        for position in ('s', 'o')) for row in all_triples)
+        context.record_fallback('consistency.triplesMC', all_triples)
+        # A partial local schema must not feed other checks as a complete schema.
+        return properties if isinstance(properties, list) else MISSING_VALUE, count
 
 
 def _ontology_hijacking(context):
@@ -149,44 +145,54 @@ def _ontology_hijacking(context):
         return context.timed('Check Ontology hijacking', 'Consistency', calculate)
     except Exception as error:
         context.warning(f'Consistency | Ontology hijacking | {str(error)}')
-        return [], MISSING_VALUE
+        return MISSING_VALUE, MISSING_VALUE
 
 
-def _undefined_classes(context, all_triples, all_type):
+def _undefined_classes(context, all_triples=None, all_type=None):
     try:
         def calculate():
-            to_search = []
-            found = False
-            for triple in all_triples:
-                subject = triple.get('s').get('value')
-                all_type.sort()
-                if utils.binarySearch(all_type, 0, len(all_type) - 1, subject) != -1:
-                    found = True
-                    break
-                if not found and utils.validateURI(subject):
-                    to_search.append(subject)
-                found = False
-            return LOVAPI.searchTermsList(to_search)
+            try:
+                rows = query.getUntypedSubjectCounts(context.access_url)
+                if not isinstance(rows, list):
+                    raise ValueError('Invalid untyped-subject results')
+                counts = {row['s']['value']: int(row['triples']['value']) for row in rows
+                          if utils.validateURI(row['s']['value'])}
+                if any(count < 0 for count in counts.values()):
+                    raise ValueError('Invalid untyped-subject count')
+            except Exception as error:
+                context.warning(f'Consistency | Undefined-class query failed; using retrieved triples | {error}')
+                if not isinstance(all_triples, list):
+                    return MISSING_VALUE
+                defined = set(all_type) if isinstance(all_type, list) else _typed_subjects(all_triples)
+                counts = Counter(row['s']['value'] for row in all_triples
+                                 if row['s']['value'] not in defined and utils.validateURI(row['s']['value']))
+                context.record_fallback('consistency.undefinedClass', all_triples)
+            unknown = LOVAPI.searchTermsList(list(counts))
+            if not isinstance(unknown, list):
+                return MISSING_VALUE
+            return sum(counts[subject] for subject in unknown)
 
         return context.timed('Check Invalid usage of undefined classes', 'Consistency', calculate)
     except Exception as error:
-        context.warning(f'Consistency | Invalid usage of undefined classes and properties | {str(error)}')
+        context.warning(f'Consistency | Invalid usage of undefined classes and properties | {error}')
         return MISSING_VALUE
+
+
+def _typed_subjects(triples, types=None):
+    """Read declarations from the retrieved triples if schema queries also fail."""
+    return {row['s']['value'] for row in triples
+            if row['p']['value'] == 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'
+            and (types is None or row['o']['value'] in types)}
 
 
 def _undefined_properties(context, properties):
     try:
         def calculate():
-            to_search = []
-            found = False
-            for predicate in query.getAllPredicate(context.access_url):
-                properties.sort()
-                if utils.binarySearch(properties, 0, len(properties) - 1, predicate) != -1:
-                    found = True
-                    break
-                if not found and utils.validateURI(predicate):
-                    to_search.append(predicate)
-                found = False
+            if not isinstance(properties, list):
+                return MISSING_VALUE
+            declared = set(properties)
+            to_search = [predicate for predicate in query.getAllPredicate(context.access_url)
+                         if predicate not in declared and utils.validateURI(predicate)]
             return LOVAPI.searchTermsList(to_search)
 
         return context.timed('Check Invalid usage of undefined properties', 'Consistency', calculate)
@@ -222,6 +228,8 @@ def _ratio_or_message(context, value, triples_query, warning):
     if not isinstance(triples_query, int) or triples_query <= 0:
         return 'insufficient data'
     if isinstance(value, list):
-        return 1.0 - (len(value) / triples_query)
+        value = len(value)
+    if type(value) is int and 0 <= value <= triples_query:
+        return 1.0 - (value / triples_query)
     context.warning(warning)
     return MISSING_VALUE

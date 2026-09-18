@@ -36,18 +36,8 @@ class RepresentationalConciseness:
 
 def calculate(context, all_triples, rdf_structures):
     subject_stats = _subject_uri_lengths(context, all_triples)
-    object_values, object_stats = _endpoint_uri_lengths(
-        context,
-        query.getAllObject,
-        'object',
-        'Representational-conciseness | Keeping URI short',
-    )
-    predicate_values, predicate_stats = _endpoint_uri_lengths(
-        context,
-        query.getAllPredicate2,
-        'predicate',
-        'Representational-conciseness | Keeping URI short',
-    )
+    object_values, object_stats = _triple_uri_lengths(all_triples, 'o')
+    predicate_values, predicate_stats = _triple_uri_lengths(all_triples, 'p')
 
     subject_values = []
     all_uri = []
@@ -112,14 +102,12 @@ def _subject_uri_lengths(context, all_triples):
         return _missing_stats()
 
 
-def _endpoint_uri_lengths(context, getter, label, warning_prefix):
-    try:
-        values = getter(context.access_url)
-        lengths = [len(uri) for uri in values if utils.validateURI(uri)]
-        return values, _length_stats(lengths, len(values))
-    except Exception as error:
-        context.warning(f'{warning_prefix} | {str(error)}')
+def _triple_uri_lengths(triples, position):
+    if not isinstance(triples, list):
         return MISSING_VALUE, _missing_stats()
+    values = list(dict.fromkeys(triple[position]['value'] for triple in triples
+                               if triple[position]['type'] == 'uri'))
+    return values, _length_stats([len(uri) for uri in values], len(triples))
 
 
 def _length_stats(lengths, considered_count):

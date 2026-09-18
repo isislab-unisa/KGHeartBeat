@@ -19,9 +19,7 @@ class Accuracy:
 def calculate(context, all_triples, triples_query):
     fp_value = _functional_property_value(context, triples_query)
     ifp_value = _inverse_functional_property_value(context, triples_query)
-    labels = _labels(context)
-    empty_annotation = _empty_annotations(context, labels)
-    white_space_annotation = _white_space_annotations(context, labels)
+    empty_annotation, white_space_annotation = _annotation_scores(context, all_triples)
     malformed_datatypes = _malformed_datatypes(context, all_triples)
     return Accuracy(empty_annotation, white_space_annotation, malformed_datatypes, fp_value, ifp_value)
 
@@ -68,41 +66,29 @@ def _inverse_functional_property_value(context, triples_query):
         return MISSING_VALUE
 
 
-def _labels(context):
+def _annotation_scores(context, all_triples=None):
     try:
-        return query.getLabel(context.access_url)
-    except Exception:
-        return []
-
-
-def _empty_annotations(context, labels):
-    try:
-        def calculate_value():
-            empty = 0
-            for obj in labels:
-                if not utils.validateURI(obj) and obj == '':
-                    empty = empty + 1
-            return 1.0 - (empty / len(labels))
-
-        return context.timed('Check Empty annotation labels', 'Accuracy', calculate_value)
+        counts = context.timed('Check annotation labels', 'Accuracy',
+                               lambda: query.getLabelQualityCounts(context.access_url))
+        if any(type(counts[key]) is not int or counts[key] < 0
+               for key in ('total', 'empty', 'whitespace')):
+            raise ValueError('Invalid annotation counts')
+        if max(counts['empty'], counts['whitespace']) > counts['total']:
+            raise ValueError('Annotation counts exceed the total')
     except Exception as error:
-        context.warning(f'Accuracy | Empty annotation labels | {str(error)}')
-        return MISSING_VALUE
-
-
-def _white_space_annotations(context, labels):
-    try:
-        def calculate_value():
-            white_space = []
-            for obj in labels:
-                if not utils.validateURI(obj) and obj != obj.strip():
-                    white_space.append(obj)
-            return 1.0 - (len(white_space) / len(labels))
-
-        return context.timed('Check White space in annotation', 'Accuracy', calculate_value)
-    except Exception as error:
-        context.warning(f'Accuracy | White space in annotation | {str(error)}')
-        return MISSING_VALUE
+        context.warning(f'Accuracy | Annotation query failed; using retrieved triples | {error}')
+        if not isinstance(all_triples, list):
+            return MISSING_VALUE, MISSING_VALUE
+        labels = [row['o'] for row in all_triples if row['p']['value'] in query.LABEL_PREDICATES]
+        literals = [obj['value'] for obj in labels if obj['type'] in ('literal', 'typed-literal')]
+        counts = {'total': len(labels), 'empty': sum(value == '' for value in literals),
+                  'whitespace': sum(value != value.strip() for value in literals)}
+        for metric in ('accuracy.emptyAnn', 'accuracy.wSA'):
+            context.record_fallback(metric, all_triples, considered=len(labels))
+    if counts['total'] > 0:
+        return (1.0 - counts['empty'] / counts['total'],
+                1.0 - counts['whitespace'] / counts['total'])
+    return MISSING_VALUE, MISSING_VALUE
 
 
 def _malformed_datatypes(context, all_triples):
