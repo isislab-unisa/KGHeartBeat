@@ -1,5 +1,6 @@
 import base64
 import csv
+import json
 from datetime import date, datetime
 from email import header, utils
 from http.client import HTTPConnection
@@ -58,6 +59,7 @@ class OutputCSV(MetricsOutput):
                      'Performance_Median-throughput','Performance_75th-percentile-throughput','Performance_Maximum-throughput','Performance_Average-throughput','Performance_Standard-deviation-of-throughput','Amount-of-data_Number-of-triples-(metadata)','Amount-of-data_Number-of-triples-(query)','Amount-of-data_Number-of-entities','Amount-of-data_Number-of-entities-counted-with-regex','Amount-of-data_Number-of-property','Volatility_Dataset-update-frequency','Interlinking_Degree-of-connection','Interlinking_Clustering-coefficient','Interlinking_Centrality','Interlinking_Number-of-samAs-chains','Interlinking_External-links','Reputation_PageRank','Believability_Description','Believability_Dataset-URL','Believability_Is-on-a-trusted-provider-list','Believability_Trust-value','Verifiability_Vocabularies','Verifiability_Author-(query)','Verifiability_Author-(metadata)','Verifiability_Contributor','Verifiability_Publisher','Verifiability_Sources','Verifiability_Signed','Completeness_Number-of-triples','Completeness_Number-of-triples-linked','Completeness_Interlinking-completeness','Interoperability_New-vocabularies-defined-in-the-dataset','Interoperability_New-terms-defined-in-the-dataset','Understandability_Number-of-labels/comments-present-on-the-data','Understandability_Percentage-of-triples-with-labels','Understandability_Regex-uri','Understandability_Presence-of-example','Interpretability_Number-of-blank-nodes','Interpretability_Uses-RDF-structures','Consistency_Deprecated-classes/properties-used','Consistency_Entities-as-member-of-disjoint-class','Consistency_Triples-with-misplaced-property-problem','Consistency_Triples-with-misplaced-class-problem','Consistency_Ontology-Hijacking-problem','Consistency_Undefined-class-used-without-declaration','Consistency_Undefined-properties-used-without-declaration','Conciseness_Extensional-conciseness','Conciseness_Intensional-conciseness','Accuracy_Triples-with-empty-annotation-problem','Accuracy_Triples-with-white-space-in-annotation(at-the-beginning-or-at-the-end)','Accuracy_Triples-with-malformed-data-yype-literals-problem','Accuracy_Functional-properties-with-inconsistent-values','Accuracy_Invalid-usage-of-inverse-functional-properties','Extra_Number-of-triples-updated','Score','Normalized-score','Extra_Limited','Extra_Offline-dumps','Extra_Url-file-VoID','Extra_Availability-VoID-file','Extra_MinTPNoOff','Extra_MeanTPNoOff','Extra_MaxTPNoOff','Extra_sdTPNoOff','Extra_URIs-Deferenceability','Availability-score','Licensing-score','Interlinking-score','Performance-score','Accuracy-score','Consistency-score','Conciseness-score','Verifiability-score','Reputation-score','Believability-score',
                      'Currency-score','Volatility-score','Completeness-score','Amount-of-data-score','Representational-Consistency-score','Representational-Conciseness-score','Understandability-score','Interpretability-score','Versatility-score','Security-score','Interlinking_SKOS-mapping-properties', 'Extra_U1-value','Extra_CS2-value','Extra_IN3-value','Extra_RC1-value','Extra_RC2-value','Extra_IN4-value','Extra_metadata-media-type','Extra_Availability-of-a-common-accepted-Media-Type','Extra_U5-value','Extra_PE2-value','Extra_PE3-value']
 
+        header.append('Extra_Triple-retrieval')
         here = os.path.dirname(os.path.abspath(__file__))
         save_path = os.path.join(here,'../Analysis results')
         if include_dimensions == False:
@@ -105,6 +107,7 @@ class OutputCSV(MetricsOutput):
                         self.kgQuality.extra.scoreObj.availabilityScoreValue,self.kgQuality.extra.scoreObj.licensingScoreValue,self.kgQuality.extra.scoreObj.interlinkingScoreValue,self.kgQuality.extra.scoreObj.performanceScoreValue,self.kgQuality.extra.scoreObj.accuracyScoreValue,self.kgQuality.extra.scoreObj.consistencyScoreValue,self.kgQuality.extra.scoreObj.concisenessScoreValue,self.kgQuality.extra.scoreObj.verifiabilityScoreValue,self.kgQuality.extra.scoreObj.reputationScoreValue,self.kgQuality.extra.scoreObj.believabilityScoreValue,self.kgQuality.extra.scoreObj.currencyScoreValue,self.kgQuality.extra.scoreObj.volatilityScoreValue,
                         self.kgQuality.extra.scoreObj.completenessScoreValue,self.kgQuality.extra.scoreObj.amountScoreValue,self.kgQuality.extra.scoreObj.repConsScoreValue,self.kgQuality.extra.scoreObj.repConcScoreValue,self.kgQuality.extra.scoreObj.understScoreValue,self.kgQuality.extra.scoreObj.interpretabilityScoreValue,self.kgQuality.extra.scoreObj.versatilityScoreValue,self.kgQuality.extra.scoreObj.securityScoreValue,self.kgQuality.interlinking.skosMapping, self.kgQuality.extra.scoreObj.labelValue, self.kgQuality.extra.scoreObj.misplacedValue, self.kgQuality.extra.scoreObj.undefValue, self.kgQuality.extra.scoreObj.uriValue, self.kgQuality.extra.scoreObj.rdfValue, self.kgQuality.extra.scoreObj.blankValue, self.kgQuality.extra.metadataMediaType, self.kgQuality.extra.commonMediaType,self.kgQuality.extra.scoreObj.vocabsValue,self.kgQuality.extra.scoreObj.tpValue,self.kgQuality.extra.scoreObj.latencyValue]
 
+            data.append(json.dumps(getattr(self.kgQuality.extra, 'tripleRetrieval', {})))
             writer.writerow(data)
     
     def normalizeScore(filename):
@@ -767,4 +770,3 @@ class OutputCSV(MetricsOutput):
             except Exception as e:
                 print("KGid.txt DELETED %s"%e)
 '''
-
