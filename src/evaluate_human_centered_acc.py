@@ -9,6 +9,10 @@ class EvaluateHumanCenteredAcc:
     
     def __init__(self, kg_quality):
         self.kg_quality = kg_quality
+        self.query_endpoint = getattr(kg_quality.extra, 'queryEndpointUrl', kg_quality.extra.endpointUrl)
+        self.data_available = (kg_quality.availability.sparqlEndpoint == 'Available'
+                               or (getattr(kg_quality.extra, 'analysisSource', None) == 'rdf_dump'
+                                   and bool(self.query_endpoint)))
         self.accessibility4all = Accessibility4All()
         self.accessibility4visuallyimpaired = Accessibility4VisuallyImpaired()
         self.deaf_hearing_accessibility = DeafHearingAccessibility()
@@ -26,7 +30,7 @@ class EvaluateHumanCenteredAcc:
     def evaluate_perceivable(self):
 
         status_sparql_endpoint = self.kg_quality.availability.sparqlEndpoint
-        sparql_endpoint = self.kg_quality.extra.endpointUrl
+        sparql_endpoint = self.query_endpoint
         void_file_url = self.kg_quality.extra.urlVoid
         resourcesDH = self.kg_quality.extra.other_resources
         total_resources_in_kg = utils.run_with_timeout(query.fetch_subjects,args=(sparql_endpoint,), timeout=1800)
@@ -44,7 +48,7 @@ class EvaluateHumanCenteredAcc:
         video = self.deaf_hearing_accessibility.video(sparql_endpoint,total_resources_in_kg)
 
         perceivable_scores_sum = (image_metadata[0] + image[0] + audio_metadata[0] + audio[0] + video_metadata[0] + video[0])
-        if status_sparql_endpoint == 'Available':
+        if self.data_available:
             perceivable_score = perceivable_scores_sum / 6
         else:
             perceivable_score = perceivable_scores_sum / 3
@@ -73,7 +77,7 @@ class EvaluateHumanCenteredAcc:
 
     def evaluate_understandable(self):
         status_sparql_endpoint = self.kg_quality.availability.sparqlEndpoint
-        sparql_endpoint = self.kg_quality.extra.endpointUrl
+        sparql_endpoint = self.query_endpoint
         void_file_url = self.kg_quality.extra.urlVoid
 
         data_lang = self.kg_quality.versatility.languagesQ
@@ -81,14 +85,14 @@ class EvaluateHumanCenteredAcc:
             data_lang_score = (0, f"Languages available: {data_lang}")
         elif data_lang == 0:
             data_lang_score = (-1, "No language specified")
-        elif status_sparql_endpoint != 'Available':
+        elif not self.data_available:
             data_lang_score = (-1, "No SPARQL endpoint available")
         else:
             data_lang_score = (-1, "Error fetching languages")
         
-        metadata_lang = self.accessibility4all.metadata_lang(self.kg_quality.extra.endpointUrl, self.kg_quality.extra.urlVoid)
+        metadata_lang = self.accessibility4all.metadata_lang(self.query_endpoint, self.kg_quality.extra.urlVoid)
 
-        if status_sparql_endpoint == 'Available':
+        if self.data_available:
             triples = self.kg_quality.amountOfData.numTriplesQ
             labels = self.kg_quality.understendability.numLabel
             if isinstance(labels, int) and labels > 0 and isinstance(triples, int) and triples > 0:
@@ -102,12 +106,12 @@ class EvaluateHumanCenteredAcc:
         else:
             human_readable_labels_score = (-1, "No SPARQL endpoint available")
         
-        examples = self.accessibility4all.examples(self.kg_quality.extra.urlVoid, self.kg_quality.extra.endpointUrl, self.search_engine_metadata)
+        examples = self.accessibility4all.examples(self.kg_quality.extra.urlVoid, self.query_endpoint, self.search_engine_metadata)
 
         description_readability = self.accessibility4all.description_readability(sparql_endpoint, void_file_url, Aggregator.getDescription(self.search_engine_metadata))
 
         understandable_sum = (data_lang_score[0] + metadata_lang[0] + human_readable_labels_score[0] + examples[0] + description_readability[0])
-        if status_sparql_endpoint == 'Available':
+        if self.data_available:
             understandable_score = understandable_sum / 5
         else:
             understandable_score = understandable_sum / 3
@@ -137,8 +141,8 @@ class EvaluateHumanCenteredAcc:
         status_dump1 = self.kg_quality.availability.RDFDumpM
         status_dum2 = self.kg_quality.availability.RDFDumpQ
 
-        contact_person = self.accessibility4all.contact_point(self.search_engine_metadata, self.kg_quality.extra.endpointUrl, self.kg_quality.extra.urlVoid)
-        dump_size = self.accessibility4all.dump_size(self.kg_quality.extra.urlVoid, self.kg_quality.extra.endpointUrl, self.kg_quality.extra.KGid)
+        contact_person = self.accessibility4all.contact_point(self.search_engine_metadata, self.query_endpoint, self.kg_quality.extra.urlVoid)
+        dump_size = self.accessibility4all.dump_size(self.kg_quality.extra.urlVoid, self.query_endpoint, self.kg_quality.extra.KGid)
         
         if status_sparql_endpoint == 'Available':
             auth = (0, f"SPARQL endpoint status: {status_sparql_endpoint}")
@@ -189,11 +193,11 @@ class EvaluateHumanCenteredAcc:
         }
     
     def evaluate_robust(self):
-        versioning = self.accessibility4all.version(self.kg_quality.extra.urlVoid, self.kg_quality.extra.endpointUrl)
+        versioning = self.accessibility4all.version(self.kg_quality.extra.urlVoid, self.query_endpoint)
         robots_txt = self.accessibility4all.robots_txt(self.kg_quality.extra.other_resources, self.kg_quality.extra.endpointUrl, self.kg_quality.verifiability.sources.web)
         webpage_broken_links = self.accessibility4all.webpage_status(self.search_engine_metadata)
-        metadata_broken_links_rate = self.accessibility4all.metadata_broken_links_rate(self.search_engine_metadata, self.kg_quality.extra.endpointUrl, self.kg_quality.extra.urlVoid, self.kg_quality.extra.KGid)
-        canonical_id = self.accessibility4all.canonical_citation(self.kg_quality.extra.urlVoid, self.kg_quality.extra.endpointUrl, self.search_engine_metadata)
+        metadata_broken_links_rate = self.accessibility4all.metadata_broken_links_rate(self.search_engine_metadata, self.query_endpoint, self.kg_quality.extra.urlVoid, self.kg_quality.extra.KGid)
+        canonical_id = self.accessibility4all.canonical_citation(self.kg_quality.extra.urlVoid, self.query_endpoint, self.search_engine_metadata)
 
         robust_score = (versioning[0] + robots_txt[0] + webpage_broken_links[0] + metadata_broken_links_rate[0] + canonical_id[0]) / 5
 
@@ -217,7 +221,7 @@ class EvaluateHumanCenteredAcc:
         }
     
     def evaluate_access_4_visually_impaired(self):
-        sparql_endpoint = self.kg_quality.extra.endpointUrl
+        sparql_endpoint = self.query_endpoint
         void_file_url = self.kg_quality.extra.urlVoid
         resourcesDH = self.kg_quality.extra.other_resources
         status_sparql_endpoint = self.kg_quality.availability.sparqlEndpoint
@@ -225,7 +229,7 @@ class EvaluateHumanCenteredAcc:
         alt_image = self.accessibility4visuallyimpaired.alt_image(sparql_endpoint)
         audio_descriptions = self.deaf_hearing_accessibility.check_audio_description_subtitles(sparql_endpoint)['description_ratio']
 
-        if status_sparql_endpoint == 'Available':
+        if self.data_available:
             acc_4_4_visually_impaired_score = (alt_image[0] + audio_descriptions[0]) / 2
         else:
             acc_4_4_visually_impaired_score = 0
@@ -242,7 +246,7 @@ class EvaluateHumanCenteredAcc:
 
     
     def evaluate_access_4_deaf_hearing(self):
-        sparql_endpoint = self.kg_quality.extra.endpointUrl
+        sparql_endpoint = self.query_endpoint
         status_sparql_endpoint = self.kg_quality.availability.sparqlEndpoint
 
         video_results = self.deaf_hearing_accessibility.check_video_description_subtitles(sparql_endpoint)
@@ -256,7 +260,7 @@ class EvaluateHumanCenteredAcc:
         transcript_video = video_results['description_ratio']
         transcript_audio = audio_results['description_ratio']
 
-        if status_sparql_endpoint == 'Available':
+        if self.data_available:
             access_4_deaf_hearing_score = (video_descriptions[0] + sign_lang_video[0] + sign_lang_audio[0] + captions_video[0] + captions_audio[0] + transcript_video[0] + transcript_audio[0]) / 7
         else:
             access_4_deaf_hearing_score = 0
