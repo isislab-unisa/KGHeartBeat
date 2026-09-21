@@ -14,7 +14,9 @@ import pandas as pd
 import utils
 import requests
 from ExternalLink import ExternalLink
+from result_paths import results_dir
 from MetricsOutput import MetricsOutput
+from QualityDimensions.FiveStar import FiveStar, CSV_COLUMNS
 from QualityDimensions.AmountOfData import AmountOfData
 from QualityDimensions.Availability import Availability
 from QualityDimensions.Believability import Believability
@@ -61,8 +63,12 @@ class OutputCSV(MetricsOutput):
 
         header.append('Extra_Triple-retrieval')
         header.append('Dataset source' if not include_dimensions else 'dataset_source')
+        header.extend(CSV_COLUMNS if not include_dimensions else (
+            'FiveStar_Open-Web', 'FiveStar_Structured-data', 'FiveStar_Open-format',
+            'FiveStar_URI-identification', 'FiveStar_External-links',
+            'FiveStar_Rating', 'FiveStar_Assessment-status', 'FiveStar_Evidence'))
         here = os.path.dirname(os.path.abspath(__file__))
-        save_path = os.path.join(here,'../Analysis results')
+        save_path = str(results_dir())
         if include_dimensions == False:
             save_path = os.path.join(save_path, filename+".csv")
         else:
@@ -73,7 +79,7 @@ class OutputCSV(MetricsOutput):
 
     def writeRow(self,filename,include_dimensions = False):
         here = os.path.dirname(os.path.abspath(__file__))
-        save_path = os.path.join(here,'../Analysis results')
+        save_path = str(results_dir())
         if include_dimensions == False:
             save_path = os.path.join(save_path, filename+".csv")
         else:
@@ -110,6 +116,8 @@ class OutputCSV(MetricsOutput):
 
             data.append(json.dumps(getattr(self.kgQuality.extra, 'tripleRetrieval', {})))
             data.append(getattr(self.kgQuality.extra, 'datasetSource', 'unknown'))
+            five_star = getattr(self.kgQuality, 'five_star', None)
+            data.extend((five_star if isinstance(five_star, FiveStar) else FiveStar()).csv_values())
             writer.writerow(data)
     
     def normalizeScore(filename):

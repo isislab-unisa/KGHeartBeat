@@ -5,9 +5,10 @@ from pathlib import Path
 import string
 
 from API.KGSum import KGSumAPI
+from result_paths import results_dir
 
 
-RESULTS_DIR = Path(__file__).resolve().parent.parent / 'Analysis results'
+RESULTS_DIR = results_dir()
 
 
 def normalize_kg_id(kg_id):

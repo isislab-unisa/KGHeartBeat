@@ -3,6 +3,7 @@ import bz2
 import gzip
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import lzma
+import os
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from threading import Thread
@@ -14,7 +15,7 @@ import requests
 from rdf_formats import rdf_media_type
 
 
-MAX_DUMP_BYTES = 2 * 1024 ** 3
+MAX_DUMP_BYTES = int(os.environ.get('KGH_MAX_DUMP_BYTES', 2 * 1024 ** 3))
 
 
 def rdf_format(name, media_type=None):

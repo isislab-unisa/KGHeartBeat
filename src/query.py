@@ -105,6 +105,38 @@ def _select_bindings(url, query_text, timeout=300, xml_reader=None):
     return False
 
 
+def getFiveStarDatasetLicenses(url):
+    return _select_bindings(url, '''
+        PREFIX dct: <http://purl.org/dc/terms/>
+        PREFIX dc: <http://purl.org/dc/elements/1.1/>
+        PREFIX cc: <http://creativecommons.org/ns#>
+        SELECT DISTINCT ?s ?p ?o WHERE {
+            { ?s a <http://www.w3.org/ns/dcat#Dataset> }
+            UNION { ?s a <http://rdfs.org/ns/void#Dataset> }
+            ?s ?p ?o .
+            FILTER (?p IN (dct:license, dc:license, cc:license,
+                           <http://schema.org/license>, <https://schema.org/license>))
+        } LIMIT 20
+    ''', timeout=30)
+
+
+def getFiveStarExternalLinks(url):
+    return _select_bindings(url, '''
+        PREFIX owl: <http://www.w3.org/2002/07/owl#>
+        PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+        SELECT ?s ?p ?o WHERE {
+            ?s ?p ?o .
+            FILTER (?p IN (owl:sameAs, <http://schema.org/sameAs>,
+                <https://schema.org/sameAs>, skos:exactMatch, skos:closeMatch,
+                skos:broadMatch, skos:narrowMatch, skos:relatedMatch))
+            FILTER (isIRI(?s) && isIRI(?o))
+            FILTER (REGEX(STR(?s), "^https?://", "i") && REGEX(STR(?o), "^https?://", "i"))
+            FILTER (LCASE(REPLACE(STR(?s), "^https?://([^/]+).*$", "$1", "i")) !=
+                    LCASE(REPLACE(STR(?o), "^https?://([^/]+).*$", "$1", "i")))
+        } LIMIT 5
+    ''', timeout=30)
+
+
 def _select_exists(url, query_text, timeout=300):
     bindings = _select_bindings(url, query_text, timeout, utils.xmlToDict)
     if isinstance(bindings, list):

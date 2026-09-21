@@ -19,6 +19,7 @@ from QualityDimensions.Understendability import Understendability
 from QualityDimensions.Verifiability import Verifiability
 from QualityDimensions.Versatility import Versatility
 from QualityDimensions.Volatility import Volatility
+from QualityDimensions.FiveStar import FiveStar
 
 class KnowledgeGraph:
     def __init__(self,availability,currency,versatility,security,rConciseness,licensing,performance,amountOfData,volatility,interlinking,consistency,reputation,believability,verifiability,completeness,rConsistency,understendability,interpretability,conciseness,accuracy,extra):
@@ -45,6 +46,7 @@ class KnowledgeGraph:
         self.extra = extra
         self.fairness = False
         self.human_accessibility = False
+        self.five_star = FiveStar()
 
     def getQualityKG(self):
-        return f"Quality of KG {self.believability.title}\n {Availability.getAvailability(self.availability)} {Currency.getCurrency(self.currency)} {Versatility.getVersatility(self.versatility)} {Security.getSecurity(self.security)} {RepresentationalConciseness.getRepresentationalConciseness(self.rConciseness)} {Licensing.getLicensing(self.licensing)} {Performance.getPerformance(self.performance)} {AmountOfData.getAmountOfData(self.amountOfData)} {Volatility.getVolatility(self.volatility)} {Interlinking.getInterlinking(self.interlinking)} {Consistency.getConsistency(self.consistency)} {Reputation.getReputation(self.reputation)} {Believability.getBelievability(self.believability)} {Verifiability.getVerifiability(self.verifiability)} {Completeness.getCompleteness(self.completeness)} {RepresentationalConsistency.getRepresentationalConsistency(self.rConsistency)} {Understendability.getUnderstendability(self.understendability)} {Interpretability.getInterpretability(self.interpretability)} {Conciseness.getConciseness(self.conciseness)} {Accuracy.getAccuracy(self.accuracy)} {Extra.getExtra(self.extra)}"
+        return f"Quality of KG {self.believability.title}\n {Availability.getAvailability(self.availability)} {Currency.getCurrency(self.currency)} {Versatility.getVersatility(self.versatility)} {Security.getSecurity(self.security)} {RepresentationalConciseness.getRepresentationalConciseness(self.rConciseness)} {Licensing.getLicensing(self.licensing)} {Performance.getPerformance(self.performance)} {AmountOfData.getAmountOfData(self.amountOfData)} {Volatility.getVolatility(self.volatility)} {Interlinking.getInterlinking(self.interlinking)} {Consistency.getConsistency(self.consistency)} {Reputation.getReputation(self.reputation)} {Believability.getBelievability(self.believability)} {Verifiability.getVerifiability(self.verifiability)} {Completeness.getCompleteness(self.completeness)} {RepresentationalConsistency.getRepresentationalConsistency(self.rConsistency)} {Understendability.getUnderstendability(self.understendability)} {Interpretability.getInterpretability(self.interpretability)} {Conciseness.getConciseness(self.conciseness)} {Accuracy.getAccuracy(self.accuracy)} {Extra.getExtra(self.extra)} {self.five_star.getFiveStar()}"
