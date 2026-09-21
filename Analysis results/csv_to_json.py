@@ -6,6 +6,7 @@ import sys
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / 'src'))
 import utils
 from kg_profile import RESULTS_DIR, load_profile, normalize_kg_id
+from QualityDimensions.FiveStar import from_csv as five_star_from_csv
 
 
 maxInt = sys.maxsize
@@ -248,6 +249,7 @@ def full_csv(results_dir=RESULTS_DIR):
                     }
 
                 data['Extra']['triple_retrieval'] = parse_triple_retrieval(rows)
+                data['FiveStar'] = five_star_from_csv(rows)
                 with (output_dir / (kg_id + ' ' + filename + '.json')).open('w',encoding='utf-8') as jsonFile:
                     jsonFile.write(json.dumps(data, indent=4))
 
@@ -297,6 +299,7 @@ def splitted_csv(results_dir=RESULTS_DIR):
                         "Extra":{"sparql_link" : rows['Link SPARQL endpoint'],"rdf_dump_link" : rows['Link for download the dataset']}
                     }
                     data['Extra']['triple_retrieval'] = parse_triple_retrieval(rows)
+                    data['FiveStar'] = five_star_from_csv(rows)
                     with (output_dir / (kg_id + rows['Date'] + '.json')).open('w',encoding='utf-8') as jsonFile:
                         jsonFile.write(json.dumps(data, indent=4))
                 except:
