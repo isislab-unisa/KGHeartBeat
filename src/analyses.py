@@ -15,6 +15,7 @@ from QualityDimensions.Conciseness import Conciseness, calculate as calculate_co
 from QualityDimensions.Consistency import Consistency, build as build_consistency, collect_metrics as collect_consistency_metrics
 from QualityDimensions.Currency import Currency, build as build_currency, build_void as build_void_currency, endpoint_dates
 from QualityDimensions.Interlinking import Interlinking, graph_metrics, same_as_chains, skos_mapping
+from QualityDimensions.FiveStar import calculate as calculate_five_star, public_web_uri
 from QualityDimensions.Interpretability import Interpretability, blank_nodes
 from QualityDimensions.Licensing import Licensing, human_readable_from_endpoint, machine_readable_from_endpoint
 from QualityDimensions.Performance import Performance
@@ -96,9 +97,10 @@ def _analyses(analysis_date, idKG, nameKG, sparql_endpoint, rdf_dump, stack, tri
 
     triples_metadata = metadata_triples(target.metadata)
     resource_info = load_resources(target.kg_id, resources=target.resources)
-    void_info = check_void(context, resource_info.objects, sources_obj)
+    void_info = check_void(context, resource_info.objects, sources_obj, target.metadata)
 
     public_access_url = access_url
+    public_endpoint_available = endpoint_check.available and not endpoint_check.restricted and public_web_uri(access_url)
     query_target = resolve_query_target(target, endpoint_check, context, stack)
     if profile_worker is not None:
         # Explicit input wins; catalog targets use the resolved public source.
@@ -212,7 +214,7 @@ def _analyses(analysis_date, idKG, nameKG, sparql_endpoint, rdf_dump, stack, tri
         'checked_at': analysis_date,
     })
 
-    return KnowledgeGraph(
+    kg = KnowledgeGraph(
         dimensions["availability"],
         dimensions["currency"],
         dimensions["versatility"],
@@ -235,6 +237,12 @@ def _analyses(analysis_date, idKG, nameKG, sparql_endpoint, rdf_dump, stack, tri
         dimensions["accuracy"],
         extra,
     )
+    kg.five_star = calculate_five_star(
+        context, kg, values.get('all_triples'),
+        query_available=endpoint_check.available,
+        public_endpoint=public_endpoint_available,
+    )
+    return kg
 
 
 def _endpoint_values(context, triples_metadata, download_urls, offline_dumps, local_dump=False):

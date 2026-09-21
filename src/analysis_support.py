@@ -140,7 +140,8 @@ def configure_logger(analysis_date, kg_id, kg_name):
     logger.setLevel(logging.DEBUG)
 
     here = os.path.dirname(os.path.abspath(__file__))
-    save_path = os.path.join(here, '../Analysis results')
+    from result_paths import results_dir
+    save_path = str(results_dir())
     save_path = os.path.join(save_path, analysis_date + ".log")
     file_handler = logging.FileHandler(save_path)
     file_handler.setLevel(logging.DEBUG)
@@ -209,23 +210,41 @@ def load_resources(kg_id, resources=None):
     return ResourceInfo(resources, objects, metadata_media_type, available_download, download_urls, offline_dumps)
 
 
-def check_void(context, resources, sources):
+def check_void(context, resources, sources, metadata=None):
     start = time.time()
     url = utils.getUrlVoID(resources)
     void_available = False
     status = 'VoID file absent'
+    explicit_url_checked = False
 
-    if utils.is_valid_void_url(url):
-        if isinstance(url, str):
+    # An explicit VoID URL takes precedence. The well-known URI is a fallback
+    # only when no usable explicit URL was found.
+    if isinstance(url, str):
+        if utils.is_valid_void_url(url):
+            explicit_url_checked = True
             void_available, status = _parse_void_url(url)
+        else:
+            status = 'VoID file offline'
 
-        if not void_available and not isinstance(url, str) and sources.web not in ['absent', 'Absent']:
-            url = sources.web + '/.well-known/void'
-            void_available, status = _parse_void_url(url, absent_on_url_error=True)
+    if not explicit_url_checked and not void_available:
+        websites = []
+        if sources is not None:
+            websites.append(getattr(sources, 'web', None))
+        if isinstance(metadata, dict):
+            websites.append(metadata.get('website'))
+
+        for website in dict.fromkeys(websites):
+            if not isinstance(website, str) or website in ('', 'absent', 'Absent'):
+                continue
+
+            candidate = website.rstrip('/') + '/.well-known/void'
+            void_available, status = _parse_void_url(candidate, absent_on_url_error=True)
             if void_available:
+                url = candidate
                 context.logger.info(f"VoID file link: {url}", extra=context.kg_info)
+                break
 
-        if not isinstance(url, str):
+        if not void_available and not isinstance(url, str):
             status = 'VoID file absent'
 
     context.logger.info(f"VoID file link: {url}", extra=context.kg_info)
@@ -579,22 +598,32 @@ def _try_dataset_sparql(access_url, endpoint, sources, restricted, context):
 
 def _parse_void_url(url, absent_on_url_error=False):
     try:
-        VoIDAnalyses.parseVoID(url)
-        return True, 'VoID file available'
-    except Exception:
-        try:
-            VoIDAnalyses.parseVoIDTtl(url)
+        parsed = VoIDAnalyses.parseVoID(url)
+        if parsed is not False and parsed is not None:
             return True, 'VoID file available'
-        except urllib.error.HTTPError as error:
-            if absent_on_url_error and error.code == 404:
-                return False, 'VoID file absent'
-            return False, 'VoID file offline'
-        except urllib.error.URLError:
-            if absent_on_url_error:
-                return False, 'VoID file absent'
-            return False, 'VoID file offline'
-        except Exception:
-            return False, 'VoID file offline'
+    except Exception:
+        pass
+
+    try:
+        parsed = VoIDAnalyses.parseVoIDTtl(url)
+        if parsed is not False and parsed is not None:
+            return True, 'VoID file available'
+    except urllib.error.HTTPError as error:
+        if absent_on_url_error and error.code == 404:
+            return False, 'VoID file absent'
+        return False, 'VoID file offline'
+    except urllib.error.URLError:
+        if absent_on_url_error:
+            return False, 'VoID file absent'
+        return False, 'VoID file offline'
+    except Exception:
+        if absent_on_url_error:
+            return False, 'VoID file absent'
+        return False, 'VoID file offline'
+
+    if absent_on_url_error:
+        return False, 'VoID file absent'
+    return False, 'VoID file offline'
 
 
 def _unique(values):
