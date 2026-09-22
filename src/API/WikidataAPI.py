@@ -16,7 +16,25 @@ WIKIDATA_CATALOGUE_PATH = Path(__file__).with_name("wikidata-catalogue.json")
 logger = logging.getLogger(__name__)
 
 
-def _query(query, context="query", attempts=3):
+class WikidataRateLimitError(RuntimeError):
+    """Raised internally when Wikidata responds with HTTP 429."""
+
+
+def _is_rate_limit_error(error):
+    for candidate in (error, getattr(error, "response", None)):
+        if candidate is None:
+            continue
+        for attribute in ("code", "status", "status_code"):
+            value = getattr(candidate, attribute, None)
+            try:
+                if int(value) == 429:
+                    return True
+            except (TypeError, ValueError):
+                pass
+    return re.search(r"\b429\b", str(error)) is not None
+
+
+def _query(query, context="query", attempts=3, raise_on_rate_limit=False):
     for attempt in range(attempts):
         started = time.monotonic()
         try:
@@ -40,6 +58,12 @@ def _query(query, context="query", attempts=3):
                 context, attempt + 1, attempts, time.monotonic() - started,
                 type(e).__name__, e,
             )
+            if _is_rate_limit_error(e):
+                if raise_on_rate_limit:
+                    raise WikidataRateLimitError(
+                        f"Wikidata rate limited {context}"
+                    ) from e
+                return False
             if attempt == attempts - 1:
                 return False
             time.sleep(5 * (2 ** attempt))
@@ -174,7 +198,17 @@ ORDER BY ?name
             for index, entry in enumerate(catalogue)
         }
         for dataset in datasets:
-            dataset["metadata"] = getMetadata(dataset["qid"])
+            try:
+                dataset["metadata"] = getMetadata(
+                    dataset["qid"], raise_on_rate_limit=True
+                )
+            except WikidataRateLimitError:
+                logger.warning(
+                    "Wikidata rate limited metadata retrieval at %s; "
+                    "stopping refresh and using the local catalogue",
+                    dataset["qid"],
+                )
+                return _cached_endpoint_datasets(path, include_metadata=True)
             if not dataset["metadata"]:
                 logger.warning("No metadata saved for %s", dataset["qid"])
                 continue
@@ -190,7 +224,7 @@ ORDER BY ?name
     return datasets or False
 
 
-def getMetadata(qid):
+def getMetadata(qid, raise_on_rate_limit=False):
     """Return metadata for one Wikidata entity identified by its QID."""
     if not isinstance(qid, str) or not re.fullmatch(r"Q\d+", qid):
         return False
@@ -219,7 +253,10 @@ WHERE {{
   }}
 }}
 """
-    data = _query(query, context=f"metadata for {qid}")
+    data = _query(
+        query, context=f"metadata for {qid}",
+        raise_on_rate_limit=raise_on_rate_limit,
+    )
     if not data:
         return False
 
