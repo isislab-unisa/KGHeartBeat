@@ -27,7 +27,7 @@ def _is_rate_limit_error(error):
         for attribute in ("code", "status", "status_code"):
             value = getattr(candidate, attribute, None)
             try:
-                if int(value) == 429:
+                if int(value) == 429 or int(value) == 502:
                     return True
             except (TypeError, ValueError):
                 pass
@@ -371,29 +371,39 @@ def getAllDatasetIDs(catalogue_path=None):
     return [entry.get("qid") for entry in catalogue if entry.get("qid")]
 
 def getNameKG(metadata):
+    if not isinstance(metadata, dict):
+        return False
     title = metadata.get("title")
     if isinstance(title, str) and title.strip():
         return title.strip()
 
 def getLicense(metadata):
+    if not isinstance(metadata, dict):
+        return False
     licenses = metadata.get("licenses")
     if isinstance(licenses, list) and licenses:
         return licenses[0]
     return False
 
 def getAuthor(metadata):
+    if not isinstance(metadata, dict):
+        return False
     authors = metadata.get("authors")
     if isinstance(authors, list) and authors:
         return ", ".join(authors)
     return False
 
 def getSource(metadata):
+    if not isinstance(metadata, dict):
+        return False
     webpages = metadata.get("webpages")
     if isinstance(webpages, list) and webpages:
         return webpages[0]
     return False
 
 def getTriples(metadata):
+    if not isinstance(metadata, dict):
+        return False
     triples = metadata.get("number_of_triples")
     if isinstance(triples, list) and triples:
         return triples[0]
@@ -434,13 +444,23 @@ def getOtherResources(qid):
 
 def getExternalLinks(qid):
     metadata = getLocalMetadata(qid)
-    linked_datasets = metadata.get("linked_datasets")
-    if isinstance(linked_datasets, list) and linked_datasets:
-        return [dataset.get("title") for dataset in linked_datasets if isinstance(dataset, dict) and "title" in dataset]
-    else:
+    if not isinstance(metadata, dict):
         return False
+    linked_datasets = metadata.get("linked_datasets")
+    if not isinstance(linked_datasets, list) or not linked_datasets:
+        return False
+    links = []
+    for dataset in linked_datasets:
+        if not isinstance(dataset, dict):
+            continue
+        target = dataset.get("qid") or dataset.get("title")
+        if isinstance(target, str) and target.strip():
+            links.append({"target": target.strip(), "value": 1})
+    return links or False
 
 def getDescription(metadata):
+    if not isinstance(metadata, dict):
+        return False
     description = metadata.get("description")
     if isinstance(description, str) and description.strip():
         return description.strip()
@@ -448,6 +468,8 @@ def getDescription(metadata):
 
 def getKeywords(qid):
     metadata = getLocalMetadata(qid)
+    if not isinstance(metadata, dict):
+        return []
     keywords = metadata.get("keywords")
     if isinstance(keywords, list) and keywords:
         return keywords
@@ -455,6 +477,8 @@ def getKeywords(qid):
 
 def getDOI(qid):
     metadata = getLocalMetadata(qid)
+    if not isinstance(metadata, dict):
+        return False
     doi = metadata.get("doi")
     if isinstance(doi, list) and doi:
         return doi[0]
