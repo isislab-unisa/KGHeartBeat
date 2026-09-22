@@ -79,6 +79,14 @@ def getDatasetMetadata(idKG):
             return item["metadata"]
     return False
 
+def getLocalDatasetMetadata(idKG):
+    with open("kg-catalog-metadata.json", "r", encoding="utf-8") as f:
+        metadata_list = json.load(f)
+    for item in metadata_list:
+        if item["metadata"].get("id") == idKG:
+            return item["metadata"]
+    return False
+
 def getDatasetName(metadata):
     idKG = metadata.get("id")
     with open("kg-catalog-metadata.json", "r", encoding="utf-8") as f:
@@ -125,7 +133,7 @@ def getTriples(metadata):
     return False
 
 def getSPARQLEndpoint(idKG):
-    metadata = getDatasetMetadata(idKG)
+    metadata = getLocalDatasetMetadata(idKG)
     if isinstance(metadata,dict):
         sparql = metadata.get('sparql')
         if isinstance(sparql,dict):
@@ -137,7 +145,7 @@ def getSPARQLEndpoint(idKG):
         return False
 
 def getOtherResources(idKG):  
-    metadata = getDatasetMetadata(idKG)
+    metadata = getLocalDatasetMetadata(idKG)
     if not isinstance(metadata, dict):
         return False
 
@@ -186,7 +194,7 @@ def getOtherResources(idKG):
 
 # TODO: Update with correct links discovering when KGCatalog supports them
 def getExternalLinks(idKG):
-    metadata = getDatasetMetadata(idKG)
+    metadata = getLocalDatasetMetadata(idKG)
     if not isinstance(metadata, dict):
         return False
 
@@ -205,21 +213,21 @@ def getDescription(metadata):
     return False
 
 def getLanguage(idKG):
-    metadata = getDatasetMetadata(idKG)
+    metadata = getLocalDatasetMetadata(idKG)
     for item in metadata:
         if item["metadata"].get("id") == idKG:
             return item["metadata"].get("language")
     return False
 
 def getKeywords(idKG):
-    metadata = getDatasetMetadata(idKG)
+    metadata = getLocalDatasetMetadata(idKG)
     for item in metadata:
         if item["metadata"].get("id") == idKG:
             return item["metadata"].get("keywords")
     return []
 
 def getDOI(idKG):
-    metadata = getDatasetMetadata(idKG)
+    metadata = getLocalDatasetMetadata(idKG)
     for item in metadata:
         if item["metadata"].get("id") == idKG:
             return item["metadata"].get("doi")
@@ -227,7 +235,7 @@ def getDOI(idKG):
     
 if __name__ == "__main__":
     metadata_list = getAllDatasetIDs()
-    metadata = getDatasetMetadata("dblp")
+    metadata = getLocalDatasetMetadata("dblp")
     title = getDatasetName(metadata)
     license = getLicense(metadata)
     print(f"Title for 'dblp': {title}")

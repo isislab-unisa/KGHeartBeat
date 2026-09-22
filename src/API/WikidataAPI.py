@@ -291,6 +291,12 @@ def getLocalMetadata(qid, catalogue_path=None):
 
     return False
 
+
+def getDatasetMetadata(qid, catalogue_path=None):
+    """Return locally cached Wikidata metadata using the common API name."""
+    return getLocalMetadata(qid, catalogue_path)
+
+
 def getAllDatasetIDs(catalogue_path=None):
     path = Path(catalogue_path) if catalogue_path is not None else Path("wikidata-catalogue.json")
     if catalogue_path is None and not path.exists():
@@ -334,6 +340,8 @@ def getTriples(metadata):
 
 def getSPARQLEndpoint(qid):
     metadata = getLocalMetadata(qid)
+    if not isinstance(metadata, dict):
+        return False
     access_url = metadata.get("access_url")
     if isinstance(access_url, str) and access_url.strip():
         return access_url.strip()

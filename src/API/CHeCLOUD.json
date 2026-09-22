@@ -6934,14 +6934,42 @@
   },
   {
     "_id": "dnb-gemeinsame-normdatei0000018da796a714",
+    "identifier": "dnb-gemeinsame-normdatei",
+    "title": "Gemeinsame Normdatei (GND)",
+    "doi": "",
+    "license": "http://www.opendefinition.org/licenses/cc-zero",
+    "description": {
+      "en": "GND stands for \"Gemeinsame Normdatei\" (Integrated Authority File) and offers a broad range of elements to describe authorities. The GND originates from the German library community and aims to solve the name ambiguity problem in the library world. Corresponding data is usually expressed in a customized MARC 21 Authority Format (GND MARC Format) which is quite domain specific and is not used beyond the library and publisher world. The GND ontology tries to bridge this gap by providing a format specification for the usage in the semantic web.\n\nThe need for name disambiguity and entries having an authoritative character is an issue that concerns a lot more communities than the library world. In a growing information society the unique identification and linking of persons, places and other authorities becomes more and more important. The GND Ontology aims to transfer the made experience from libraries to the web community by providing a vocabulary for the description of differentiated and undifferentiated persons, conferences or events, corporate bodies, places or geographic names, subject headings, and works.\n\nTo ensure compatibility aspects the GND ontology aligns a number of already established vocabularies like the FOAF vocabulary.\n\nThe GND is a young specification that probably will underlie certain smaller changes. However, the currently defined classes and properties have a status of stability. But we also expect the introduction of additional elements caused by newly upcoming requirements within the community. From January 2014 on, the Linked Data Service of the German National Library (DNB) will issue scheduled releases and will be integrated in the export releases of the other formats. Changes to the conversion and to the data modelling will be made in January, May and September. Changes will be notified in advance via the Linked Data Service mailing list (http://lists.dnb.de/mailman/listinfo/lds) and the Integrated\nAuthority File GND Ontology mailing list (http://lists.dnb.de/mailman/listinfo/gnd-ontology). Please subscribe if you are interested in receiving information about future developments in DNB Linked Data Services.\nIn a schedule corresponding to the export releases, updated dumps of the authority and bibliographic data in RDF/XML and Turtle will be available for download in February, June and October.\n\nThe authors welcome comments on this document, preferably via the public GND ontology list; public archives are available. \n\nThe Integrated Authority File\n\nThe \"Gemeinsame Normdatei\" (GND, Integrated Authority File) brings together the content of the former Corporate Body Authority File GKD (Gemeinsame Körperschaftsdatei), the Name Authority File PND (Personennamendatei), the Subject Headings Authority File SWD (Schlagwortnormdatei) and the Uniform Title File of the Deutsches Musikarchiv EST file (Einheitssachtitel-Datei ) to form an integrated authority file.\n\nThe target has therefore been reached of setting up an authority file which covers all types of entities and which serves as a common, authoritative reference system for libraries' bibliographic data and for the cataloging data of other authority file users such as archives, museums, projects, scientific and cultural institutions. All library networks in the German-speaking countries and the German Union Catalogue of Serials (ZDB) are involved in the GND project alongside the German National Library.\n\nThe GND should consign to the past problems arising from different formats, parallel storage of data records and different rules for descriptive and subject cataloging.\n\nThe objective of the GND is to form a modern, web-compatible authority file which is capable of networking the wide range of resources and information held by libraries and other cultural institutions in the German-speaking countries and making these accessible to users. To approach a web-compatible authority file we also provide the GND as linked data. Therefore we developed an independent GND specific vocabulary (GND Ontology) that almost completely covers the offered GND concepts provided in MARC 21. "
+    },
+    "sparql": [
+      {
+        "access_url": "https://sparql.dnb.de/",
+        "title": "DNB SPARQL Service - BETA",
+        "description": ""
+      }
+    ],
+    "full_download": [
+      {
+        "title": "Gemeinsame Normdatei (Integrated Authority File) ",
+        "download_url": "https://data.dnb.de/opendata/authorities-gnd_lds.nt.gz",
+        "description": "nTriples"
+      },
+      {
+        "title": "Gemeinsame Normdatei (Integrated Authority File) ",
+        "download_url": "https://data.dnb.de/opendata/authorities-gnd_lds.hdt.gz",
+        "description": "HDT"
+      }
+    ],
+    "website": "https://www.dnb.de/lds",
+    "domain": "cultural-heritage",
+    "contact_point": {
+      "name": "Deutsche Nationalbibliothek and German Library Networks",
+      "email": "metadatendienste@dnb.de"
+    },
     "owner": {
       "name": "",
       "email": "tracy.hoffmann@gmail.com"
     },
-    "identifier": "dnb-gemeinsame-normdatei",
-    "image": "",
-    "website": "https://www.dnb.de/lds",
-    "triples": "165639860",
     "keywords": [
       "authorities",
       "bibliographic",
@@ -6967,228 +6995,121 @@
       "cultural-heritage",
       "ch-tangible"
     ],
-    "full_download": [
-      {
-        "_id": "872034eb-5868-b299-6f1f-cbf4a6249c7e",
-        "title": "Gemeinsame Normdatei (Integrated Authority File) ",
-        "description": "nTriples",
-        "access_url": "",
-        "media_type": "application/x-gzip",
-        "download_url": "https://data.dnb.de/opendata/authorities-gnd_lds.nt.gz",
-        "mirror": [],
-        "status": "FAIL (Unhandled content type. Must be text/*, application/xml, or application/*+xml)"
-      },
-      {
-        "_id": "3783e36e-3dda-e7a0-c305-fbaf92839f01",
-        "title": "Gemeinsame Normdatei (Integrated Authority File) ",
-        "description": "HDT",
-        "access_url": "",
-        "media_type": "application/x-gzip",
-        "download_url": "https://data.dnb.de/opendata/authorities-gnd_lds.hdt.gz",
-        "mirror": [],
-        "status": "FAIL (Unhandled content type. Must be text/*, application/xml, or application/*+xml)"
-      }
-    ],
-    "description": {
-      "en": "GND stands for \"Gemeinsame Normdatei\" (Integrated Authority File) and offers a broad range of elements to describe authorities. The GND originates from the German library community and aims to solve the name ambiguity problem in the library world. Corresponding data is usually expressed in a customized MARC 21 Authority Format (GND MARC Format) which is quite domain specific and is not used beyond the library and publisher world. The GND ontology tries to bridge this gap by providing a format specification for the usage in the semantic web.\n\nThe need for name disambiguity and entries having an authoritative character is an issue that concerns a lot more communities than the library world. In a growing information society the unique identification and linking of persons, places and other authorities becomes more and more important. The GND Ontology aims to transfer the made experience from libraries to the web community by providing a vocabulary for the description of differentiated and undifferentiated persons, conferences or events, corporate bodies, places or geographic names, subject headings, and works.\n\nTo ensure compatibility aspects the GND ontology aligns a number of already established vocabularies like the FOAF vocabulary.\n\nThe GND is a young specification that probably will underlie certain smaller changes. However, the currently defined classes and properties have a status of stability. But we also expect the introduction of additional elements caused by newly upcoming requirements within the community. From January 2014 on, the Linked Data Service of the German National Library (DNB) will issue scheduled releases and will be integrated in the export releases of the other formats. Changes to the conversion and to the data modelling will be made in January, May and September. Changes will be notified in advance via the Linked Data Service mailing list (http://lists.dnb.de/mailman/listinfo/lds) and the Integrated\nAuthority File GND Ontology mailing list (http://lists.dnb.de/mailman/listinfo/gnd-ontology). Please subscribe if you are interested in receiving information about future developments in DNB Linked Data Services.\nIn a schedule corresponding to the export releases, updated dumps of the authority and bibliographic data in RDF/XML and Turtle will be available for download in February, June and October.\n\nThe authors welcome comments on this document, preferably via the public GND ontology list; public archives are available. \n\nThe Integrated Authority File\n\nThe \"Gemeinsame Normdatei\" (GND, Integrated Authority File) brings together the content of the former Corporate Body Authority File GKD (Gemeinsame Körperschaftsdatei), the Name Authority File PND (Personennamendatei), the Subject Headings Authority File SWD (Schlagwortnormdatei) and the Uniform Title File of the Deutsches Musikarchiv EST file (Einheitssachtitel-Datei ) to form an integrated authority file.\n\nThe target has therefore been reached of setting up an authority file which covers all types of entities and which serves as a common, authoritative reference system for libraries' bibliographic data and for the cataloging data of other authority file users such as archives, museums, projects, scientific and cultural institutions. All library networks in the German-speaking countries and the German Union Catalogue of Serials (ZDB) are involved in the GND project alongside the German National Library.\n\nThe GND should consign to the past problems arising from different formats, parallel storage of data records and different rules for descriptive and subject cataloging.\n\nThe objective of the GND is to form a modern, web-compatible authority file which is capable of networking the wide range of resources and information held by libraries and other cultural institutions in the German-speaking countries and making these accessible to users. To approach a web-compatible authority file we also provide the GND as linked data. Therefore we developed an independent GND specific vocabulary (GND Ontology) that almost completely covers the offered GND concepts provided in MARC 21. "
-    },
-    "title": "Gemeinsame Normdatei (GND)",
+    "Image": "",
     "example": [
       {
         "title": "Example Person",
-        "media_type": "example/rdf+xml",
-        "description": "Example (Turtle)",
         "access_url": "https://d-nb.info/gnd/118514768/about/lds",
-        "status": "FAIL (400)"
+        "description": "Example (Turtle)"
       },
       {
         "title": "Example Subject Heading",
-        "media_type": "example/rdf+xml",
-        "description": "Example (Turtle)",
         "access_url": "https://d-nb.info/gnd/4190055-8/about/lds",
-        "status": "FAIL (400)"
+        "description": "Example (Turtle)"
       },
       {
         "title": "Example Corporate Body",
-        "media_type": "example/rdf+xml",
-        "description": "Example (Turtle)",
         "access_url": "https://d-nb.info/gnd/10140798-1/about/lds",
-        "status": "FAIL (400)"
+        "description": "Example (Turtle)"
       },
       {
         "title": "Example Person",
-        "media_type": "example/rdf+xml",
-        "description": "Example (Turtle)",
         "access_url": "https://d-nb.info/gnd/11850553X/about/lds",
-        "status": "FAIL (400)"
+        "description": "Example (Turtle)"
       }
     ],
-    "license": "http://www.opendefinition.org/licenses/cc-zero",
     "other_download": [
       {
-        "_id": "c4f79b02-b466-5202-5d33-60fe72a8f7e8",
         "title": "Gemeinsame Normdatei (Integrated Authority File)  - Geographical entity",
-        "description": "JSONLD",
         "access_url": "https://data.dnb.de/opendata/authorities-gnd-geografikum_lds.jsonld.gz",
-        "media_type": "application/x-gzip",
-        "mirror": [],
-        "status": "FAIL (Unhandled content type. Must be text/*, application/xml, or application/*+xml)"
+        "description": "JSONLD"
       },
       {
-        "_id": "8d5f8fd9-909a-9e51-3ff6-5c84691b92c5",
         "title": "Gemeinsame Normdatei (Integrated Authority File)  - Geographical entity",
-        "description": "RDF/XML",
         "access_url": "https://data.dnb.de/opendata/authorities-gnd-geografikum_lds.rdf.gz",
-        "media_type": "application/x-gzip",
-        "mirror": [],
-        "status": "FAIL (Unhandled content type. Must be text/*, application/xml, or application/*+xml)"
+        "description": "RDF/XML"
       },
       {
-        "_id": "d97604b9-a358-c85c-380a-97cf28eee0c0",
         "title": "Gemeinsame Normdatei (Integrated Authority File)  - Geographical entity",
-        "description": "Turtle",
         "access_url": "https://data.dnb.de/opendata/authorities-gnd-geografikum_lds.ttl.gz",
-        "media_type": "application/x-gzip",
-        "mirror": [],
-        "status": "FAIL (Unhandled content type. Must be text/*, application/xml, or application/*+xml)"
+        "description": "Turtle"
       },
       {
-        "_id": "1cac69f9-725d-6cd6-536e-8ad24408c4ec",
         "title": "Gemeinsame Normdatei (Integrated Authority File)  -  Corporate body",
-        "description": "JSONLD",
         "access_url": "https://data.dnb.de/opendata/authorities-gnd-koerperschaft_lds.jsonld.gz",
-        "media_type": "application/x-gzip",
-        "mirror": [],
-        "status": "FAIL (Unhandled content type. Must be text/*, application/xml, or application/*+xml)"
+        "description": "JSONLD"
       },
       {
-        "_id": "9b329d05-5d55-299b-1b5a-78a29728b376",
         "title": "Gemeinsame Normdatei (Integrated Authority File)  -  Corporate body",
-        "description": "RDF/XML",
         "access_url": "https://data.dnb.de/opendata/authorities-gnd-koerperschaft_lds.rdf.gz",
-        "media_type": "application/x-gzip",
-        "mirror": [],
-        "status": "FAIL (Unhandled content type. Must be text/*, application/xml, or application/*+xml)"
+        "description": "RDF/XML"
       },
       {
-        "_id": "63d89a6d-a39d-52e8-6f2f-db13ed2c63f1",
         "title": "Gemeinsame Normdatei (Integrated Authority File)  -  Corporate body",
-        "description": "Turtle",
         "access_url": "https://data.dnb.de/opendata/authorities-gnd-koerperschaft_lds.ttl.gz",
-        "media_type": "application/x-gzip",
-        "mirror": [],
-        "status": "FAIL (Unhandled content type. Must be text/*, application/xml, or application/*+xml)"
+        "description": "Turtle"
       },
       {
-        "_id": "873b659e-29ff-6724-21a2-aeb2f55e51ae",
         "title": "Gemeinsame Normdatei (Integrated Authority File)  -  Congress",
-        "description": "JSONLD",
         "access_url": "https://data.dnb.de/opendata/authorities-gnd-kongress_lds.jsonld.gz",
-        "media_type": "application/x-gzip",
-        "mirror": [],
-        "status": "FAIL (Unhandled content type. Must be text/*, application/xml, or application/*+xml)"
+        "description": "JSONLD"
       },
       {
-        "_id": "150b73b6-c397-e00b-1196-c568e6467428",
         "title": "Gemeinsame Normdatei (Integrated Authority File)  -  Congress",
-        "description": "RDF/XML",
         "access_url": "https://data.dnb.de/opendata/authorities-gnd-kongress_lds.rdf.gz",
-        "media_type": "application/x-gzip",
-        "mirror": [],
-        "status": "FAIL (Unhandled content type. Must be text/*, application/xml, or application/*+xml)"
+        "description": "RDF/XML"
       },
       {
-        "_id": "b89465bc-4c3e-2210-a6bf-42ce1dbd87fe",
         "title": "Gemeinsame Normdatei (Integrated Authority File)  -  Congress",
-        "description": "Turtle",
         "access_url": "https://data.dnb.de/opendata/authorities-gnd-kongress_lds.turtle.gz",
-        "media_type": "text/trutle",
-        "mirror": [],
-        "status": "FAIL (HTTP error fetching URL. Status=404, URL=[https://data.dnb.de/opendata/authorities-gnd-kongress_lds.turtle.gz])"
+        "description": "Turtle"
       },
       {
-        "_id": "034993ed-a66b-8004-b14a-93ec123e4209",
         "title": "Gemeinsame Normdatei (Integrated Authority File)  - Person",
-        "description": "JSONLD",
         "access_url": "https://data.dnb.de/opendata/authorities-gnd-person_lds.jsonld.gz",
-        "media_type": "application/x-gzip",
-        "mirror": [],
-        "status": "FAIL (Unhandled content type. Must be text/*, application/xml, or application/*+xml)"
+        "description": "JSONLD"
       },
       {
-        "_id": "51f3323d-81ae-47ea-d23b-c697bc0150c6",
         "title": "Gemeinsame Normdatei (Integrated Authority File)  - Person",
-        "description": "RDF/XML",
         "access_url": "https://data.dnb.de/opendata/authorities-gnd-person_lds.rdf.gz",
-        "media_type": "application/x-gzip",
-        "mirror": [],
-        "status": "FAIL (Unhandled content type. Must be text/*, application/xml, or application/*+xml)"
+        "description": "RDF/XML"
       },
       {
-        "_id": "648cc749-43ce-beb4-0431-4a663e58a1d2",
         "title": "Gemeinsame Normdatei (Integrated Authority File)  - Person",
-        "description": "Turtle",
         "access_url": "https://data.dnb.de/opendata/authorities-gnd-person_lds.ttl.gz",
-        "media_type": "application/x-gzip",
-        "mirror": [],
-        "status": "FAIL (Unhandled content type. Must be text/*, application/xml, or application/*+xml)"
+        "description": "Turtle"
       },
       {
-        "_id": "9681de93-2358-c5a2-6c4c-59acbcdf5399",
         "title": "Gemeinsame Normdatei (Integrated Authority File)  - Subject term",
-        "description": "JSONLD",
         "access_url": "https://data.dnb.de/opendata/authorities-gnd-sachbegriff_lds.jsonld.gz",
-        "media_type": "application/x-gzip",
-        "mirror": [],
-        "status": "FAIL (Unhandled content type. Must be text/*, application/xml, or application/*+xml)"
+        "description": "JSONLD"
       },
       {
-        "_id": "5f813a99-c4da-6bc0-a292-dae4c0f69bd4",
         "title": "Gemeinsame Normdatei (Integrated Authority File)  - Subject term",
-        "description": "RDF/XML",
         "access_url": "https://data.dnb.de/opendata/authorities-gnd-sachbegriff_lds.rdf.gz",
-        "media_type": "application/x-gzip",
-        "mirror": [],
-        "status": "FAIL (Unhandled content type. Must be text/*, application/xml, or application/*+xml)"
+        "description": "RDF/XML"
       },
       {
-        "_id": "315ad3d7-b185-323e-f551-b190dea98e0e",
         "title": "Gemeinsame Normdatei (Integrated Authority File)  - Subject term",
-        "description": "Turtle",
         "access_url": "https://data.dnb.de/opendata/authorities-gnd-sachbegriff_lds.ttl.gz",
-        "media_type": "application/x-gzip",
-        "mirror": [],
-        "status": "FAIL (Unhandled content type. Must be text/*, application/xml, or application/*+xml)"
+        "description": "Turtle"
       },
       {
-        "_id": "f036e5f3-1f4d-1a30-6595-d6ca5c9b5b95",
         "title": "Gemeinsame Normdatei (Integrated Authority File)  - Work",
-        "description": "JSONLD",
         "access_url": "https://data.dnb.de/opendata/authorities-gnd-werk_lds.jsonld.gz",
-        "media_type": "application/x-gzip",
-        "mirror": [],
-        "status": "FAIL (Unhandled content type. Must be text/*, application/xml, or application/*+xml)"
+        "description": "JSONLD"
       },
       {
-        "_id": "6afe8bdd-c8c5-098a-85de-f8909b1f9265",
         "title": "Gemeinsame Normdatei (Integrated Authority File)  - Work",
-        "description": "RDF/XML",
         "access_url": "https://data.dnb.de/opendata/authorities-gnd-werk_lds.rdf.gz",
-        "media_type": "application/x-gzip",
-        "mirror": [],
-        "status": "FAIL (Unhandled content type. Must be text/*, application/xml, or application/*+xml)"
+        "description": "RDF/XML"
       },
       {
-        "_id": "3e9fd746-f942-a55a-9b8b-4f902798296e",
         "title": "Gemeinsame Normdatei (Integrated Authority File)  - Work",
-        "description": "Turtle",
         "access_url": "https://data.dnb.de/opendata/authorities-gnd-werk_lds.ttl.gz",
-        "media_type": "application/x-gzip",
-        "mirror": [],
-        "status": "FAIL (Unhandled content type. Must be text/*, application/xml, or application/*+xml)"
+        "description": "Turtle"
       }
     ],
-    "domain": "cultural-heritage",
     "namespace": "https://d-nb.info/gnd/",
     "links": [
       {
@@ -7204,23 +7125,19 @@
         "value": "9317888"
       },
       {
-        "_id": "25ba8651-8adb-3fd5-2b94-1a205f82e2a3",
         "target": "geonames-semantic-web",
         "value": "63754"
       },
       {
-        "_id": "3dcc45ae-76ce-1e1c-a6c1-f21c553e6fe8",
         "target": "wikidata",
         "value": "1785108"
       }
     ],
     "time": "0000018da796a714",
-    "sparql": [],
-    "doi": "",
-    "contact_point": {
-      "name": "Deutsche Nationalbibliothek and German Library Networks",
-      "email": "metadatendienste@dnb.de"
-    }
+    "triples": "165639860",
+    "category": "ch-tangible",
+    "image": "",
+    "newKeyword": ""
   },
   {
     "_id": "english-heritage-periods-list",
@@ -16918,5 +16835,62 @@
     "links": [],
     "time": "",
     "triples": 0
+  },
+  {
+    "_id": "CEBEME",
+    "identifier": "CEBEME",
+    "title": "Continental European Books in Early Modern England, 1500-1640",
+    "doi": "10.48420/31149868",
+    "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "description": {
+      "en": "Dataset of AHRC-funded project Continental European Books in Early Modern England, 1500-1640: A New Approach Using Bibliographic Data Science (CEBEME).\n\nThe CEBEME project set out to expand our knowledge and understanding of the depth, scope, and significance of early modern England’s transnational literary connections by creating the largest dataset to date on foreign books in England between 1500 and 1640, covering all key aspects of the translation, importation, sale, and ownership of books printed in Continental Europe in England.\n\nThe project addressed the following research questions:\n\n- What foreign-language books printed abroad were available early modern England? Which subjects, authors, and works were most popular? In which languages? Where had imported or translated books been printed?\n- Who had access to foreign books in early modern England? How did the circulation of imported or translated books vary depending on the location and social background of readers?\n\nThe project drew on Bibliographic Data Science to harmonize the following five source datasets as Linked Open Data:\n\n1. Renaissance Cultural Crossroads Catalogue (https://www.dhi.ac.uk/data/rcc).\n2. Private Libraries in Renaissance England (https://plre.folger.edu/).\n3. Provincial Booksellers (from the Appendix to Jennifer Winters, ‘The English Provincial Book Trade: Bookseller Stock-Lists, c.1520-1640’ (PhD thesis, University of St Andrews, 2012), available for download at https://hdl.handle.net/10023/3449).\n4. Plantin Sales (ZvL) (Excel spreadsheet with sales of Christophe Plantin to English buyers (1558–89) produced by Zanna van Loon, Curator of Rare Books and Manuscripts at the Museum Plantin-Moretus in Antwerp).\n5. Plantin Sales (CEBEME) (dataset produced by project based on records of sales by Officina Plantiniana to English buyers, 1590-1610).\n\nUsers should refer to the documentation included for detailed information on what is included in the project database and the technical specifications. The database can be accessed via a user interface on the web at https://cebeme.manchester.ac.uk/."
+    },
+    "sparql": [
+      {
+        "access_url": "https://jena.cebeme.manchester.ac.uk/CEBEME/sparql",
+        "title": "",
+        "description": ""
+      }
+    ],
+    "full_download": [
+      {
+        "title": "",
+        "download_url": "https://doi.org/10.48420/31149868",
+        "description": ""
+      }
+    ],
+    "website": "https://cebeme.manchester.ac.uk/",
+    "domain": "cultural-heritage",
+    "contact_point": {
+      "name": "Dr Fred Schurink",
+      "email": "fred.schurink@manchester.ac.uk"
+    },
+    "owner": {
+      "name": "Dr Fred Schurink",
+      "email": "fred.schurink@manchester.ac.uk"
+    },
+    "keywords": [
+      "ch-tangible"
+    ],
+    "Image": "",
+    "example": [
+      {
+        "title": "",
+        "access_url": "https://cebeme.manchester.ac.uk/data/pb/item/1537",
+        "description": ""
+      }
+    ],
+    "other_download": [],
+    "namespace": "http://cebeme.manchester.ac.uk/data/",
+    "links": [
+      {
+        "target": "viaf",
+        "value": "7011"
+      }
+    ],
+    "time": "",
+    "triples": "3739514",
+    "category": "ch-tangible",
+    "newKeyword": ""
   }
 ]
