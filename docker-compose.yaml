@@ -1,0 +1,118 @@
+name: kgheartbeat
+
+x-python: &python
+  image: kgheartbeat:local
+  build: .
+  init: true
+
+x-assessment-environment: &assessment-environment
+  KGH_STATE_DIR: /app/var/assessments
+  KGH_PUBLIC_URL: ${KGH_PUBLIC_URL:-http://localhost:8000}
+  KGH_CORS_ORIGINS: ${KGH_CORS_ORIGINS:-http://localhost:3001}
+
+services:
+  kgheartbeat:
+    <<: *python
+    volumes:
+      - ./src/configuration.json:/app/src/configuration.json:ro
+      - ./Analysis results:/app/Analysis results
+    restart: "no"
+
+  mongodb:
+    image: mongo:7
+    profiles: [mongodb, webapp, import]
+    volumes:
+      - mongodb-data:/data/db
+    # Accessible only on the Compose network; no host port is published.
+    healthcheck:
+      test: [CMD, mongosh, --quiet, --eval, "quit(db.adminCommand('ping').ok ? 0 : 1)"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+  import-results:
+    <<: *python
+    profiles: [import]
+    command: [python, /app/docker/import_results.py]
+    environment:
+      MONGO_URI: ${MONGO_URI:-mongodb://mongodb:27017}
+      DB_NAME: ${DB_NAME:-KGHeartbeatDB}
+    volumes:
+      - ./Analysis results:/app/Analysis results
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    restart: "no"
+
+  backend:
+    profiles: [webapp]
+    build: ./KGHeartbeat-WebApp/back-end
+    environment:
+      MONGO_URI: ${MONGO_URI:-mongodb://mongodb:27017}
+      DB_NAME: ${DB_NAME:-KGHeartbeatDB}
+      PORT: 5006
+      SPARQL_ENDPOINT_URL: ${SPARQL_ENDPOINT_URL:-http://triplestore:3030/fair/sparql}
+      SPARQL_DATASET_NAME: fair
+    ports:
+      - "127.0.0.1:5006:5006"
+    volumes:
+      - ./Analysis results:/app/analysis_data:ro
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    restart: unless-stopped
+
+  frontend:
+    profiles: [webapp]
+    build:
+      context: ./KGHeartbeat-WebApp/front-end/kg-heartbeat
+      args:
+        REACT_APP_API_URL: ${REACT_APP_API_URL:-http://localhost:5006/}
+        REACT_APP_ASSESSMENT_API_URL: ${KGH_PUBLIC_URL:-http://localhost:8000}
+        REACT_APP_PUBLIC_URL: ${REACT_APP_PUBLIC_URL:-http://localhost:3001}
+    ports:
+      - "127.0.0.1:3001:3001"
+    depends_on:
+      - backend
+      - assessment-api
+    restart: unless-stopped
+
+  assessment-api:
+    <<: *python
+    profiles: [webapp]
+    working_dir: /app
+    command: [python, -m, uvicorn, 'assessment_service.api:create_app', --factory, --host, 0.0.0.0, --port, '8000', --no-proxy-headers, --no-access-log]
+    environment: *assessment-environment
+    volumes:
+      - assessment-data:/app/var/assessments
+    ports:
+      - "127.0.0.1:8000:8000"
+    restart: unless-stopped
+
+  assessment-worker:
+    <<: *python
+    profiles: [webapp]
+    working_dir: /app
+    command: [python, -m, assessment_service.worker]
+    environment: *assessment-environment
+    volumes:
+      - assessment-data:/app/var/assessments
+    restart: unless-stopped
+
+  # Optional RDF query UI support, using the existing webapp's Fuseki services.
+  triplestore:
+    profiles: [sparql]
+    extends:
+      file: ./KGHeartbeat-WebApp/docker-compose.yml
+      service: triplestore
+  triplestore-init:
+    profiles: [sparql]
+    extends:
+      file: ./KGHeartbeat-WebApp/docker-compose.yml
+      service: triplestore-init
+
+volumes:
+  mongodb-data:
+  assessment-data:
+  fuseki-data:
