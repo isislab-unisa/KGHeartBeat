@@ -1,12 +1,14 @@
 import yaml
 import requests
 import json
+from pathlib import Path
 
 API = "https://api.github.com"
 OWNER = "dbpedia"
 REPO = "kg-catalog"
 BRANCH = "main"
 PREFIX = "knowledge-graphs/"
+SNAPSHOT_PATH = Path(__file__).with_name("kg-catalog-metadata.json")
 
 def json_default(value):
     """Convert YAML date/datetime values into JSON-compatible strings."""
@@ -15,73 +17,93 @@ def json_default(value):
     return str(value)
 
 
-def getAllDatasetIDs(repo_url = f"{API}/repos/{OWNER}/{REPO}/git/trees/{BRANCH}?recursive=1"):
+def _load_snapshot(snapshot_path=SNAPSHOT_PATH, announce=False):
+    """Load the last complete KG Catalog snapshot."""
+    try:
+        with Path(snapshot_path).open(encoding="utf-8") as source:
+            results = json.load(source)
+        if not isinstance(results, list):
+            raise ValueError("KG Catalog snapshot must contain a JSON list")
+        if announce:
+            print(f"Loaded {len(results)} knowledge graphs from local KG Catalog snapshot")
+        return results
+    except FileNotFoundError:
+        print(f"KG Catalog snapshot not found: {snapshot_path}")
+    except (OSError, ValueError) as error:
+        print(f"Could not load KG Catalog snapshot {snapshot_path}: {error}")
+    return []
+
+
+def getAllDatasetIDs(
+    repo_url=f"{API}/repos/{OWNER}/{REPO}/git/trees/{BRANCH}?recursive=1",
+    snapshot_path=SNAPSHOT_PATH,
+):
+    """Refresh KG Catalog metadata, falling back to the local snapshot."""
 
     headers = {
         "Accept": "application/vnd.github+json"
     }
 
-    response = requests.get(
-        repo_url,
-        headers=headers
-    )
-    response.raise_for_status()
-
-    tree = response.json()["tree"]
-
-    metadata_paths = [
-    item["path"]
-    for item in tree
-    if item["type"] == "blob"
-    and item["path"].startswith(PREFIX)
-    and item["path"].endswith("/metadata.yaml")
-]
-    results = []
-
-    for path in metadata_paths:
-        raw_url = (
-            f"https://raw.githubusercontent.com/"
-            f"{OWNER}/{REPO}/{BRANCH}/{path}"
-        )
-
-        metadata_response = requests.get(raw_url)
-        metadata_response.raise_for_status()
-        
-
-        metadata = yaml.safe_load(metadata_response.text)
-        results.append({
-            "directory": path.removesuffix("/metadata.yaml"),
-            "metadata": metadata
-        })
+    try:
+        response = requests.get(repo_url, headers=headers, timeout=15)
+        response.raise_for_status()
+        tree = response.json()["tree"]
+        metadata_paths = [
+            item["path"]
+            for item in tree
+            if item.get("type") == "blob"
+            and isinstance(item.get("path"), str)
+            and item["path"].startswith(PREFIX)
+            and item["path"].endswith("/metadata.yaml")
+        ]
+        results = []
+        for path in metadata_paths:
+            raw_url = (
+                f"https://raw.githubusercontent.com/"
+                f"{OWNER}/{REPO}/{BRANCH}/{path}"
+            )
+            metadata_response = requests.get(raw_url, headers=headers, timeout=15)
+            metadata_response.raise_for_status()
+            metadata = yaml.safe_load(metadata_response.text)
+            if not isinstance(metadata, dict):
+                raise ValueError(f"Invalid metadata document: {path}")
+            results.append({
+                "directory": path.removesuffix("/metadata.yaml"),
+                "metadata": metadata,
+            })
+    except (requests.RequestException, KeyError, TypeError, ValueError, yaml.YAMLError) as error:
+        print(f"Could not refresh KG Catalog metadata ({error}); using local snapshot")
+        return _load_snapshot(snapshot_path, announce=True)
 
     print(f"Found {len(results)} knowledge graphs")
 
     if results:
-        print(f"Saving metadata to kg-catalog-metadata.json")
-        with open("kg-catalog-metadata.json", "w", encoding="utf-8") as f:
-            json.dump(
-                results,
-                f,
-                ensure_ascii=False,
-                indent=2,
-                default=json_default,
-            )
+        print(f"Saving metadata to {snapshot_path}")
+        try:
+            with Path(snapshot_path).open("w", encoding="utf-8") as output:
+                json.dump(
+                    results,
+                    output,
+                    ensure_ascii=False,
+                    indent=2,
+                    default=json_default,
+                )
+        except OSError as error:
+            print(f"Could not save KG Catalog snapshot: {error}")
     else:
-        with open("kg-catalog-metadata.json", "r", encoding="utf-8") as f:
-            results = json.load(f)
+        return _load_snapshot(snapshot_path, announce=True)
 
     return results
 
 def getDatasetMetadata(idKG):
-    metadata_list = getAllDatasetIDs()
+    metadata_list = _load_snapshot()
     for item in metadata_list:
         if item["metadata"].get("id") == idKG:
             return item["metadata"]
     return False
 
 def getLocalDatasetMetadata(idKG):
-    with open("kg-catalog-metadata.json", "r", encoding="utf-8") as f:
-        metadata_list = json.load(f)
+    metadata_list = _load_snapshot()
     for item in metadata_list:
         if item["metadata"].get("id") == idKG:
             return item["metadata"]
