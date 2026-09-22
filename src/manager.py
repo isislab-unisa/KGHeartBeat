@@ -18,6 +18,8 @@ from evaluate_fairness import EvaluateFAIRness
 from evaluate_human_centered_acc import EvaluateHumanCenteredAcc
 from API import CHeCloudAPI
 from API import YummyDataAPI
+from API import WikidataAPI
+from API import KGCatalogAPI
 useDB = False
 # try :
 #     import pymongo
@@ -79,10 +81,15 @@ if (len(id) == 1 and 'all' in id) or (len(name) == 1 and 'all' in name) or (len(
     CHe_Cloud = CHeCloudAPI.getAllDatasetIDs()
     monitoring_requests = MonitoringRequests()
     kg_added_by_users = monitoring_requests.getIDs()
+    kg_catalog = KGCatalogAPI.getAllDatasetIDs()
+    wikidata_kg = WikidataAPI.getWikidataSPARQLEndpoint(include_metadata=True)
+    wikidata_kg_ids = WikidataAPI.getAllDatasetIDs()
     print(f"Number of KG found from AGAPI: {len(kgFound)}")
     print(f"Number of KGs from monitoring requests: {len(kg_added_by_users)}")
     print(f"Number of KGs from CHe Cloud: {len(CHe_Cloud)}")
-    toAnalyze = toAnalyze + kgFound + kg_added_by_users + CHe_Cloud
+    print(f"Number of KGs from KGCatalog: {len(kg_catalog)}")
+    print(f"Number of KGs from Wikidata: {len(wikidata_kg_ids)}")
+    toAnalyze = toAnalyze + kgFound + kg_added_by_users + CHe_Cloud + kg_catalog + wikidata_kg_ids
 
 toAnalyze = toAnalyze + tuple_id
 toAnalyze = list(dict.fromkeys(toAnalyze)) #CLEAN THE LIST FROM DUPLICATES
