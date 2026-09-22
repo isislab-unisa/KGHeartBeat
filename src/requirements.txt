@@ -15,10 +15,12 @@ xmltodict==0.12.0
 scipy
 python-dotenv
 pyoxigraph>=0.5,<0.6
-# Uncomment the following line if you want to re-execute experiments for KG generation from CSV using LLMs
-# langchain
-# langchain-core
-# langchain_community
-# langchain_openai
-# langchain_google_genai
-# langchain_google_vertexai
+PyYAML==6.0.2
+nltk==3.9.1
+#Uncomment the following line if you want to re-execute experiments of CSV to KG conversion with LLMs
+langchain
+langchain-core
+langchain_community
+langchain_openai
+langchain_google_genai
+langchain_google_vertexai

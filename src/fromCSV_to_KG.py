@@ -4,9 +4,6 @@ from rdflib.namespace import RDF, RDFS, XSD, DCTERMS, FOAF
 import os
 import csv
 from itertools import islice    
-from langchain_core.prompts import PromptTemplate
-from from_kg_to_csv.prompt_llms  import PromptLLMS
-from from_kg_to_csv.evaluate_answer import EvaluateKG
 from datetime import datetime
 from pathlib import Path
 import re
@@ -27,6 +24,9 @@ def read_csv_in_blocks(filename, block_dimension = 10):
 
 
 def convert_to_kg_with_llms(filename,block_dimension):
+    from langchain_core.prompts import PromptTemplate
+    from from_kg_to_csv.prompt_llms  import PromptLLMS
+    from from_kg_to_csv.evaluate_answer import EvaluateKG
     # Read and trasfromt the ttl ontology into text
     with open(ontology_path) as f:
         ttl_text = f.read() + '\n'
