@@ -12,14 +12,17 @@ from SPARQLWrapper import JSON, POST, SPARQLWrapper
 
 WIKIDATA_SPARQL_URL = "https://query.wikidata.org/sparql"
 USER_AGENT = "KGHeartbeat/1.5 (https://github.com/isislab-unisa/KGHeartbeat)"
+WIKIDATA_CATALOGUE_PATH = Path(__file__).with_name("wikidata-catalogue.json")
 logger = logging.getLogger(__name__)
 
 
-def _query(query, context="query"):
-    for attempt in range(3):
+def _query(query, context="query", attempts=3):
+    for attempt in range(attempts):
         started = time.monotonic()
         try:
-            logger.info("Wikidata %s: attempt %d/3", context, attempt + 1)
+            logger.info(
+                "Wikidata %s: attempt %d/%d", context, attempt + 1, attempts
+            )
             sparql = SPARQLWrapper(WIKIDATA_SPARQL_URL)
             sparql.setMethod(POST)
             sparql.setQuery(query)
@@ -33,11 +36,11 @@ def _query(query, context="query"):
             return data
         except Exception as e:
             logger.warning(
-                "Wikidata %s failed on attempt %d/3 after %.1fs (%s): %s",
-                context, attempt + 1, time.monotonic() - started,
+                "Wikidata %s failed on attempt %d/%d after %.1fs (%s): %s",
+                context, attempt + 1, attempts, time.monotonic() - started,
                 type(e).__name__, e,
             )
-            if attempt == 2:
+            if attempt == attempts - 1:
                 return False
             time.sleep(5 * (2 ** attempt))
 
@@ -63,16 +66,61 @@ def _save_catalogue(catalogue, path):
             temporary_path.unlink()
 
 
+def _resolve_catalogue_path(catalogue_path=None):
+    if catalogue_path is None:
+        return Path(__file__).with_name("wikidata-catalogue.json")
+    path = Path(catalogue_path)
+    if path.name == "wikidata-catalogue.json" and not path.exists():
+        return Path(__file__).with_name("wikidata-catalogue.json")
+    return path
+
+
+def _load_catalogue(catalogue_path=None):
+    path = _resolve_catalogue_path(catalogue_path)
+    try:
+        with path.open(encoding="utf-8") as source:
+            catalogue = json.load(source)
+        if not isinstance(catalogue, list) or any(
+            not isinstance(entry, dict)
+            or not isinstance(entry.get("qid"), str)
+            or not isinstance(entry.get("access_url"), str)
+            or not isinstance(entry.get("metadata"), dict)
+            for entry in catalogue
+        ):
+            raise ValueError("catalogue must be a list of complete dataset entries")
+        return catalogue
+    except FileNotFoundError:
+        logger.warning("Local Wikidata catalogue not found: %s", path)
+    except (OSError, ValueError, json.JSONDecodeError) as error:
+        logger.warning("Could not load local Wikidata catalogue %s: %s", path, error)
+    return []
+
+
+def _cached_endpoint_datasets(catalogue_path, include_metadata):
+    catalogue = _load_catalogue(catalogue_path)
+    if not catalogue:
+        return False
+    logger.warning(
+        "Using %d datasets from the local Wikidata catalogue", len(catalogue)
+    )
+    if include_metadata:
+        return catalogue
+    return [
+        {key: entry[key] for key in ("qid", "title", "access_url")}
+        for entry in catalogue
+    ]
+
+
 def getWikidataSPARQLEndpoint(
-    include_metadata=False, catalogue_path="wikidata-catalogue.json"
+    include_metadata=False, catalogue_path=None
 ):
     """List endpoints; optionally fetch metadata sequentially for every result.
 
     By default, results contain only qid, title, and access_url. Use
     getMetadata(qid) to fetch metadata for selected entities separately.
-    With include_metadata=True, save each successful result to catalogue_path
-    (relative to the current working directory). Existing entries are refreshed
-    by QID and endpoint; failed requests leave saved metadata intact.
+    With include_metadata=True, save each successful result to catalogue_path.
+    Existing entries are refreshed by QID and endpoint. If endpoint discovery
+    fails, return the local catalogue without issuing further metadata queries.
     """
     query = """
 SELECT ?item ?name ?endpoint
@@ -90,10 +138,10 @@ WHERE {
 }
 ORDER BY ?name
 """
-    data = _query(query, context="endpoint discovery")
+    data = _query(query, context="endpoint discovery", attempts=1)
 
     if not data:
-        return False
+        return _cached_endpoint_datasets(catalogue_path, include_metadata)
 
     datasets = []
     for result in data.get("results", {}).get("bindings", []):
@@ -114,22 +162,13 @@ ORDER BY ?name
         })
 
     datasets.sort(key=lambda dataset: dataset["title"].casefold())
+    if not datasets:
+        logger.warning("Wikidata endpoint discovery returned no datasets")
+        return _cached_endpoint_datasets(catalogue_path, include_metadata)
     logger.info("Wikidata endpoint discovery found %d datasets", len(datasets))
     if include_metadata:
-        path = Path(catalogue_path)
-        try:
-            with path.open(encoding="utf-8") as source:
-                catalogue = json.load(source)
-        except FileNotFoundError:
-            catalogue = []
-        if not isinstance(catalogue, list) or any(
-            not isinstance(entry, dict)
-            or not isinstance(entry.get("qid"), str)
-            or not isinstance(entry.get("access_url"), str)
-            or not isinstance(entry.get("metadata"), dict)
-            for entry in catalogue
-        ):
-            raise ValueError(f"Invalid Wikidata catalogue: {path}")
+        path = _resolve_catalogue_path(catalogue_path)
+        catalogue = _load_catalogue(path) if path.exists() else []
         positions = {
             (entry["qid"], entry["access_url"]): index
             for index, entry in enumerate(catalogue)
@@ -276,14 +315,7 @@ def getLocalMetadata(qid, catalogue_path=None):
     working directory, then beside this module. If the QID is not found,
     return False.
     """
-    path = Path(catalogue_path) if catalogue_path is not None else Path("wikidata-catalogue.json")
-    if catalogue_path is None and not path.exists():
-        path = Path(__file__).with_name("wikidata-catalogue.json")
-    try:
-        with path.open(encoding="utf-8") as source:
-            catalogue = json.load(source)
-    except FileNotFoundError:
-        return False
+    catalogue = _load_catalogue(catalogue_path)
 
     for entry in catalogue:
         if entry.get("qid") == qid:
@@ -298,15 +330,7 @@ def getDatasetMetadata(qid, catalogue_path=None):
 
 
 def getAllDatasetIDs(catalogue_path=None):
-    path = Path(catalogue_path) if catalogue_path is not None else Path("wikidata-catalogue.json")
-    if catalogue_path is None and not path.exists():
-        path = Path(__file__).with_name("wikidata-catalogue.json")
-    try:
-        with path.open(encoding="utf-8") as source:
-            catalogue = json.load(source)
-    except FileNotFoundError:
-        return []
-
+    catalogue = _load_catalogue(catalogue_path)
     return [entry.get("qid") for entry in catalogue if entry.get("qid")]
 
 def getNameKG(metadata):
@@ -408,7 +432,7 @@ if __name__ == "__main__":
         help="Fetch and save metadata after each dataset (requires additional queries).",
     )
     parser.add_argument(
-        "--catalogue-path", default="wikidata-catalogue.json",
+        "--catalogue-path", default=str(WIKIDATA_CATALOGUE_PATH),
         help="JSON output path used with --include-metadata (default: %(default)s).",
     )
     args = parser.parse_args()
