@@ -3,6 +3,7 @@ import json
 import os
 import Configuration
 from API import AGAPI
+from API import Aggregator
 from API import LODCloudAPI
 import analyses as analyses
 from JsonValidator import JsonValidator
@@ -92,7 +93,13 @@ if (len(id) == 1 and 'all' in id) or (len(name) == 1 and 'all' in name) or (len(
     toAnalyze = toAnalyze + kgFound + kg_added_by_users + CHe_Cloud + kg_catalog + wikidata_kg_ids
 
 toAnalyze = toAnalyze + tuple_id
-toAnalyze = list(dict.fromkeys(toAnalyze)) #CLEAN THE LIST FROM DUPLICATES
+before_deduplication = len(toAnalyze)
+toAnalyze = Aggregator.deduplicate_datasets(toAnalyze)
+print(
+    f"Deduplicated KGs by ID, SPARQL endpoint, and RDF dump: "
+    f"{before_deduplication} -> {len(toAnalyze)}"
+)
+
 # graph = Graph.check_for_the_KGs_graph()
 # if graph:
 #     need_to_update = Graph.cheks_for_changes_in_graph()

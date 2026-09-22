@@ -1,6 +1,6 @@
 from copy import deepcopy
 import logging
-from urllib.parse import urlsplit
+from urllib.parse import urlsplit, urlunsplit
 
 from rdf_formats import rdf_media_type
 from API import DataHubAPI
@@ -10,6 +10,99 @@ from API import CHeCloudAPI
 from API import KGCatalogAPI
 from API import WikidataAPI
 import utils
+
+
+def _dataset_tuple(dataset):
+    """Normalize the dataset shapes returned by the supported catalogues."""
+    if isinstance(dataset, str):
+        return (dataset, '') if dataset.strip() else None
+    if isinstance(dataset, (tuple, list)) and dataset:
+        dataset_id = dataset[0]
+        title = dataset[1] if len(dataset) > 1 else ''
+    elif isinstance(dataset, dict):
+        metadata = dataset.get('metadata', dataset)
+        if not isinstance(metadata, dict):
+            return None
+        dataset_id = metadata.get('id') or metadata.get('qid') or metadata.get('identifier')
+        title = metadata.get('title') or metadata.get('name') or ''
+    else:
+        return None
+    if not isinstance(dataset_id, str) or not dataset_id.strip():
+        return None
+    return dataset_id.strip(), title.strip() if isinstance(title, str) else ''
+
+
+def _canonical_resource_url(value):
+    """Normalize harmless URL variations used by different catalogues."""
+    if not isinstance(value, str) or not value.strip():
+        return None
+    value = value.strip()
+    parsed = urlsplit(value)
+    if not parsed.scheme or not parsed.netloc:
+        return value
+    scheme = parsed.scheme.lower()
+    hostname = (parsed.hostname or '').lower()
+    try:
+        port = parsed.port
+    except ValueError:
+        return value
+    if port is not None and not ((scheme == 'http' and port == 80)
+                                 or (scheme == 'https' and port == 443)):
+        hostname = f'{hostname}:{port}'
+    if parsed.username:
+        credentials = parsed.username
+        if parsed.password:
+            credentials += f':{parsed.password}'
+        hostname = f'{credentials}@{hostname}'
+    path = parsed.path.rstrip('/') or '/'
+    return urlunsplit((scheme, hostname, path, parsed.query, ''))
+
+
+def deduplicate_datasets(datasets, endpoint_getter=None, dump_getter=None):
+    """Keep one KG for a shared ID, SPARQL endpoint, or RDF dump URL.
+
+    Catalogue order defines precedence. Lookup failures do not remove a KG.
+    Signatures from discarded entries are retained, allowing transitive matches
+    (same endpoint as one entry and same dump as another) to collapse together.
+    """
+    endpoint_getter = endpoint_getter or getSPARQLEndpoint
+    dump_getter = dump_getter or getRDFDumps
+    unique = []
+    known_signatures = set()
+
+    for raw_dataset in datasets:
+        dataset = _dataset_tuple(raw_dataset)
+        if dataset is None:
+            continue
+        dataset_id, _ = dataset
+        signatures = {('id', dataset_id.casefold())}
+        try:
+            endpoint = _canonical_resource_url(endpoint_getter(dataset_id))
+            if endpoint:
+                signatures.add(('sparql', endpoint))
+        except Exception as error:
+            logging.getLogger(__name__).warning(
+                'Could not resolve a SPARQL endpoint for %s during deduplication: %s',
+                dataset_id, error,
+            )
+        try:
+            for dump in dump_getter(dataset_id) or []:
+                url = dump[0] if isinstance(dump, (tuple, list)) and dump else dump
+                url = _canonical_resource_url(url)
+                if url:
+                    signatures.add(('rdf_dump', url))
+        except Exception as error:
+            logging.getLogger(__name__).warning(
+                'Could not resolve RDF dumps for %s during deduplication: %s',
+                dataset_id, error,
+            )
+
+        is_duplicate = bool(signatures & known_signatures)
+        known_signatures.update(signatures)
+        if not is_duplicate:
+            unique.append(dataset)
+
+    return unique
 
 def getDataPackage(idKG):
     metadataDH = DataHubAPI.getDataPackage(idKG)
@@ -78,6 +171,10 @@ def getLicense(metadata):
         return licenseLODC
     elif licenseDH != False:
         return licenseDH
+    elif licenseKGCatalog != False:
+        return licenseKGCatalog
+    elif licenseWikidata != False:
+        return licenseWikidata
     else:
         return False
 
