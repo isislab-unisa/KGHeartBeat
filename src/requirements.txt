@@ -18,9 +18,9 @@ pyoxigraph>=0.5,<0.6
 PyYAML==6.0.2
 nltk==3.9.1
 #Uncomment the following line if you want to re-execute experiments of CSV to KG conversion with LLMs
-langchain
-langchain-core
-langchain_community
-langchain_openai
-langchain_google_genai
-langchain_google_vertexai
+#langchain
+#langchain-core
+#langchain_community
+#langchain_openai
+#langchain_google_genai
+#langchain_google_vertexai
