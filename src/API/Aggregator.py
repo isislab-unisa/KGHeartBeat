@@ -32,7 +32,7 @@ def _dataset_tuple(dataset):
     return dataset_id.strip(), title.strip() if isinstance(title, str) else ''
 
 
-def _canonical_resource_url(value):
+def canonical_resource_url(value):
     """Normalize harmless URL variations used by different catalogues."""
     if not isinstance(value, str) or not value.strip():
         return None
@@ -77,7 +77,7 @@ def deduplicate_datasets(datasets, endpoint_getter=None, dump_getter=None):
         dataset_id, _ = dataset
         signatures = {('id', dataset_id.casefold())}
         try:
-            endpoint = _canonical_resource_url(endpoint_getter(dataset_id))
+            endpoint = canonical_resource_url(endpoint_getter(dataset_id))
             if endpoint:
                 signatures.add(('sparql', endpoint))
         except Exception as error:
@@ -88,7 +88,7 @@ def deduplicate_datasets(datasets, endpoint_getter=None, dump_getter=None):
         try:
             for dump in dump_getter(dataset_id) or []:
                 url = dump[0] if isinstance(dump, (tuple, list)) and dump else dump
-                url = _canonical_resource_url(url)
+                url = canonical_resource_url(url)
                 if url:
                     signatures.add(('rdf_dump', url))
         except Exception as error:
@@ -103,6 +103,32 @@ def deduplicate_datasets(datasets, endpoint_getter=None, dump_getter=None):
             unique.append(dataset)
 
     return unique
+
+
+def get_sparql_endpoint_signatures(datasets, endpoint_getter=None):
+    """Return canonical SPARQL endpoints associated with *datasets*.
+
+    This is useful when another source supplies direct endpoint targets after
+    catalogue datasets have already been analyzed.  Failed lookups are
+    ignored, matching the best-effort behavior of :func:`deduplicate_datasets`.
+    """
+    endpoint_getter = endpoint_getter or getSPARQLEndpoint
+    endpoints = set()
+    for raw_dataset in datasets:
+        dataset = _dataset_tuple(raw_dataset)
+        if dataset is None:
+            continue
+        try:
+            endpoint = canonical_resource_url(endpoint_getter(dataset[0]))
+        except Exception as error:
+            logging.getLogger(__name__).warning(
+                'Could not resolve a SPARQL endpoint for %s: %s',
+                dataset[0], error,
+            )
+            continue
+        if endpoint:
+            endpoints.add(endpoint)
+    return endpoints
 
 def getDataPackage(idKG):
     metadataDH = DataHubAPI.getDataPackage(idKG)

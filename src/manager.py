@@ -159,7 +159,16 @@ if (len(id) == 1 and 'all' in id) or (len(name) == 1 and 'all' in name) or (len(
     sparql_urls = YummyDataAPI.getSPARQLEndpointURLs()
 
 sparql_urls.extend(url for url in input.get('sparql_url') if url != 'all')
-direct_targets = [(url, {'sparql_endpoint': url}) for url in dict.fromkeys(sparql_urls)]
+analyzed_sparql_endpoints = Aggregator.get_sparql_endpoint_signatures(toAnalyze)
+direct_sparql_urls = []
+for url in dict.fromkeys(sparql_urls):
+    canonical_url = Aggregator.canonical_resource_url(url)
+    if canonical_url in analyzed_sparql_endpoints:
+        print(f"Skipping direct SPARQL target already analyzed: {url}")
+        continue
+    direct_sparql_urls.append(url)
+
+direct_targets = [(url, {'sparql_endpoint': url}) for url in direct_sparql_urls]
 direct_targets.extend((url, {'rdf_dump': url}) for url in dict.fromkeys(rdf_dump_urls))
 
 if direct_targets:
