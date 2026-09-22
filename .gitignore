@@ -176,3 +176,15 @@ node_modules
 .*
 yarn.lock
 parse_performance.py
+assessment_service/data/
+!assessment_service/.env-example
+
+# Container definitions and example configuration are source files.
+!/Dockerfile
+!/.dockerignore
+!/docker/.env.example
+!KGHeartbeat-WebApp/**/Dockerfile
+!KGHeartbeat-WebApp/**/.dockerignore
+!/src/Dockerfile
+!KGHeartbeat-WebApp/.gitignore
+.dockerignore
