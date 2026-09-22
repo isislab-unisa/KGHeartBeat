@@ -1,6 +1,7 @@
 import yaml
 import requests
 import json
+from functools import lru_cache
 from pathlib import Path
 
 API = "https://api.github.com"
@@ -17,13 +18,19 @@ def json_default(value):
     return str(value)
 
 
+@lru_cache(maxsize=4)
+def _read_snapshot(snapshot_path):
+    with Path(snapshot_path).open(encoding="utf-8") as source:
+        results = json.load(source)
+    if not isinstance(results, list):
+        raise ValueError("KG Catalog snapshot must contain a JSON list")
+    return results
+
+
 def _load_snapshot(snapshot_path=SNAPSHOT_PATH, announce=False):
     """Load the last complete KG Catalog snapshot."""
     try:
-        with Path(snapshot_path).open(encoding="utf-8") as source:
-            results = json.load(source)
-        if not isinstance(results, list):
-            raise ValueError("KG Catalog snapshot must contain a JSON list")
+        results = _read_snapshot(str(Path(snapshot_path).resolve()))
         if announce:
             print(f"Loaded {len(results)} knowledge graphs from local KG Catalog snapshot")
         return results
@@ -88,6 +95,7 @@ def getAllDatasetIDs(
                     indent=2,
                     default=json_default,
                 )
+            _read_snapshot.cache_clear()
         except OSError as error:
             print(f"Could not save KG Catalog snapshot: {error}")
     else:
@@ -109,50 +117,49 @@ def getLocalDatasetMetadata(idKG):
             return item["metadata"]
     return False
 
-def getDatasetName(metadata):
+
+def _local_metadata_for(metadata):
+    if not isinstance(metadata, dict):
+        return False
     idKG = metadata.get("id")
-    with open("kg-catalog-metadata.json", "r", encoding="utf-8") as f:
-        metadata_list = json.load(f)
-    for item in metadata_list:
-        if item["metadata"].get("id") == idKG:
-            return item["metadata"].get("title")
-    return False
+    if not isinstance(idKG, str) or not idKG:
+        return False
+    return getLocalDatasetMetadata(idKG)
+
+
+def getDatasetName(metadata):
+    local_metadata = _local_metadata_for(metadata)
+    return local_metadata.get("title", False) if local_metadata else False
 
 def getLicense(metadata):
-    idKG = metadata.get("id")
-    with open("kg-catalog-metadata.json", "r", encoding="utf-8") as f:
-        metadata_list = json.load(f)
-    for item in metadata_list:
-        if item["metadata"].get("id") == idKG:
-            return item["metadata"].get("license")
-    return False
+    local_metadata = _local_metadata_for(metadata)
+    return local_metadata.get("license", False) if local_metadata else False
 
 def getAuthor(metadata):
-    idKG = metadata.get("id")
-    with open("kg-catalog-metadata.json", "r", encoding="utf-8") as f:
-        metadata_list = json.load(f)
-    for item in metadata_list:
-        if item["metadata"].get("id") == idKG:
-            return item["metadata"].get("maintainers").get("name")
-    return False
+    local_metadata = _local_metadata_for(metadata)
+    if not local_metadata:
+        return False
+    maintainers = local_metadata.get("maintainers")
+    if isinstance(maintainers, dict):
+        maintainers = [maintainers]
+    if not isinstance(maintainers, list):
+        return False
+    names = [
+        maintainer.get("name").strip()
+        for maintainer in maintainers
+        if isinstance(maintainer, dict)
+        and isinstance(maintainer.get("name"), str)
+        and maintainer.get("name").strip()
+    ]
+    return ", ".join(names) if names else False
 
 def getSource(metadata):
-    idKG = metadata.get("id")
-    with open("kg-catalog-metadata.json", "r", encoding="utf-8") as f:
-        metadata_list = json.load(f)
-    for item in metadata_list:
-        if item["metadata"].get("id") == idKG:
-            return item["metadata"].get("homepage")
-    return False
+    local_metadata = _local_metadata_for(metadata)
+    return local_metadata.get("homepage", False) if local_metadata else False
 
 def getTriples(metadata):
-    idKG = metadata.get("id")
-    with open("kg-catalog-metadata.json", "r", encoding="utf-8") as f:
-        metadata_list = json.load(f)
-    for item in metadata_list:
-        if item["metadata"].get("id") == idKG:
-            return item["metadata"].get("last-version-size")
-    return False
+    local_metadata = _local_metadata_for(metadata)
+    return local_metadata.get("last-version-size", False) if local_metadata else False
 
 def getSPARQLEndpoint(idKG):
     metadata = getLocalDatasetMetadata(idKG)
@@ -226,34 +233,21 @@ def getExternalLinks(idKG):
     return []
 
 def getDescription(metadata):
-    idKG = metadata.get("id")
-    with open("kg-catalog-metadata.json", "r", encoding="utf-8") as f:
-        metadata_list = json.load(f)
-    for item in metadata_list:
-        if item["metadata"].get("id") == idKG:
-            return item["metadata"].get("description")
-    return False
+    local_metadata = _local_metadata_for(metadata)
+    return local_metadata.get("description", False) if local_metadata else False
 
 def getLanguage(idKG):
     metadata = getLocalDatasetMetadata(idKG)
-    for item in metadata:
-        if item["metadata"].get("id") == idKG:
-            return item["metadata"].get("language")
-    return False
+    return metadata.get("language", False) if metadata else False
 
 def getKeywords(idKG):
     metadata = getLocalDatasetMetadata(idKG)
-    for item in metadata:
-        if item["metadata"].get("id") == idKG:
-            return item["metadata"].get("keywords")
-    return []
+    keywords = metadata.get("keywords") if metadata else None
+    return keywords if isinstance(keywords, list) else []
 
 def getDOI(idKG):
     metadata = getLocalDatasetMetadata(idKG)
-    for item in metadata:
-        if item["metadata"].get("id") == idKG:
-            return item["metadata"].get("doi")
-    return False
+    return metadata.get("doi", False) if metadata else False
     
 if __name__ == "__main__":
     metadata_list = getAllDatasetIDs()
