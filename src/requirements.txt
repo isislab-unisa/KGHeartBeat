@@ -1,11 +1,11 @@
-bitarray==2.4.0
+bitarray==2.8.3
 jsonschema==4.4.0
-matplotlib==3.5.1
+matplotlib==3.8.2
 mechanize==0.4.7
-mmh3==3.0.0
+mmh3==4.1.0
 networkx==2.6.3
-numpy<1.28.0
-pandas==1.4.1
+numpy>=1.26.4,<2.0
+pandas==2.1.1
 rdflib==6.1.1
 requests==2.27.1
 SPARQLWrapper==2.0.0
@@ -14,10 +14,11 @@ validators==0.18.2
 xmltodict==0.12.0
 scipy
 python-dotenv
-langchain
-langchain-core
-langchain_community
-langchain_openai
-langchain_google_genai
-langchain_google_vertexai
 pyoxigraph>=0.5,<0.6
+# Uncomment the following line if you want to re-execute experiments for KG generation from CSV using LLMs
+# langchain
+# langchain-core
+# langchain_community
+# langchain_openai
+# langchain_google_genai
+# langchain_google_vertexai
