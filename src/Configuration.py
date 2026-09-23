@@ -12,4 +12,6 @@ def createConfiguration():
         data["id"] = id
         data["sparql_url"] = sparql_url
         data["rdf_dump_url"] = []
+        data["include_profile"] = True
+        data["max_parallel_kgs"] = 1
         json.dump(data,f)

@@ -1,1 +1,1 @@
-{"name": ["all"], "id": [], "sparql_url" : [], "rdf_dump_url": [],"triple_limit": null, "include_profile": true}
+{"name": ["all"], "id": [], "sparql_url" : [], "rdf_dump_url": [],"triple_limit": 1000000, "include_profile": true, "max_parallel_kgs": 20}

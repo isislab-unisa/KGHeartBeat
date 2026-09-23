@@ -16,6 +16,7 @@ class JsonValidator(InputValidator):
       "properties": {
         "triple_limit": {"type": ["integer", "null"], "minimum": 1},
         "include_profile": {"type": "boolean"},
+        "max_parallel_kgs": {"type": "integer", "minimum": 1},
         "name": {
           "type": "array",
           "items": [

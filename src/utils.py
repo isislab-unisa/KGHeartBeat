@@ -3,6 +3,7 @@ from importlib.metadata import requires
 import itertools
 from operator import truediv
 import os
+import threading
 from pathlib import Path
 from socket import timeout
 import ssl
@@ -34,6 +35,8 @@ import re
 _NETLOC_PATTERN = re.compile(r'^[\w\-\.]+(?:\:\d+)?$')
 from multiprocessing import Process, Queue
 import pandas as pd
+
+_WRITE_TIME_LOCK = threading.Lock()
 
 
 #PRINT THE METADATI OF A KG
@@ -1049,8 +1052,9 @@ def write_time(kg,time,metric,dimension,analysis_date):
     from result_paths import results_dir
     save_path = str(results_dir())
     save_path = os.path.join(save_path, f"performance-{analysis_date}.txt")
-    with open(save_path,'a') as file:
-            file.write(f'{dimension} | {metric} for {kg} took {time}s\n')
+    with _WRITE_TIME_LOCK:
+        with open(save_path,'a') as file:
+                file.write(f'{dimension} | {metric} for {kg} took {time}s\n')
 
 def update_local_kgs_spnapshot():
     url = "http://www.isislab.it:12280/kgsearchengine/brutalsearch?"

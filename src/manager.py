@@ -1,4 +1,5 @@
 from datetime import date
+from concurrent.futures import ThreadPoolExecutor, as_completed
 import json
 import os
 import Configuration
@@ -30,6 +31,60 @@ useDB = False
 # except:
 #     useDB = False
 
+
+def analyse_target(analysis_date, source, target_options, analysis_options):
+    """Run all calculations for one independent KG without writing shared output."""
+    start_analysis = time.time()
+    with analyses.analysis_session(analysis_date, **target_options, **analysis_options) as kg:
+        score = Score(kg, 20)
+        total_score, normalized_score = score.getWeightedDimensionScore(1)
+        kg.extra.score = float(f"{total_score:.3f}")
+        kg.extra.normalizedScore = float(f"{normalized_score:.3f}")
+        kg.extra.scoreObj = score
+
+        evaluation = EvaluateFAIRness(kg)
+        evaluation.evaluate_findability()
+        evaluation.evaluate_availability()
+        evaluation.evaluate_interoperability()
+        evaluation.evaluate_reusability()
+        evaluation.calculate_FAIR_score()
+        kg.fairness = evaluation.fairness
+
+        human_accessibility_evaluation = EvaluateHumanCenteredAcc(kg)
+        kg.human_accessibility = human_accessibility_evaluation.evaluate_all()
+
+    return source, kg, score, time.time() - start_analysis
+
+
+def write_analysis_result(result, output_ids, analysis_date):
+    """Write shared result files from the coordinator thread only."""
+    source, kg, score, elapsed = result
+    utils.write_time(source, elapsed, '--- Analysis', 'INFO', analysis_date)
+    OutputCSV(kg, output_ids).writeRow(analysis_date)
+    OutputCSV(kg, output_ids).writeRow(analysis_date, include_dimensions=True)
+    print(f"KG score: {kg.extra.score}")
+    if useDB:
+        mongo_interface = DBinterface()
+        mongo_interface.insert_quality_data(kg, score)
+    del kg
+    gc.collect()
+
+
+def analyse_batch(targets, output_ids, analysis_date, analysis_options, max_parallel_kgs):
+    """Analyse independent targets concurrently and persist each completed result."""
+    if not targets:
+        return
+    print(f"Analysing {len(targets)} KG(s) with {max_parallel_kgs} worker(s)")
+    with ThreadPoolExecutor(max_workers=max_parallel_kgs) as executor:
+        futures = [
+            executor.submit(analyse_target, analysis_date, source, target_options, analysis_options)
+            for source, target_options in targets
+        ]
+        # Write a result as soon as its worker finishes; CSV row order therefore
+        # reflects completion order rather than input order.
+        for future in as_completed(futures):
+            write_analysis_result(future.result(), output_ids, analysis_date)
+
 try: #GET THE CONFIGURATION FILE AND CHEK IF IT IS VALID
     here = os.path.dirname(os.path.abspath(__file__))
     configFile = os.path.join(here,'configuration.json')
@@ -55,6 +110,7 @@ except  FileNotFoundError:
 
 rdf_dump_urls = input.get('rdf_dump_url', [])
 analysis_options = {'include_profile': input.get('include_profile', True)}
+max_parallel_kgs = input.get('max_parallel_kgs', 1)
 if 'triple_limit' in input:
     analysis_options['triple_limit'] = input['triple_limit']
 if len(input.get('id')) == 0 and len(input.get('name')) == 0 and len(input.get('sparql_url')) == 0 and not rdf_dump_urls:
@@ -115,45 +171,11 @@ filename = str(filename)
 OutputCSV.writeHeader(filename)
 OutputCSV.writeHeader(filename,include_dimensions=True)
 
-for i in range(len(toAnalyze)):
-    start_analysis = time.time()
-    with analyses.analysis_session(idKG=toAnalyze[i][0],analysis_date=filename,nameKG=toAnalyze[i][1], **analysis_options) as kg:
-        score = Score(kg,20)
-        totalScore,normalizedScore = score.getWeightedDimensionScore(1)
-        totalScore = "%.3f"%totalScore
-        normalizedScore = "%.3f"%normalizedScore
-        totalScore = float(totalScore)
-        normalizedScore = float(normalizedScore)
-        kg.extra.score = totalScore
-        kg.extra.normalizedScore = normalizedScore
-        kg.extra.scoreObj = score
-
-        evaluation = EvaluateFAIRness(kg)
-        evaluation.evaluate_findability()
-        evaluation.evaluate_availability()
-        evaluation.evaluate_interoperability()
-        evaluation.evaluate_reusability()
-        evaluation.calculate_FAIR_score()
-        kg.fairness = evaluation.fairness
-
-        human_accessibility_evaluation = EvaluateHumanCenteredAcc(kg)
-        human_accessibility_evaluation_results = human_accessibility_evaluation.evaluate_all()
-        kg.human_accessibility = human_accessibility_evaluation_results
-
-
-        end_analysis = time.time()
-        utils.write_time(toAnalyze[i][0],end_analysis-start_analysis,'--- Analysis','INFO',filename)
-        csv = OutputCSV(kg,toAnalyze)
-        csv_with_dim = OutputCSV(kg,toAnalyze)
-        csv.writeRow(filename)
-        csv_with_dim.writeRow(filename,include_dimensions=True)
-        print(f"KG score: {kg.extra.score}")
-        if(useDB == True):
-             mongo_interface = DBinterface()
-             mongo_interface.insert_quality_data(kg,score)
-        del csv
-        del kg
-        gc.collect()
+catalog_targets = [
+    (kg_id, {'idKG': kg_id, 'nameKG': kg_name})
+    for kg_id, kg_name in toAnalyze
+]
+analyse_batch(catalog_targets, toAnalyze, filename, analysis_options, max_parallel_kgs)
 
 sparql_urls = []
 if (len(id) == 1 and 'all' in id) or (len(name) == 1 and 'all' in name) or (len(input.get('sparql_url')) == 1 and 'all' in input.get('sparql_url')):
@@ -173,46 +195,8 @@ for url in dict.fromkeys(sparql_urls):
 direct_targets = [(url, {'sparql_endpoint': url}) for url in direct_sparql_urls]
 direct_targets.extend((url, {'rdf_dump': url}) for url in dict.fromkeys(rdf_dump_urls))
 
-if direct_targets:
-    for source_url, target_options in direct_targets:
-        start_analysis = time.time()
-        with analyses.analysis_session(filename, **target_options, **analysis_options) as kg:
-            score = Score(kg,20)
-            totalScore,normalizedScore = score.getWeightedDimensionScore(1)
-            totalScore = "%.3f"%totalScore
-            normalizedScore = "%.3f"%normalizedScore
-            totalScore = float(totalScore)
-            normalizedScore = float(normalizedScore)
-            kg.extra.score = totalScore
-            kg.extra.normalizedScore = normalizedScore
-            kg.extra.scoreObj = score
-
-            evaluation = EvaluateFAIRness(kg)
-            evaluation.evaluate_findability()
-            evaluation.evaluate_availability()
-            evaluation.evaluate_interoperability()
-            evaluation.evaluate_reusability()
-            evaluation.calculate_FAIR_score()
-            kg.fairness = evaluation.fairness
-
-            human_accessibility_evaluation = EvaluateHumanCenteredAcc(kg)
-            human_accessibility_evaluation_results = human_accessibility_evaluation.evaluate_all()
-            kg.human_accessibility = human_accessibility_evaluation_results
-
-            end_analysis = time.time()
-            utils.write_time(source_url,end_analysis-start_analysis,'--- Analysis','INFO',filename)
-            source_urls = [url for url, _ in direct_targets]
-            csv = OutputCSV(kg,source_urls)
-            csv_with_dim = OutputCSV(kg,source_urls)
-            csv.writeRow(filename)
-            csv_with_dim.writeRow(filename,include_dimensions=True)
-            print(f"KG score: {kg.extra.score}")
-            if(useDB == True):
-                mongo_interface = DBinterface()
-                mongo_interface.insert_quality_data(kg,score)
-            del csv
-            del kg
-            gc.collect()
+source_urls = [url for url, _ in direct_targets]
+analyse_batch(direct_targets, source_urls, filename, analysis_options, max_parallel_kgs)
 
 end = time.time()
 save_path = os.path.join(here,'../Analysis results')

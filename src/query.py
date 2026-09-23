@@ -2068,7 +2068,7 @@ def hasAltDescription(endpoint_url,iri_to_check):
         return e
 
 @log_in_out
-def fetch_objects(endpoint_url, limit=1000, condition = ()):
+def fetch_objects(endpoint_url, limit=10000, condition = ()):
     sparql = SPARQLWrapper(endpoint_url)
     offset = 0
     count = 0
@@ -2141,7 +2141,7 @@ def fetch_subjects(endpoint_url, limit=1000, condition = ()):
     return count
 
 @log_in_out
-def fetch_objects_value(endpoint_url, limit=1000, condition = ()):
+def fetch_objects_value(endpoint_url, limit=10000, condition = ()):
     sparql = SPARQLWrapper(endpoint_url)
     offset = 0
     values = []
@@ -2203,7 +2203,7 @@ def count_audio_objects_sparql(endpoint_url):
         return e
     
 @log_in_out
-def check_video_presence(endpoint_url, limit = True):
+def check_video_presence(endpoint_url, limit = 10000):
     sparql = SPARQLWrapper(endpoint_url)
     query = """
         SELECT ?o
