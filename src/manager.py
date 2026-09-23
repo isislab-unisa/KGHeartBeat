@@ -21,6 +21,7 @@ from API import CHeCloudAPI
 from API import YummyDataAPI
 from API import WikidataAPI
 from API import KGCatalogAPI
+from API import GitHubEndpointFinder
 useDB = False
 # try :
 #     import pymongo
@@ -157,6 +158,7 @@ for i in range(len(toAnalyze)):
 sparql_urls = []
 if (len(id) == 1 and 'all' in id) or (len(name) == 1 and 'all' in name) or (len(input.get('sparql_url')) == 1 and 'all' in input.get('sparql_url')):
     sparql_urls = YummyDataAPI.getSPARQLEndpointURLs()
+    sparql_urls.extend(GitHubEndpointFinder.get_endpoint_urls_from_github())
 
 sparql_urls.extend(url for url in input.get('sparql_url') if url != 'all')
 analyzed_sparql_endpoints = Aggregator.get_sparql_endpoint_signatures(toAnalyze)

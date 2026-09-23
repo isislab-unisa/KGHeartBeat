@@ -1,0 +1,382 @@
+{
+  "generated_at": "2026-09-22T15:01:10.710538+00:00",
+  "statistics": {
+    "endpoint_occurrences": 346,
+    "unique_endpoints": 75,
+    "duplicates_skipped": 271,
+    "local_endpoints_skipped": 1,
+    "invalid_endpoints_skipped": 4,
+    "working_endpoints": 41
+  },
+  "endpoints": [
+    {
+      "endpoint": "http://sparql.wikipathways.org/sparql",
+      "repository": "vemonet/shapes-of-you",
+      "rq_file": "api/get-pathways-for-genes.rq",
+      "github_url": "https://github.com/vemonet/shapes-of-you/blob/cf8efe48ef560e3d7d2b2ca806114fe23beb0928/api/get-pathways-for-genes.rq",
+      "method": "GET",
+      "status_code": 200,
+      "checked_at": "2026-09-22T14:51:42.243770+00:00"
+    },
+    {
+      "endpoint": "https://ubergraph.apps.renci.org/sparql",
+      "repository": "INCATools/ubergraph",
+      "rq_file": "sparql/map2slim.rq",
+      "github_url": "https://github.com/INCATools/ubergraph/blob/7b1d8899724f4c932c9240fd675fc5e89085ced1/sparql/map2slim.rq",
+      "method": "GET",
+      "status_code": 200,
+      "checked_at": "2026-09-22T14:51:43.477428+00:00"
+    },
+    {
+      "endpoint": "http://dbpedia.org/sparql",
+      "repository": "CLARIAH/wp4-queries",
+      "rq_file": "dbpedia.rq",
+      "github_url": "https://github.com/CLARIAH/wp4-queries/blob/78935372e9eebd78d67756ea703c276564296c5c/dbpedia.rq",
+      "method": "GET",
+      "status_code": 200,
+      "checked_at": "2026-09-22T14:51:50.169476+00:00"
+    },
+    {
+      "endpoint": "http://virtuoso.clariah-sdh.eculture.labs.vu.nl/sparql",
+      "repository": "CLARIAH/wp4-queries",
+      "rq_file": "hdng_cedar.rq",
+      "github_url": "https://github.com/CLARIAH/wp4-queries/blob/78935372e9eebd78d67756ea703c276564296c5c/hdng_cedar.rq",
+      "method": "GET",
+      "status_code": 200,
+      "checked_at": "2026-09-22T14:51:55.037674+00:00"
+    },
+    {
+      "endpoint": "https://query.wikidata.org/bigdata/namespace/wdq/sparql",
+      "repository": "egonw/SARS-CoV-2-Queries",
+      "rq_file": "grlc/complexes.rq",
+      "github_url": "https://github.com/egonw/SARS-CoV-2-Queries/blob/c321df120122c4082823542d513cc05da4bf1d69/grlc/complexes.rq",
+      "method": "GET",
+      "status_code": 200,
+      "checked_at": "2026-09-22T14:52:31.007509+00:00"
+    },
+    {
+      "endpoint": "https://query.wikidata.org/sparql",
+      "repository": "knaw-huc/golden-agents-processes-of-creativity",
+      "rq_file": "datasets/stcn/wikidata-mapping.rq",
+      "github_url": "https://github.com/knaw-huc/golden-agents-processes-of-creativity/blob/5fb8017f67a27e2dfb421b99dbc209dfe23e7803/datasets/stcn/wikidata-mapping.rq",
+      "method": "GET",
+      "status_code": 200,
+      "checked_at": "2026-09-22T14:53:14.306741+00:00"
+    },
+    {
+      "endpoint": "https://api.linkeddata.cultureelerfgoed.nl/datasets/rce/erfgeo/sparql",
+      "repository": "cultureelerfgoed/sparql",
+      "rq_file": "LDV/Query-25.rq",
+      "github_url": "https://github.com/cultureelerfgoed/sparql/blob/86ed158272d784d14607a4190701ebc502fd3530/LDV/Query-25.rq",
+      "method": "GET",
+      "status_code": 200,
+      "checked_at": "2026-09-22T14:53:18.733691+00:00"
+    },
+    {
+      "endpoint": "https://api.linkeddata.cultureelerfgoed.nl/datasets/rce/cho/services/cho/sparql",
+      "repository": "cultureelerfgoed/sparql",
+      "rq_file": "LDV/kadaster.rq",
+      "github_url": "https://github.com/cultureelerfgoed/sparql/blob/86ed158272d784d14607a4190701ebc502fd3530/LDV/kadaster.rq",
+      "method": "GET",
+      "status_code": 200,
+      "checked_at": "2026-09-22T14:53:19.268748+00:00"
+    },
+    {
+      "endpoint": "https://api.linkeddata.cultureelerfgoed.nl/datasets/rce/afbeeldingen2/sparql",
+      "repository": "cultureelerfgoed/sparql",
+      "rq_file": "LDV/Query-2-3.rq",
+      "github_url": "https://github.com/cultureelerfgoed/sparql/blob/86ed158272d784d14607a4190701ebc502fd3530/LDV/Query-2-3.rq",
+      "method": "GET",
+      "status_code": 200,
+      "checked_at": "2026-09-22T14:53:20.636175+00:00"
+    },
+    {
+      "endpoint": "https://api.linkeddata.cultureelerfgoed.nl/datasets/rce/cho/sparql",
+      "repository": "cultureelerfgoed/sparql",
+      "rq_file": "LDV/Query-26-3.rq",
+      "github_url": "https://github.com/cultureelerfgoed/sparql/blob/86ed158272d784d14607a4190701ebc502fd3530/LDV/Query-26-3.rq",
+      "method": "GET",
+      "status_code": 200,
+      "checked_at": "2026-09-22T14:53:21.148802+00:00"
+    },
+    {
+      "endpoint": "https://api.linkeddata.cultureelerfgoed.nl/datasets/thesauri/Cultuurhistorische-Thesaurus-CHT/sparql",
+      "repository": "cultureelerfgoed/sparql",
+      "rq_file": "LDV/Query-1-15.rq",
+      "github_url": "https://github.com/cultureelerfgoed/sparql/blob/86ed158272d784d14607a4190701ebc502fd3530/LDV/Query-1-15.rq",
+      "method": "GET",
+      "status_code": 200,
+      "checked_at": "2026-09-22T14:53:21.719550+00:00"
+    },
+    {
+      "endpoint": "https://api.linkeddata.cultureelerfgoed.nl/datasets/thesauri/Archeologisch-Basis-Register/sparql",
+      "repository": "cultureelerfgoed/sparql",
+      "rq_file": "LDV/Query-4-5.rq",
+      "github_url": "https://github.com/cultureelerfgoed/sparql/blob/86ed158272d784d14607a4190701ebc502fd3530/LDV/Query-4-5.rq",
+      "method": "GET",
+      "status_code": 200,
+      "checked_at": "2026-09-22T14:53:22.768373+00:00"
+    },
+    {
+      "endpoint": "https://api.linkeddata.cultureelerfgoed.nl/datasets/rce/Rijksmonumenten-sdo/services/Rijksmonumenten-sdo-jena/sparql",
+      "repository": "cultureelerfgoed/sparql",
+      "rq_file": "LDV/Query-2-4-2-1.rq",
+      "github_url": "https://github.com/cultureelerfgoed/sparql/blob/86ed158272d784d14607a4190701ebc502fd3530/LDV/Query-2-4-2-1.rq",
+      "method": "GET",
+      "status_code": 200,
+      "checked_at": "2026-09-22T14:53:24.034681+00:00"
+    },
+    {
+      "endpoint": "https://api.linkeddata.cultureelerfgoed.nl/datasets/thesauri/thesauri/services/thesauri/sparql",
+      "repository": "cultureelerfgoed/sparql",
+      "rq_file": "LDV/traning-example.rq",
+      "github_url": "https://github.com/cultureelerfgoed/sparql/blob/86ed158272d784d14607a4190701ebc502fd3530/LDV/traning-example.rq",
+      "method": "GET",
+      "status_code": 200,
+      "checked_at": "2026-09-22T14:53:25.308408+00:00"
+    },
+    {
+      "endpoint": "https://api.linkeddata.cultureelerfgoed.nl/datasets/thesauri/archeologischbasisregister/sparql",
+      "repository": "cultureelerfgoed/sparql",
+      "rq_file": "LDV/construct-gehele-abr2.rq",
+      "github_url": "https://github.com/cultureelerfgoed/sparql/blob/86ed158272d784d14607a4190701ebc502fd3530/LDV/construct-gehele-abr2.rq",
+      "method": "GET",
+      "status_code": 200,
+      "checked_at": "2026-09-22T14:53:29.412968+00:00"
+    },
+    {
+      "endpoint": "https://api.linkeddata.cultureelerfgoed.nl/datasets/rce/colonialobjects/services/colonialobjects/sparql",
+      "repository": "cultureelerfgoed/sparql",
+      "rq_file": "LDV/methods-of-acquisition.rq",
+      "github_url": "https://github.com/cultureelerfgoed/sparql/blob/86ed158272d784d14607a4190701ebc502fd3530/LDV/methods-of-acquisition.rq",
+      "method": "GET",
+      "status_code": 200,
+      "checked_at": "2026-09-22T14:53:29.994894+00:00"
+    },
+    {
+      "endpoint": "https://api.linkeddata.cultureelerfgoed.nl/datasets/RCE-Knowledge-Graph/RCE-Knowledge-Graph/sparql",
+      "repository": "cultureelerfgoed/sparql",
+      "rq_file": "LDV/Query.rq",
+      "github_url": "https://github.com/cultureelerfgoed/sparql/blob/86ed158272d784d14607a4190701ebc502fd3530/LDV/Query.rq",
+      "method": "GET",
+      "status_code": 200,
+      "checked_at": "2026-09-22T14:53:32.841273+00:00"
+    },
+    {
+      "endpoint": "https://sparql.opencitations.net/meta",
+      "repository": "arcangelo7/sparql-api-comparison",
+      "rq_file": "grlc/queries/article-meta.rq",
+      "github_url": "https://github.com/arcangelo7/sparql-api-comparison/blob/7080e9cc24787266246695bc1907082b31634aaa/grlc/queries/article-meta.rq",
+      "method": "GET",
+      "status_code": 200,
+      "checked_at": "2026-09-22T14:53:34.656594+00:00"
+    },
+    {
+      "endpoint": "https://api.linkeddata.cultureelerfgoed.nl/datasets/rce/aardbevingen/services/aardbevingen/sparql",
+      "repository": "cultureelerfgoed/sparql",
+      "rq_file": "LDV/Query-17.rq",
+      "github_url": "https://github.com/cultureelerfgoed/sparql/blob/86ed158272d784d14607a4190701ebc502fd3530/LDV/Query-17.rq",
+      "method": "GET",
+      "status_code": 200,
+      "checked_at": "2026-09-22T14:53:55.822966+00:00"
+    },
+    {
+      "endpoint": "https://api.linkeddata.cultureelerfgoed.nl/datasets/rce/ceo/sparql",
+      "repository": "cultureelerfgoed/sparql",
+      "rq_file": "LDV/Query-2-9.rq",
+      "github_url": "https://github.com/cultureelerfgoed/sparql/blob/86ed158272d784d14607a4190701ebc502fd3530/LDV/Query-2-9.rq",
+      "method": "GET",
+      "status_code": 200,
+      "checked_at": "2026-09-22T14:53:56.477084+00:00"
+    },
+    {
+      "endpoint": "https://dbpedia.org/sparql",
+      "repository": "knaw-huc/grlc-queries",
+      "rq_file": "docker.rq",
+      "github_url": "https://github.com/knaw-huc/grlc-queries/blob/0596fecaaca31b4c75cb44a97b1b7f3aa5c97600/docker.rq",
+      "method": "GET",
+      "status_code": 200,
+      "checked_at": "2026-09-22T14:54:01.158214+00:00"
+    },
+    {
+      "endpoint": "https://api.linkeddata.cultureelerfgoed.nl/datasets/rce/aardbevingen/sparql",
+      "repository": "cultureelerfgoed/sparql",
+      "rq_file": "LDV/aardbevingen-in-nl-be-du.rq",
+      "github_url": "https://github.com/cultureelerfgoed/sparql/blob/86ed158272d784d14607a4190701ebc502fd3530/LDV/aardbevingen-in-nl-be-du.rq",
+      "method": "GET",
+      "status_code": 200,
+      "checked_at": "2026-09-22T14:54:08.757556+00:00"
+    },
+    {
+      "endpoint": "https://api.linkeddata.cultureelerfgoed.nl/datasets/thesauri/Cultuurhistorische-Thesaurus-CHT/services/Cultuurhistorische-Thesaurus-CHT/sparql",
+      "repository": "cultureelerfgoed/sparql",
+      "rq_file": "LDV/Query-27.rq",
+      "github_url": "https://github.com/cultureelerfgoed/sparql/blob/86ed158272d784d14607a4190701ebc502fd3530/LDV/Query-27.rq",
+      "method": "GET",
+      "status_code": 200,
+      "checked_at": "2026-09-22T14:54:09.945519+00:00"
+    },
+    {
+      "endpoint": "https://api.linkeddata.cultureelerfgoed.nl/datasets/thesauri/archeologischbasisregister/services/archeologischbasisregister-jena/sparql",
+      "repository": "cultureelerfgoed/sparql",
+      "rq_file": "LDV/select-abr-jena-union.rq",
+      "github_url": "https://github.com/cultureelerfgoed/sparql/blob/86ed158272d784d14607a4190701ebc502fd3530/LDV/select-abr-jena-union.rq",
+      "method": "GET",
+      "status_code": 200,
+      "checked_at": "2026-09-22T14:54:13.843731+00:00"
+    },
+    {
+      "endpoint": "https://api.linkeddata.cultureelerfgoed.nl/datasets/thesauri/oorlogsbronnen/sparql",
+      "repository": "cultureelerfgoed/sparql",
+      "rq_file": "LDV/related-tussen-conceptschemes-1-1.rq",
+      "github_url": "https://github.com/cultureelerfgoed/sparql/blob/86ed158272d784d14607a4190701ebc502fd3530/LDV/related-tussen-conceptschemes-1-1.rq",
+      "method": "GET",
+      "status_code": 200,
+      "checked_at": "2026-09-22T14:54:17.701716+00:00"
+    },
+    {
+      "endpoint": "https://api.linkeddata.cultureelerfgoed.nl/datasets/rce/diff-cho/sparql",
+      "repository": "cultureelerfgoed/sparql",
+      "rq_file": "LDV/diff-cho-tien-grootste-inhoudelijke-wijz.rq",
+      "github_url": "https://github.com/cultureelerfgoed/sparql/blob/86ed158272d784d14607a4190701ebc502fd3530/LDV/diff-cho-tien-grootste-inhoudelijke-wijz.rq",
+      "method": "GET",
+      "status_code": 200,
+      "checked_at": "2026-09-22T14:54:33.085187+00:00"
+    },
+    {
+      "endpoint": "https://bio2rdf.137.120.31.102.nip.io/sparql",
+      "repository": "bio2rdf/bio2rdf-sparql-queries",
+      "rq_file": "bio2rdf/select-phenotypes-for-disease.rq",
+      "github_url": "https://github.com/bio2rdf/bio2rdf-sparql-queries/blob/c6acffc14b3adb3a1fe689cbcf7fb9be8b8944ab/bio2rdf/select-phenotypes-for-disease.rq",
+      "method": "GET",
+      "status_code": 200,
+      "checked_at": "2026-09-22T14:54:35.975409+00:00"
+    },
+    {
+      "endpoint": "https://enpkg.commons-lab.org/graphdb/repositories/ENPKG",
+      "repository": "earth-metabolome-initiative/queries",
+      "rq_file": "count_features_by_sample_annotated_by_canopus_as_aspidosperma.rq",
+      "github_url": "https://github.com/earth-metabolome-initiative/queries/blob/dd97aa6749e8c167821827803058f40c09bd22a4/count_features_by_sample_annotated_by_canopus_as_aspidosperma.rq",
+      "method": "GET",
+      "status_code": 200,
+      "checked_at": "2026-09-22T14:54:42.162389+00:00"
+    },
+    {
+      "endpoint": "https://cat.apis.beeldengeluid.nl/sparql",
+      "repository": "beeldengeluid/beng-lod-server",
+      "rq_file": "queries/inverse_relations.rq",
+      "github_url": "https://github.com/beeldengeluid/beng-lod-server/blob/7c085175ce808c08226f2996988da7d9e81da09b/queries/inverse_relations.rq",
+      "method": "GET",
+      "status_code": 200,
+      "checked_at": "2026-09-22T14:55:40.524199+00:00"
+    },
+    {
+      "endpoint": "https://aopwiki.rdf.bigcat-bioinformatics.org/sparql",
+      "repository": "Crispae/linked-data-api",
+      "rq_file": "getAOforMIE.rq",
+      "github_url": "https://github.com/Crispae/linked-data-api/blob/e153ec091190181bbf96456eeca3e8c33bee8678/getAOforMIE.rq",
+      "method": "GET",
+      "status_code": 200,
+      "checked_at": "2026-09-22T14:55:46.661770+00:00"
+    },
+    {
+      "endpoint": "https://api.data.muziekweb.nl/datasets/MuziekwebOrganization/Muziekweb/services/Muziekweb/sparql",
+      "repository": "beeldengeluid/hackalod_2025",
+      "rq_file": "queries/muziekweb-album-information.rq",
+      "github_url": "https://github.com/beeldengeluid/hackalod_2025/blob/ab1d4f8b19c9ce70cc493a7ed62527f0abb62846/queries/muziekweb-album-information.rq",
+      "method": "GET",
+      "status_code": 200,
+      "checked_at": "2026-09-22T14:56:00.289945+00:00"
+    },
+    {
+      "endpoint": "http://query.wikidata.org/sparql",
+      "repository": "egonw/grant-api",
+      "rq_file": "List Project Dissemination Activities.rq",
+      "github_url": "https://github.com/egonw/grant-api/blob/f360af1d67527c3a1fea4bfc24de80410070d5db/List Project Dissemination Activities.rq",
+      "method": "GET",
+      "status_code": 200,
+      "checked_at": "2026-09-22T14:56:00.865098+00:00"
+    },
+    {
+      "endpoint": "https://api.linkeddata.cultureelerfgoed.nl/datasets/rce/cho-acceptance/sparql",
+      "repository": "cultureelerfgoed/sparql",
+      "rq_file": "LDV/totaal-aantal-triples-1.rq",
+      "github_url": "https://github.com/cultureelerfgoed/sparql/blob/86ed158272d784d14607a4190701ebc502fd3530/LDV/totaal-aantal-triples-1.rq",
+      "method": "GET",
+      "status_code": 200,
+      "checked_at": "2026-09-22T14:56:31.049014+00:00"
+    },
+    {
+      "endpoint": "https://api.linkeddata.cultureelerfgoed.nl/datasets/thesauri/cht/sparql",
+      "repository": "cultureelerfgoed/sparql",
+      "rq_file": "LDV/Concepten-zonder-labels-in-het-Nederland.rq",
+      "github_url": "https://github.com/cultureelerfgoed/sparql/blob/86ed158272d784d14607a4190701ebc502fd3530/LDV/Concepten-zonder-labels-in-het-Nederland.rq",
+      "method": "GET",
+      "status_code": 200,
+      "checked_at": "2026-09-22T14:56:36.347019+00:00"
+    },
+    {
+      "endpoint": "https://api.linkeddata.cultureelerfgoed.nl/datasets/rce/gebedshuizen/services/gebedshuizen/sparql",
+      "repository": "cultureelerfgoed/sparql",
+      "rq_file": "LDV/Steden-en-Dorpen.rq",
+      "github_url": "https://github.com/cultureelerfgoed/sparql/blob/86ed158272d784d14607a4190701ebc502fd3530/LDV/Steden-en-Dorpen.rq",
+      "method": "GET",
+      "status_code": 200,
+      "checked_at": "2026-09-22T14:57:42.474292+00:00"
+    },
+    {
+      "endpoint": "https://api.linkeddata.cultureelerfgoed.nl/datasets/rce/tooi/sparql",
+      "repository": "cultureelerfgoed/sparql",
+      "rq_file": "LDV/tooi-waterschappen.rq",
+      "github_url": "https://github.com/cultureelerfgoed/sparql/blob/86ed158272d784d14607a4190701ebc502fd3530/LDV/tooi-waterschappen.rq",
+      "method": "GET",
+      "status_code": 200,
+      "checked_at": "2026-09-22T14:57:44.635637+00:00"
+    },
+    {
+      "endpoint": "https://api.linkeddata.cultureelerfgoed.nl/datasets/thesauri/archeologischbasisregister/services/archeologischbasisregister-virtuoso/sparql",
+      "repository": "cultureelerfgoed/sparql",
+      "rq_file": "LDV/select-ABR-virtuoso-bif.rq",
+      "github_url": "https://github.com/cultureelerfgoed/sparql/blob/86ed158272d784d14607a4190701ebc502fd3530/LDV/select-ABR-virtuoso-bif.rq",
+      "method": "GET",
+      "status_code": 200,
+      "checked_at": "2026-09-22T14:57:48.866987+00:00"
+    },
+    {
+      "endpoint": "https://query.knowledgepixels.com/repo/last30d",
+      "repository": "knowledgepixels/nanopub-query-api",
+      "rq_file": "get-active-users-last30d.rq",
+      "github_url": "https://github.com/knowledgepixels/nanopub-query-api/blob/e814a99fe1bf88fd43828e1b7b3ba535920a63bb/get-active-users-last30d.rq",
+      "method": "GET",
+      "status_code": 200,
+      "checked_at": "2026-09-22T14:58:05.644625+00:00"
+    },
+    {
+      "endpoint": "https://api.linkeddata.cultureelerfgoed.nl/datasets/Closed-Linked-Data/adviseurs/sparql",
+      "repository": "cultureelerfgoed/sparql",
+      "rq_file": "LDV/Query-3-11-1.rq",
+      "github_url": "https://github.com/cultureelerfgoed/sparql/blob/86ed158272d784d14607a4190701ebc502fd3530/LDV/Query-3-11-1.rq",
+      "method": "GET",
+      "status_code": 200,
+      "checked_at": "2026-09-22T14:59:59.059912+00:00"
+    },
+    {
+      "endpoint": "https://www.foodie-cloud.org/sparql?default-graph-uri=http://w3id.org/iliad/dataaset/jf-pilot-sample",
+      "repository": "ILIAD-ocean-twin/JF-API",
+      "rq_file": "Sensors_Datastreams.rq",
+      "github_url": "https://github.com/ILIAD-ocean-twin/JF-API/blob/c1e9a76dc30397e8779949c7082a8a3d0373d3ff/Sensors_Datastreams.rq",
+      "method": "GET",
+      "status_code": 200,
+      "checked_at": "2026-09-22T15:00:00.328171+00:00"
+    },
+    {
+      "endpoint": "https://api.linkeddata.cultureelerfgoed.nl/datasets/rce/ceo/services/ceo/sparql",
+      "repository": "cultureelerfgoed/sparql",
+      "rq_file": "LDV/geoGerritRietveld2.rq",
+      "github_url": "https://github.com/cultureelerfgoed/sparql/blob/86ed158272d784d14607a4190701ebc502fd3530/LDV/geoGerritRietveld2.rq",
+      "method": "GET",
+      "status_code": 200,
+      "checked_at": "2026-09-22T15:00:47.757285+00:00"
+    }
+  ]
+}
