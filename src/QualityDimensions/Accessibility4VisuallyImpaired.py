@@ -18,7 +18,7 @@ class Accessibility4VisuallyImpaired:
             if isinstance(images, list) and len(images) > 0:
                 count_with_alt = 0
                 for i, img in enumerate(images, 1):
-                    res = query.hasAltDescription(sparql_endpoint, img)
+                    res = query.hasAltDescription(sparql_endpoint, img, limit=10000)
                     if isinstance(res, tuple) and len(res) == 2:
                         if res[0]:
                             count_with_alt += 1

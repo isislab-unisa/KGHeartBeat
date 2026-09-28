@@ -56,7 +56,7 @@ class DeafHearingAccessibility:
                     sub = False
                     desc = False
                     sign_lang = False
-                    _, texts = query.hasAltDescription(sparql_endpoint, video)
+                    _, texts = query.hasAltDescription(sparql_endpoint, video, limit=10000)
                     if len(texts) > 0:
                         for text in texts:
                             if utils.is_subtitle(text):
@@ -107,7 +107,7 @@ class DeafHearingAccessibility:
                     sub = False
                     desc = False
                     sign_lang = False
-                    _, texts = query.hasAltDescription(sparql_endpoint, audio)
+                    _, texts = query.hasAltDescription(sparql_endpoint, audio, limit=10000)
                     if len(texts) > 0:
                         for text in texts:
                             if utils.is_subtitle(text):

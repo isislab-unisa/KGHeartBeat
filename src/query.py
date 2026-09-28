@@ -2027,7 +2027,10 @@ def getImageIri(endpoint_url):
         return False
 
 @log_in_out
-def hasAltDescription(endpoint_url,iri_to_check):
+def hasAltDescription(endpoint_url,iri_to_check, limit):
+    if type(limit) is not int or limit <= 0:
+        raise ValueError('limit must be a positive integer')
+
     sparql = SPARQLWrapper(endpoint_url)
     encoded_iri = quote(iri_to_check, safe="/:#?&=%")
     sparql.setQuery(f"""
@@ -2044,7 +2047,9 @@ def hasAltDescription(endpoint_url,iri_to_check):
         VALUES ?prop {{ rdfs:label foaf:name schema:alternateName dcterms:description skos:prefLabel dcterms:alternative skos:altLabel dcterms:title
                      rdfs:comment awol:label dcterms:alternative skos:altLabel skos:note wdrs:text skosxl:altLabel skosxl:hiddenLabel skosxl:prefLabel
                      skosxl:literalForm schema:name schema:description schema:alternateName }}
-        <{encoded_iri}> ?prop ?o .}}
+        <{encoded_iri}> ?prop ?o .
+    }}
+    LIMIT {limit}
         """)
     try:
         sparql.setTimeout(300)
