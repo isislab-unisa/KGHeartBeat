@@ -1560,21 +1560,18 @@ def count_syllables(word):
         syllables = 1
     return syllables
 
-def flesch_reading_ease(text):
-    sentences = re.split(r'[.!?]+', text)
-    sentences = [s for s in sentences if s.strip()]
+def lix_score(text):
+    """Return LIX using sentence length and the fraction of long words."""
+    sentences = sent_tokenize(text)
+    words = [word for word in word_tokenize(text) if any(char.isalnum() for char in word)]
+    if not words:
+        return 0
 
-    words = re.findall(r'\w+', text)
-
-    syllable_count = sum(count_syllables(word) for word in words)
-
-    num_sentences = max(len(sentences), 1)
-    num_words = max(len(words), 1)
-    words_per_sentence = num_words / num_sentences
-    syllables_per_word = syllable_count / num_words
-
-    score = 206.835 - 1.015 * words_per_sentence - 84.6 * syllables_per_word
-    return round(score, 2)
+    long_words = [word for word in words if len(word) > 6]
+    return (
+        len(words) / max(len(sentences), 1)
+        + len(long_words) / len(words)
+    )
 
 
 def run_with_timeout(func, args=(), timeout=300):

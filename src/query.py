@@ -2410,3 +2410,67 @@ def get_metadata_languages(endpoint_url):
             return False
     except Exception as e:
         return e
+
+
+def get_metadata_language_counts(endpoint_url):
+    """Return (all metadata triples, triples whose object has a language tag)."""
+    sparql = SPARQLWrapper(endpoint_url)
+    sparql.setQuery("""
+        PREFIX void: <http://rdfs.org/ns/void#>
+        PREFIX dcat: <http://www.w3.org/ns/dcat#>
+        SELECT (COUNT(*) AS ?total)
+               (SUM(IF(isLiteral(?o), IF(LANG(?o) != "", 1, 0), 0)) AS ?tagged)
+        WHERE {
+            SELECT DISTINCT ?dataset ?p ?o WHERE {
+                ?dataset a ?type ; ?p ?o .
+                VALUES ?type { void:Dataset dcat:Dataset dcat:Distribution }
+            }
+        }
+    """)
+    sparql.setReturnFormat(JSON)
+    sparql.setTimeout(300)
+    try:
+        results = sparql.query().convert()
+        if isinstance(results, dict):
+            row = results['results']['bindings'][0]
+            return int(row['total']['value']), int(row['tagged']['value'])
+        if isinstance(results, Document):
+            row = results.getElementsByTagName('result')[0]
+            counts = {
+                binding.getAttribute('name'): int(
+                    binding.getElementsByTagName('literal')[0].firstChild.data
+                    if binding.getElementsByTagName('literal')[0].firstChild else '0'
+                )
+                for binding in row.getElementsByTagName('binding')
+            }
+            return counts['total'], counts['tagged']
+        return False
+    except Exception as error:
+        return error
+
+
+def get_kg_webpages(endpoint_url):
+    """Return webpage URLs declared on dataset resources."""
+    try:
+        sparql = SPARQLWrapper(endpoint_url)
+        sparql.setQuery("""
+            PREFIX void: <http://rdfs.org/ns/void#>
+            PREFIX dcat: <http://www.w3.org/ns/dcat#>
+            PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+            SELECT DISTINCT ?o WHERE {
+                ?dataset a ?type ; ?p ?o .
+                VALUES ?type { void:Dataset dcat:Dataset }
+                VALUES ?p { foaf:homepage foaf:page dcat:landingPage }
+                FILTER(isIRI(?o))
+            }
+        """)
+        sparql.setTimeout(300)
+        sparql.setReturnFormat(JSON)
+        results = sparql.query().convert()
+        if isinstance(results, dict):
+            return utils.getResultsFromJSON(results)
+        if isinstance(results, Document):
+            return utils.getResultsFromXML(results)
+        return False
+    except Exception:
+        return False

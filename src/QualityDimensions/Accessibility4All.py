@@ -1,6 +1,7 @@
 import requests
 import os
 import sys
+from urllib.parse import urlsplit
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import query
 import VoIDAnalyses
@@ -13,13 +14,16 @@ class Accessibility4All:
         self.assistive_technologies_value = None
         return None
 
-    def open_license(self, kg_license):
-        if kg_license == False:
+    def open_license(self, kg_license, kg_license_id=None):
+        if kg_license == False and not kg_license_id:
             self.open_license_value = (0, kg_license)
             return self.open_license_value
 
         # Case 1: all elements are '-'
-        if all(license == '-' for license in kg_license):
+        if not kg_license_id and isinstance(kg_license, list) and len(kg_license) > 0 and all(license == '-' for license in kg_license):
+            self.open_license_value = (0, kg_license)
+            return self.open_license_value
+        elif not kg_license_id and isinstance(kg_license, str) and kg_license == '-':
             self.open_license_value = (0, kg_license)
             return self.open_license_value
 
@@ -30,90 +34,118 @@ class Accessibility4All:
         if response.status_code == 200:
             open_license_data = response.json()
 
-            # Extract URLs of open licenses and normalize by removing protocol
-            okfn_urls = [lic["url"].replace("http://", "").replace("https://", "") 
-                        for lic in open_license_data.values() if lic.get("url")]
-
             def normalize(url):
-                return url.replace("http://", "").replace("https://", "")
+                """Canonicalize equivalent license URLs for registry matching."""
+                if not isinstance(url, str) or not url.strip():
+                    return None
+                value = url.strip()
+                parsed = urlsplit(value if "://" in value else f"https://{value}")
+                host = (parsed.hostname or "").lower()
+                # The Open Definition has historically appeared with or without www.
+                if host in ("www.opendefinition.org", "opendefinition.org"):
+                    host = "opendefinition.org"
+                try:
+                    port = parsed.port
+                except ValueError:
+                    return None
+                if port and not ((parsed.scheme.lower() == "http" and port == 80)
+                                 or (parsed.scheme.lower() == "https" and port == 443)):
+                    host = f"{host}:{port}"
+                path = parsed.path.rstrip("/")
+                return f"{host}{path}"
 
-            # At least one KG license matches an open license
-            if isinstance(kg_license, list):
-                if any(normalize(license) in okfn_urls for license in kg_license):
-                    self.open_license_value = (1, kg_license)
-                else:
-                    self.open_license_value = (-1, kg_license)
-            else:
-                if normalize(kg_license) in okfn_urls:
-                    self.open_license_value = (1, kg_license)
-                else:
-                    self.open_license_value = (-1, kg_license)
-            
-            if isinstance(kg_license, list) and len(kg_license) == 0:
+            def normalize_id(value):
+                if not isinstance(value, str) or not value.strip():
+                    return None
+                return value.strip().casefold().replace("_", "-")
+
+            # Compare normalized forms so protocol, host alias, and trailing
+            # slash differences do not turn a known open license into 0.5.
+            okfn_urls = {
+                normalized
+                for license_data in open_license_data.values()
+                if isinstance(license_data, dict)
+                for normalized in [normalize(license_data.get("url"))]
+                if normalized
+            }
+            okfn_ids = {
+                normalized
+                for license_data in open_license_data.values()
+                if isinstance(license_data, dict)
+                for normalized in [normalize_id(license_data.get("id"))]
+                if normalized
+            }
+
+            license_values = kg_license if isinstance(kg_license, list) else [kg_license]
+            license_ids = kg_license_id if isinstance(kg_license_id, list) else [kg_license_id]
+            matched_by_url = any(normalize(value) in okfn_urls for value in license_values)
+            matched_by_id = any(normalize_id(value) in okfn_ids for value in license_values + license_ids)
+            if matched_by_url or matched_by_id:
+                self.open_license_value = (1, kg_license if kg_license else kg_license_id)
+            elif isinstance(kg_license, list) and len(kg_license) == 0 and not kg_license_id:
                 self.open_license_value = (0, kg_license)  
+            else:
+                self.open_license_value = (0.5, kg_license if kg_license else kg_license_id)
 
             return self.open_license_value
         else:
             # Request failed
             return (0, "Failed to retrieve open license list")
         
-    def webpage_status(self, search_engine_metadata):
+    def webpage_status(self, search_engine_metadata, sparql_endpoint=None, void_file_url=None):
+        checked = set()
+        last_failure = None
+
+        def check_webpages(urls):
+            nonlocal last_failure
+            for website_url in urls:
+                if not utils.is_url(website_url) or website_url in checked:
+                    continue
+                checked.add(website_url)
+                try:
+                    response = requests.get(website_url, allow_redirects=True, timeout=10)
+                    if 200 <= response.status_code < 400:
+                        return (1, website_url)
+                    last_failure = website_url
+                except requests.RequestException as error:
+                    last_failure = f"{website_url}: {error}"
+            return None
+
         if isinstance(search_engine_metadata, dict):
-            website_url = search_engine_metadata.get('website', None)
-            try:
-                response = requests.get(website_url)
-                if response.status_code > 199 and response.status_code < 400:
-                    return (0, website_url)
-                else:
-                    return (-1, website_url)
-            except Exception as e:
-                return (-1, e)
-        else:
-            return (-1, "No search engine metadata available")
-        
-        try:
-            response = requests.get(url, allow_redirects=True, timeout=10)
-            # Basic validity check
-            if response.status_code != 200:
-                return False
+            result = check_webpages([search_engine_metadata.get('website')])
+            if result is not None:
+                return result
 
-            # Lowercase content for keyword search
-            content = response.text.lower()
+        if utils.is_url(sparql_endpoint):
+            webpages = query.get_kg_webpages(sparql_endpoint)
+            if isinstance(webpages, list):
+                result = check_webpages(webpages)
+                if result is not None:
+                    return result
 
-            # Detect common "not found" indicators
-            error_indicators = [
-                "not found",
-                "error",
-                "404",
-                "page not found",
-                "content not found",
-                "does not exist",
-                "no encontrado",
-                "no se encuentra",
-            ]
+        if utils.is_url(void_file_url):
+            void_file = VoIDAnalyses.parseVoID(void_file_url)
+            if void_file is not False:
+                result = check_webpages(VoIDAnalyses.get_kg_webpages(void_file))
+                if result is not None:
+                    return result
 
-            # If any error indicator appears in the content → treat as broken
-            if any(indicator in content for indicator in error_indicators):
-                return (-1, website_url)
+        return (0, last_failure or "No KG webpage found in metadata, SPARQL endpoint, or VoID file")
 
-            return (1, website_url)
-        except requests.RequestException:
-            return (-1, website_url)
-        
     def check_authentication(self, sparql_endpoint):
         if utils.is_url(sparql_endpoint):
             try:
                 response = requests.get(sparql_endpoint)
                 if response.status_code == 200:
-                    return (0, sparql_endpoint)
+                    return (1, sparql_endpoint)
                 elif response.status_code == 401:
-                    return (-1, sparql_endpoint)
+                    return (0, sparql_endpoint)
                 else:
-                    return (-1, f"{sparql_endpoint} (status: {response.status_code})")
+                    return (0, f"{sparql_endpoint} (status: {response.status_code})")
             except Exception as e:
-                return (-1, str(e))
+                return (0, str(e))
         else:
-            return (-1, "No SPARQL endpoint provided")
+            return (0, "No SPARQL endpoint provided")
 
 
     def metadata_broken_links_rate(self, search_engine_metadata, sparql_endpoint, void_file_url, kg_id):
@@ -142,7 +174,7 @@ class Accessibility4All:
                             no_broken_links += 1
                     except:
                         broken_links += 1
-            broken_links_ratio =  0 - (broken_links / (no_broken_links + broken_links)) if (no_broken_links + broken_links) > 0 else 0
+            broken_links_ratio =  (no_broken_links / (no_broken_links + broken_links)) if (no_broken_links + broken_links) > 0 else 0
             return (broken_links_ratio, f"Links from VoID file: {links}")
         elif isinstance(all_obj_sparql, list) and len(all_obj_sparql) > 0:
             broken_links = 0
@@ -158,7 +190,7 @@ class Accessibility4All:
                             no_broken_links += 1
                     except:
                         broken_links += 1
-            broken_links_ratio =  0 - (broken_links / (no_broken_links + broken_links)) if (no_broken_links + broken_links) > 0 else 0
+            broken_links_ratio =  (no_broken_links / (no_broken_links + broken_links)) if (no_broken_links + broken_links) > 0 else 0
             return (broken_links_ratio, f"Links from SPARQL endpoint: {links}")
         elif isinstance(search_engine_metadata, dict):
             available_resources_count = 0
@@ -184,7 +216,7 @@ class Accessibility4All:
             available_resources_count += len(available_resources)
             unavailable_resources_count += len(unavailable_resources)
             links = [res.get("path") for res in resources]
-            broken_links_ratio = 0 - (unavailable_resources_count / (available_resources_count + unavailable_resources_count)) if (available_resources_count + unavailable_resources_count) > 0 else 0
+            broken_links_ratio = (available_resources_count / (available_resources_count + unavailable_resources_count)) if (available_resources_count + unavailable_resources_count) > 0 else 0
             return (broken_links_ratio, f"Links from search engine metadata: {links}")
 
         return (-1, "No metadata found in SPARQL endpoint, VoID file or search engine metadata")
@@ -203,9 +235,9 @@ class Accessibility4All:
                 version = version_in_void
 
         if version != False:
-            return (0, version)
+            return (1, version)
         else:
-            return (-1, "No version found")
+            return (0, "No version found")
 
     def assistive_technologies(self, sparql_endpoint, void_file_url):
         ass_tech = []
@@ -248,25 +280,28 @@ class Accessibility4All:
             return (0, "No citation found")
 
     def contact_point(self, search_engine_metadata, sparql_endpoint, void_file_url):
-        if search_engine_metadata is None or not isinstance(search_engine_metadata, dict):
-            return (0, "No search engine metadata available")
-        contact_in_metadata = search_engine_metadata.get('contact_point', False)
-        if contact_in_metadata != False and isinstance(contact_in_metadata, dict):
-            name = contact_in_metadata.get('name', False)
-            email = contact_in_metadata.get('email', False)
-            if (email and email != 'null') or (name and name != 'null'):
-                return (1, contact_in_metadata)
-        
+        def has_value(value):
+            return isinstance(value, str) and value.strip().lower() not in ('', 'null')
+
+        if isinstance(search_engine_metadata, dict):
+            contact_in_metadata = search_engine_metadata.get('contact_point')
+            if isinstance(contact_in_metadata, dict):
+                if any(has_value(contact_in_metadata.get(field)) for field in ('name', 'email')):
+                    return (1, contact_in_metadata)
+
         if utils.is_url(sparql_endpoint):
             contact_in_sparql = query.get_contact_point(sparql_endpoint)
-            if isinstance(contact_in_sparql, list) and len(contact_in_sparql) > 0:
-                return (1, contact_in_sparql)
-        
+            if isinstance(contact_in_sparql, list):
+                contacts = [contact for contact in contact_in_sparql if has_value(contact)]
+                if contacts:
+                    return (1, contacts)
+
         if utils.is_url(void_file_url):
             void_file = VoIDAnalyses.parseVoID(void_file_url)
-            contact_in_void = VoIDAnalyses.get_contact_point(void_file)
-            if isinstance(contact_in_void, list) and len(contact_in_void) > 0:
-                return (1, contact_in_void)
+            if void_file is not False:
+                contact_in_void = VoIDAnalyses.get_contact_point(void_file)
+                if has_value(contact_in_void):
+                    return (1, contact_in_void)
 
         return (0, "No contact point found")
 
@@ -322,9 +357,9 @@ class Accessibility4All:
         if small_dump:
             return (1, dumps)
         elif medium_dump:
-            return (0, dumps)
+            return (0.5, dumps)
         elif large_dump:
-            return (-1, dumps)
+            return (0, dumps)
         elif len(dumps) == 0:
             return (0, "No data dumps found")
         elif len(dumps) > 0 and not small_dump and not medium_dump and not large_dump:
@@ -497,39 +532,24 @@ class Accessibility4All:
         description = False
         if isinstance(description_metadata, str) and description_metadata != 'absent' and description_metadata != '':
             description = description_metadata
-            readability_score = utils.flesch_reading_ease(description)
-            if readability_score >= 100:
-                return 1 , f"Description from search engine metadata: {description}"
-            elif readability_score < -1:
-                return -1, f"Description from search engine metadata: {description}"
-            else:
-                return (round((readability_score / 50) - 1, 2), f"Description from search engine metadata: {description}")
+            readability_score = min(1, max(0, (55 - utils.lix_score(description)) / 30))
+            return readability_score, f"Description from search engine metadata: {description}"
 
         if utils.is_url(sparql_endpoint_url):
             description_sparql = query.getDescription(sparql_endpoint_url)
             if isinstance(description_sparql, list) and len(description_sparql) > 0:
                 description = description_sparql[0]
                 if isinstance(description, str):
-                    readability_score = utils.flesch_reading_ease(description)
-                    if readability_score >= 100:
-                        return (1, f"Description from SPARQL endpoint: {description}")
-                    elif readability_score < -1:
-                        return (-1, f"Description from SPARQL endpoint: {description}")
-                    else:
-                        return (round((readability_score / 50) - 1, 2), f"Description from SPARQL metadata: {description}")
+                    readability_score = min(1, max(0, (55 - utils.lix_score(description)) / 30))
+                    return readability_score, f"Description from SPARQL metadata: {description}"
 
         if utils.is_url(void_file_url):
             void_file = VoIDAnalyses.parseVoID(void_file_url)
             description_void = VoIDAnalyses.getDescription(void_file)
             if isinstance(description_void, list) and len(description_void) > 0:
                 description = description_void[0]
-                readability_score = utils.flesch_reading_ease(description)
-                if readability_score >= 100:
-                    return (1, f"Description from VoID file: {description}")
-                elif readability_score < -1:
-                    return (-1, f"Description from VoID file: {description}")
-                else:
-                    return (round((readability_score / 50) - 1, 2), f"Description from VoID file: {description}")
+                readability_score = min(1, max(0, (55 - utils.lix_score(description)) / 30))
+                return readability_score, f"Description from VoID file: {description}"
 
         if description == False or description == '':
             return (0, "No description found")
@@ -552,21 +572,33 @@ class Accessibility4All:
             return 0, "No SPARQL endpoint provided"
 
     def metadata_lang(self, sparql_endpoint_url, void_file):
+        """Score language-tagged metadata triples divided by all metadata triples."""
+        errors = []
         if utils.is_url(sparql_endpoint_url):
-            query_results = query.get_metadata_languages(sparql_endpoint_url)
-            if isinstance(query_results, list):
-                return 0, f"Languages found: {query_results}"
+            counts = query.get_metadata_language_counts(sparql_endpoint_url)
+            if isinstance(counts, tuple) and counts[0] > 0:
+                total, tagged = counts
+                return round(tagged / total, 2), (
+                    f"Metadata with language tags: {tagged}/{total} (SPARQL endpoint)"
+                )
+            errors.append(f"Error querying SPARQL endpoint: {counts}" if not isinstance(counts, tuple)
+                          else "No dataset metadata found in SPARQL endpoint")
+
+        if utils.is_url(void_file):
+            graph = VoIDAnalyses.parseVoID(void_file)
+            if graph is not False:
+                total, tagged = VoIDAnalyses.getMetadataLanguageCounts(graph)
+                if total > 0:
+                    return round(tagged / total, 2), (
+                        f"Metadata with language tags: {tagged}/{total} (VoID file)"
+                    )
+                errors.append("No dataset metadata found in VoID file")
             else:
-                return -1, f"Error querying SPARQL endpoint: {query_results}"
-        elif utils.is_url(void_file):
-            void_file_parsed = VoIDAnalyses.parseVoID(void_file)
-            void_languages = VoIDAnalyses.getLanguage(void_file_parsed)
-            if isinstance(void_file_parsed, list):
-                return 0, f"Languages found: {void_languages}"
-            elif void_languages == 'absent':
-                return -1, "No languages found in VoID file"
-        else:
-            return -1, "No SPARQL endpoint or VoID file provided to check languages in the metadata"
-        
+                errors.append("Error parsing VoID file")
+
+        return 0, "; ".join(errors) if errors else (
+            "No SPARQL endpoint or VoID file provided to check languages in the metadata"
+        )
+
 #aa = Accessibility4All()
 #print(aa.metadata_lang("https://dbpedia.org/sparql"))

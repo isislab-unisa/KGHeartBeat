@@ -1,6 +1,6 @@
 import datetime
 import re
-from rdflib import DCAT, Graph, URIRef, Namespace
+from rdflib import DCAT, Graph, Literal, URIRef, Namespace
 from rdflib.namespace import DC, DCTERMS, DOAP, FOAF, SKOS, OWL, RDF, RDFS, VOID, XMLNS, XSD
 
 
@@ -281,3 +281,28 @@ def getDescription(graph):
         return descriptions
     else:
         return False
+
+def getMetadataLanguageCounts(graph):
+    """Count metadata with the same dataset scope as the endpoint query."""
+    datasets = set()
+    for dataset_type in (VOID.Dataset, DCAT.Dataset, DCAT.Distribution):
+        datasets.update(graph.subjects(RDF.type, dataset_type))
+    metadata = {
+        triple for dataset in datasets for triple in graph.triples((dataset, None, None))
+    }
+    tagged = sum(isinstance(obj, Literal) and bool(obj.language)
+                 for _, _, obj in metadata)
+    return len(metadata), tagged
+
+
+def get_kg_webpages(graph):
+    """Return declared dataset webpages, excluding data access URLs."""
+    datasets = set(graph.subjects(RDF.type, VOID.Dataset))
+    datasets.update(graph.subjects(RDF.type, DCAT.Dataset))
+    return sorted({
+        str(obj)
+        for dataset in datasets
+        for predicate in (FOAF.homepage, FOAF.page, DCAT.landingPage)
+        for obj in graph.objects(dataset, predicate)
+        if isinstance(obj, URIRef)
+    })

@@ -17,6 +17,7 @@ class EvaluateHumanCenteredAcc:
         self.accessibility4visuallyimpaired = Accessibility4VisuallyImpaired()
         self.deaf_hearing_accessibility = DeafHearingAccessibility()
         self.search_engine_metadata = self.recover_search_engine_metadata(kg_quality.extra.KGid)
+        self.total_resources_in_kg = utils.run_with_timeout(query.fetch_subjects,args=(self.query_endpoint,), timeout=1800)
 
 
     def recover_search_engine_metadata(self, kg_identifier):
@@ -28,30 +29,25 @@ class EvaluateHumanCenteredAcc:
         return metadata
         
     def evaluate_perceivable(self):
-
-        status_sparql_endpoint = self.kg_quality.availability.sparqlEndpoint
         sparql_endpoint = self.query_endpoint
         void_file_url = self.kg_quality.extra.urlVoid
         resourcesDH = self.kg_quality.extra.other_resources
-        total_resources_in_kg = utils.run_with_timeout(query.fetch_subjects,args=(sparql_endpoint,), timeout=1800)
 
         image_metadata = self.deaf_hearing_accessibility.image_metadata(sparql_endpoint,void_file_url,resourcesDH)
         
-        image = self.accessibility4all.image(sparql_endpoint,total_resources_in_kg)
+        image = self.accessibility4all.image(sparql_endpoint,self.total_resources_in_kg)
         
         audio_metadata = self.accessibility4visuallyimpaired.audio_meta(sparql_endpoint,void_file_url,resourcesDH)
         
-        audio = self.accessibility4visuallyimpaired.audio(sparql_endpoint,total_resources_in_kg)
+        audio = self.accessibility4visuallyimpaired.audio(sparql_endpoint,self.total_resources_in_kg)
 
         video_metadata = self.deaf_hearing_accessibility.video_meta(sparql_endpoint,void_file_url,resourcesDH)  
 
-        video = self.deaf_hearing_accessibility.video(sparql_endpoint,total_resources_in_kg)
+        video = self.deaf_hearing_accessibility.video(sparql_endpoint,self.total_resources_in_kg)
 
         perceivable_scores_sum = (image_metadata[0] + image[0] + audio_metadata[0] + audio[0] + video_metadata[0] + video[0])
-        if self.data_available:
-            perceivable_score = perceivable_scores_sum / 6
-        else:
-            perceivable_score = perceivable_scores_sum / 3
+
+        perceivable_score = perceivable_scores_sum / 6
 
         return {    
             "image_metadata": {
@@ -76,45 +72,42 @@ class EvaluateHumanCenteredAcc:
         }
 
     def evaluate_understandable(self):
-        status_sparql_endpoint = self.kg_quality.availability.sparqlEndpoint
         sparql_endpoint = self.query_endpoint
         void_file_url = self.kg_quality.extra.urlVoid
 
         data_lang = self.kg_quality.versatility.languagesQ
         if isinstance(data_lang, list) and len(data_lang) > 0:
-            data_lang_score = (0, f"Languages available: {data_lang}")
+            data_lang_score = (1, f"Languages available: {data_lang}")
         elif data_lang == 0:
-            data_lang_score = (-1, "No language specified")
+            data_lang_score = (0, "No language specified")
         elif not self.data_available:
-            data_lang_score = (-1, "No SPARQL endpoint available")
+            data_lang_score = (0, "No SPARQL endpoint available")
         else:
-            data_lang_score = (-1, "Error fetching languages")
+            data_lang_score = (0, "Error fetching languages")
         
         metadata_lang = self.accessibility4all.metadata_lang(self.query_endpoint, self.kg_quality.extra.urlVoid)
 
         if self.data_available:
-            triples = self.kg_quality.amountOfData.numTriplesQ
             labels = self.kg_quality.understendability.numLabel
-            if isinstance(labels, int) and labels > 0 and isinstance(triples, int) and triples > 0:
-                human_readable_labels_score = (-1 + (labels / triples), f"Number of human-readable labels: {labels}")
+            if isinstance(labels, int) and labels > 0 and isinstance(self.total_resources_in_kg, int) and self.total_resources_in_kg > 0:
+                human_readable_labels_score = ((labels / self.total_resources_in_kg), f"Number of human-readable labels: {labels}")
             elif isinstance(labels, int) and labels == 0:
-                human_readable_labels_score = (-1, "No human-readable labels found")
+                human_readable_labels_score = (0, "No human-readable labels found")
             elif isinstance(labels, int):
-                human_readable_labels_score = (-1, f"Number of human-readable labels: {labels}")
+                human_readable_labels_score = (0, f"Number of human-readable labels: {labels}")
             else:
-                human_readable_labels_score = (-1, "Error fetching human-readable labels")
+                human_readable_labels_score = (0, "Error fetching human-readable labels")
         else:
-            human_readable_labels_score = (-1, "No SPARQL endpoint available")
+            human_readable_labels_score = (0, "No SPARQL endpoint available")
         
         examples = self.accessibility4all.examples(self.kg_quality.extra.urlVoid, self.query_endpoint, self.search_engine_metadata)
 
         description_readability = self.accessibility4all.description_readability(sparql_endpoint, void_file_url, Aggregator.getDescription(self.search_engine_metadata))
 
         understandable_sum = (data_lang_score[0] + metadata_lang[0] + human_readable_labels_score[0] + examples[0] + description_readability[0])
-        if self.data_available:
-            understandable_score = understandable_sum / 5
-        else:
-            understandable_score = understandable_sum / 3
+
+        understandable_score = understandable_sum / 5
+
 
         return {
             "metadata_language": {
@@ -145,30 +138,29 @@ class EvaluateHumanCenteredAcc:
         dump_size = self.accessibility4all.dump_size(self.kg_quality.extra.urlVoid, self.query_endpoint, self.kg_quality.extra.KGid)
         
         if status_sparql_endpoint == 'Available':
-            auth = (0, f"SPARQL endpoint status: {status_sparql_endpoint}")
+            auth = (1, f"SPARQL endpoint status: {status_sparql_endpoint}")
         else:
-            auth = (-1, f"SPARQL endpoint status: {status_sparql_endpoint}")
+            auth = (0, f"SPARQL endpoint status: {status_sparql_endpoint}")
 
         dump_format = self.kg_quality.extra.commonMediaType
         if dump_format == True:
-            dump_format_score = (0, "Common formats available")
-        elif dump_format == False:
-            dump_format_score = (-1, "Dump available but no common formats found")
+            dump_format_score = (1, "Common formats available")
+        elif dump_format == False and (status_dump1 == 1 or status_dum2 == True):
+            dump_format_score = (0.5, "Dump available but no common formats found")
         else:
-            dump_format_score = (-1, "No dump provided for the KG")
-        
-        opens_license = self.accessibility4all.open_license(Aggregator.getLicense(self.search_engine_metadata))
+            dump_format_score = (0, "No dump provided for the KG")
+
+        licenseMetadata = self.kg_quality.licensing.licenseMetadata
+        licenseQuery = self.kg_quality.licensing.licenseQuery
+        if licenseMetadata:
+            opens_license = self.accessibility4all.open_license(licenseMetadata)
+        elif licenseQuery:
+            opens_license = self.accessibility4all.open_license(licenseQuery)
+
         alternative_access_point = self.accessibility4all.alternative_access_point(self.kg_quality.extra.urlVoid, self.kg_quality.extra.endpointUrl, self.kg_quality.extra.KGid)
 
         operable_sum = (contact_person[0] + dump_size[0] + auth[0] + dump_format_score[0] + opens_license[0] + alternative_access_point[0])
-        if status_sparql_endpoint == 'Available' and (status_dump1 == 1 or status_dum2 == True):
-            operable_score = operable_sum / 6
-        elif status_sparql_endpoint == 'Available':
-            operable_score = operable_sum / 4
-        elif status_dump1 == 1 or status_dum2 == True:
-            operable_score = operable_sum / 5
-        else:
-            operable_score = operable_sum / 3
+        operable_score = operable_sum / 6
 
         return {
             "contact_point": {
@@ -194,20 +186,16 @@ class EvaluateHumanCenteredAcc:
     
     def evaluate_robust(self):
         versioning = self.accessibility4all.version(self.kg_quality.extra.urlVoid, self.query_endpoint)
-        robots_txt = self.accessibility4all.robots_txt(self.kg_quality.extra.other_resources, self.kg_quality.extra.endpointUrl, self.kg_quality.verifiability.sources.web)
-        webpage_broken_links = self.accessibility4all.webpage_status(self.search_engine_metadata)
+        webpage_broken_links = self.accessibility4all.webpage_status(self.search_engine_metadata, self.query_endpoint, self.kg_quality.extra.urlVoid)
         metadata_broken_links_rate = self.accessibility4all.metadata_broken_links_rate(self.search_engine_metadata, self.query_endpoint, self.kg_quality.extra.urlVoid, self.kg_quality.extra.KGid)
         canonical_id = self.accessibility4all.canonical_citation(self.kg_quality.extra.urlVoid, self.query_endpoint, self.search_engine_metadata)
 
-        robust_score = (versioning[0] + robots_txt[0] + webpage_broken_links[0] + metadata_broken_links_rate[0] + canonical_id[0]) / 5
+        robust_score = (versioning[0] + webpage_broken_links[0] + metadata_broken_links_rate[0] + canonical_id[0]) / 4
 
         return {
             "versioning": {
                 "score": versioning[0],
                 "details": versioning[1]},
-            "robots_txt": {
-                "score": robots_txt[0],
-                "details": robots_txt[1]},
             "webpage_broken_links": {
                 "score": webpage_broken_links[0],
                 "details": webpage_broken_links[1]},
@@ -222,17 +210,11 @@ class EvaluateHumanCenteredAcc:
     
     def evaluate_access_4_visually_impaired(self):
         sparql_endpoint = self.query_endpoint
-        void_file_url = self.kg_quality.extra.urlVoid
-        resourcesDH = self.kg_quality.extra.other_resources
-        status_sparql_endpoint = self.kg_quality.availability.sparqlEndpoint
 
         alt_image = self.accessibility4visuallyimpaired.alt_image(sparql_endpoint)
         audio_descriptions = self.deaf_hearing_accessibility.check_audio_description_subtitles(sparql_endpoint)['description_ratio']
 
-        if self.data_available:
-            acc_4_4_visually_impaired_score = (alt_image[0] + audio_descriptions[0]) / 2
-        else:
-            acc_4_4_visually_impaired_score = 0
+        acc_4_4_visually_impaired_score = (alt_image[0] + audio_descriptions[0]) / 2
 
         return {
             "alt_image": {
