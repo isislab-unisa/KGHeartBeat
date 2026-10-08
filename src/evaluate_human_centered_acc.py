@@ -293,5 +293,6 @@ class EvaluateHumanCenteredAcc:
             "accessibility_for_deaf_hearing": access_4_deaf_hearing,
             "overall_score_no_special": sum_overall_no_special,
             "overall_score_with_special": sum_overall_with_special,
-            "overall_score_only_special": sum_overall_only_special
+            "overall_score_only_special": sum_overall_only_special,
+            "overall_score_accessibility": (perceivable['perceivable_score'] + operable['operable_score'] + understandable['understandable_score'] + robust['robust_score'] + access_4_visually_impaired['accessibility_for_visually_impaired_score'] + access_4_deaf_hearing['accessibility_for_deaf_hearing_score']) / 6
         }
