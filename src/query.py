@@ -986,7 +986,10 @@ def getUntypedSubjectCounts(url):
     ''', timeout=30)
 
 @log_in_out
-def getAllType(url, subjects=None):
+def getAllType(url, subjects=None, limit=None):
+    """Retrieve typed subjects, optionally bounded by the analysis triple limit."""
+    if limit is not None and (type(limit) is not int or limit <= 0):
+        raise ValueError('limit must be a positive integer or None')
     try:
         restriction = ''
         if subjects is not None:
@@ -994,11 +997,15 @@ def getAllType(url, subjects=None):
             if not subjects:
                 return []
             restriction = 'VALUES ?s { ' + ' '.join(rdflib.URIRef(s).n3() for s in subjects) + ' }'
-        return _select_values(url, '''
+        query_text = '''
         PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
         SELECT DISTINCT ?s
         WHERE {''' + restriction + ''' ?s rdf:type ?o}
-        ''', utils.getResultsFromJSONs, utils.getResultsFromXML, timeout=30 if subjects is not None else 300)
+        '''
+        if limit is not None:
+            query_text += f' LIMIT {limit}'
+        return _select_values(url, query_text, utils.getResultsFromJSONs, utils.getResultsFromXML,
+                              timeout=30 if subjects is not None or limit is not None else 300)
     except Exception as e :
         return e
 @log_in_out
