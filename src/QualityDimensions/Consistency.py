@@ -135,7 +135,7 @@ def _misplaced_classes(context, all_triples=None):
 def _ontology_hijacking(context):
     try:
         def calculate():
-            all_type = query.getAllType(context.access_url)
+            all_type = query.getAllType(context.access_url, limit=context.triple_limit)
             if isinstance(all_type, list):
                 triples = LOVAPI.searchTermsList(all_type)
                 return all_type, len(triples) > 0
