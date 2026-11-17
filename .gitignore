@@ -188,3 +188,4 @@ assessment_service/data/
 !/src/Dockerfile
 !KGHeartbeat-WebApp/.gitignore
 .dockerignore
+Analysis results/profile/
