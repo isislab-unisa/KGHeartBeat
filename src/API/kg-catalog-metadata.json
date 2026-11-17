@@ -1,5 +1,71 @@
 [
   {
+    "directory": "knowledge-graphs/andric-letters-kg",
+    "metadata": {
+      "databus-account": "knowledge-graph-catalog",
+      "id": "andric-letters-kg",
+      "title": "Ivo Andrić Letters Knowledge Graph",
+      "abstract": "A knowledge graph representing a selected corpus of Ivo Andrić’s correspondence with Zdenka Marković. It models letters, persons, places, organizations, and dates as RDF, with selected entities linked to Wikidata.",
+      "description": "The Ivo Andrić Letters Knowledge Graph is derived from a selected corpus of correspondence written by [Ivo Andrić](https://www.wikidata.org/wiki/Q47561), a Yugoslav writer and Nobel Prize Laureate, to [Zdenka Marković](https://www.enciklopedija.hr/clanak/markovic-zdenka), a Croatian writer and translator.\nThe graph was created using a semi-automated pipeline that combines text recognition with Transkribus, letter segmentation, Named Entity Recognition (NER), entity normalization, Named Entity Linking (NEL), and RDF generation. It represents individual letters together with their metadata, including sender, recipient, date, and place of writing, as well as persons, locations, organizations, dates, and other entities mentioned in the correspondence.\nSelected entities are linked to Wikidata identifiers, enabling integration with the wider Linked Open Data ecosystem. The graph uses established Semantic Web vocabularies, including Schema.org, Dublin Core Terms, PROV-O, SKOS, RDFS, and XML Schema datatypes.\nThe dataset supports SPARQL-based exploration of the correspondence and can be used to investigate people, places, organizations, and other entities occurring in Andrić’s letters, as well as the relationships between the letters and their broader historical and cultural context.\nThe Knowledge Graph is part of a reproducible workflow for transforming historical correspondence into structured Linked Data and was developed as part of the project Ivo Andrić in the European Context ([project website](https://www.gralis2.at/gralis/projektarium/Andric/index.html)).",
+      "moss-publish": false,
+      "databus-publish": false,
+      "license": "https://creativecommons.org/licenses/by-nc/4.0/",
+      "homepage": "https://github.com/marijadjokic/andrics_correspondence_as_kg",
+      "domains": [
+        "Cross-domain"
+      ],
+      "keywords": [
+        "Ivo Andric",
+        "correspondence",
+        "knowledge graph",
+        "RDF",
+        "linked data",
+        "digital humanities",
+        "named entity linking",
+        "Wikidata"
+      ],
+      "artifacts": [
+        {
+          "artifact": "andric-letters",
+          "title": "Ivo Andrić Letters KG",
+          "abstract": "RDF representation of a selected corpus of Ivo Andrić's correspondence with Zdenka Marković.",
+          "description": "Knowledge graph representing letters, correspondence metadata, named entities, entity mentions, and selected Wikidata links extracted from a corpus of Ivo Andrić's correspondence with Zdenka Marković.\n",
+          "versions": [
+            {
+              "version": "2026.10.04",
+              "title": "Ivo Andrić Letters KG",
+              "abstract": "RDF representation of a selected corpus of Ivo Andrić's correspondence with Zdenka Marković.",
+              "description": "Release of the Ivo Andrić Letters Knowledge Graph containing letters, correspondence metadata, persons, places, organizations, dates, entity mentions, and selected links to Wikidata.\n",
+              "license": "https://creativecommons.org/licenses/by-nc/4.0/",
+              "distributions": [
+                {
+                  "file": "https://raw.githubusercontent.com/marijadjokic/andrics_correspondence_as_kg/master/data/output/andric_letters_kg.ttl",
+                  "format": "ttl",
+                  "status": "active",
+                  "sha256": "550f7a51e52013fd653050c7045aec47905eb1ca774127ee0ef97f8cee4f1e90",
+                  "size": 12385
+                },
+                {
+                  "file": "https://raw.githubusercontent.com/marijadjokic/andrics_correspondence_as_kg/master/data/output/andric_letters_kg.jsonld",
+                  "format": "jsonld",
+                  "status": "active",
+                  "sha256": "d8a6fd0b2bd77b4fa9ad491bf91b4e26ca43ea8382019a9030be1462f23dc026",
+                  "size": 16050
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "maintainers": [
+        {
+          "name": "Marija Djokic Petrovic",
+          "github": "marijadjokic"
+        }
+      ]
+    }
+  },
+  {
     "directory": "knowledge-graphs/cso",
     "metadata": {
       "databus-account": "knowledge-graph-catalog",
@@ -94,7 +160,8 @@
       "sparql": [
         {
           "name": "main",
-          "url": "https://sparql.dblp.org"
+          "url": "https://sparql.dblp.org/sparql",
+          "ui": "https://sparql.dblp.org"
         }
       ],
       "last-version-size": 5125379331,
@@ -322,6 +389,23 @@
                   "compression": "gz",
                   "size": 5207691176,
                   "sha256": "c028bfb9231f05bd804d100a8b14b340f7366858f363ee6f4b8bfdd1653ad7c4",
+                  "status": "active"
+                }
+              ]
+            },
+            {
+              "version": "2026-11-01",
+              "title": "Monthly Snapshot",
+              "abstract": "This file contains all the dblp data in a single file. The dblp computer science bibliography is the open indexing service and knowledge graph of the computer science community. ",
+              "description": "This file contains all the dblp data in a single file. The dblp computer science bibliography is the open indexing service and knowledge graph of the computer science community. This version and its metadata have been **automatically retrieved and published** by an automated update process.\n\nFound an issue? Update metadata: https://github.com/m1ci/lod-next-gen/blob/main/knowledge-graphs/dblp/metadata.yaml",
+              "license": "https://creativecommons.org/publicdomain/zero/1.0/legalcode.rdf",
+              "distributions": [
+                {
+                  "file": "https://drops.dagstuhl.de/storage/artifacts/dblp/rdf/2026/dblp-2026-11-01.nt.gz",
+                  "format": "nt",
+                  "compression": "gz",
+                  "size": 5436187013,
+                  "sha256": "795e9fd7d532dafa6685962e0fc59dcd4ba41087642a486bfd22af68d8fd11af",
                   "status": "active"
                 }
               ]
@@ -4724,6 +4808,374 @@
     }
   },
   {
+    "directory": "knowledge-graphs/eobs-kg",
+    "metadata": {
+      "databus-account": "knowledge-graph-catalog",
+      "id": "eobs-kg",
+      "title": "EOBS Knowledge Graph",
+      "abstract": "EOBS-KG is a knowledge graph of European climate observations covering the time period 1950-2024.",
+      "description": "EOBS-KG is a knowledge graph providing structured data about climate variables such as mean/min/max temperature, precipitation, relative humidity, and wind speed for Europe. The knowledge graph contains about 3 billion triples, covers the period 1950-2024.",
+      "moss-publish": false,
+      "databus-publish": false,
+      "license": "https://creativecommons.org/licenses/by-nc/4.0/",
+      "homepage": "https://doi.org/10.34740/kaggle/ds/10081642",
+      "domains": [
+        "Geography & Environment"
+      ],
+      "keywords": [
+        "climate data",
+        "geographic knowledge graph",
+        "scientific knowledge graph"
+      ],
+      "sparql": [
+        {
+          "name": "main",
+          "url": "https://obs.knowledgehub.nfdi4earth.de/sparql",
+          "ui": "https://w3id.org/climateobservations/eobs-v31"
+        }
+      ],
+      "maintainers": [
+        {
+          "name": "Auriol Degbelo",
+          "contact": "auriol.degbelo@tu-dresden.de",
+          "github": "aurioldegbelo"
+        }
+      ],
+      "artifacts": [
+        {
+          "artifact": "eobs-kg-colllection-1950-1954",
+          "title": "Collection of observations from 1950-1954",
+          "abstract": "This file contains observations from 1950 to 1954.",
+          "versions": [
+            {
+              "version": "2026.07.10",
+              "title": "Collection of observations from 1950-1954",
+              "abstract": "This file contains observations from 1950 to 1954.",
+              "license": "https://creativecommons.org/licenses/by-nc/4.0/",
+              "distributions": [
+                {
+                  "file": "https://www.kaggle.com/api/v1/datasets/download/ammaryousaf45/e-obs-climate-data?filename=eobs_climate_kg_1950_1954_20251216_004417.ttl",
+                  "format": "ttl",
+                  "status": "active",
+                  "sha256": "3daa97090b313c5f06967381eb702c0b81f9a1971adae3196f57b0d6c153f0b0",
+                  "size": 10370162736
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "artifact": "eobs-kg-colllection-1955-1959",
+          "title": "Collection of observations from 1955-1959",
+          "abstract": "This file contains observations from 1955 to 1959.",
+          "versions": [
+            {
+              "version": "2026.07.10",
+              "title": "Collection of observations from 1955-1959",
+              "abstract": "This file contains observations from 1955 to 1959.",
+              "license": "https://creativecommons.org/licenses/by-nc/4.0/",
+              "distributions": [
+                {
+                  "file": "https://www.kaggle.com/api/v1/datasets/download/ammaryousaf45/e-obs-climate-data?filename=eobs_climate_kg_1955_1959_20251216_160101.ttl",
+                  "format": "ttl",
+                  "status": "active",
+                  "sha256": "d72d58480fcd32b67e416ac060a07860e6e846f8916f598c373893c94209ca24",
+                  "size": 10424866172
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "artifact": "eobs-kg-colllection-1960-1964",
+          "title": "Collection of observations from 1960-1964",
+          "abstract": "This file contains observations from 1960 to 1964.",
+          "versions": [
+            {
+              "version": "2026.07.10",
+              "title": "Collection of observations from 1960-1964",
+              "abstract": "This file contains observations from 1960 to 1964.",
+              "license": "https://creativecommons.org/licenses/by-nc/4.0/",
+              "distributions": [
+                {
+                  "file": "https://www.kaggle.com/api/v1/datasets/download/ammaryousaf45/e-obs-climate-data?filename=eobs_climate_kg_1960_1964_20251217_072456.ttl",
+                  "format": "ttl",
+                  "status": "active",
+                  "sha256": "5e0093cdc76325d4a459c31e906cec12c99b7cf4417f4426d63bb419b71a64db",
+                  "size": 10463821745
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "artifact": "eobs-kg-colllection-1965-1969",
+          "title": "Collection of observations from 1965-1969",
+          "abstract": "This file contains observations from 1965 to 1969.",
+          "versions": [
+            {
+              "version": "2026.07.10",
+              "title": "Collection of observations from 1965-1969",
+              "abstract": "This file contains observations from 1965 to 1969.",
+              "license": "https://creativecommons.org/licenses/by-nc/4.0/",
+              "distributions": [
+                {
+                  "file": "https://www.kaggle.com/api/v1/datasets/download/ammaryousaf45/e-obs-climate-data?filename=eobs_climate_kg_1965_1969_20251217_230110.ttl",
+                  "format": "ttl",
+                  "status": "active",
+                  "sha256": "9c1e93f6f61ab35471df874da07ed979829dcaa610823299944bd6ec8d13da1f",
+                  "size": 10781856766
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "artifact": "eobs-kg-colllection-1970-1974",
+          "title": "Collection of observations from 1970-1974",
+          "abstract": "This file contains observations from 1970 to 1974.",
+          "versions": [
+            {
+              "version": "2026.07.10",
+              "title": "Collection of observations from 1970-1974",
+              "abstract": "This file contains observations from 1970 to 1974.",
+              "license": "https://creativecommons.org/licenses/by-nc/4.0/",
+              "distributions": [
+                {
+                  "file": "https://www.kaggle.com/api/v1/datasets/download/ammaryousaf45/e-obs-climate-data?filename=eobs_climate_kg_1970_1974_20251226_203257.ttl",
+                  "format": "ttl",
+                  "status": "active",
+                  "sha256": "8609501c10fff43caeebe80e9868daf4a02b9c69b67439b30b2e4cb736c875bc",
+                  "size": 10831635733
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "artifact": "eobs-kg-colllection-1975-1979",
+          "title": "Collection of observations from 1975-1979",
+          "abstract": "This file contains observations from 1975 to 1979.",
+          "versions": [
+            {
+              "version": "2026.07.10",
+              "title": "Collection of observations from 1975-1979",
+              "abstract": "This file contains observations from 1975 to 1979.",
+              "license": "https://creativecommons.org/licenses/by-nc/4.0/",
+              "distributions": [
+                {
+                  "file": "https://www.kaggle.com/api/v1/datasets/download/ammaryousaf45/e-obs-climate-data?filename=eobs_climate_kg_1975_1979_20251217_003449.ttl",
+                  "format": "ttl",
+                  "status": "active",
+                  "sha256": "eeb8ed7e84232840f595a86b7995e0f71f540e91842dc3b8da6115a04bb019c2",
+                  "size": 11104804451
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "artifact": "eobs-kg-colllection-1980-1984",
+          "title": "Collection of observations from 1980-1984",
+          "abstract": "This file contains observations from 1980 to 1984.",
+          "versions": [
+            {
+              "version": "2026.07.10",
+              "title": "Collection of observations from 1980-1984",
+              "abstract": "This file contains observations from 1980 to 1984.",
+              "license": "https://creativecommons.org/licenses/by-nc/4.0/",
+              "distributions": [
+                {
+                  "file": "https://www.kaggle.com/api/v1/datasets/download/ammaryousaf45/e-obs-climate-data?filename=eobs_climate_kg_1980_1984_20251217_003450.ttl",
+                  "format": "ttl",
+                  "status": "active",
+                  "sha256": "18794e46f56ab72e8a7af6faf0075815f4c5f2c3d8145abd3073ae7064dbf32c",
+                  "size": 9908172705
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "artifact": "eobs-kg-colllection-1985-1989",
+          "title": "Collection of observations from 1985-1989",
+          "abstract": "This file contains observations from 1985 to 1989.",
+          "versions": [
+            {
+              "version": "2026.07.10",
+              "title": "Collection of observations from 1985-1989",
+              "abstract": "This file contains observations from 1985 to 1989.",
+              "license": "https://creativecommons.org/licenses/by-nc/4.0/",
+              "distributions": [
+                {
+                  "file": "https://www.kaggle.com/api/v1/datasets/download/ammaryousaf45/e-obs-climate-data?filename=eobs_climate_kg_1985_1989_20251231_142101.ttl",
+                  "format": "ttl",
+                  "status": "active",
+                  "sha256": "d5241ba0c945d799ee2c267e68205e7b893956acc7180344b77ae010b21ee3fc",
+                  "size": 12695993744
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "artifact": "eobs-kg-colllection-1990-1994",
+          "title": "Collection of observations from 1990-1994",
+          "abstract": "This file contains observations from 1990 to 1994.",
+          "versions": [
+            {
+              "version": "2026.07.10",
+              "title": "Collection of observations from 1990-1994",
+              "abstract": "This file contains observations from 1990 to 1994.",
+              "license": "https://creativecommons.org/licenses/by-nc/4.0/",
+              "distributions": [
+                {
+                  "file": "https://www.kaggle.com/api/v1/datasets/download/ammaryousaf45/e-obs-climate-data?filename=eobs_climate_kg_1990_1994_20251231_141928.ttl",
+                  "format": "ttl",
+                  "status": "active",
+                  "sha256": "632c4f8631163f8574649546240fa57b722d0a8f02d29f4565de803297d5f505",
+                  "size": 12737887623
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "artifact": "eobs-kg-colllection-1995-1999",
+          "title": "Collection of observations from 1995-1999",
+          "abstract": "This file contains observations from 1995 to 1999.",
+          "versions": [
+            {
+              "version": "2026.07.10",
+              "title": "Collection of observations from 1995-1999",
+              "abstract": "This file contains observations from 1995 to 1999.",
+              "license": "https://creativecommons.org/licenses/by-nc/4.0/",
+              "distributions": [
+                {
+                  "file": "https://www.kaggle.com/api/v1/datasets/download/ammaryousaf45/e-obs-climate-data?filename=eobs_climate_kg_1995_1999_20251231_142040.ttl",
+                  "format": "ttl",
+                  "status": "active",
+                  "sha256": "4784479a0d37dae278886f5e46fb5fc0482f0d048ac620795502748f4454fba7",
+                  "size": 12766118093
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "artifact": "eobs-kg-colllection-2000-2004",
+          "title": "Collection of observations from 2000-2004",
+          "abstract": "This file contains observations from 2000 to 2004.",
+          "versions": [
+            {
+              "version": "2026.07.10",
+              "title": "Collection of observations from 2000-2004",
+              "abstract": "This file contains observations from 2000 to 2004.",
+              "license": "https://creativecommons.org/licenses/by-nc/4.0/",
+              "distributions": [
+                {
+                  "file": "https://www.kaggle.com/api/v1/datasets/download/ammaryousaf45/e-obs-climate-data?filename=eobs_climate_kg_2000_2004_20251231_141520.ttl",
+                  "format": "ttl",
+                  "status": "active",
+                  "sha256": "b2765eb68efd4c3c46df8c4f3be535593e909a08af19274838b24472b952409f",
+                  "size": 12612078087
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "artifact": "eobs-kg-colllection-2005-2009",
+          "title": "Collection of observations from 2005-2009",
+          "abstract": "This file contains observations from 2005 to 2009.",
+          "versions": [
+            {
+              "version": "2026.07.10",
+              "title": "Collection of observations from 2005-2009",
+              "abstract": "This file contains observations from 2005 to 2009.",
+              "license": "https://creativecommons.org/licenses/by-nc/4.0/",
+              "distributions": [
+                {
+                  "file": "https://www.kaggle.com/api/v1/datasets/download/ammaryousaf45/e-obs-climate-data?filename=eobs_climate_kg_2005_2009_20251227_024839.ttl",
+                  "format": "ttl",
+                  "status": "active",
+                  "sha256": "d8f2979c7fd3247c5bd26a670aa516d0c11e73675204384809e28450b9c91c0c",
+                  "size": 9826458032
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "artifact": "eobs-kg-colllection-2010-2014",
+          "title": "Collection of observations from 2010-2014",
+          "abstract": "This file contains observations from 2010 to 2014.",
+          "versions": [
+            {
+              "version": "2026.07.10",
+              "title": "Collection of observations from 2010-2014",
+              "abstract": "This file contains observations from 2010 to 2014.",
+              "license": "https://creativecommons.org/licenses/by-nc/4.0/",
+              "distributions": [
+                {
+                  "file": "https://www.kaggle.com/api/v1/datasets/download/ammaryousaf45/e-obs-climate-data?filename=eobs_climate_kg_2010_2014_20251217_011112.ttl",
+                  "format": "ttl",
+                  "status": "active",
+                  "sha256": "1f48a43ff2c6e55114df345611be6e10960823d22858610590421c4c44b2b18b",
+                  "size": 11976692480
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "artifact": "eobs-kg-colllection-2015-2019",
+          "title": "Collection of observations from 2015-2019",
+          "abstract": "This file contains observations from 2015 to 2019.",
+          "versions": [
+            {
+              "version": "2026.07.10",
+              "title": "Collection of observations from 2015-2019",
+              "abstract": "This file contains observations from 2015 to 2019.",
+              "license": "https://creativecommons.org/licenses/by-nc/4.0/",
+              "distributions": [
+                {
+                  "file": "https://www.kaggle.com/api/v1/datasets/download/ammaryousaf45/e-obs-climate-data?filename=eobs_climate_kg_2015_2019_20251217_173418.ttl",
+                  "format": "ttl",
+                  "status": "active",
+                  "sha256": "aaebbdc5c9a679d8f6e5fd87243c69480aeb404857b02f98ce070c03b47d7be5",
+                  "size": 11755433567
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "artifact": "eobs-kg-colllection-2020-2024",
+          "title": "Collection of observations from 2020-2024",
+          "abstract": "This file contains observations from 2020 to 2024.",
+          "versions": [
+            {
+              "version": "2026.07.10",
+              "title": "Collection of observations from 2020-2024",
+              "abstract": "This file contains observations from 2020 to 2024.",
+              "license": "https://creativecommons.org/licenses/by-nc/4.0/",
+              "distributions": [
+                {
+                  "file": "https://www.kaggle.com/api/v1/datasets/download/ammaryousaf45/e-obs-climate-data?filename=eobs_climate_kg_2020_2024_20251227_032128.ttl",
+                  "format": "ttl",
+                  "status": "active",
+                  "sha256": "a12b3c8cd8f13db0104515222e3bade506d5f9273e1214d8571c5702bef4ba3e",
+                  "size": 10889356546
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
     "directory": "knowledge-graphs/fr-dbpedia-kg",
     "metadata": {
       "databus-account": "knowledge-graph-catalog",
@@ -4817,63 +5269,74 @@
   {
     "directory": "knowledge-graphs/gnd",
     "metadata": {
-      "databus-account": "deutsche-natbib",
+      "databus-account": "knowledge-graph-catalog",
       "id": "gnd",
-      "title": "Integrated Authority File",
+      "title": "Integrated Authority File (GND)",
       "abstract": "The GND (Gemeinsame Normdatei) is a knowledge graph by the German National Library, providing structured metadata on persons, organizations, works, subjects, and locations. It unifies legacy authority files using RDF, enabling semantic links across libraries and research institutions.",
       "description": "The GND (Gemeinsame Normdatei) is a knowledge graph by the German National Library, providing structured metadata on persons, organizations, works, subjects, and locations. It unifies legacy authority files using RDF, enabling semantic links across libraries and research institutions.",
       "homepage": "https://www.dnb.de/EN/Professionell/Metadatendienste/Datenbezug/LDS/lds_node.html",
-      "license": "https://dalicc.net/licenselibrary/Cc010Universal",
-      "check-new-release": "check_gnd_release.py",
+      "domains": [
+        "Cross-domain"
+      ],
+      "license": "https://creativecommons.org/publicdomain/zero/1.0/deed.de",
       "databus-publish": false,
       "moss-publish": false,
       "keywords": [
-        "bibliographic",
-        "publications"
+        "Cross-domain"
       ],
       "sparql": [
         {
-          "name": "main",
-          "url": "https://sparql.dnb.de"
+          "name": "gnd",
+          "url": "https://sparql.dnb.de/api/gnd",
+          "ui": "https://sparql.dnb.de"
+        },
+        {
+          "name": "dnbgnd",
+          "url": "https://sparql.dnb.de/api/dnbgnd",
+          "ui": "https://sparql.dnb.de"
+        },
+        {
+          "name": "zdb",
+          "url": "https://sparql.dnb.de/api/zdb",
+          "ui": "https://sparql.dnb.de"
         }
       ],
       "maintainers": [
         {
           "name": "Tracy Arndt",
           "contact": "T.Arndt@dnb.de",
-          "github": "n/a"
+          "github": "thoffma"
         }
       ],
-      "last-version-size": 3686365,
       "artifacts": [
         {
-          "artifact": "authorities-gnd-geografikum_lds",
-          "title": "authorities-gnd-geografikum_lds",
-          "abstract": "2025-09-29 14:49 42M Stabiler Link auf den aktuellen Gesamtabzug der GND, Entitaeten Geografikum (Geographical entity, Code g). This version has been **auto-generated**.",
-          "description": "2025-09-29 14:49 42M Stabiler Link auf den aktuellen Gesamtabzug der GND, Entitaeten Geografikum (Geographical entity, Code g). This version has been **auto-generated**.",
+          "artifact": "authorities-gnd_lds",
+          "title": "authorities-gnd_lds",
+          "abstract": "Gesamtabzug der GND im Format RDF",
+          "description": "Gesamtabzug der GND im Format RDF",
           "versions": [
             {
-              "version": "2025-09-16",
-              "title": "authorities-gnd-geografikum_lds",
-              "abstract": "2025-09-29 14:49 42M Stabiler Link auf den aktuellen Gesamtabzug der GND, Entitaeten Geografikum (Geographical entity, Code g). This version has been **auto-generated**.",
-              "description": "2025-09-29 14:49 42M Stabiler Link auf den aktuellen Gesamtabzug der GND, Entitaeten Geografikum (Geographical entity, Code g). This version has been **auto-generated**.",
-              "license": "https://dalicc.net/licenselibrary/Cc010Universal",
+              "version": "2026-02-17",
+              "title": "authorities-gnd_lds",
+              "abstract": "Gesamtabzug der GND im Format RDF",
+              "description": "Gesamtabzug der GND im Format RDF",
+              "license": "https://creativecommons.org/publicdomain/zero/1.0/deed.de",
               "distributions": [
                 {
-                  "file": "https://data.dnb.de/opendata/authorities-gnd-geografikum_lds_20250926.jsonld.gz",
-                  "format": "jsonld",
+                  "file": "https://data.dnb.de/opendata/authorities-gnd_lds_20260217.nt.gz",
+                  "format": "ntriples",
                   "compression": "gz",
-                  "size": 43984924,
-                  "sha256": "926239dc82b3894916ad4e377d113752666b4b68aaaa517d04c0300ca4ba9844",
-                  "status": "active"
+                  "sha256": "e773583749c425a815e923a4c4a4dcbe26e33c607a4111d8efb56992b42f9a75",
+                  "status": "active",
+                  "size": 2591266134
                 },
                 {
-                  "file": "https://data.dnb.de/opendata/authorities-gnd-geografikum_lds_20250913.rdf.gz",
+                  "file": "https://data.dnb.de/opendata/authorities-gnd_lds_20260217.rdf.gz",
                   "format": "rdf",
                   "compression": "gz",
-                  "size": 43476315,
-                  "sha256": "f329bd6cd74d2851072bf62701ee3ce4023e027615002da2954fb5b751b922a3",
-                  "status": "error"
+                  "sha256": "ff9654434d5e2fdf21dece9c25fa6f9540140f6ac3ca6dfc182b19874df9a8e9",
+                  "status": "active",
+                  "size": 1895558072
                 }
               ]
             }
@@ -4976,12 +5439,6 @@
         "Microsoft Academic Graph",
         "linked open data",
         "RDF"
-      ],
-      "sparql": [
-        {
-          "name": "main",
-          "url": "https://makg.org/sparql"
-        }
       ],
       "maintainers": [
         {
@@ -5912,14 +6369,15 @@
       "sparql": [
         {
           "name": "main",
-          "url": "https://www.orkg.org/orkg/sparql/"
+          "url": "https://orkg.org/triplestore",
+          "ui": "https://www.orkg.org/orkg/sparql/"
         }
       ],
       "maintainers": [
         {
-          "name": "Milan Dojchinovski",
-          "contact": "dojcinovski.milan@gmail.com",
-          "github": "m1ci"
+          "name": "Manuel Prinz",
+          "contact": "manuel.prinz@tib.eu",
+          "github": "manuelprinz"
         }
       ],
       "last-version-size": 52688916,
@@ -6732,7 +7190,8 @@
       "sparql": [
         {
           "name": "main",
-          "url": "https://sidekick.bio2vec.net/sparql"
+          "url": "https://sidekick.bio2vec.net/fuseki/sidekick/query",
+          "ui": "https://sidekick.bio2vec.net/sparql"
         }
       ],
       "maintainers": [
@@ -6851,6 +7310,70 @@
                   "size": 868738
                 }
               ]
+            },
+            {
+              "version": "2026.09.23",
+              "title": "SSTIM 0.18.0",
+              "abstract": "Release 0.18.0 of the Sensory Stimulation Ontology.",
+              "description": "Frozen whole-set namespace document for SSTIM 0.18.0. The release is byte-stable under its version IRI and archived on Zenodo under concept DOI 10.5281/zenodo.21286974. This catalog entry was discovered from the canonical W3C-CG release tag and accepted only after its published immutable manifest and ontology version agreed.",
+              "license": "https://creativecommons.org/licenses/by/4.0/",
+              "distributions": [
+                {
+                  "file": "https://w3c-cg.github.io/sstim/ontology/0.18.0/sstim-namespace.ttl",
+                  "format": "ttl",
+                  "status": "active",
+                  "sha256": "5ee580002b881472e80cb3987f0673ab918d7f5b053f8a13ff145f4921133ca8",
+                  "size": 871241
+                }
+              ]
+            },
+            {
+              "version": "2026.10.10",
+              "title": "SSTIM 0.19.0",
+              "abstract": "Release 0.19.0 of the Sensory Stimulation Ontology.",
+              "description": "Frozen whole-set namespace document for SSTIM 0.19.0. The release is byte-stable under its version IRI and archived on Zenodo under concept DOI 10.5281/zenodo.21286974. This catalog entry was discovered from the canonical W3C-CG release tag and accepted only after its published immutable manifest and ontology version agreed.",
+              "license": "https://creativecommons.org/licenses/by/4.0/",
+              "distributions": [
+                {
+                  "file": "https://w3c-cg.github.io/sstim/ontology/0.19.0/sstim-namespace.ttl",
+                  "format": "ttl",
+                  "status": "active",
+                  "sha256": "4a11a5de19a04bdf2b482f11fa0e629190d4f4ebfd7415a8396d39432a4fc303",
+                  "size": 895259
+                }
+              ]
+            },
+            {
+              "version": "2026.10.19",
+              "title": "SSTIM 0.20.0",
+              "abstract": "Release 0.20.0 of the Sensory Stimulation Ontology.",
+              "description": "Frozen whole-set namespace document for SSTIM 0.20.0. The release is byte-stable under its version IRI and archived on Zenodo under concept DOI 10.5281/zenodo.21286974. This catalog entry was discovered from the canonical W3C-CG release tag and accepted only after its published immutable manifest and ontology version agreed.",
+              "license": "https://creativecommons.org/licenses/by/4.0/",
+              "distributions": [
+                {
+                  "file": "https://w3c-cg.github.io/sstim/ontology/0.20.0/sstim-namespace.ttl",
+                  "format": "ttl",
+                  "status": "active",
+                  "sha256": "ea3170bd505e3abc40a9ad1ed1b008e7d1483256aacf0518bee1228ad7f1f148",
+                  "size": 994079
+                }
+              ]
+            },
+            {
+              "version": "2026.11.01",
+              "title": "SSTIM 0.21.0",
+              "abstract": "Release 0.21.0 of the Sensory Stimulation Ontology.",
+              "description": "Frozen whole-set namespace document for SSTIM 0.21.0. The release is byte-stable under its version IRI and archived on Zenodo under concept DOI 10.5281/zenodo.21286974. This catalog entry was discovered from the canonical W3C-CG release tag and accepted only after its published immutable manifest and ontology version agreed.",
+              "license": "https://creativecommons.org/licenses/by/4.0/",
+              "distributions": [
+                {
+                  "file": "https://w3c-cg.github.io/sstim/ontology/0.21.0/sstim-namespace.ttl",
+                  "format": "ttl",
+                  "status": "active",
+                  "sha256": "69864df7933f8b895989974194d5fb6e0dc51c77c86915834bcfc0baf7196602",
+                  "size": 1005083
+                }
+              ]
             }
           ]
         }
@@ -6892,7 +7415,8 @@
       "sparql": [
         {
           "name": "main",
-          "url": "https://query.wikidata.org/"
+          "url": "https://query.wikidata.org/sparql",
+          "ui": "https://query.wikidata.org/"
         }
       ],
       "maintainers": [
@@ -6997,6 +7521,131 @@
                   "format": "nt",
                   "compression": "gz",
                   "size": 71568239134,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                }
+              ]
+            },
+            {
+              "version": "2026-09-30",
+              "title": "Wikidata Truthy RDF Dump - Beta",
+              "abstract": "Beta Wikidata truthy RDF dumps containing the best-rank direct statements.",
+              "description": "Beta truthy RDF dumps contain the simplified truthy representation of Wikidata, including direct best-rank statements represented using wdt: and wdtn: properties. Qualifiers and references are omitted.",
+              "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+              "distributions": [
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20260930/wikidata-20260930-truthy-BETA.nt.bz2",
+                  "format": "nt",
+                  "compression": "bz2",
+                  "size": 43507090513,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                },
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20260930/wikidata-20260930-truthy-BETA.nt.gz",
+                  "format": "nt",
+                  "compression": "gz",
+                  "size": 71640460978,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                }
+              ]
+            },
+            {
+              "version": "2026-10-07",
+              "title": "Wikidata Truthy RDF Dump - Beta",
+              "abstract": "Beta Wikidata truthy RDF dumps containing the best-rank direct statements.",
+              "description": "Beta truthy RDF dumps contain the simplified truthy representation of Wikidata, including direct best-rank statements represented using wdt: and wdtn: properties. Qualifiers and references are omitted.",
+              "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+              "distributions": [
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261007/wikidata-20261007-truthy-BETA.nt.bz2",
+                  "format": "nt",
+                  "compression": "bz2",
+                  "size": 43534958911,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                },
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261007/wikidata-20261007-truthy-BETA.nt.gz",
+                  "format": "nt",
+                  "compression": "gz",
+                  "size": 71682496855,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                }
+              ]
+            },
+            {
+              "version": "2026-10-14",
+              "title": "Wikidata Truthy RDF Dump - Beta",
+              "abstract": "Beta Wikidata truthy RDF dumps containing the best-rank direct statements.",
+              "description": "Beta truthy RDF dumps contain the simplified truthy representation of Wikidata, including direct best-rank statements represented using wdt: and wdtn: properties. Qualifiers and references are omitted.",
+              "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+              "distributions": [
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261014/wikidata-20261014-truthy-BETA.nt.bz2",
+                  "format": "nt",
+                  "compression": "bz2",
+                  "size": 43554015292,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                },
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261014/wikidata-20261014-truthy-BETA.nt.gz",
+                  "format": "nt",
+                  "compression": "gz",
+                  "size": 71710466638,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                }
+              ]
+            },
+            {
+              "version": "2026-11-04",
+              "title": "Wikidata Truthy RDF Dump - Beta",
+              "abstract": "Beta Wikidata truthy RDF dumps containing the best-rank direct statements.",
+              "description": "Beta truthy RDF dumps contain the simplified truthy representation of Wikidata, including direct best-rank statements represented using wdt: and wdtn: properties. Qualifiers and references are omitted.",
+              "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+              "distributions": [
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261104/wikidata-20261104-truthy-BETA.nt.bz2",
+                  "format": "nt",
+                  "compression": "bz2",
+                  "size": 43634466369,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                },
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261104/wikidata-20261104-truthy-BETA.nt.gz",
+                  "format": "nt",
+                  "compression": "gz",
+                  "size": 71837406207,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                }
+              ]
+            },
+            {
+              "version": "2026-11-11",
+              "title": "Wikidata Truthy RDF Dump - Beta",
+              "abstract": "Beta Wikidata truthy RDF dumps containing the best-rank direct statements.",
+              "description": "Beta truthy RDF dumps contain the simplified truthy representation of Wikidata, including direct best-rank statements represented using wdt: and wdtn: properties. Qualifiers and references are omitted.",
+              "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+              "distributions": [
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261111/wikidata-20261111-truthy-BETA.nt.bz2",
+                  "format": "nt",
+                  "compression": "bz2",
+                  "size": 43669635611,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                },
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261111/wikidata-20261111-truthy-BETA.nt.gz",
+                  "format": "nt",
+                  "compression": "gz",
+                  "size": 71891236605,
                   "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
                   "status": "active"
                 }
@@ -7170,6 +7819,334 @@
                   "status": "active"
                 }
               ]
+            },
+            {
+              "version": "2026-09-25",
+              "title": "Wikidata Lexemes RDF Dump - Beta",
+              "abstract": "Beta RDF dumps containing Wikidata lexemes and associated linguistic information.",
+              "description": "Beta Wikidata lexeme dumps contain the lexeme namespace and associated linguistic information represented in RDF.",
+              "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+              "distributions": [
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20260925/wikidata-20260925-lexemes-BETA.nt.bz2",
+                  "format": "nt",
+                  "compression": "bz2",
+                  "size": 1170673130,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                },
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20260925/wikidata-20260925-lexemes-BETA.nt.gz",
+                  "format": "nt",
+                  "compression": "gz",
+                  "size": 1522459371,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                },
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20260925/wikidata-20260925-lexemes-BETA.ttl.bz2",
+                  "format": "ttl",
+                  "compression": "bz2",
+                  "size": 677196187,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                },
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20260925/wikidata-20260925-lexemes-BETA.ttl.gz",
+                  "format": "ttl",
+                  "compression": "gz",
+                  "size": 843209759,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                }
+              ]
+            },
+            {
+              "version": "2026-10-02",
+              "title": "Wikidata Lexemes RDF Dump - Beta",
+              "abstract": "Beta RDF dumps containing Wikidata lexemes and associated linguistic information.",
+              "description": "Beta Wikidata lexeme dumps contain the lexeme namespace and associated linguistic information represented in RDF.",
+              "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+              "distributions": [
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261002/wikidata-20261002-lexemes-BETA.nt.bz2",
+                  "format": "nt",
+                  "compression": "bz2",
+                  "size": 1176675873,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                },
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261002/wikidata-20261002-lexemes-BETA.nt.gz",
+                  "format": "nt",
+                  "compression": "gz",
+                  "size": 1529396508,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                },
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261002/wikidata-20261002-lexemes-BETA.ttl.bz2",
+                  "format": "ttl",
+                  "compression": "bz2",
+                  "size": 680809311,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                },
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261002/wikidata-20261002-lexemes-BETA.ttl.gz",
+                  "format": "ttl",
+                  "compression": "gz",
+                  "size": 847173517,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                }
+              ]
+            },
+            {
+              "version": "2026-10-09",
+              "title": "Wikidata Lexemes RDF Dump - Beta",
+              "abstract": "Beta RDF dumps containing Wikidata lexemes and associated linguistic information.",
+              "description": "Beta Wikidata lexeme dumps contain the lexeme namespace and associated linguistic information represented in RDF.",
+              "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+              "distributions": [
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261009/wikidata-20261009-lexemes-BETA.nt.bz2",
+                  "format": "nt",
+                  "compression": "bz2",
+                  "size": 1177721248,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                },
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261009/wikidata-20261009-lexemes-BETA.nt.gz",
+                  "format": "nt",
+                  "compression": "gz",
+                  "size": 1530626516,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                },
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261009/wikidata-20261009-lexemes-BETA.ttl.bz2",
+                  "format": "ttl",
+                  "compression": "bz2",
+                  "size": 681449877,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                },
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261009/wikidata-20261009-lexemes-BETA.ttl.gz",
+                  "format": "ttl",
+                  "compression": "gz",
+                  "size": 847995513,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                }
+              ]
+            },
+            {
+              "version": "2026-10-16",
+              "title": "Wikidata Lexemes RDF Dump - Beta",
+              "abstract": "Beta RDF dumps containing Wikidata lexemes and associated linguistic information.",
+              "description": "Beta Wikidata lexeme dumps contain the lexeme namespace and associated linguistic information represented in RDF.",
+              "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+              "distributions": [
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261016/wikidata-20261016-lexemes-BETA.nt.bz2",
+                  "format": "nt",
+                  "compression": "bz2",
+                  "size": 1179865923,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                },
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261016/wikidata-20261016-lexemes-BETA.nt.gz",
+                  "format": "nt",
+                  "compression": "gz",
+                  "size": 1533109073,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                },
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261016/wikidata-20261016-lexemes-BETA.ttl.bz2",
+                  "format": "ttl",
+                  "compression": "bz2",
+                  "size": 682776342,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                },
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261016/wikidata-20261016-lexemes-BETA.ttl.gz",
+                  "format": "ttl",
+                  "compression": "gz",
+                  "size": 849578788,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                }
+              ]
+            },
+            {
+              "version": "2026-10-23",
+              "title": "Wikidata Lexemes RDF Dump - Beta",
+              "abstract": "Beta RDF dumps containing Wikidata lexemes and associated linguistic information.",
+              "description": "Beta Wikidata lexeme dumps contain the lexeme namespace and associated linguistic information represented in RDF.",
+              "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+              "distributions": [
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261023/wikidata-20261023-lexemes-BETA.nt.bz2",
+                  "format": "nt",
+                  "compression": "bz2",
+                  "size": 1180565976,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                },
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261023/wikidata-20261023-lexemes-BETA.nt.gz",
+                  "format": "nt",
+                  "compression": "gz",
+                  "size": 1533921877,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                },
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261023/wikidata-20261023-lexemes-BETA.ttl.bz2",
+                  "format": "ttl",
+                  "compression": "bz2",
+                  "size": 683259257,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                },
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261023/wikidata-20261023-lexemes-BETA.ttl.gz",
+                  "format": "ttl",
+                  "compression": "gz",
+                  "size": 850133405,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                }
+              ]
+            },
+            {
+              "version": "2026-10-30",
+              "title": "Wikidata Lexemes RDF Dump - Beta",
+              "abstract": "Beta RDF dumps containing Wikidata lexemes and associated linguistic information.",
+              "description": "Beta Wikidata lexeme dumps contain the lexeme namespace and associated linguistic information represented in RDF.",
+              "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+              "distributions": [
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261030/wikidata-20261030-lexemes-BETA.nt.bz2",
+                  "format": "nt",
+                  "compression": "bz2",
+                  "size": 1189690483,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                },
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261030/wikidata-20261030-lexemes-BETA.nt.gz",
+                  "format": "nt",
+                  "compression": "gz",
+                  "size": 1544198707,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                },
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261030/wikidata-20261030-lexemes-BETA.ttl.bz2",
+                  "format": "ttl",
+                  "compression": "bz2",
+                  "size": 688753896,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                },
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261030/wikidata-20261030-lexemes-BETA.ttl.gz",
+                  "format": "ttl",
+                  "compression": "gz",
+                  "size": 856149537,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                }
+              ]
+            },
+            {
+              "version": "2026-11-06",
+              "title": "Wikidata Lexemes RDF Dump - Beta",
+              "abstract": "Beta RDF dumps containing Wikidata lexemes and associated linguistic information.",
+              "description": "Beta Wikidata lexeme dumps contain the lexeme namespace and associated linguistic information represented in RDF.",
+              "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+              "distributions": [
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261106/wikidata-20261106-lexemes-BETA.nt.bz2",
+                  "format": "nt",
+                  "compression": "bz2",
+                  "size": 1193366744,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                },
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261106/wikidata-20261106-lexemes-BETA.nt.gz",
+                  "format": "nt",
+                  "compression": "gz",
+                  "size": 1549309106,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                },
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261106/wikidata-20261106-lexemes-BETA.ttl.bz2",
+                  "format": "ttl",
+                  "compression": "bz2",
+                  "size": 691046578,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                },
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261106/wikidata-20261106-lexemes-BETA.ttl.gz",
+                  "format": "ttl",
+                  "compression": "gz",
+                  "size": 859219723,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                }
+              ]
+            },
+            {
+              "version": "2026-11-13",
+              "title": "Wikidata Lexemes RDF Dump - Beta",
+              "abstract": "Beta RDF dumps containing Wikidata lexemes and associated linguistic information.",
+              "description": "Beta Wikidata lexeme dumps contain the lexeme namespace and associated linguistic information represented in RDF.",
+              "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+              "distributions": [
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261113/wikidata-20261113-lexemes-BETA.nt.bz2",
+                  "format": "nt",
+                  "compression": "bz2",
+                  "size": 1197699640,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                },
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261113/wikidata-20261113-lexemes-BETA.nt.gz",
+                  "format": "nt",
+                  "compression": "gz",
+                  "size": 1554649202,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                },
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261113/wikidata-20261113-lexemes-BETA.ttl.bz2",
+                  "format": "ttl",
+                  "compression": "bz2",
+                  "size": 693882424,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                },
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261113/wikidata-20261113-lexemes-BETA.ttl.gz",
+                  "format": "ttl",
+                  "compression": "gz",
+                  "size": 862796465,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                }
+              ]
             }
           ]
         },
@@ -7298,6 +8275,170 @@
                   "status": "active"
                 }
               ]
+            },
+            {
+              "version": "2026-10-05",
+              "title": "Wikidata Complete RDF Dump - Beta",
+              "abstract": "Beta complete Wikidata RDF dumps containing all entity information representable in RDF.",
+              "description": "Beta complete Wikidata RDF dumps contain all entity information representable in RDF, including statements, qualifiers, references, labels, descriptions, aliases, and other RDF-representable data.",
+              "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+              "distributions": [
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261005/wikidata-20261005-all-BETA.nt.bz2",
+                  "format": "nt",
+                  "compression": "bz2",
+                  "size": 196233094777,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                },
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261005/wikidata-20261005-all-BETA.nt.gz",
+                  "format": "nt",
+                  "compression": "gz",
+                  "size": 254109726591,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                },
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261005/wikidata-20261005-all-BETA.ttl.bz2",
+                  "format": "ttl",
+                  "compression": "bz2",
+                  "size": 125778820821,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                },
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261005/wikidata-20261005-all-BETA.ttl.gz",
+                  "format": "ttl",
+                  "compression": "gz",
+                  "size": 154385433263,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                }
+              ]
+            },
+            {
+              "version": "2026-10-12",
+              "title": "Wikidata Complete RDF Dump - Beta",
+              "abstract": "Beta complete Wikidata RDF dumps containing all entity information representable in RDF.",
+              "description": "Beta complete Wikidata RDF dumps contain all entity information representable in RDF, including statements, qualifiers, references, labels, descriptions, aliases, and other RDF-representable data.",
+              "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+              "distributions": [
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261012/wikidata-20261012-all-BETA.nt.bz2",
+                  "format": "nt",
+                  "compression": "bz2",
+                  "size": 196362089421,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                },
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261012/wikidata-20261012-all-BETA.nt.gz",
+                  "format": "nt",
+                  "compression": "gz",
+                  "size": 254258152074,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                },
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261012/wikidata-20261012-all-BETA.ttl.bz2",
+                  "format": "ttl",
+                  "compression": "bz2",
+                  "size": 125863783935,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                },
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261012/wikidata-20261012-all-BETA.ttl.gz",
+                  "format": "ttl",
+                  "compression": "gz",
+                  "size": 154485416676,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                }
+              ]
+            },
+            {
+              "version": "2026-10-19",
+              "title": "Wikidata Complete RDF Dump - Beta",
+              "abstract": "Beta complete Wikidata RDF dumps containing all entity information representable in RDF.",
+              "description": "Beta complete Wikidata RDF dumps contain all entity information representable in RDF, including statements, qualifiers, references, labels, descriptions, aliases, and other RDF-representable data.",
+              "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+              "distributions": [
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261019/wikidata-20261019-all-BETA.nt.bz2",
+                  "format": "nt",
+                  "compression": "bz2",
+                  "size": 196489088177,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                },
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261019/wikidata-20261019-all-BETA.nt.gz",
+                  "format": "nt",
+                  "compression": "gz",
+                  "size": 254418437496,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                },
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261019/wikidata-20261019-all-BETA.ttl.bz2",
+                  "format": "ttl",
+                  "compression": "bz2",
+                  "size": 125950344604,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                },
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261019/wikidata-20261019-all-BETA.ttl.gz",
+                  "format": "ttl",
+                  "compression": "gz",
+                  "size": 154588499264,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                }
+              ]
+            },
+            {
+              "version": "2026-11-09",
+              "title": "Wikidata Complete RDF Dump - Beta",
+              "abstract": "Beta complete Wikidata RDF dumps containing all entity information representable in RDF.",
+              "description": "Beta complete Wikidata RDF dumps contain all entity information representable in RDF, including statements, qualifiers, references, labels, descriptions, aliases, and other RDF-representable data.",
+              "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+              "distributions": [
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261109/wikidata-20261109-all-BETA.nt.bz2",
+                  "format": "nt",
+                  "compression": "bz2",
+                  "size": 196966855717,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                },
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261109/wikidata-20261109-all-BETA.nt.gz",
+                  "format": "nt",
+                  "compression": "gz",
+                  "size": 255009291617,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                },
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261109/wikidata-20261109-all-BETA.ttl.bz2",
+                  "format": "ttl",
+                  "compression": "bz2",
+                  "size": 126263214438,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                },
+                {
+                  "file": "https://dumps.wikimedia.org/wikidatawiki/entities/20261109/wikidata-20261109-all-BETA.ttl.gz",
+                  "format": "ttl",
+                  "compression": "gz",
+                  "size": 154958907479,
+                  "sha256": "abcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcdabcd",
+                  "status": "active"
+                }
+              ]
             }
           ]
         }
@@ -7329,7 +8470,8 @@
       "sparql": [
         {
           "name": "main",
-          "url": "https://yago-knowledge.org/sparql"
+          "url": "https://yago-knowledge.org/sparql/qlever",
+          "ui": "https://yago-knowledge.org/sparql"
         }
       ],
       "maintainers": [
