@@ -3,52 +3,60 @@ import json
 import os
 from copy import deepcopy
 from functools import lru_cache
+from threading import Lock
 abs_path = os.path.dirname(os.path.abspath(__file__))
 
-def getAllDatasetIDs(snapshot_path=f'{abs_path}/CHeCLOUD.json'):
-    dataset_ids = []
-    url = 'https://checloud.di.unisa.it/checloud-api/CHe_cloud_data/get_all'
+# Once CHeCloud fails, keep this process on the local snapshot. This prevents
+# one timeout per dataset from turning an analysis into hundreds of retries.
+_service_offline = False
+_service_lock = Lock()
 
-    try:
-        response = requests.get(url, verify=False, timeout=10)
-        if response.status_code == 200:
-            data = response.json()
-            dataset_ids = [(el.get('identifier'), el.get('title')) for el in data]
 
-            # Save snapshot
-            with open(snapshot_path, 'w', encoding='utf-8') as f:
-                json.dump(data, f, ensure_ascii=False, indent=2)
-            return dataset_ids
-        else:
-            print(f"CHeCloud responded with status {response.status_code}, loading local snapshot if available.")
-    except Exception as e:
-        print(f"CHeCloud connection failed: {e}")
-
-    if os.path.exists(snapshot_path):
-        print("Loading CHeCloud data from local snapshot...")
-        with open(snapshot_path, 'r', encoding='utf-8') as f:
-            data = json.load(f)
-            dataset_ids = [(el.get('identifier'), el.get('title')) for el in data]
-        return dataset_ids
-    else:
+def _load_catalog_snapshot(snapshot_path):
+    if not os.path.exists(snapshot_path):
         print("No local snapshot available.")
         return []
+    try:
+        with open(snapshot_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        if not isinstance(data, list):
+            print("CHeCloud snapshot is not a dataset list.")
+            return []
+        print("Loading CHeCloud data from local snapshot...")
+        return data
+    except (OSError, ValueError) as e:
+        print(f"Could not load CHeCloud snapshot: {e}")
+        return []
+
+def getAllDatasetIDs(snapshot_path=f'{abs_path}/CHeCLOUD.json'):
+    global _service_offline
+    url = 'https://checloud.di.unisa.it/checloud-api/CHe_cloud_data/get_all'
+
+    with _service_lock:
+        if not _service_offline:
+            try:
+                response = requests.get(url, verify=False, timeout=10)
+                if response.status_code == 200:
+                    data = response.json()
+                    with open(snapshot_path, 'w', encoding='utf-8') as f:
+                        json.dump(data, f, ensure_ascii=False, indent=2)
+                    return [(el.get('identifier'), el.get('title')) for el in data]
+                print(f"CHeCloud responded with status {response.status_code}; switching to local snapshot.")
+            except Exception as e:
+                print(f"CHeCloud connection failed: {e}; switching to local snapshot for this process.")
+            _service_offline = True
+
+    data = _load_catalog_snapshot(snapshot_path)
+    return [(el.get('identifier'), el.get('title')) for el in data if isinstance(el, dict)]
 
 @lru_cache(maxsize=1024)
 def _get_dataset_metadata(idKG, snapshot):
     """Fetch each CHeCloud dataset at most once per process."""
+    global _service_offline
     url = f'https://checloud.di.unisa.it/checloud-api/CHe_cloud_data/dataset_metadata/{str(idKG)}'
-    try:
-        response = requests.get(url, verify=False, timeout=10)
-        if response.status_code == 200:
-            print("Connection to API successful and data recovered")
-            response = response.json()
-            return response
-        else:
-            print(
-                f"CHeCloud responded with status {response.status_code}, "
-                "loading local snapshot if available."
-            )
+
+    def load_snapshot():
+        try:
             with open(snapshot, 'r', encoding='utf-8') as f:
                 data = json.load(f)
             if not isinstance(data, list):
@@ -67,9 +75,25 @@ def _get_dataset_metadata(idKG, snapshot):
                 ),
                 False,
             )
-    except Exception as e:
-        print(f'CHeCloud connection failed: {e}')
-        return False
+        except (OSError, ValueError) as e:
+            print(f"Could not load CHeCloud snapshot: {e}")
+            return False
+
+    with _service_lock:
+        if not _service_offline:
+            try:
+                response = requests.get(url, verify=False, timeout=10)
+                if response.status_code == 200:
+                    print("Connection to API successful and data recovered")
+                    return response.json()
+                print(
+                    f"CHeCloud responded with status {response.status_code}; "
+                    "switching to local snapshot."
+                )
+            except Exception as e:
+                print(f"CHeCloud connection failed: {e}; switching to local snapshot for this process.")
+            _service_offline = True
+    return load_snapshot()
 
 
 def clear_metadata_cache():
