@@ -2083,7 +2083,8 @@ def hasAltDescription(endpoint_url,iri_to_check, limit):
         else:
             return False, []
     except Exception as e:
-        return e
+        print(f"Error querying alternative descriptions at {endpoint_url} for {iri_to_check}: {e}")
+        return False, []
 
 @log_in_out
 def fetch_objects(endpoint_url, limit=10000, condition = ()):
