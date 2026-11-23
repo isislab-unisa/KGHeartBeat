@@ -24,6 +24,8 @@ def run(directory):
     signal.alarm(cpu)
     source = json.loads((directory / 'input.json').read_text())
     install_network_guard()
+    # Python socket patches do not survive exec into KGSum's environment.
+    os.environ['KGH_KGSUM_NETWORK_GUARD'] = '1'
     if source['type'] != 'upload':
         validate_public_url(source['url'])
     sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'src'))
@@ -35,7 +37,8 @@ def run(directory):
     date = datetime.now(timezone.utc).date().isoformat()
     target = ({'sparql_endpoint': source['url']} if source['type'] == 'sparql' else
               {'rdf_dump': str(directory / source['filename']) if source['type'] == 'upload' else source['url']})
-    # KGSum is a remote service; uploaded private files must not be sent to it.
+    # Uploaded private files remain excluded from optional profiling because
+    # RDF parsing can resolve external resources.
     with analysis_session(date, **target, triple_limit=int(os.environ['KGH_TRIPLE_LIMIT']),
                           include_profile=source['type'] != 'upload') as kg:
         score = Score(kg, 20)
