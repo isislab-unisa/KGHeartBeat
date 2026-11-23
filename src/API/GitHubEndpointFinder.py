@@ -19,7 +19,7 @@ MAX_PAGES = 10
 
 SPARQL_TIMEOUT = 10
 
-OUTPUT_FILE = "gitHub_endpoints.json"
+OUTPUT_FILE = "github_endpoints.json"
 
 ENDPOINT_RE = re.compile(
     r"^\s*#\+\s*endpoint\s*:\s*(.+?)\s*$",
