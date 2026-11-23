@@ -19,15 +19,20 @@ def normalize_kg_id(kg_id):
 def create_profile(kg_id, analysis_date, sparql_endpoint=None, rdf_dump=None, results_dir=RESULTS_DIR):
     """Overwrite the previous result, including on failure, so it cannot become stale."""
     profile = None
+    profile_error = None
     try:
-        profile = KGSumAPI().create_KG_profile(kg_sparql_url=sparql_endpoint, kg_rdf_url=rdf_dump)
-    except Exception:
+        profiler = KGSumAPI()
+        profile = profiler.create_KG_profile(kg_sparql_url=sparql_endpoint, kg_rdf_url=rdf_dump)
+        profile_error = profiler.last_error
+    except Exception as exc:
+        profile_error = str(exc)
         logging.getLogger(__name__).exception('Could not create KGSum profile for %s', kg_id)
     try:
         record = {
             'kg_id': normalize_kg_id(kg_id),
             'analysis_date': str(analysis_date),
             'profile': profile,
+            'profile_error': profile_error,
         }
         path = Path(results_dir) / 'profile' / (record['kg_id'] + '.json')
         path.parent.mkdir(parents=True, exist_ok=True)

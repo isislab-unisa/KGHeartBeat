@@ -1128,12 +1128,10 @@ def check_if_zipped_dump(media_types):
 
 def url_points_to_graph_file(url):
     SUPPORTED_EXTENSIONS = ['.ttl', '.rdf', '.nt', '.jsonld', '.xml']
+    # Reject malformed catalogue links before urllib3 attempts hostname parsing.
+    if not is_url(url):
+        return False
     try:
-        # Check if URL is valid
-        result = urlparse(url)
-        if not all([result.scheme, result.netloc]):
-            return False
-
         response = requests.head(url, allow_redirects=True, timeout=10)
         if response.status_code != 200:
             return False

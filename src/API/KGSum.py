@@ -1,4 +1,4 @@
-"""Small client for KGSum's SPARQL and RDF-file profiling endpoints."""
+"""Run KGSum's source locally, without depending on its hosted API."""
 import bz2
 import gzip
 import io
@@ -6,6 +6,11 @@ import logging
 import lzma
 import os
 from pathlib import Path
+import signal
+import subprocess
+import tempfile
+import json
+import math
 from urllib.parse import unquote, urlsplit
 
 import requests
@@ -14,38 +19,64 @@ from rdf_formats import rdf_media_type
 
 
 class KGSumAPI:
-    def __init__(self, base_url='http://www.isislab.it:12280/kgsum', timeout=(15, 1800)):
-        self.base_url = base_url.rstrip('/')
+    def __init__(self, source_dir=None, python=None, timeout=1800):
+        self.source_dir = Path(source_dir or os.environ.get('KGH_KGSUM_PATH') or
+                               Path(__file__).resolve().parents[3] / 'KGSum').expanduser().absolute()
+        self.python = python or os.environ.get('KGH_KGSUM_PYTHON') or str(self.source_dir / '.venv/bin/python')
         self.timeout = timeout
+        self.last_error = None
 
     def create_KG_profile(self, kg_sparql_url=None, kg_rdf_url=None):
-        """Return the JSON or Turtle profile; failures must not stop quality analysis."""
+        """Return Turtle from KGSum's Python functions; failure is non-fatal."""
+        self.last_error = None
         try:
-            if kg_sparql_url:
-                response = requests.post(
-                    f'{self.base_url}/api/v1/profile/sparql',
-                    json={'endpoint': kg_sparql_url, 'format': 'ttl'},
-                    timeout=self.timeout,
-                )
-            elif kg_rdf_url:
-                filename, content, media_type = self._read_dump(str(kg_rdf_url))
-                response = requests.post(
-                    f'{self.base_url}/api/v1/profile/file',
-                    params={'format': 'ttl'},
-                    files={'file': (filename, content, media_type)},
-                    timeout=self.timeout,
-                )
-            else:
+            if not kg_sparql_url and not kg_rdf_url:
                 return None
-            response.raise_for_status()
-            if not response.content:
-                return None
-            try:
-                return response.json()
-            except ValueError:
-                return response.text
+            if not (self.source_dir / 'src/generate_profile.py').is_file():
+                raise ValueError('Set KGH_KGSUM_PATH to a KGSum checkout (see docs/local-profiles.md)')
+            timeout = float(os.environ.get('KGH_KGSUM_TIMEOUT_SECONDS', self.timeout))
+            if not math.isfinite(timeout) or timeout <= 0:
+                raise ValueError('KGSum timeout must be positive and finite')
+            with tempfile.TemporaryDirectory(prefix='kgh-profile-') as directory:
+                directory = Path(directory)
+                request = {'endpoint': str(kg_sparql_url)} if kg_sparql_url else {}
+                if not kg_sparql_url:
+                    filename, content, _ = self._read_dump(str(kg_rdf_url))
+                    (directory / 'dump').mkdir()
+                    dump = directory / 'dump' / (Path(filename).name or 'graph.ttl')
+                    dump.write_bytes(content)
+                    request['file'] = str(dump)
+                request_path, output_path = directory / 'input.json', directory / 'output.json'
+                request_path.write_text(json.dumps(request), encoding='utf-8')
+                command = [self.python, str(Path(__file__).with_name('kgsum_runner.py')),
+                           str(self.source_dir), str(request_path), str(output_path)]
+                # Keep the assessment worker's process group so its deadline also
+                # kills KGSum. Batch runs get a group for timeout cleanup.
+                own_group = os.name == 'posix' and not os.environ.get('KGH_KGSUM_NETWORK_GUARD')
+                with (directory / 'runtime.log').open('w+b') as log:
+                    with subprocess.Popen(command, cwd=self.source_dir, stdout=log,
+                                          stderr=log, start_new_session=own_group) as process:
+                        try:
+                            code = process.wait(timeout=timeout)
+                        except subprocess.TimeoutExpired:
+                            if own_group:
+                                os.killpg(process.pid, signal.SIGKILL)
+                            else:
+                                process.kill()
+                            process.wait()
+                            raise ValueError('Local KGSum profiling timed out')
+                    if code:
+                        # A bounded tail provides actionable runtime errors.
+                        log.seek(0, 2)
+                        log.seek(max(0, log.tell() - 2000))
+                        raise ValueError('Local KGSum failed: ' + log.read().decode('utf-8', errors='replace'))
+                profile = json.loads(output_path.read_text(encoding='utf-8'))
+                if not isinstance(profile, str) or not profile.strip():
+                    raise ValueError('Local KGSum did not return a Turtle profile')
+                return profile
         except (requests.RequestException, OSError, ValueError, EOFError, lzma.LZMAError) as exc:
-            logging.getLogger(__name__).warning('Failed to create KGSum profile: %s', exc)
+            self.last_error = str(exc)
+            logging.getLogger(__name__).warning('Failed to create local KGSum profile: %s', exc)
             return None
 
     def _read_dump(self, source):
